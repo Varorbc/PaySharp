@@ -72,7 +72,8 @@ namespace ICanPay.Wechatpay
 
         public string BuildPaymentUrl()
         {
-            throw new NotImplementedException();
+            UnifiedOrder();
+            return Notify.MWebUrl;
         }
 
         protected override void InitOrderParameter()
@@ -86,14 +87,7 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
             GatewayData.Add(Constant.SIGN_TYPE, Merchant.SignType);
             GatewayData.Add(Constant.NOTIFY_URL, Merchant.NotifyUrl);
-            if (!string.IsNullOrEmpty(Merchant.DeviceInfo))
-            {
-                GatewayData.Add(Constant.DEVICE_INFO, Merchant.DeviceInfo);
-            }
-            else
-            {
-                GatewayData.Add(Constant.DEVICE_INFO, Constant.WEB);
-            }
+            GatewayData.Add(Constant.DEVICE_INFO, Constant.WEB);
 
             #endregion
 
@@ -104,7 +98,7 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.FEE_TYPE, Order.FeeType);
             GatewayData.Add(Constant.TOTAL_FEE, Order.Amount * 100);
             GatewayData.Add(Constant.TIME_START, Order.TimeStart);
-            GatewayData.Add(Constant.TRADE_TYPE, Constant.APP);
+            GatewayData.Add(Constant.TRADE_TYPE, Order.TradeType);
             GatewayData.Add(Constant.SPBILL_CREATE_IP, Order.SpbillCreateIp);
 
             if (!string.IsNullOrEmpty(Order.Detail))
@@ -142,11 +136,6 @@ namespace ICanPay.Wechatpay
                 GatewayData.Add(Constant.OPENID, Order.OpenId);
             }
 
-            if (!string.IsNullOrEmpty(Order.SceneInfo))
-            {
-                GatewayData.Add(Constant.SCENE_INFO, Order.SceneInfo);
-            }
-
             #endregion
 
             GatewayData.Add(Constant.SIGN, BuildSign());
@@ -154,6 +143,12 @@ namespace ICanPay.Wechatpay
 
         protected override void SupplementaryAppParameter()
         {
+            if (!string.IsNullOrEmpty(Order.SceneInfo))
+            {
+                GatewayData.Add(Constant.SCENE_INFO, Order.SceneInfo);
+            }
+
+            Order.TradeType = Constant.APP;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
@@ -164,6 +159,16 @@ namespace ICanPay.Wechatpay
 
         protected override void SupplementaryWapParameter()
         {
+            if (!string.IsNullOrEmpty(Order.SceneInfo))
+            {
+                GatewayData.Add(Constant.SCENE_INFO, Order.SceneInfo);
+            }
+            else
+            {
+                throw new ArgumentNullException("SceneInfo 参数不可为空");
+            }
+
+            Order.TradeType = Constant.MWEB;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 

@@ -76,5 +76,12 @@ namespace ICanPay.Wechatpay
         /// </summary>
         [Display(Name = Constant.RETURN_MSG)]
         public string ReturnMsg { get; set; }
+
+        /// <summary>
+        /// 支付跳转链接
+        /// mweb_url为拉起微信支付收银台的中间页面，可通过访问该url来拉起微信客户端，完成支付,mweb_url的有效期为5分钟。
+        /// </summary>
+        [Display(Name = Constant.MWEB_URL)]
+        public string MWebUrl { get; set; }
     }
 }
