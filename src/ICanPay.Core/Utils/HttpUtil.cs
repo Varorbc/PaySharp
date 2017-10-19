@@ -7,7 +7,7 @@ namespace ICanPay
     /// <summary>
     /// Http工具类
     /// </summary>
-    public static class HttpUtil
+    public class HttpUtil
     {
         #region 属性
 

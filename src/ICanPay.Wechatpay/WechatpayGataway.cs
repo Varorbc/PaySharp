@@ -57,7 +57,7 @@ namespace ICanPay.Wechatpay
             return false;
         }
 
-        public string GetPaymentQRCodeContent()
+        public string BuildPaymentQRCode()
         {
             return GetWeixinPaymentUrl(CreateOrder());
         }
@@ -65,7 +65,7 @@ namespace ICanPay.Wechatpay
         private string CreateOrder()
         {
             InitOrderParameter();
-            return Utility
+            return Util
                 .PostAsync(queryGatewayUrl, GatewayData.ToXml())
                 .GetAwaiter()
                 .GetResult();
@@ -79,7 +79,7 @@ namespace ICanPay.Wechatpay
         private string QueryOrder()
         {
             InitQueryOrderParameter();
-            return Utility
+            return Util
                 .PostAsync(queryGatewayUrl, GatewayData.ToXml())
                 .GetAwaiter()
                 .GetResult();
@@ -232,7 +232,7 @@ namespace ICanPay.Wechatpay
             }
 
             signBuilder.Append("key=" + Merchant.Key);
-            return Utility.GetMD5(signBuilder.ToString());
+            return Util.GetMD5(signBuilder.ToString());
         }
 
         /// <summary>

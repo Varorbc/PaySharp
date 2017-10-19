@@ -50,7 +50,7 @@ namespace ICanPay.Alipay
         {
             InitOrderParameter();
 
-            return GetFormHtml(GatewayUrl);
+            return GatewayData.ToForm(GatewayUrl);
         }
 
         public string BuildPaymentUrl()
@@ -133,7 +133,7 @@ namespace ICanPay.Alipay
         protected override void InitOrderParameter()
         {
             base.InitOrderParameter();
-            Merchant.BizContent = Utility.SerializeObject(Order);
+            Merchant.BizContent = Util.SerializeObject(Order);
             GatewayData.Add(Constant.APP_ID, Merchant.AppId);
             GatewayData.Add(Constant.METHOD, Merchant.Method);
             GatewayData.Add(Constant.FORMAT, Merchant.Format);
@@ -238,7 +238,7 @@ namespace ICanPay.Alipay
         private bool ValidateNotifyId()
         {
             // 服务器异步通知的通知Id则会在输出标志成功接收到通知的success字符串后失效。
-            if (string.Compare(Utility.ReadPage(GetValidateNotifyUrl()), TRUE) == 0)
+            if (string.Compare(Util.ReadPage(GetValidateNotifyUrl()), TRUE) == 0)
             {
                 return true;
             }

@@ -10,14 +10,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 无效网关
         /// </summary>
-        None = 0,
-
+        None,
 
         /// <summary>
         /// 支付失败
         /// </summary>
         Failed,
-
 
         /// <summary>
         /// 支付成功

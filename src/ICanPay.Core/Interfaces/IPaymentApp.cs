@@ -1,4 +1,5 @@
-﻿namespace ICanPay.Core
+﻿
+namespace ICanPay.Core
 {
     /// <summary>
     /// 支付订单通过App提交

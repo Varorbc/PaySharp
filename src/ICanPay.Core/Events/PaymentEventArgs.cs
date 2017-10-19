@@ -53,6 +53,17 @@ namespace ICanPay.Core
             }
         }
 
+        /// <summary>
+        /// 支付网关类型
+        /// </summary>
+        public GatewayType GatewayType
+        {
+            get
+            {
+                return gateway.GatewayType;
+            }
+        }
+
         #endregion
     }
 }

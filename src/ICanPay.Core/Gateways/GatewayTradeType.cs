@@ -9,7 +9,7 @@ namespace ICanPay.Core
         /// <summary>
         /// App支付
         /// </summary>
-        App = 0,
+        App,
 
         /// <summary>
         /// 手机网站支付

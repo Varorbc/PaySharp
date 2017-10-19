@@ -30,7 +30,7 @@ namespace ICanPay.Core
         /// </summary>
         /// <param name="gateway">网关</param>
         /// <param name="order">订单</param>
-        public PaymentSetting(GatewayBase gateway, OrderBase order)
+        public PaymentSetting(GatewayBase gateway, IOrder order)
             : this(gateway)
         {
             this.gateway.Order = order;
@@ -43,7 +43,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 订单数据
         /// </summary>
-        public OrderBase Order
+        public IOrder Order
         {
             get
             {
@@ -108,7 +108,7 @@ namespace ICanPay.Core
 
             if (gateway.GatewayTradeType == GatewayTradeType.Scan && gateway is IPaymentQRCode paymentQRCode)
             {
-                BuildQRCodeImage(paymentQRCode.GetPaymentQRCodeContent());
+                BuildQRCodeImage(paymentQRCode.BuildPaymentQRCode());
                 return null;
             }
 

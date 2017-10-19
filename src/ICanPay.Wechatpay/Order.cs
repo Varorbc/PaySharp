@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Wechatpay
 {
-    public class Order : OrderBase
+    public class Order : IOrder
     {
         /// <summary>
         /// 商品简单描述，该字段请按照规范传递，具体请见参数规定

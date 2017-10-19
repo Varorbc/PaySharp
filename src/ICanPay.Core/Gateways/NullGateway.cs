@@ -18,7 +18,6 @@ namespace ICanPay.Core
         {
         }
 
-
         /// <summary>
         /// 初始化未知网关
         /// </summary>
@@ -30,28 +29,19 @@ namespace ICanPay.Core
 
         #endregion
 
-
         #region 属性
 
-        public override GatewayType GatewayType
-        {
-            get { return GatewayType.None; }
-        }
+        public override GatewayType GatewayType => GatewayType.None;
 
-        public override string GatewayUrl => throw new NotImplementedException();
+        public override string GatewayUrl => string.Empty;
 
         #endregion
-
 
         #region 方法
 
         protected override async Task<bool> CheckNotifyDataAsync()
         {
-            return false;
-        }
-
-        public override void WriteSuccessFlag()
-        {
+            return await Task.Run(() => { return false; });
         }
 
         protected override void InitOrderParameter()

@@ -9,7 +9,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 未知网关类型
         /// </summary>
-        None = 0,
+        None,
 
 
         /// <summary>

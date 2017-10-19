@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Alipay
 {
-    public class Order : OrderBase
+    public class Order : IOrder
     {
         /// <summary>
         /// 商户订单号，64个字符以内、可包含字母、数字、下划线；需保证在商户端不重复

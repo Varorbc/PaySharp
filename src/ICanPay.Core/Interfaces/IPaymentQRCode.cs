@@ -6,11 +6,10 @@ namespace ICanPay.Core
     /// </summary>
     public interface IPaymentQRCode
     {
-
         /// <summary>
-        /// 获得订单的支付二维码内容
+        /// 创建包含支付订单数据的二维码
         /// </summary>
-        /// <returns>订单的支付二维码内容</returns>
-        string GetPaymentQRCodeContent();
+        /// <returns></returns>
+        string BuildPaymentQRCode();
     }
 }

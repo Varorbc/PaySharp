@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Alipay
 {
-    public class Notify : NotifyBase
+    public class Notify : INotify
     {
         /// <summary>
         /// 通知时间

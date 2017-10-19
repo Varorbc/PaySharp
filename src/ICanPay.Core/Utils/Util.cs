@@ -12,7 +12,7 @@ namespace ICanPay.Core
     /// <summary>
     /// 支付的相关操作
     /// </summary>
-    public static class Utility
+    public static class Util
     {
 
         #region 方法

@@ -20,28 +20,16 @@ namespace ICanPay.Core
 
         #endregion
 
-
         #region 属性
 
         /// <summary>
         /// 通知数据
         /// </summary>
-        public NotifyBase Notify
+        public INotify Notify
         {
             get
             {
                 return gateway.Notify;
-            }
-        }
-
-        /// <summary>
-        /// 支付网关类型
-        /// </summary>
-        public GatewayType GatewayType
-        {
-            get
-            {
-                return gateway.GatewayType;
             }
         }
 

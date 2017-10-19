@@ -20,21 +20,5 @@ namespace ICanPay.Core
 
         #endregion
 
-
-        #region 属性
-
-        /// <summary>
-        /// 支付网关类型
-        /// </summary>
-        public GatewayType GatewayType
-        {
-            get
-            {
-                return gateway.GatewayType;
-            }
-        }
-
-        #endregion
-
     }
 }

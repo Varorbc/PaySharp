@@ -25,7 +25,6 @@ namespace ICanPay.Core
         #region 私有字段
 
         private GatewayData gatewayData;
-        private const string formItem = "<input type='hidden' name='{0}' value='{1}'>";
 
         #endregion
 
@@ -43,7 +42,7 @@ namespace ICanPay.Core
         /// 构造函数
         /// </summary>
         /// <param name="merchant">商户数据</param>
-        protected GatewayBase(MerchantBase merchant)
+        protected GatewayBase(IMerchant merchant)
             : this(new GatewayData())
         {
             Merchant = merchant;
@@ -65,17 +64,17 @@ namespace ICanPay.Core
         /// <summary>
         /// 订单数据
         /// </summary>
-        public OrderBase Order { get; set; }
+        public IOrder Order { get; set; }
 
         /// <summary>
         /// 商户数据
         /// </summary>
-        public MerchantBase Merchant { get; set; }
+        public IMerchant Merchant { get; set; }
 
         /// <summary>
         /// 通知数据
         /// </summary>
-        public NotifyBase Notify { get; set; }
+        public INotify Notify { get; set; }
 
         /// <summary>
         /// 支付网关的类型
@@ -112,31 +111,9 @@ namespace ICanPay.Core
         #region 方法
 
         /// <summary>
-        /// 创建Form HTML代码
-        /// </summary>
-        /// <param name="url">网关的Url</param>
-        protected string GetFormHtml(string url)
-        {
-            StringBuilder html = new StringBuilder();
-            html.AppendLine("<body>");
-            html.AppendLine("<form name='Gateway' method='post' action ='" + url + "'>");
-            foreach (var item in gatewayData.Values)
-            {
-                html.AppendLine(string.Format(formItem, item.Key, item.Value));
-            }
-            html.AppendLine("</form>");
-            html.AppendLine("<script language='javascript' type='text/javascript'>");
-            html.AppendLine("document.Gateway.submit();");
-            html.AppendLine("</script>");
-            html.AppendLine("</body>");
-
-            return html.ToString();
-        }
-
-        /// <summary>
         /// 验证订单是否支付成功
         /// </summary>
-        public async Task<bool> ValidateNotifyAsync()
+        internal async Task<bool> ValidateNotifyAsync()
         {
             if (await CheckNotifyDataAsync())
             {

@@ -1,9 +1,10 @@
-﻿namespace ICanPay.Core
+﻿
+namespace ICanPay.Core
 {
     /// <summary>
-    /// 订单的金额、编号
+    /// 订单接口
     /// </summary>
-    public interface OrderBase
+    public interface IOrder
     {
         /// <summary>
         /// 商户订单号

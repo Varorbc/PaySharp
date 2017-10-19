@@ -51,7 +51,7 @@ namespace ICanPay.Yeepay
         public string BuildPaymentForm()
         {
             InitOrderParameter();
-            return GetFormHtml(payGatewayUrl);
+            return GatewayData.ToForm(payGatewayUrl);
         }
 
 
@@ -196,7 +196,7 @@ namespace ICanPay.Yeepay
         /// <returns></returns>
         public bool QueryNow()
         {
-            ReadQueryReturn(Utility.ReadPage(GetQueryOrderUrl()));
+            ReadQueryReturn(Util.ReadPage(GetQueryOrderUrl()));
             return ValidateQuery();
         }
 

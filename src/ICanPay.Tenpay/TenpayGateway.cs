@@ -77,7 +77,7 @@ namespace ICanPay.Tenpay
         public string BuildPaymentForm()
         {
             InitOrderParameter();
-            return GetFormHtml(payGatewayUrl);
+            return GatewayData.ToForm(payGatewayUrl); ;
         }
 
 
@@ -196,7 +196,7 @@ namespace ICanPay.Tenpay
         /// <returns></returns>
         private bool ValidateNotifyId()
         {
-            string resultXml = Utility.ReadPage(GetValidateNotifyUrl(), pageEncoding);
+            string resultXml = Util.ReadPage(GetValidateNotifyUrl(), pageEncoding);
             // 需要先备份并清除之前接收到的网关的通知的数据，否者会对数据的验证造成干扰。
             GatewayData gatewayData = BackupAndClearGatewayData();
             ReadResultXml(resultXml);
@@ -294,7 +294,7 @@ namespace ICanPay.Tenpay
 
         public bool QueryNow()
         {
-            ReadResultXml(Utility.ReadPage(GetQueryOrderUrl(), pageEncoding));
+            ReadResultXml(Util.ReadPage(GetQueryOrderUrl(), pageEncoding));
             if (ValidateNotifyParameter() && ValidateOrder())
             {
                 return true;
