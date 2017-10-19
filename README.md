@@ -39,12 +39,7 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
                     Privatekey = "Varorbc"
                 };
 				
-                var alipayGateway = new AlipayGateway(alipayMerchant)
-                {
-                    GatewayTradeType = GatewayTradeType.Web
-                };
-
-                gateways.Add(alipayGateway);
+                gateways.Add(new AlipayGateway(alipayMerchant));
             });
         }
 
