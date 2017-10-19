@@ -8,7 +8,7 @@ namespace ICanPay.Wechatpay
     /// 微信支付网关
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
-        IPaymentQRCode, IQueryNow, IPaymentApp, IPaymentUrl, IPaymentPublic
+        IPaymentScan, IQueryNow, IPaymentApp, IPaymentUrl, IPaymentPublic
     {
 
         #region 私有字段
@@ -59,9 +59,10 @@ namespace ICanPay.Wechatpay
             return false;
         }
 
-        public string BuildPaymentQRCode()
+        public string BuildPaymentScan()
         {
-            return null;//GetWeixinPaymentUrl(UnifiedOrder());
+            UnifiedOrder();
+            return Notify.CodeUrl;
         }
 
         public string BuildPaymentApp()
@@ -183,6 +184,12 @@ namespace ICanPay.Wechatpay
 
         protected override void SupplementaryScanParameter()
         {
+            if (string.IsNullOrEmpty(Order.ProductId))
+            {
+                throw new ArgumentNullException("ProductId 参数不可为空");
+            }
+
+            Order.TradeType = Constant.NATIVE;
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
         }
 

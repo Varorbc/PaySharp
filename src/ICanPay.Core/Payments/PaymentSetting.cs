@@ -119,10 +119,9 @@ namespace ICanPay.Core
                     break;
                 case GatewayTradeType.Scan:
                     {
-                        if (gateway is IPaymentQRCode paymentQRCode)
+                        if (gateway is IPaymentScan paymentScan)
                         {
-                            BuildQRCodeImage(paymentQRCode.BuildPaymentQRCode());
-                            return null;
+                            return paymentScan.BuildPaymentScan();
                         }
                     }
                     break;
@@ -173,25 +172,6 @@ namespace ICanPay.Core
             }
 
             throw new NotSupportedException(gateway.GatewayType + " 没有实现 IQueryNow 查询接口");
-        }
-
-        /// <summary>
-        /// 生成并输出二维码图片
-        /// </summary>
-        /// <param name="qrCodeContent">二维码内容</param>
-        private void BuildQRCodeImage(string qrCodeContent)
-        {
-#if NET35
-            QRCodeEncoder qrCodeEncoder = new QRCodeEncoder
-            {
-                QRCodeScale = 4  // 二维码大小
-            };
-            Bitmap image = qrCodeEncoder.Encode(qrCodeContent, Encoding.Default);
-            MemoryStream ms = new MemoryStream();
-            image.Save(ms, ImageFormat.Png);
-            HttpContext.Current.Response.ContentType = "image/x-png";
-            HttpContext.Current.Response.BinaryWrite(ms.GetBuffer());
-#endif
         }
 
         #endregion
