@@ -1,8 +1,4 @@
-﻿using ICanPay.Alipay;
-using ICanPay.Core;
-using ICanPay.Tenpay;
-using ICanPay.Wechatpay;
-using ICanPay.Yeepay;
+﻿using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -34,7 +30,7 @@ namespace ICanPay.Demo.Controllers
             // 支付成功时时的处理代码
             if (e.GatewayType == GatewayType.Alipay)
             {
-                var alipayNotify = (Notify)e.Notify;
+                var alipayNotify = (Alipay.Notify)e.Notify;
             }
         }
 

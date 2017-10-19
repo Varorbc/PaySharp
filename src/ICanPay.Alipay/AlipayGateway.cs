@@ -143,8 +143,8 @@ namespace ICanPay.Alipay
             GatewayData.Add(Constant.VERSION, Merchant.Version);
             GatewayData.Add(Constant.NOTIFY_URL, Merchant.NotifyUrl);
             GatewayData.Add(Constant.BIZ_CONTENT, Merchant.BizContent);
-            Merchant.Sign = Signature.RSASign(GatewayData.ToUrl(), Merchant.Privatekey, Merchant.Charset, Merchant.SignType, false);
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);    // 签名需要在最后设置，以免缺少参数。
+            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
         }
 
         private string GetPaymentQueryString()
@@ -186,7 +186,7 @@ namespace ICanPay.Alipay
         /// </summary>
         private bool ValidateNotifySign()
         {
-            Merchant.Sign = Signature.RSASign(GatewayData.ToUrl(Constant.SIGN, Constant.SIGN_TYPE), Merchant.Privatekey, Merchant.Charset, Merchant.SignType, false);
+            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(Constant.SIGN, Constant.SIGN_TYPE), Merchant.Privatekey);
             // 验证通知的签名
             if (string.Compare(Notify.Sign, Merchant.Sign) == 0)
             {
@@ -202,7 +202,7 @@ namespace ICanPay.Alipay
         private bool ValidateNotifyId()
         {
             // 服务器异步通知的通知Id则会在输出标志成功接收到通知的success字符串后失效。
-            if (string.Compare(Util.ReadPage(GetValidateNotifyUrl()), TRUE) == 0)
+            if (string.Compare(HttpUtil.ReadPage(GetValidateNotifyUrl()), TRUE) == 0)
             {
                 return true;
             }

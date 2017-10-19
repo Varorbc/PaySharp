@@ -3,11 +3,70 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ICanPay.Alipay
+namespace ICanPay.Core
 {
-    internal class Signature
+    /// <summary>
+    /// 加密工具类
+    /// </summary>
+    public class EncryptUtil
     {
-        public static string RSASign(string data, string privateKeyPem, string charset, string signType, bool keyFromFile)
+        #region MD5加密
+
+        /// <summary>
+        /// MD5加密
+        /// </summary>
+        /// <param name="data">数据</param>
+        public static string MD5(string data)
+        {
+            return MD5(data, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// MD5加密
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <param name="encoding">编码</param>
+        /// <returns></returns>
+        public static string MD5(string data, Encoding encoding)
+        {
+            var md5 = System.Security.Cryptography.MD5.Create();
+            byte[] dataByte = md5.ComputeHash(encoding.GetBytes(data));
+            var sb = new StringBuilder();
+            for (int i = 0; i < dataByte.Length; i++)
+            {
+                sb.Append(dataByte[i].ToString("X2"));
+            }
+
+            return sb.ToString();
+        }
+
+        #endregion
+
+        #region RSA加密
+
+        /// <summary>
+        /// RSA加密
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <param name="privateKey">私钥</param>
+        /// <returns></returns>
+        public static string RSA(string data, string privateKey)
+        {
+            return RSA(data, privateKey, "UTF-8", "RSA", false);
+        }
+
+        /// <summary>
+        /// RSA2加密
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <param name="privateKey">私钥</param>
+        /// <returns></returns>
+        public static string RSA2(string data, string privateKey)
+        {
+            return RSA(data, privateKey, "UTF-8", "RSA2", false);
+        }
+
+        private static string RSA(string data, string privateKeyPem, string charset, string signType, bool keyFromFile)
         {
 
             byte[] signatureBytes = null;
@@ -15,7 +74,8 @@ namespace ICanPay.Alipay
             {
                 RSACryptoServiceProvider rsaCsp = null;
                 if (keyFromFile)
-                {//文件读取
+                {
+                    //文件读取
                     rsaCsp = LoadCertificateFile(privateKeyPem, signType);
                 }
                 else
@@ -25,6 +85,7 @@ namespace ICanPay.Alipay
                 }
 
                 byte[] dataBytes = null;
+
                 if (string.IsNullOrEmpty(charset))
                 {
                     dataBytes = Encoding.UTF8.GetBytes(data);
@@ -33,26 +94,26 @@ namespace ICanPay.Alipay
                 {
                     dataBytes = Encoding.GetEncoding(charset).GetBytes(data);
                 }
+
                 if (null == rsaCsp)
                 {
                     throw new Exception("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset);
                 }
+
                 if ("RSA2".Equals(signType))
                 {
-
                     signatureBytes = rsaCsp.SignData(dataBytes, "SHA256");
-
                 }
                 else
                 {
                     signatureBytes = rsaCsp.SignData(dataBytes, "SHA1");
                 }
-
             }
             catch (Exception)
             {
                 throw new Exception("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset);
             }
+
             return Convert.ToBase64String(signatureBytes);
         }
 
@@ -69,8 +130,7 @@ namespace ICanPay.Alipay
                 }
                 try
                 {
-                    RSACryptoServiceProvider rsa = DecodeRSAPrivateKey(res, signType);
-                    return rsa;
+                    return DecodeRSAPrivateKey(res, signType);
                 }
                 catch (Exception)
                 {
@@ -81,19 +141,13 @@ namespace ICanPay.Alipay
 
         private static RSACryptoServiceProvider LoadCertificateString(string strKey, string signType)
         {
-            byte[] data = null;
-            //读取带
-            //ata = Encoding.Default.GetBytes(strKey);
-            data = Convert.FromBase64String(strKey);
-            //data = GetPem("RSA PRIVATE KEY", data);
+            byte[] data = Convert.FromBase64String(strKey);
             try
             {
-                RSACryptoServiceProvider rsa = DecodeRSAPrivateKey(data, signType);
-                return rsa;
+                return DecodeRSAPrivateKey(data, signType);
             }
             catch (Exception)
             {
-                //    throw new AopException("EncryptContent = woshihaoren,zheshiyigeceshi,wanerde", ex);
             }
             return null;
         }
@@ -101,32 +155,39 @@ namespace ICanPay.Alipay
         private static RSACryptoServiceProvider DecodeRSAPrivateKey(byte[] privkey, string signType)
         {
             byte[] MODULUS, E, D, P, Q, DP, DQ, IQ;
-
-            // --------- Set up stream to decode the asn.1 encoded RSA private key ------
             MemoryStream mem = new MemoryStream(privkey);
-            BinaryReader binr = new BinaryReader(mem);  //wrap Memory Stream with BinaryReader for easy reading
+            BinaryReader binr = new BinaryReader(mem);
             byte bt = 0;
             ushort twobytes = 0;
             int elems = 0;
             try
             {
                 twobytes = binr.ReadUInt16();
-                if (twobytes == 0x8130) //data read as little endian order (actual data order for Sequence is 30 81)
-                    binr.ReadByte();    //advance 1 byte
+                if (twobytes == 0x8130)
+                {
+                    binr.ReadByte();
+                }
                 else if (twobytes == 0x8230)
-                    binr.ReadInt16();    //advance 2 bytes
+                {
+                    binr.ReadInt16();
+                }
                 else
+                {
                     return null;
+                }
 
                 twobytes = binr.ReadUInt16();
-                if (twobytes != 0x0102) //version number
+                if (twobytes != 0x0102)
+                {
                     return null;
+                }
+
                 bt = binr.ReadByte();
                 if (bt != 0x00)
+                {
                     return null;
+                }
 
-
-                //------ all private key components are Integer sequences ----
                 elems = GetIntegerSize(binr);
                 MODULUS = binr.ReadBytes(elems);
 
@@ -151,10 +212,10 @@ namespace ICanPay.Alipay
                 elems = GetIntegerSize(binr);
                 IQ = binr.ReadBytes(elems);
 
-
-                // ------- create RSACryptoServiceProvider instance and initialize with public key -----
-                CspParameters CspParameters = new CspParameters();
-                CspParameters.Flags = CspProviderFlags.UseMachineKeyStore;
+                CspParameters CspParameters = new CspParameters
+                {
+                    Flags = CspProviderFlags.UseMachineKeyStore
+                };
 
                 int bitLen = 1024;
                 if ("RSA2".Equals(signType))
@@ -163,15 +224,17 @@ namespace ICanPay.Alipay
                 }
 
                 RSACryptoServiceProvider RSA = new RSACryptoServiceProvider(bitLen, CspParameters);
-                RSAParameters RSAparams = new RSAParameters();
-                RSAparams.Modulus = MODULUS;
-                RSAparams.Exponent = E;
-                RSAparams.D = D;
-                RSAparams.P = P;
-                RSAparams.Q = Q;
-                RSAparams.DP = DP;
-                RSAparams.DQ = DQ;
-                RSAparams.InverseQ = IQ;
+                RSAParameters RSAparams = new RSAParameters
+                {
+                    Modulus = MODULUS,
+                    Exponent = E,
+                    D = D,
+                    P = P,
+                    Q = Q,
+                    DP = DP,
+                    DQ = DQ,
+                    InverseQ = IQ
+                };
                 RSA.ImportParameters(RSAparams);
                 return RSA;
             }
@@ -204,31 +267,37 @@ namespace ICanPay.Alipay
             byte highbyte = 0x00;
             int count = 0;
             bt = binr.ReadByte();
-            if (bt != 0x02)		//expect integer
+            if (bt != 0x02)
+            {
                 return 0;
+            }
+
             bt = binr.ReadByte();
 
             if (bt == 0x81)
-                count = binr.ReadByte();	// data size in next byte
-            else
-                if (bt == 0x82)
             {
-                highbyte = binr.ReadByte(); // data size in next 2 bytes
+                count = binr.ReadByte();
+            }
+            else if (bt == 0x82)
+            {
+                highbyte = binr.ReadByte();
                 lowbyte = binr.ReadByte();
                 byte[] modint = { lowbyte, highbyte, 0x00, 0x00 };
                 count = BitConverter.ToInt32(modint, 0);
             }
             else
             {
-                count = bt;     // we already have the data size
+                count = bt;
             }
 
             while (binr.ReadByte() == 0x00)
-            {	//remove high order zeros in data
+            {
                 count -= 1;
             }
-            binr.BaseStream.Seek(-1, SeekOrigin.Current);		//last ReadByte wasn't a removed zero, so back up a byte
+            binr.BaseStream.Seek(-1, SeekOrigin.Current);
             return count;
         }
+
+        #endregion
     }
 }

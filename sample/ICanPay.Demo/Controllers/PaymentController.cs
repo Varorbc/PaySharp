@@ -82,7 +82,7 @@ namespace ICanPay.Demo.Controllers
             };
 
             var gateway = gatewayList.GetGateway(GatewayType.Alipay);
-            gateway.GatewayTradeType = GatewayTradeType.App;
+            gateway.GatewayTradeType = GatewayTradeType.Web;
 
             PaymentSetting paymentSetting = new PaymentSetting(gateway, order);
             return paymentSetting.Payment();
@@ -102,7 +102,7 @@ namespace ICanPay.Demo.Controllers
             };
 
             var gateway = gatewayList.GetGateway(GatewayType.Wechatpay);
-            gateway.GatewayTradeType = GatewayTradeType.Scan;
+            gateway.GatewayTradeType = GatewayTradeType.App;
 
             PaymentSetting paymentSetting = new PaymentSetting(gateway, order);
             return paymentSetting.Payment();

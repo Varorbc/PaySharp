@@ -196,7 +196,7 @@ namespace ICanPay.Yeepay
         /// <returns></returns>
         public bool QueryNow()
         {
-            ReadQueryReturn(Util.ReadPage(GetQueryOrderUrl()));
+            ReadQueryReturn(HttpUtil.ReadPage(GetQueryOrderUrl()));
             return ValidateQuery();
         }
 
