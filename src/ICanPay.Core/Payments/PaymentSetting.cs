@@ -89,27 +89,53 @@ namespace ICanPay.Core
         /// </remarks>
         public string Payment()
         {
-            if (gateway.GatewayTradeType == GatewayTradeType.Wap && gateway is IPaymentUrl paymentUrl)
+            switch (gateway.GatewayTradeType)
             {
-                HttpUtil.Redirect(paymentUrl.BuildPaymentUrl());
-                return null;
-            }
-
-            if (gateway.GatewayTradeType == GatewayTradeType.Web && gateway is IPaymentForm paymentForm)
-            {
-                HttpUtil.Write(paymentForm.BuildPaymentForm());
-                return null;
-            }
-
-            if (gateway.GatewayTradeType == GatewayTradeType.App && gateway is IPaymentApp paymentApp)
-            {
-                return paymentApp.BuildPaymentApp();
-            }
-
-            if (gateway.GatewayTradeType == GatewayTradeType.Scan && gateway is IPaymentQRCode paymentQRCode)
-            {
-                BuildQRCodeImage(paymentQRCode.BuildPaymentQRCode());
-                return null;
+                case GatewayTradeType.App:
+                    {
+                        if (gateway is IPaymentApp paymentApp)
+                        {
+                            return paymentApp.BuildPaymentApp();
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Wap:
+                    {
+                        if (gateway is IPaymentUrl paymentUrl)
+                        {
+                            HttpUtil.Redirect(paymentUrl.BuildPaymentUrl());
+                            return null;
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Web:
+                    {
+                        if (gateway is IPaymentForm paymentForm)
+                        {
+                            HttpUtil.Write(paymentForm.BuildPaymentForm());
+                            return null;
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Scan:
+                    {
+                        if (gateway is IPaymentQRCode paymentQRCode)
+                        {
+                            BuildQRCodeImage(paymentQRCode.BuildPaymentQRCode());
+                            return null;
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Public:
+                    {
+                        if (gateway is IPaymentPublic paymentPublic)
+                        {
+                            return paymentPublic.BuildPaymentPublic();
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
 
             throw new NotSupportedException(gateway.GatewayType + " 没有实现支付接口");

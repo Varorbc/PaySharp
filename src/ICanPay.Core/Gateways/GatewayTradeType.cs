@@ -24,6 +24,11 @@ namespace ICanPay.Core
         /// <summary>
         /// 扫码支付
         /// </summary>
-        Scan
+        Scan,
+
+        /// <summary>
+        /// 公众号支付
+        /// </summary>
+        Public
     }
 }
