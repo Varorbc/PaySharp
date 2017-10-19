@@ -173,7 +173,7 @@ namespace ICanPay.Alipay
         private bool ValidateNotifyParameter()
         {
             // 支付状态是否为成功。
-            if (string.Compare(Notify.TradeStatus, Constant.TRADE_SUCCESS) == 0)
+            if (Notify.TradeStatus == Constant.TRADE_SUCCESS)
             {
                 return true;
             }
@@ -188,7 +188,7 @@ namespace ICanPay.Alipay
         {
             Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(Constant.SIGN, Constant.SIGN_TYPE), Merchant.Privatekey);
             // 验证通知的签名
-            if (string.Compare(Notify.Sign, Merchant.Sign) == 0)
+            if (Notify.Sign == Merchant.Sign)
             {
                 return true;
             }
@@ -201,8 +201,10 @@ namespace ICanPay.Alipay
         /// </summary>
         private bool ValidateNotifyId()
         {
+            string data = HttpUtil.ReadPage(GetValidateNotifyUrl());
+            GatewayData.FromXml(data);
             // 服务器异步通知的通知Id则会在输出标志成功接收到通知的success字符串后失效。
-            if (string.Compare(HttpUtil.ReadPage(GetValidateNotifyUrl()), TRUE) == 0)
+            if (GatewayData.GetStringValue("is_success") == "T")
             {
                 return true;
             }

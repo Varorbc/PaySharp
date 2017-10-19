@@ -7,7 +7,7 @@ namespace ICanPay.Wechatpay
     /// <summary>
     /// 微信支付网关
     /// </summary>
-    public sealed class WechatpayGataway : GatewayBase, IPaymentQRCode, IQueryNow, IPaymentApp
+    public sealed class WechatpayGataway : GatewayBase, IPaymentQRCode, IQueryNow, IPaymentApp, IPaymentUrl
     {
 
         #region 私有字段
@@ -60,34 +60,19 @@ namespace ICanPay.Wechatpay
 
         public string BuildPaymentQRCode()
         {
-            return GetWeixinPaymentUrl(UnifiedOrder());
+            return null;//GetWeixinPaymentUrl(UnifiedOrder());
         }
 
-        /// <summary>
-        /// 统一下单
-        /// </summary>
-        /// <returns></returns>
-        private string UnifiedOrder()
+        public string BuildPaymentApp()
         {
-            InitOrderParameter();
-            return HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToXml())
-                .GetAwaiter()
-                .GetResult();
+            UnifiedOrder();
+            InitAppParameter();
+            return GatewayData.ToUrlEncode();
         }
 
-        public bool QueryNow()
+        public string BuildPaymentUrl()
         {
-            return CheckQueryResult(QueryOrder());
-        }
-
-        private string QueryOrder()
-        {
-            InitQueryOrderParameter();
-            return HttpUtil
-                .PostAsync(queryGatewayUrl, GatewayData.ToXml())
-                .GetAwaiter()
-                .GetResult();
+            throw new NotImplementedException();
         }
 
         protected override void InitOrderParameter()
@@ -187,12 +172,32 @@ namespace ICanPay.Wechatpay
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
         }
 
-        public string BuildPaymentApp()
+        public bool QueryNow()
         {
-            string result = UnifiedOrder();
+            return CheckQueryResult(QueryOrder());
+        }
+
+        /// <summary>
+        /// 统一下单
+        /// </summary>
+        /// <returns></returns>
+        private void UnifiedOrder()
+        {
+            InitOrderParameter();
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToXml())
+                .GetAwaiter()
+                .GetResult();
             ReadReturnResult(result);
-            InitAppParameter();
-            return GatewayData.ToUrlEncode();
+        }
+
+        private string QueryOrder()
+        {
+            InitQueryOrderParameter();
+            return HttpUtil
+                .PostAsync(queryGatewayUrl, GatewayData.ToXml())
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -261,14 +266,12 @@ namespace ICanPay.Wechatpay
         /// 是否是已成功的返回
         /// </summary>
         /// <returns></returns>
-        private bool IsSuccessReturn()
+        private void IsSuccessReturn()
         {
-            if (string.Compare(Notify.ReturnCode, SUCCESS) == 0)
+            if (Notify.ReturnCode == FAIL)
             {
-                return true;
+                throw new Exception(Notify.ReturnMsg);
             }
-
-            throw new Exception(Notify.ReturnMsg);
         }
 
         /// <summary>
