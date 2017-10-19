@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -84,7 +85,7 @@ namespace ICanPay.Core
                     {
                         if (reader != null)
                         {
-                            return reader.ReadToEnd();
+                            return reader.ReadToEnd().Trim();
                         }
                     }
                 }
@@ -137,7 +138,7 @@ namespace ICanPay.Core
                     {
                         if (reader != null)
                         {
-                            return reader.ReadToEnd();
+                            return reader.ReadToEnd().Trim();
                         }
                     }
                 }
@@ -183,6 +184,15 @@ namespace ICanPay.Core
         public static GatewayBase GetGateway(this ICollection<GatewayBase> gatewayList, GatewayType gatewayType)
         {
             return gatewayList.FirstOrDefault(a => a.GatewayType == gatewayType);
+        }
+
+        /// <summary>
+        /// 生成随机字符串
+        /// </summary>
+        /// <returns></returns>
+        public static string GenerateNonceStr()
+        {
+            return Guid.NewGuid().ToString().Replace("-", "");
         }
 
         #endregion

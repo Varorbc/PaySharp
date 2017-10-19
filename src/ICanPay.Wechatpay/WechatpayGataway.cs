@@ -66,7 +66,7 @@ namespace ICanPay.Wechatpay
         {
             InitOrderParameter();
             return Util
-                .PostAsync(queryGatewayUrl, GatewayData.ToXml())
+                .PostAsync(GatewayUrl, GatewayData.ToXml())
                 .GetAwaiter()
                 .GetResult();
         }
@@ -90,7 +90,7 @@ namespace ICanPay.Wechatpay
             base.InitOrderParameter();
 
             #region 商户数据
-            Merchant.NonceStr = GenerateNonceStr();
+            Merchant.NonceStr = Util.GenerateNonceStr();
             GatewayData.Add(Constant.APPID, Merchant.AppId);
             GatewayData.Add(Constant.MCH_ID, Merchant.MchId);
             GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
@@ -108,7 +108,7 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.BODY, Order.Body);
             GatewayData.Add(Constant.OUT_TRADE_NO, Order.OutTradeNo);
             GatewayData.Add(Constant.FEE_TYPE, Order.FeeType);
-            GatewayData.Add(Constant.TOTAL_FEE, (Order.Amount * 100).ToString());
+            GatewayData.Add(Constant.TOTAL_FEE, Order.Amount * 100);
             GatewayData.Add(Constant.TIME_START, Order.TimeStart);
             GatewayData.Add(Constant.TRADE_TYPE, Constant.APP);
             GatewayData.Add(Constant.SPBILL_CREATE_IP, Order.SpbillCreateIp);
@@ -184,15 +184,6 @@ namespace ICanPay.Wechatpay
             string result = CreateOrder();
             ReadReturnResult(result);
             return null;
-        }
-
-        /// <summary>
-        /// 生成随机字符串
-        /// </summary>
-        /// <returns></returns>
-        private string GenerateNonceStr()
-        {
-            return Guid.NewGuid().ToString().Replace("-", "");
         }
 
         /// <summary>

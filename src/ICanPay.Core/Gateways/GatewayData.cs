@@ -181,7 +181,7 @@ namespace ICanPay.Core
             sb.Append("<xml>");
             foreach (var item in Values)
             {
-                if (item.Value.GetType() == typeof(int))
+                if (item.Value.GetType() == typeof(double))
                 {
                     sb.AppendFormat("<{0}>{1}</{0}>", item.Key, item.Value);
                 }
