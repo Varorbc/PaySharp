@@ -23,40 +23,54 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 
 首先在Startup文件中添加如下方法：
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddICanPay(a =>
-            {
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddICanPay(a =>
+			{
 				var gateways = new List<GatewayBase>();
-				
-                // 设置商户数据
-                var alipayMerchant = new Alipay.Merchant
-                {
-                    AppId = "123456",
-                    NotifyUrl = "http://localhost:61337/Notify",
-                    ReturnUrl = "http://localhost:61337/Return",
-                    AlipayPublicKey = "Varorbc",
-                    Privatekey = "Varorbc"
-                };
-				
-                gateways.Add(new AlipayGateway(alipayMerchant));
-            });
-        }
+
+				// 设置商户数据
+				var alipayMerchant = new Alipay.Merchant
+				{
+					AppId = "2017093009005992",
+					NotifyUrl = "http://localhost:61337/Notify",
+					ReturnUrl = "http://localhost:61337/Return",
+					AlipayPublicKey = "Varorbc",
+					Privatekey = "Varorbc"
+				};
+
+				var wechatpayMerchant = new Wechatpay.Merchant
+				{
+					AppId = "wx2428e34e0e7dc6ef",
+					MchId = "1233410002",
+					Key = "e10adc3849ba56abbe56e056f20f883e",
+					AppSecret = "51c56b886b5be869567dd389b3e5d1d6",
+					SslCertPath = "Certs/apiclient_cert.p12",
+					SslCertPassword = "1233410002",
+					NotifyUrl = "http://localhost:61337/Notify"
+				};
+
+				gateways.Add(new AlipayGateway(alipayMerchant));
+				gateways.Add(new WechatpayGataway(wechatpayMerchant));
+
+				return gateways;
+			});
+		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-		{	
+		{
 			app.UseICanPay();
 		}
     
 然后创建支付控制类：
 
-        using ICanPay.Alipay;
-        using ICanPay.Core;
-        using Microsoft.AspNetCore.Mvc;
-        using System.Collections.Generic;
+		using ICanPay.Alipay;
+		using ICanPay.Core;
+		using Microsoft.AspNetCore.Mvc;
+		using System.Collections.Generic;
 
-        namespace ICanPay.Demo.Controllers
-        {
+		namespace ICanPay.Demo.Controllers
+		{
 			public class PaymentController : Controller
 			{
 				private ICollection<GatewayBase> gatewayList;
@@ -67,7 +81,6 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 
 				public IActionResult Index()
 				{
-
 					string content = CreateAlipayOrder();
 
 					return Content(content);
@@ -78,7 +91,7 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 				/// </summary>
 				private string CreateAlipayOrder()
 				{
-					Alipay.Order order = new Alipay.Order()
+					var order = new Order()
 					{
 						Amount = 0.01,
 						OutTradeNo = "35",
@@ -97,24 +110,23 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 					};
 
 					var gateway = gatewayList.GetGateway(GatewayType.Alipay);
-					gateway.GatewayTradeType = GatewayTradeType.App;
+					gateway.GatewayTradeType = GatewayTradeType.Web;
 
 					PaymentSetting paymentSetting = new PaymentSetting(gateway, order);
 					return paymentSetting.Payment();
-				}	
+				}
 			}
 		}
 
 再创建通知控制类：
 
-        using ICanPay.Alipay;
         using ICanPay.Core;
-        using Microsoft.AspNetCore.Mvc;
-        using System.Collections.Generic;
-        using System.Threading.Tasks;
+		using Microsoft.AspNetCore.Mvc;
+		using System.Collections.Generic;
+		using System.Threading.Tasks;
 
-        namespace ICanPay.Demo.Controllers
-        {
+		namespace ICanPay.Demo.Controllers
+		{
 			public class NotifyController : Controller
 			{
 				private ICollection<GatewayBase> gatewayList;
@@ -140,7 +152,7 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 					// 支付成功时时的处理代码
 					if (e.GatewayType == GatewayType.Alipay)
 					{
-						var alipayNotify = (Notify)e.Notify;
+						var alipayNotify = (Alipay.Notify)e.Notify;
 					}
 				}
 
@@ -173,3 +185,6 @@ https://docs.open.alipay.com/api_1/alipay.trade.pay
 
 https://pay.weixin.qq.com/wiki/doc/api/index.html
 
+# 致谢
+
+[hiihellox10](https://github.com/hiihellox10)
