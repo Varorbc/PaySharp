@@ -36,7 +36,7 @@ namespace ICanPay.Wechatpay
 
         public override GatewayType GatewayType => GatewayType.Wechatpay;
 
-        public override string GatewayUrl => "https://api.mch.weixin.qq.com/pay/unifiedorder";
+        public override string GatewayUrl { get; set; } = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
         public new Merchant Merchant => merchant;
 

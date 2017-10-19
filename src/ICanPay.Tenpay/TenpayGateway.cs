@@ -57,7 +57,7 @@ namespace ICanPay.Tenpay
             }
         }
 
-        public override string GatewayUrl => throw new NotImplementedException();
+        public override string GatewayUrl { get; set; }
 
         #endregion
 

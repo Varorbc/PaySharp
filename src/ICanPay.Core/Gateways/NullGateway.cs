@@ -33,7 +33,7 @@ namespace ICanPay.Core
 
         public override GatewayType GatewayType => GatewayType.None;
 
-        public override string GatewayUrl => string.Empty;
+        public override string GatewayUrl { get; set; } = string.Empty;
 
         #endregion
 

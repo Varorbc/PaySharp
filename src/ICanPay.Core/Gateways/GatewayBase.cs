@@ -83,7 +83,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 支付网关的地址
         /// </summary>
-        public abstract string GatewayUrl { get; }
+        public abstract string GatewayUrl { get; set; }
 
         /// <summary>
         /// 支付网关的交易类型

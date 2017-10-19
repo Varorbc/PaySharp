@@ -34,7 +34,7 @@ namespace ICanPay.Alipay
 
         public override GatewayType GatewayType => GatewayType.Alipay;
 
-        public override string GatewayUrl => "https://openapi.alipay.com/gateway.do";
+        public override string GatewayUrl { get; set; } = "https://openapi.alipay.com/gateway.do";
 
         public new Merchant Merchant => merchant;
 
