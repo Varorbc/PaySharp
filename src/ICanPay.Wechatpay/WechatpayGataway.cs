@@ -1,6 +1,5 @@
 using ICanPay.Core;
 using System;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ICanPay.Wechatpay
@@ -42,6 +41,8 @@ namespace ICanPay.Wechatpay
 
         public new Order Order => (Order)base.Order;
 
+        public new Notify Notify => (Notify)base.Notify;
+
         #endregion
 
         #region 方法
@@ -59,13 +60,17 @@ namespace ICanPay.Wechatpay
 
         public string BuildPaymentQRCode()
         {
-            return GetWeixinPaymentUrl(CreateOrder());
+            return GetWeixinPaymentUrl(UnifiedOrder());
         }
 
-        private string CreateOrder()
+        /// <summary>
+        /// 统一下单
+        /// </summary>
+        /// <returns></returns>
+        private string UnifiedOrder()
         {
             InitOrderParameter();
-            return Util
+            return HttpUtil
                 .PostAsync(GatewayUrl, GatewayData.ToXml())
                 .GetAwaiter()
                 .GetResult();
@@ -79,7 +84,7 @@ namespace ICanPay.Wechatpay
         private string QueryOrder()
         {
             InitQueryOrderParameter();
-            return Util
+            return HttpUtil
                 .PostAsync(queryGatewayUrl, GatewayData.ToXml())
                 .GetAwaiter()
                 .GetResult();
@@ -99,6 +104,10 @@ namespace ICanPay.Wechatpay
             if (!string.IsNullOrEmpty(Merchant.DeviceInfo))
             {
                 GatewayData.Add(Constant.DEVICE_INFO, Merchant.DeviceInfo);
+            }
+            else
+            {
+                GatewayData.Add(Constant.DEVICE_INFO, Constant.WEB);
             }
 
             #endregion
@@ -155,8 +164,7 @@ namespace ICanPay.Wechatpay
 
             #endregion
 
-            Merchant.Sign = BuildSign();
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);    // 签名需要在最后设置，以免缺少参数。
+            GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
         protected override void SupplementaryAppParameter()
@@ -181,9 +189,10 @@ namespace ICanPay.Wechatpay
 
         public string BuildPaymentApp()
         {
-            string result = CreateOrder();
+            string result = UnifiedOrder();
             ReadReturnResult(result);
-            return null;
+            InitAppParameter();
+            return GatewayData.ToUrlEncode();
         }
 
         /// <summary>
@@ -201,8 +210,8 @@ namespace ICanPay.Wechatpay
         /// <param name="result"></param>
         private void ReadReturnResult(string result)
         {
-            ClearGatewayData();
             GatewayData.FromXml(result);
+            ReadNotify<Notify>();
             IsSuccessReturn();
         }
 
@@ -212,18 +221,8 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private string BuildSign()
         {
-            StringBuilder signBuilder = new StringBuilder();
-            foreach (var item in GatewayData.Values)
-            {
-                // 空值的参数与sign参数不参与签名
-                if (string.Compare(Constant.SIGN, item.Key) != 0)
-                {
-                    signBuilder.AppendFormat("{0}={1}&", item.Key, item.Value);
-                }
-            }
-
-            signBuilder.Append("key=" + Merchant.Key);
-            return Util.GetMD5(signBuilder.ToString());
+            string data = GatewayData.ToUrl(Constant.SIGN) + "&key=" + Merchant.Key;
+            return EncryptUtil.MD5(data);
         }
 
         /// <summary>
@@ -233,8 +232,6 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private string GetWeixinPaymentUrl(string resultXml)
         {
-            // 需要先清除之前创建订单的参数，否则会对接收到的参数造成干扰。
-            ClearGatewayData();
             GatewayData.FromXml(resultXml);
             if (IsSuccessResult())
             {
@@ -266,12 +263,12 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private bool IsSuccessReturn()
         {
-            if (string.Compare(GatewayData.GetStringValue(Constant.RETURN_CODE), SUCCESS) == 0)
+            if (string.Compare(Notify.ReturnCode, SUCCESS) == 0)
             {
                 return true;
             }
 
-            throw new Exception(GatewayData.GetStringValue(Constant.RETURN_MSG));
+            throw new Exception(Notify.ReturnMsg);
         }
 
         /// <summary>
@@ -281,8 +278,6 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private bool CheckQueryResult(string resultXml)
         {
-            // 需要先清除之前查询订单的参数，否则会对接收到的参数造成干扰。
-            ClearGatewayData();
             GatewayData.FromXml(resultXml);
             if (IsSuccessResult())
             {
@@ -304,30 +299,28 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.MCH_ID, Merchant.MchId);
             GatewayData.Add(Constant.OUT_TRADE_NO, Order.OutTradeNo);
             GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
-            GatewayData.Add(Constant.SIGN, BuildSign());    // 签名需要在最后设置，以免缺少参数。
+            GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
         /// <summary>
-        /// 清除网关的数据
+        /// 初始化APP端调起支付的参数
         /// </summary>
-        private void ClearGatewayData()
+        private void InitAppParameter()
         {
             GatewayData.Clear();
-        }
-
-        /// <summary>
-        /// 初始化表示已成功接收到支付通知的数据
-        /// </summary>
-        private void InitProcessSuccessParameter()
-        {
-            GatewayData.Add(Constant.RETURN_CODE, SUCCESS);
+            Merchant.NonceStr = Util.GenerateNonceStr();
+            GatewayData.Add(Constant.APPID, Merchant.AppId);
+            GatewayData.Add(Constant.PARTNERID, Merchant.MchId);
+            GatewayData.Add(Constant.PREPAYID, "23");
+            GatewayData.Add(Constant.PACKAGE, "Sign=WXPay");
+            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
+            GatewayData.Add(Constant.TIMESTAMP, DateTime.Now.ToTimeStamp());
+            GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
         public override void WriteSuccessFlag()
         {
-            // 需要先清除之前接收到的通知的参数，否则会对生成标志成功接收到通知的XML造成干扰。
-            ClearGatewayData();
-            InitProcessSuccessParameter();
+            GatewayData.Add(Constant.RETURN_CODE, SUCCESS);
             HttpUtil.Write(GatewayData.ToXml());
         }
 

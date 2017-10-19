@@ -47,5 +47,10 @@
         public const string PREPAY_ID = "prepay_id";
         public const string MWEB_URL = "mweb_url";
         public const string MWEB = "MWEB";
+        public const string PARTNERID = "partnerid";
+        public const string PACKAGE = "package";
+        public const string WEB = "WEB";
+        public const string TIMESTAMP = "timestamp";
+        public const string PREPAYID = "prepayid";
     }
 }
