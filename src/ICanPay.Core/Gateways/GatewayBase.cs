@@ -192,6 +192,11 @@ namespace ICanPay.Core
                 SupplementaryWebParameter();
             }
 
+            if (GatewayTradeType == GatewayTradeType.Public)
+            {
+                SupplementaryPublicParameter();
+            }
+
             ValidateParameter(Merchant);
             ValidateParameter(Order);
         }
@@ -215,6 +220,13 @@ namespace ICanPay.Core
         /// 补充扫码支付的缺少参数
         /// </summary>
         protected abstract void SupplementaryScanParameter();
+
+        /// <summary>
+        /// 补充公众号支付的缺少参数
+        /// </summary>
+        protected virtual void SupplementaryPublicParameter()
+        {
+        }
 
         /// <summary>
         /// 读取通知

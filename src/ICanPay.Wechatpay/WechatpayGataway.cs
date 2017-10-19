@@ -7,7 +7,8 @@ namespace ICanPay.Wechatpay
     /// <summary>
     /// 微信支付网关
     /// </summary>
-    public sealed class WechatpayGataway : GatewayBase, IPaymentQRCode, IQueryNow, IPaymentApp, IPaymentUrl
+    public sealed class WechatpayGataway : GatewayBase,
+        IPaymentQRCode, IQueryNow, IPaymentApp, IPaymentUrl, IPaymentPublic
     {
 
         #region 私有字段
@@ -67,13 +68,20 @@ namespace ICanPay.Wechatpay
         {
             UnifiedOrder();
             InitAppParameter();
-            return GatewayData.ToUrlEncode();
+            return GatewayData.ToJson();
         }
 
         public string BuildPaymentUrl()
         {
             UnifiedOrder();
             return Notify.MWebUrl;
+        }
+
+        public string BuildPaymentPublic()
+        {
+            UnifiedOrder();
+            InitPublicParameter();
+            return GatewayData.ToJson();
         }
 
         protected override void InitOrderParameter()
@@ -136,6 +144,11 @@ namespace ICanPay.Wechatpay
                 GatewayData.Add(Constant.OPENID, Order.OpenId);
             }
 
+            if (!string.IsNullOrEmpty(Order.SceneInfo))
+            {
+                GatewayData.Add(Constant.SCENE_INFO, Order.SceneInfo);
+            }
+
             #endregion
 
             GatewayData.Add(Constant.SIGN, BuildSign());
@@ -159,11 +172,7 @@ namespace ICanPay.Wechatpay
 
         protected override void SupplementaryWapParameter()
         {
-            if (!string.IsNullOrEmpty(Order.SceneInfo))
-            {
-                GatewayData.Add(Constant.SCENE_INFO, Order.SceneInfo);
-            }
-            else
+            if (string.IsNullOrEmpty(Order.SceneInfo))
             {
                 throw new ArgumentNullException("SceneInfo 参数不可为空");
             }
@@ -175,6 +184,17 @@ namespace ICanPay.Wechatpay
         protected override void SupplementaryScanParameter()
         {
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+        }
+
+        protected override void SupplementaryPublicParameter()
+        {
+            if (string.IsNullOrEmpty(Order.OpenId))
+            {
+                throw new ArgumentNullException("openid 参数不可为空");
+            }
+
+            Order.TradeType = Constant.JSAPI;
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
         public bool QueryNow()
@@ -319,11 +339,26 @@ namespace ICanPay.Wechatpay
             Merchant.NonceStr = Util.GenerateNonceStr();
             GatewayData.Add(Constant.APPID, Merchant.AppId);
             GatewayData.Add(Constant.PARTNERID, Merchant.MchId);
-            GatewayData.Add(Constant.PREPAYID, "23");
+            GatewayData.Add(Constant.PREPAYID, Notify.PrepayId);
             GatewayData.Add(Constant.PACKAGE, "Sign=WXPay");
             GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
             GatewayData.Add(Constant.TIMESTAMP, DateTime.Now.ToTimeStamp());
             GatewayData.Add(Constant.SIGN, BuildSign());
+        }
+
+        /// <summary>
+        /// 初始化公众号调起支付的参数
+        /// </summary>
+        private void InitPublicParameter()
+        {
+            GatewayData.Clear();
+            Merchant.NonceStr = Util.GenerateNonceStr();
+            GatewayData.Add(Constant.APPID, Merchant.AppId);
+            GatewayData.Add(Constant.TIMESTAMP, DateTime.Now.ToTimeStamp());
+            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
+            GatewayData.Add(Constant.PACKAGE, $"{Constant.PREPAY_ID}={Notify.PrepayId}");
+            GatewayData.Add(Constant.SIGN_TYPE, "MD5");
+            GatewayData.Add(Constant.PAYSIGN, BuildSign());
         }
 
         public override void WriteSuccessFlag()

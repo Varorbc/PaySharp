@@ -83,5 +83,12 @@ namespace ICanPay.Wechatpay
         /// </summary>
         [Display(Name = Constant.MWEB_URL)]
         public string MWebUrl { get; set; }
+
+        /// <summary>
+        /// 二维码链接
+        /// trade_type为NATIVE时有返回，用于生成二维码，展示给用户进行扫码支付
+        /// </summary>
+        [Display(Name = Constant.CODE_URL)]
+        public string CodeUrl { get; set; }
     }
 }
