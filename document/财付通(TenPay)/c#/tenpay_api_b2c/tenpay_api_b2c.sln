@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "D:\www\tenpay_api_b2c\", ".", "{07753D37-FF9D-4732-8555-9C3C0EF080C8}"
+	ProjectSection(WebsiteProperties) = preProject
+		ProjectReferences = "{A8FCD174-B0A9-4050-A864-63041D47AC2E}|tenpayLib.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/tenpay_api_b2c"
+		Debug.AspNetCompiler.PhysicalPath = "D:\www\tenpay_api_b2c\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\tenpay_api_b2c\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/tenpay_api_b2c"
+		Release.AspNetCompiler.PhysicalPath = "D:\www\tenpay_api_b2c\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\tenpay_api_b2c\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "1588"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tenpayLib", "tenpayLib\tenpayLib.csproj", "{A8FCD174-B0A9-4050-A864-63041D47AC2E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|.NET = Debug|.NET
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Release|.NET = Release|.NET
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07753D37-FF9D-4732-8555-9C3C0EF080C8}.Debug|.NET.ActiveCfg = Debug|.NET
+		{07753D37-FF9D-4732-8555-9C3C0EF080C8}.Debug|.NET.Build.0 = Debug|.NET
+		{07753D37-FF9D-4732-8555-9C3C0EF080C8}.Debug|Any CPU.ActiveCfg = Debug|.NET
+		{07753D37-FF9D-4732-8555-9C3C0EF080C8}.Debug|Mixed Platforms.ActiveCfg = Debug|.NET
+		{07753D37-FF9D-4732-8555-9C3C0EF080C8}.Debug|Mixed Platforms.Build.0 = Debug|.NET
+		{07753D37-FF9D-4732-8555-9C3C0EF080C8}.Release|.NET.ActiveCfg = Debug|.NET
+		{07753D37-FF9D-4732-8555-9C3C0EF080C8}.Release|.NET.Build.0 = Debug|.NET
+		{07753D37-FF9D-4732-8555-9C3C0EF080C8}.Release|Any CPU.ActiveCfg = Debug|.NET
+		{07753D37-FF9D-4732-8555-9C3C0EF080C8}.Release|Mixed Platforms.ActiveCfg = Debug|.NET
+		{07753D37-FF9D-4732-8555-9C3C0EF080C8}.Release|Mixed Platforms.Build.0 = Debug|.NET
+		{A8FCD174-B0A9-4050-A864-63041D47AC2E}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{A8FCD174-B0A9-4050-A864-63041D47AC2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8FCD174-B0A9-4050-A864-63041D47AC2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8FCD174-B0A9-4050-A864-63041D47AC2E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A8FCD174-B0A9-4050-A864-63041D47AC2E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A8FCD174-B0A9-4050-A864-63041D47AC2E}.Release|.NET.ActiveCfg = Release|Any CPU
+		{A8FCD174-B0A9-4050-A864-63041D47AC2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8FCD174-B0A9-4050-A864-63041D47AC2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8FCD174-B0A9-4050-A864-63041D47AC2E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A8FCD174-B0A9-4050-A864-63041D47AC2E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

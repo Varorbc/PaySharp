@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/Varorbc/ICanPay</PackageProjectUrl>
+    <Title>ICanPay.Tenpay</Title>
+    <Authors>Varorbc</Authors>
+    <Description>财付通支付</Description>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DocumentationFile>bin\Release\netstandard2.0\ICanPay.Tenpay.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICanPay.Core\ICanPay.Core.csproj" />
+  </ItemGroup>
+
+</Project>
