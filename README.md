@@ -25,7 +25,6 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddICanPay(a =>
             {
 				var gateways = new List<GatewayBase>();
@@ -52,7 +51,7 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{	
 			app.UseICanPay();
-    	}
+		}
     
 然后创建支付控制类：
 
