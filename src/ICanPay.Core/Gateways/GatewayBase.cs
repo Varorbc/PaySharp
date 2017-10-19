@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ICanPay.Core
@@ -216,6 +215,39 @@ namespace ICanPay.Core
         /// 补充扫码支付的缺少参数
         /// </summary>
         protected abstract void SupplementaryScanParameter();
+
+        /// <summary>
+        /// 读取通知
+        /// </summary>
+        protected void ReadNotify<T>()
+        {
+            Task.Run(() =>
+            {
+                var type = typeof(T);
+                var notify = Activator.CreateInstance(type);
+                var properties = type.GetProperties();
+
+                foreach (var item in properties)
+                {
+                    string key = item
+                        .GetCustomAttributesData()[0]
+                        .NamedArguments[0]
+                        .TypedValue
+                        .Value
+                        .ToString();
+                    object value = GatewayData.GetValue(key);
+
+                    if (value != null)
+                    {
+                        item.SetValue(notify, Convert.ChangeType(value, item.PropertyType));
+                    }
+                }
+
+                Notify = (INotify)notify;
+            })
+            .GetAwaiter()
+            .GetResult();
+        }
 
         #endregion
 

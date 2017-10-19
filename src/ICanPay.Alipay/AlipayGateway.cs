@@ -69,7 +69,7 @@ namespace ICanPay.Alipay
 
         protected override async Task<bool> CheckNotifyDataAsync()
         {
-            await ReadNotifyAsync();
+            ReadNotify<Notify>();
             if (await IsSuccessResultAsync())
             {
                 return true;
@@ -150,42 +150,6 @@ namespace ICanPay.Alipay
         private string GetPaymentQueryString()
         {
             return GatewayData.ToUrlEncode();
-        }
-
-        /// <summary>
-        /// 读取通知
-        /// </summary>
-        private void ReadNotify()
-        {
-            var type = typeof(Notify);
-            var notify = Activator.CreateInstance(type);
-            var properties = type.GetProperties();
-
-            foreach (var item in properties)
-            {
-                string key = item
-                    .GetCustomAttributesData()[0]
-                    .NamedArguments[0]
-                    .TypedValue
-                    .Value
-                    .ToString();
-                object value = GatewayData.GetValue(key);
-
-                if (value != null)
-                {
-                    item.SetValue(notify, Convert.ChangeType(value, item.PropertyType));
-                }
-            }
-
-            base.Notify = (Notify)notify;
-        }
-
-        /// <summary>
-        /// 异步读取通知
-        /// </summary>
-        private async Task ReadNotifyAsync()
-        {
-            await Task.Run(() => ReadNotify());
         }
 
         /// <summary>
