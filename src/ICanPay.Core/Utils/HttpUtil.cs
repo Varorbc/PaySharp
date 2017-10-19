@@ -4,7 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ICanPay
+namespace ICanPay.Core
 {
     /// <summary>
     /// Http工具类
