@@ -10,7 +10,7 @@ namespace ICanPay.Core
     /// </summary>
     public abstract class GatewayBase
     {
-        #region 公有字段
+        #region 公共字段
 
         public const string TRUE = "true";
         public const string FALSE = "false";
@@ -231,7 +231,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 读取通知
         /// </summary>
-        protected void ReadNotify<T>()
+        protected void ReadNotify<T>() where T : INotify
         {
             Task.Run(() =>
             {

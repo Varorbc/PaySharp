@@ -29,35 +29,31 @@ namespace ICanPay.Core
         public static GatewayBase GetGateway(ICollection<GatewayBase> gatewayList)
         {
             var gatewayData = ReadNotifyData();
+            GatewayBase gateway;
+
             if (IsAlipayGateway(gatewayData))
             {
-                var gateway = gatewayList.GetGateway(GatewayType.Alipay);
-                gateway.GatewayData = gatewayData;
-                return gateway;
+                gateway = gatewayList.GetGateway(GatewayType.Alipay);
             }
-
-            if (IsWechatpayGateway(gatewayData))
+            else if (IsWechatpayGateway(gatewayData))
             {
-                var gateway = gatewayList.GetGateway(GatewayType.Wechatpay);
-                gateway.GatewayData = gatewayData;
-                return gateway;
+                gateway = gatewayList.GetGateway(GatewayType.Wechatpay);
             }
-
-            if (IsTenpayGateway(gatewayData))
+            else if (IsTenpayGateway(gatewayData))
             {
-                var gateway = gatewayList.GetGateway(GatewayType.Tenpay);
-                gateway.GatewayData = gatewayData;
-                return gateway;
+                gateway = gatewayList.GetGateway(GatewayType.Tenpay);
             }
-
-            if (IsYeepayGateway(gatewayData))
+            else if (IsYeepayGateway(gatewayData))
             {
-                var gateway = gatewayList.GetGateway(GatewayType.Yeepay);
-                gateway.GatewayData = gatewayData;
-                return gateway;
+                gateway = gatewayList.GetGateway(GatewayType.Yeepay);
+            }
+            else
+            {
+                gateway = new NullGateway();
             }
 
-            return new NullGateway(gatewayData);
+            gateway.GatewayData = gatewayData;
+            return gateway;
         }
 
         /// <summary>
