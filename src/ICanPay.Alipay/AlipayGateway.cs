@@ -50,7 +50,7 @@ namespace ICanPay.Alipay
         {
             InitOrderParameter();
 
-            return GatewayData.ToForm(GatewayUrl);
+            return GatewayData.ToForm(GatewayUrl, Merchant.Charset);
         }
 
         public string BuildPaymentUrl()

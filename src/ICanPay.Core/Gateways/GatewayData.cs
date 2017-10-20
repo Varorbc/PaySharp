@@ -309,19 +309,20 @@ namespace ICanPay.Core
         /// 将网关数据转换为表单数据
         /// </summary>
         /// <param name="url">请求地址</param>
+        /// <param name="charset">编码</param>
         /// <returns></returns>
-        public string ToForm(string url)
+        public string ToForm(string url, string charset)
         {
             var html = new StringBuilder();
             html.AppendLine("<body>");
-            html.AppendLine("<form name='Gateway' method='post' action ='" + url + "'>");
+            html.AppendLine($"<form name='gateway' method='post' action ='{url}?charset={charset}'>");
             foreach (var item in Values)
             {
                 html.AppendLine($"<input type='hidden' name='{item.Key}' value='{item.Value}'>");
             }
             html.AppendLine("</form>");
             html.AppendLine("<script language='javascript' type='text/javascript'>");
-            html.AppendLine("document.Gateway.submit();");
+            html.AppendLine("document.gateway.submit();");
             html.AppendLine("</script>");
             html.AppendLine("</body>");
 
