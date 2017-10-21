@@ -157,11 +157,6 @@ namespace ICanPay.Wechatpay
 
         protected override void SupplementaryAppParameter()
         {
-            if (!string.IsNullOrEmpty(Order.SceneInfo))
-            {
-                GatewayData.Add(Constant.SCENE_INFO, Order.SceneInfo);
-            }
-
             Order.TradeType = Constant.APP;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
@@ -173,33 +168,18 @@ namespace ICanPay.Wechatpay
 
         protected override void SupplementaryWapParameter()
         {
-            if (string.IsNullOrEmpty(Order.SceneInfo))
-            {
-                throw new ArgumentNullException("SceneInfo 参数不可为空");
-            }
-
             Order.TradeType = Constant.MWEB;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
         protected override void SupplementaryScanParameter()
         {
-            if (string.IsNullOrEmpty(Order.ProductId))
-            {
-                throw new ArgumentNullException("ProductId 参数不可为空");
-            }
-
             Order.TradeType = Constant.NATIVE;
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
         }
 
         protected override void SupplementaryPublicParameter()
         {
-            if (string.IsNullOrEmpty(Order.OpenId))
-            {
-                throw new ArgumentNullException("openid 参数不可为空");
-            }
-
             Order.TradeType = Constant.JSAPI;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }

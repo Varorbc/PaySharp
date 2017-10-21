@@ -128,7 +128,10 @@ namespace ICanPay.Core
         /// <param name="instance">验证对象</param>
         private void ValidateParameter(object instance)
         {
-            var validationContext = new ValidationContext(instance);
+            var validationContext = new ValidationContext(instance, new Dictionary<object, object>
+            {
+                { "GatewayTradeType", GatewayTradeType }
+            });
             var results = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(instance, validationContext, results, true);
 

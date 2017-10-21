@@ -163,6 +163,7 @@ namespace ICanPay.Alipay
         /// </summary>
         [JsonProperty(PropertyName = Constant.SCENE)]
         [StringLength(32, ErrorMessage = "支付场景最大长度为32位")]
+        [Necessary(GatewayTradeType.Scan, ErrorMessage = "请设置支付场景")]
         public string Scene { get; set; }
 
         /// <summary>
@@ -170,6 +171,7 @@ namespace ICanPay.Alipay
         /// </summary>
         [JsonProperty(PropertyName = Constant.AUTH_CODE)]
         [StringLength(32, ErrorMessage = "支付授权码最大长度为32位")]
+        [Necessary(GatewayTradeType.Scan, ErrorMessage = "请设置支付授权码")]
         public string AuthCode { get; set; }
 
         /// <summary>

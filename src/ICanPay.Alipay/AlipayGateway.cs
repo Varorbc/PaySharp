@@ -1,5 +1,4 @@
 ﻿using ICanPay.Core;
-using System;
 using System.Threading.Tasks;
 
 namespace ICanPay.Alipay
@@ -108,16 +107,6 @@ namespace ICanPay.Alipay
 
         protected override void SupplementaryScanParameter()
         {
-            if (string.IsNullOrEmpty(Order.Scene))
-            {
-                throw new Exception("请设置支付场景");
-            }
-
-            if (string.IsNullOrEmpty(Order.AuthCode))
-            {
-                throw new Exception("请设置支付授权码");
-            }
-
             if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
             {
                 GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);

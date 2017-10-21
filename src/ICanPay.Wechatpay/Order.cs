@@ -71,6 +71,7 @@ namespace ICanPay.Wechatpay
         /// 商品ID,trade_type=NATIVE时（即扫码支付），此参数必传。此参数为二维码中包含的商品ID，商户自行定义
         /// </summary>
         [StringLength(32, ErrorMessage = "商品ID最大长度为32位")]
+        [Necessary(GatewayTradeType.Scan, ErrorMessage = "请设置商品ID")]
         public string ProductId { get; set; }
 
         /// <summary>
@@ -86,12 +87,14 @@ namespace ICanPay.Wechatpay
         /// 企业号请使用【企业号OAuth2.0接口】获取企业号内成员userid，再调用【企业号userid转openid接口】进行转换
         /// </summary>
         [StringLength(128, ErrorMessage = "用户标识最大长度为128位")]
+        [Necessary(GatewayTradeType.Public, ErrorMessage = "请设置用户标识")]
         public string OpenId { get; set; }
 
         /// <summary>
         /// 场景信息,该字段用于上报场景信息，目前支持上报实际门店信息。该字段为JSON对象数据，对象格式为{"store_info":{"id": "门店ID","name": "名称","area_code": "编码","address": "地址" }}
         /// </summary>
         [StringLength(256, ErrorMessage = "场景信息最大长度为256位")]
+        [Necessary(GatewayTradeType.Wap, ErrorMessage = "请设置场景信息")]
         public string SceneInfo { get; set; }
 
         /// <summary>
