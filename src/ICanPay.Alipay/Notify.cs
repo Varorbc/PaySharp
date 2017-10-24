@@ -191,5 +191,65 @@ namespace ICanPay.Alipay
         /// </summary>
         [Display(Name = Constant.VOUCHER_DETAIL_LIST)]
         public string VoucherDetailList { get; set; }
+
+        /// <summary>
+        /// 网关返回码,详见文档
+        /// https://docs.open.alipay.com/common/105806
+        /// </summary>
+        [Display(Name = Constant.CODE)]
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 网关返回码描述,详见文档
+        /// https://docs.open.alipay.com/common/105806
+        /// </summary>
+        [Display(Name = Constant.MSG)]
+        public string Message { get; set; }
+
+        /// <summary>
+        /// 网关返回码,详见文档
+        /// https://docs.open.alipay.com/common/105806
+        /// </summary>
+        [Display(Name = Constant.SUBCODE)]
+        public string SubCode { get; set; }
+
+        /// <summary>
+        /// 网关返回码描述,详见文档
+        /// https://docs.open.alipay.com/common/105806
+        /// </summary>
+        [Display(Name = Constant.SUBMSG)]
+        public string SubMessage { get; set; }
+
+        /// <summary>
+        /// 支付宝卡余额
+        /// </summary>
+        [Display(Name = Constant.CARD_BALANCE)]
+        public string CardBalance { get; set; }
+
+        /// <summary>
+        /// 发生支付交易的商户门店名称
+        /// </summary>
+        [Display(Name = Constant.STORE_NAME)]
+        public string StoreName { get; set; }
+
+        /// <summary>
+        /// 买家支付宝用户号
+        /// </summary>
+        [Display(Name = Constant.BUYER_USER_ID)]
+        public string BuyerUserId { get; set; }
+
+        /// <summary>
+        /// 本交易支付时使用的所有优惠券信息
+        /// </summary>
+        [Display(Name = Constant.DISCOUNT_GOODS_DETAIL)]
+        public string DiscountGoodsDetail { get; set; }
+
+        /// <summary>
+        /// 商户传入业务信息，具体值要和支付宝约定 
+        /// 将商户传入信息分发给相应系统，应用于安全，营销等参数直传场景
+        /// 格式为json格式
+        /// </summary>
+        [Display(Name = Constant.BUSINESS_PARAMS)]
+        public string BusinessParams { get; set; }
     }
 }

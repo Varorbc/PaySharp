@@ -20,8 +20,6 @@ namespace ICanPay.Core
         {
             UseStaticHttpContext(app);
 
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
             return app;
         }
 

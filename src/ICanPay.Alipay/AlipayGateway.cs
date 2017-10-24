@@ -1,12 +1,13 @@
 ﻿using ICanPay.Core;
 using System.Threading.Tasks;
+using System;
 
 namespace ICanPay.Alipay
 {
     /// <summary>
     /// 支付宝网关
     /// </summary>
-    public sealed class AlipayGateway : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp
+    public sealed class AlipayGateway : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp, IPaymentScan
     {
 
         #region 私有字段
@@ -49,7 +50,7 @@ namespace ICanPay.Alipay
         {
             InitOrderParameter();
 
-            return GatewayData.ToForm(GatewayUrl, Merchant.Charset);
+            return GatewayData.ToForm(GatewayUrl);
         }
 
         public string BuildPaymentUrl()
@@ -64,6 +65,19 @@ namespace ICanPay.Alipay
             InitOrderParameter();
 
             return GetPaymentQueryString();
+        }
+
+        public string BuildPaymentScan()
+        {
+            InitOrderParameter();
+
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
+                .GetAwaiter()
+                .GetResult();
+            ReadReturnResult(result);
+
+            return result;
         }
 
         protected override async Task<bool> CheckNotifyDataAsync()
@@ -142,6 +156,40 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
+        /// 条码支付---读取返回结果
+        /// </summary>
+        /// <param name="result"></param>
+        private void ReadReturnResult(string result)
+        {
+            GatewayData.FromJson(result);
+            string sign = GatewayData.GetStringValue(Constant.SIGN);
+            result = GatewayData.GetStringValue(Constant.ALIPAY_TRADE_PAY_RESPONSE);
+
+            GatewayData.FromJson(result);
+            ReadNotify<Notify>();
+            Notify.Sign = sign;
+
+            IsSuccessReturn();
+        }
+
+        /// <summary>
+        /// 是否是已成功的返回
+        /// </summary>
+        /// <returns></returns>
+        private void IsSuccessReturn()
+        {
+            if (Notify.Code != "10000")
+            {
+                if (!string.IsNullOrEmpty(Notify.SubMessage))
+                {
+                    throw new Exception(Notify.SubMessage);
+                }
+
+                throw new Exception(Notify.Message);
+            }
+        }
+
+        /// <summary>
         /// 是否是已成功支付的支付通知
         /// </summary>
         /// <returns></returns>
@@ -193,7 +241,7 @@ namespace ICanPay.Alipay
             string data = HttpUtil.ReadPage(GetValidateNotifyUrl());
             GatewayData.FromXml(data);
             // 服务器异步通知的通知Id则会在输出标志成功接收到通知的success字符串后失效。
-            if (GatewayData.GetStringValue("is_success") == "T")
+            if (GatewayData.GetStringValue(Constant.IS_SUCCESS) == Constant.T)
             {
                 return true;
             }

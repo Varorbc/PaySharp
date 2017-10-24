@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -262,6 +263,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 将Url格式数据转换为网关数据
         /// </summary>
+        /// <param name="url">url数据</param>
         /// <returns></returns>
         public void FromUrl(string url)
         {
@@ -288,9 +290,11 @@ namespace ICanPay.Core
         /// <summary>
         /// 将表单数据转换为网关数据
         /// </summary>
+        /// <param name="form">表单</param>
         /// <returns></returns>
         public void FromForm(IFormCollection form)
         {
+            Clear();
             try
             {
                 var allKeys = form.Keys;
@@ -335,6 +339,21 @@ namespace ICanPay.Core
         public string ToJson()
         {
             return JsonConvert.SerializeObject(Values);
+        }
+
+        /// <summary>
+        /// 将Json格式数据转成网关数据
+        /// </summary>
+        /// <param name="json">json数据</param>
+        /// <returns></returns>
+        public void FromJson(string json)
+        {
+            Clear();
+            JObject jObject = JObject.Parse(json);
+            foreach (JProperty item in jObject.Children())
+            {
+                Add(item.Name, item.Value.ToString());
+            }
         }
 
         /// <summary>

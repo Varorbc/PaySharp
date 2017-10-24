@@ -85,5 +85,19 @@
         public const string GMT_CLOSE = "gmt_close";
         public const string FUND_BILL_LIST = "fund_bill_list";
         public const string VOUCHER_DETAIL_LIST = "voucher_detail_list";
+        public const string BAR_CODE = "bar_code";
+        public const string WAVE_CODE = "wave_code";
+        public const string CODE = "code";
+        public const string MSG = "msg";
+        public const string SUBCODE = "sub_code";
+        public const string SUBMSG = "sub_msg";
+        public const string CARD_BALANCE = "card_balance";
+        public const string STORE_NAME = "store_name";
+        public const string BUYER_USER_ID = "buyer_user_id";
+        public const string DISCOUNT_GOODS_DETAIL = "discount_goods_detail";
+        public const string BUSINESS_PARAMS = "business_params";
+        public const string ALIPAY_TRADE_PAY_RESPONSE = "alipay_trade_pay_response";
+        public const string IS_SUCCESS = "is_success";
+        public const string T = "T";
     }
 }

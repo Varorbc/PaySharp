@@ -63,6 +63,7 @@
     <Content Include="Default.aspx" />
     <Content Include="Notify_url.aspx" />
     <Content Include="pagepay\pagepay.aspx" />
+    <Content Include="pay\pay.aspx" />
     <Content Include="readme.txt" />
     <Content Include="Return_url.aspx" />
     <Content Include="wappay\billdownload.aspx" />
@@ -96,6 +97,13 @@
     </Compile>
     <Compile Include="pagepay\pagepay.aspx.designer.cs">
       <DependentUpon>pagepay.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pay\pay.aspx.cs">
+      <DependentUpon>pay.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pay\pay.aspx.designer.cs">
+      <DependentUpon>pay.aspx</DependentUpon>
     </Compile>
     <Compile Include="Return_url.aspx.cs">
       <DependentUpon>Return_url.aspx</DependentUpon>

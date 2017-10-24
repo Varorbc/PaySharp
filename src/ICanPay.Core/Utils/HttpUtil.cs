@@ -127,6 +127,7 @@ namespace ICanPay.Core
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
+            request.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
 
             try
             {
@@ -175,6 +176,7 @@ namespace ICanPay.Core
             byte[] dataByte = Encoding.UTF8.GetBytes(data);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
             request.ContentLength = dataByte.Length;
 
             try
@@ -186,8 +188,7 @@ namespace ICanPay.Core
 
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    Encoding encoding = Encoding.GetEncoding(response.CharacterSet);
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream(), encoding))
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
                         if (reader != null)
                         {
