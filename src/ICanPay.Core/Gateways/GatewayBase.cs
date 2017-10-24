@@ -207,6 +207,11 @@ namespace ICanPay.Core
                         SupplementaryBarcodeParameter();
                     }
                     break;
+                case GatewayTradeType.Applet:
+                    {
+                        SupplementaryAppletParameter();
+                    }
+                    break;
                 default:
                     break;
             }
@@ -246,6 +251,13 @@ namespace ICanPay.Core
         /// 补充条码支付的缺少参数
         /// </summary>
         protected abstract void SupplementaryBarcodeParameter();
+
+        /// <summary>
+        /// 补充小程序支付的缺少参数
+        /// </summary>
+        protected virtual void SupplementaryAppletParameter()
+        {
+        }
 
         /// <summary>
         /// 读取通知

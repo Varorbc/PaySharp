@@ -141,6 +141,14 @@ namespace ICanPay.Core
                         }
                     }
                     break;
+                case GatewayTradeType.Applet:
+                    {
+                        if (gateway is IPaymentApplet paymentApplet)
+                        {
+                            return paymentApplet.BuildPaymentApplet();
+                        }
+                    }
+                    break;
                 default:
                     break;
             }

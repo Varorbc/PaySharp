@@ -34,6 +34,11 @@ namespace ICanPay.Core
         /// <summary>
         /// 条码支付
         /// </summary>
-        Barcode
+        Barcode,
+
+        /// <summary>
+        /// 小程序支付
+        /// </summary>
+        Applet
     }
 }
