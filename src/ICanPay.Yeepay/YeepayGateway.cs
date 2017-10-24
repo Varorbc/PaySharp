@@ -256,7 +256,7 @@ namespace ICanPay.Yeepay
             throw new NotImplementedException();
         }
 
-        protected override void SupplementaryBarCodeParameter()
+        protected override void SupplementaryBarcodeParameter()
         {
             throw new NotImplementedException();
         }

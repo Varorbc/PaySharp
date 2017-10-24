@@ -184,7 +184,7 @@ namespace ICanPay.Wechatpay
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
-        protected override void SupplementaryBarCodeParameter()
+        protected override void SupplementaryBarcodeParameter()
         {
             throw new NotImplementedException();
         }

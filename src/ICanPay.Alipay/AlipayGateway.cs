@@ -8,7 +8,7 @@ namespace ICanPay.Alipay
     /// 支付宝网关
     /// </summary>
     public sealed class AlipayGateway
-        : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp, IPaymentScan
+        : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp, IPaymentScan//, IPaymentBarcode
     {
 
         #region 私有字段
@@ -70,7 +70,22 @@ namespace ICanPay.Alipay
 
         public string BuildPaymentScan()
         {
+            InitOrderParameter();
+
             return PreCreate();
+        }
+
+        public string BuildPaymentBarcode()
+        {
+            InitOrderParameter();
+
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
+                .GetAwaiter()
+                .GetResult();
+            ReadReturnResult(result, GatewayTradeType.Barcode);
+
+            return null;
         }
 
         protected override async Task<bool> CheckNotifyDataAsync()
@@ -119,17 +134,17 @@ namespace ICanPay.Alipay
                 GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
             }
 
-            Merchant.Method = Constant.Scan;
+            Merchant.Method = Constant.SCAN;
         }
 
-        protected override void SupplementaryBarCodeParameter()
+        protected override void SupplementaryBarcodeParameter()
         {
             if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
             {
                 GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
             }
 
-            Merchant.Method = Constant.BarCode;
+            Merchant.Method = Constant.BARCODE;
             Order.ProductCode = Constant.FACE_TO_FACE_PAYMENT;
         }
 
@@ -164,8 +179,6 @@ namespace ICanPay.Alipay
         /// <returns></returns>
         private string PreCreate()
         {
-            InitOrderParameter();
-
             string result = HttpUtil
                 .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
                 .GetAwaiter()

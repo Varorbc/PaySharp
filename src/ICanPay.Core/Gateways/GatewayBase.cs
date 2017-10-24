@@ -175,29 +175,40 @@ namespace ICanPay.Core
         /// </summary>
         private void SupplementaryParameter()
         {
-            if (GatewayTradeType == GatewayTradeType.App)
+            switch (GatewayTradeType)
             {
-                SupplementaryAppParameter();
-            }
-
-            if (GatewayTradeType == GatewayTradeType.Scan)
-            {
-                SupplementaryScanParameter();
-            }
-
-            if (GatewayTradeType == GatewayTradeType.Wap)
-            {
-                SupplementaryWapParameter();
-            }
-
-            if (GatewayTradeType == GatewayTradeType.Web)
-            {
-                SupplementaryWebParameter();
-            }
-
-            if (GatewayTradeType == GatewayTradeType.Public)
-            {
-                SupplementaryPublicParameter();
+                case GatewayTradeType.App:
+                    {
+                        SupplementaryAppParameter();
+                    }
+                    break;
+                case GatewayTradeType.Wap:
+                    {
+                        SupplementaryWapParameter();
+                    }
+                    break;
+                case GatewayTradeType.Web:
+                    {
+                        SupplementaryWebParameter();
+                    }
+                    break;
+                case GatewayTradeType.Scan:
+                    {
+                        SupplementaryScanParameter();
+                    }
+                    break;
+                case GatewayTradeType.Public:
+                    {
+                        SupplementaryPublicParameter();
+                    }
+                    break;
+                case GatewayTradeType.Barcode:
+                    {
+                        SupplementaryBarcodeParameter();
+                    }
+                    break;
+                default:
+                    break;
             }
 
             ValidateParameter(Merchant);
@@ -234,7 +245,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 补充条码支付的缺少参数
         /// </summary>
-        protected abstract void SupplementaryBarCodeParameter();
+        protected abstract void SupplementaryBarcodeParameter();
 
         /// <summary>
         /// 读取通知

@@ -3,7 +3,7 @@
     /// <summary>
     /// 支付订单通过条码提交
     /// </summary>
-    interface IPaymentBarcode
+    public interface IPaymentBarcode
     {
         /// <summary>
         /// 创建支付订单数据

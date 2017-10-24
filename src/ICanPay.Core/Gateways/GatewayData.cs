@@ -352,10 +352,13 @@ namespace ICanPay.Core
         public void FromJson(string json)
         {
             Clear();
-            JObject jObject = JObject.Parse(json);
-            foreach (JProperty item in jObject.Children())
+            if (!string.IsNullOrEmpty(json))
             {
-                Add(item.Name, item.Value.ToString());
+                JObject jObject = JObject.Parse(json);
+                foreach (JProperty item in jObject.Children())
+                {
+                    Add(item.Name, item.Value.ToString());
+                }
             }
         }
 

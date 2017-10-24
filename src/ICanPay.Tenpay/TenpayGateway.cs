@@ -346,7 +346,7 @@ namespace ICanPay.Tenpay
             throw new NotImplementedException();
         }
 
-        protected override void SupplementaryBarCodeParameter()
+        protected override void SupplementaryBarcodeParameter()
         {
             throw new NotImplementedException();
         }

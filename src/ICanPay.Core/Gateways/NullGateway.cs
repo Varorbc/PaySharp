@@ -63,7 +63,7 @@ namespace ICanPay.Core
         {
         }
 
-        protected override void SupplementaryBarCodeParameter()
+        protected override void SupplementaryBarcodeParameter()
         {
         }
 
