@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace ICanPay.Core
 {
@@ -61,6 +60,10 @@ namespace ICanPay.Core
         }
 
         protected override void SupplementaryScanParameter()
+        {
+        }
+
+        protected override void SupplementaryBarCodeParameter()
         {
         }
 

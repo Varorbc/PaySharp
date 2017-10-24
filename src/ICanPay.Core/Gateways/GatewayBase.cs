@@ -232,6 +232,11 @@ namespace ICanPay.Core
         }
 
         /// <summary>
+        /// 补充条码支付的缺少参数
+        /// </summary>
+        protected abstract void SupplementaryBarCodeParameter();
+
+        /// <summary>
         /// 读取通知
         /// </summary>
         protected void ReadNotify<T>() where T : INotify

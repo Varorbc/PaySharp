@@ -7,7 +7,8 @@ namespace ICanPay.Alipay
     /// <summary>
     /// 支付宝网关
     /// </summary>
-    public sealed class AlipayGateway : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp, IPaymentScan
+    public sealed class AlipayGateway
+        : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp, IPaymentScan
     {
 
         #region 私有字段
@@ -118,7 +119,18 @@ namespace ICanPay.Alipay
                 GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
             }
 
-            Merchant.Method = Constant.PRECREATE;
+            Merchant.Method = Constant.Scan;
+        }
+
+        protected override void SupplementaryBarCodeParameter()
+        {
+            if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
+            {
+                GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
+            }
+
+            Merchant.Method = Constant.BarCode;
+            Order.ProductCode = Constant.FACE_TO_FACE_PAYMENT;
         }
 
         /// <summary>

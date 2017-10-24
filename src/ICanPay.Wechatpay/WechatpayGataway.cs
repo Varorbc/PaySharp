@@ -184,6 +184,11 @@ namespace ICanPay.Wechatpay
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
+        protected override void SupplementaryBarCodeParameter()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool QueryNow()
         {
             return CheckQueryResult(QueryOrder());

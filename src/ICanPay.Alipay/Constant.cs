@@ -33,7 +33,7 @@
         public const string APP = "alipay.trade.app.pay";
         public const string WAP = "alipay.trade.wap.pay";
         public const string WEB = "alipay.trade.page.pay";
-        public const string SCAN = "alipay.trade.pay";
+        public const string BarCode = "alipay.trade.pay";
         public const string TOTAL_AMOUNT = "total_amount";
         public const string BODY = "body";
         public const string GOODS_DETAIL = "goods_detail";
@@ -99,7 +99,7 @@
         public const string ALIPAY_TRADE_PAY_RESPONSE = "alipay_trade_pay_response";
         public const string IS_SUCCESS = "is_success";
         public const string T = "T";
-        public const string PRECREATE = "alipay.trade.precreate";
+        public const string Scan = "alipay.trade.precreate";
         public const string QR_CODE = "qr_code";
         public const string ALIPAY_TRADE_PRECREATE_RESPONSE = "alipay_trade_precreate_response";
     }

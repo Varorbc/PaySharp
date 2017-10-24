@@ -256,6 +256,11 @@ namespace ICanPay.Yeepay
             throw new NotImplementedException();
         }
 
+        protected override void SupplementaryBarCodeParameter()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
 

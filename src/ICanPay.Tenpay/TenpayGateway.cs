@@ -346,6 +346,11 @@ namespace ICanPay.Tenpay
             throw new NotImplementedException();
         }
 
+        protected override void SupplementaryBarCodeParameter()
+        {
+            throw new NotImplementedException();
+        }
+
 
         #endregion
 

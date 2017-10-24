@@ -133,6 +133,14 @@ namespace ICanPay.Core
                         }
                     }
                     break;
+                case GatewayTradeType.Barcode:
+                    {
+                        if (gateway is IPaymentBarcode paymentBarcode)
+                        {
+                            return paymentBarcode.BuildPaymentBarcode();
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
