@@ -163,7 +163,7 @@ namespace ICanPay.Alipay
         /// </summary>
         [JsonProperty(PropertyName = Constant.SCENE)]
         [StringLength(32, ErrorMessage = "支付场景最大长度为32位")]
-        [Necessary(GatewayTradeType.Scan, ErrorMessage = "请设置支付场景")]
+        [Necessary(GatewayTradeType.Barcode, ErrorMessage = "请设置支付场景")]
         public string Scene { get; set; }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace ICanPay.Alipay
         /// </summary>
         [JsonProperty(PropertyName = Constant.AUTH_CODE)]
         [StringLength(32, ErrorMessage = "支付授权码最大长度为32位")]
-        [Necessary(GatewayTradeType.Scan, ErrorMessage = "请设置支付授权码")]
+        [Necessary(GatewayTradeType.Barcode, ErrorMessage = "请设置支付授权码")]
         public string AuthCode { get; set; }
 
         /// <summary>
@@ -209,5 +209,12 @@ namespace ICanPay.Alipay
         [JsonProperty(PropertyName = Constant.TERMINAL_ID)]
         [StringLength(32, ErrorMessage = "商户机具终端编号最大长度为32位")]
         public string TerminalId { get; set; }
+
+        /// <summary>
+        /// 商户传入业务信息，具体值要和支付宝约定，应用于安全，营销等参数直传场景，格式为json格式	
+        /// </summary>
+        [JsonProperty(PropertyName = Constant.BUSINESS_PARAMS)]
+        [StringLength(512, ErrorMessage = "商户传入业务信息最大长度为512位")]
+        public string BusinessParams { get; set; }
     }
 }

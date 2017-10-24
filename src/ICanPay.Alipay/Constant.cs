@@ -99,5 +99,8 @@
         public const string ALIPAY_TRADE_PAY_RESPONSE = "alipay_trade_pay_response";
         public const string IS_SUCCESS = "is_success";
         public const string T = "T";
+        public const string PRECREATE = "alipay.trade.precreate";
+        public const string QR_CODE = "qr_code";
+        public const string ALIPAY_TRADE_PRECREATE_RESPONSE = "alipay_trade_precreate_response";
     }
 }

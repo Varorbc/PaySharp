@@ -251,5 +251,11 @@ namespace ICanPay.Alipay
         /// </summary>
         [Display(Name = Constant.BUSINESS_PARAMS)]
         public string BusinessParams { get; set; }
+
+        /// <summary>
+        /// 当前预下单请求生成的二维码码串，可以用二维码生成工具根据该码串值生成对应的二维码
+        /// </summary>
+        [Display(Name = Constant.QR_CODE)]
+        public string QrCode { get; set; }
     }
 }

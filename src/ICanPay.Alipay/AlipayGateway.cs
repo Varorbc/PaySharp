@@ -69,15 +69,7 @@ namespace ICanPay.Alipay
 
         public string BuildPaymentScan()
         {
-            InitOrderParameter();
-
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
-                .GetAwaiter()
-                .GetResult();
-            ReadReturnResult(result);
-
-            return result;
+            return PreCreate();
         }
 
         protected override async Task<bool> CheckNotifyDataAsync()
@@ -126,8 +118,7 @@ namespace ICanPay.Alipay
                 GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
             }
 
-            Merchant.Method = Constant.SCAN;
-            Order.ProductCode = Constant.FACE_TO_FACE_PAYMENT;
+            Merchant.Method = Constant.PRECREATE;
         }
 
         /// <summary>
@@ -156,15 +147,34 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
-        /// 条码支付---读取返回结果
+        /// 预创建订单
         /// </summary>
-        /// <param name="result"></param>
-        private void ReadReturnResult(string result)
+        /// <returns></returns>
+        private string PreCreate()
+        {
+            InitOrderParameter();
+
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
+                .GetAwaiter()
+                .GetResult();
+            ReadReturnResult(result, GatewayTradeType.Scan);
+
+            return Notify.QrCode;
+        }
+
+        /// <summary>
+        /// 读取返回结果
+        /// </summary>
+        /// <param name="result">结果</param>
+        /// <param name="gatewayTradeType">网关交易类型，仅限扫码，条码</param>
+        private void ReadReturnResult(string result, GatewayTradeType gatewayTradeType)
         {
             GatewayData.FromJson(result);
             string sign = GatewayData.GetStringValue(Constant.SIGN);
-            result = GatewayData.GetStringValue(Constant.ALIPAY_TRADE_PAY_RESPONSE);
-
+            result = GatewayData.GetStringValue(gatewayTradeType == GatewayTradeType.Scan ?
+                Constant.ALIPAY_TRADE_PRECREATE_RESPONSE :
+                Constant.ALIPAY_TRADE_PAY_RESPONSE);
             GatewayData.FromJson(result);
             ReadNotify<Notify>();
             Notify.Sign = sign;

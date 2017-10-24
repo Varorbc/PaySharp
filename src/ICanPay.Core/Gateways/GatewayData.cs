@@ -29,7 +29,8 @@ namespace ICanPay.Core
         /// </summary>
         /// <param name="key">参数名</param>
         /// <param name="value">参数值</param>
-        public void Add(string key, object value)
+        /// <returns></returns>
+        public bool Add(string key, object value)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -49,6 +50,8 @@ namespace ICanPay.Core
             {
                 Values.Add(key, value);
             }
+
+            return true;
         }
 
         /// <summary>
@@ -362,6 +365,16 @@ namespace ICanPay.Core
         public void Clear()
         {
             Values.Clear();
+        }
+
+        /// <summary>
+        /// 移除指定参数
+        /// </summary>
+        /// <param name="key">参数名</param>
+        /// <returns></returns>
+        public bool Remove(string key)
+        {
+            return Values.Remove(key);
         }
 
         #endregion
