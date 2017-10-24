@@ -8,13 +8,14 @@ namespace ICanPay.Wechatpay
     /// 微信支付网关
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
-        IPaymentScan, IQueryNow, IPaymentApp, IPaymentUrl, IPaymentPublic
+        IPaymentScan, IQueryNow, IPaymentApp, IPaymentUrl, IPaymentPublic//, IPaymentBarcode
     {
 
         #region 私有字段
 
         private Merchant merchant;
         private const string queryGatewayUrl = "https://api.mch.weixin.qq.com/pay/orderquery";
+        private const string barcodeGatewayUrl = "https://api.mch.weixin.qq.com/pay/micropay";
 
         #endregion
 
@@ -85,6 +86,19 @@ namespace ICanPay.Wechatpay
             return GatewayData.ToJson();
         }
 
+        public string BuildPaymentBarcode()
+        {
+            GatewayUrl = barcodeGatewayUrl;
+            InitOrderParameter();
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToXml())
+                .GetAwaiter()
+                .GetResult();
+            ReadReturnResult(result);
+
+            throw new NotImplementedException();
+        }
+
         protected override void InitOrderParameter()
         {
             base.InitOrderParameter();
@@ -107,8 +121,12 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.FEE_TYPE, Order.FeeType);
             GatewayData.Add(Constant.TOTAL_FEE, Order.Amount * 100);
             GatewayData.Add(Constant.TIME_START, Order.TimeStart);
-            GatewayData.Add(Constant.TRADE_TYPE, Order.TradeType);
             GatewayData.Add(Constant.SPBILL_CREATE_IP, Order.SpbillCreateIp);
+
+            if (!string.IsNullOrEmpty(Order.TradeType))
+            {
+                GatewayData.Add(Constant.TRADE_TYPE, Order.TradeType);
+            }
 
             if (!string.IsNullOrEmpty(Order.Detail))
             {
@@ -150,6 +168,11 @@ namespace ICanPay.Wechatpay
                 GatewayData.Add(Constant.SCENE_INFO, Order.SceneInfo);
             }
 
+            if (!string.IsNullOrEmpty(Order.AuthCode))
+            {
+                GatewayData.Add(Constant.AUTH_CODE, Order.AuthCode);
+            }
+
             #endregion
 
             GatewayData.Add(Constant.SIGN, BuildSign());
@@ -186,7 +209,7 @@ namespace ICanPay.Wechatpay
 
         protected override void SupplementaryBarcodeParameter()
         {
-            throw new NotImplementedException();
+            Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
         }
 
         public bool QueryNow()

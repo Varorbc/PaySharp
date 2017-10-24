@@ -53,5 +53,15 @@
         public const string TIMESTAMP = "timestamp";
         public const string PREPAYID = "prepayid";
         public const string PAYSIGN = "paySign";
+        public const string AUTH_CODE = "auth_code";
+        public const string IS_SUBSCRIBE = "is_subscribe";
+        public const string SETTLEMENT_TOTAL_FEE = "settlement_total_fee";
+        public const string COUPON_FEE = "coupon_fee";
+        public const string BANK_TYPE = "bank_type";
+        public const string CASH_FEE_TYPE = "cash_fee_type";
+        public const string CASH_FEE = "cash_fee";
+        public const string TRANSACTION_ID = "transaction_id";
+        public const string TIME_END = "time_end";
+        public const string PROMOTION_DETAIL = "promotion_detail";
     }
 }

@@ -101,5 +101,14 @@ namespace ICanPay.Wechatpay
         /// 交易类型
         /// </summary>
         public string TradeType { get; set; }
+
+        /// <summary>
+        /// 授权码
+        /// 扫码支付授权码，设备读取用户微信中的条码或者二维码信息
+        /// （注：用户刷卡条形码规则：18位纯数字，以10、11、12、13、14、15开头）
+        /// </summary>
+        [StringLength(128, ErrorMessage = "授权码最大长度为128位")]
+        [Necessary(GatewayTradeType.Barcode, ErrorMessage = "请设置授权码")]
+        public string AuthCode { get; set; }
     }
 }
