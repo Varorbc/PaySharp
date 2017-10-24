@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -92,45 +93,46 @@ namespace ICanPay.Core
         /// <param name="text">内容</param>
         public static void Write(string text)
         {
+            Current.Response.ContentType = "text/html;charset=utf-8";
             Current.Response.WriteAsync(text).GetAwaiter().GetResult();
         }
 
         /// <summary>
         /// 读取网页，返回网页内容
         /// </summary>
-        /// <param name="pageUrl">网页URL</param>
+        /// <param name="url">url</param>
         /// <returns></returns>
-        public static string ReadPage(string pageUrl)
+        public static string ReadPage(string url)
         {
-            return ReadPage(pageUrl, Encoding.UTF8);
+            return ReadPage(url, Encoding.UTF8);
         }
 
         /// <summary>
         /// 异步读取网页，返回网页内容
         /// </summary>
-        /// <param name="pageUrl">网页URL</param>
+        /// <param name="url">url</param>
         /// <returns></returns>
-        public static async Task<string> ReadPageAsync(string pageUrl)
+        public static async Task<string> ReadPageAsync(string url)
         {
-            return await ReadPageAsync(pageUrl, Encoding.UTF8);
+            return await ReadPageAsync(url, Encoding.UTF8);
         }
 
         /// <summary>
         /// 读取网页，返回网页内容
         /// </summary>
-        /// <param name="pageUrl">网页URL</param>
-        /// <param name="pageEncoding">网页编码</param>
+        /// <param name="url">url</param>
+        /// <param name="encoding">编码</param>
         /// <returns></returns>
-        public static string ReadPage(string pageUrl, Encoding pageEncoding)
+        public static string ReadPage(string url, Encoding encoding)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(pageUrl);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
 
             try
             {
                 using (WebResponse response = request.GetResponse())
                 {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream(), pageEncoding))
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream(), encoding))
                     {
                         if (reader != null)
                         {
@@ -139,8 +141,9 @@ namespace ICanPay.Core
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                throw ex;
             }
             finally
             {
@@ -153,18 +156,18 @@ namespace ICanPay.Core
         /// <summary>
         /// 读取网页，返回网页内容
         /// </summary>
-        /// <param name="pageUrl">网页URL</param>
-        /// <param name="pageEncoding">网页编码</param>
+        /// <param name="url">url</param>
+        /// <param name="encoding">编码</param>
         /// <returns></returns>
-        public static async Task<string> ReadPageAsync(string pageUrl, Encoding pageEncoding)
+        public static async Task<string> ReadPageAsync(string url, Encoding encoding)
         {
-            return await Task.Run(() => ReadPage(pageUrl, pageEncoding));
+            return await Task.Run(() => ReadPage(url, encoding));
         }
 
         /// <summary>
         /// Post请求
         /// </summary>
-        /// <param name="url">链接</param>
+        /// <param name="url">url</param>
         /// <param name="data">数据</param>
         /// <returns></returns>
         public static string Post(string url, string data)
@@ -181,9 +184,10 @@ namespace ICanPay.Core
                     outStream.Write(dataByte, 0, dataByte.Length);
                 }
 
-                using (WebResponse response = request.GetResponse())
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    Encoding encoding = Encoding.GetEncoding(response.CharacterSet);
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream(), encoding))
                     {
                         if (reader != null)
                         {
@@ -192,8 +196,9 @@ namespace ICanPay.Core
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                throw ex;
             }
             finally
             {
@@ -206,7 +211,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 异步Post请求
         /// </summary>
-        /// <param name="url">链接</param>
+        /// <param name="url">url</param>
         /// <param name="data">数据</param>
         /// <returns></returns>
         public static async Task<string> PostAsync(string url, string data)

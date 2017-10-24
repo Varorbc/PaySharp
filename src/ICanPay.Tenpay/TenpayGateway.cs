@@ -77,7 +77,7 @@ namespace ICanPay.Tenpay
         public string BuildPaymentForm()
         {
             InitOrderParameter();
-            return GatewayData.ToForm(payGatewayUrl, "utf-8");
+            return GatewayData.ToForm(payGatewayUrl);
         }
 
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ICanPay.Core
 {
@@ -18,6 +19,8 @@ namespace ICanPay.Core
         public static IApplicationBuilder UseICanPay(this IApplicationBuilder app)
         {
             UseStaticHttpContext(app);
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             return app;
         }
