@@ -11,7 +11,8 @@ using System.IO;
 using System.Net;
 
 using System.Xml;
-using Newtonsoft.Json.Linq;
+using Jayrock.Json;
+using Jayrock.Json.Conversion;
 
 namespace Aop.Api
 {
@@ -679,10 +680,10 @@ namespace Aop.Api
         {
             // 使用AopModelParser序列化对象
             AopModelParser parser = new AopModelParser();
-            JObject jo = parser.serializeAopObject(obj);
+            JsonObject jo = parser.serializeAopObject(obj);
 
             // 根据JsonObject导出String格式的Json
-            String result = jo.ToString();
+            String result = JsonConvert.ExportToString(jo);
 
             return result;
         }

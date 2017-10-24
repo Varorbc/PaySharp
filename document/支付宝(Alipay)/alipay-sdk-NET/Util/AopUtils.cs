@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Jayrock.Json.Conversion;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
-using Newtonsoft.Json;
 
 namespace Aop.Api.Util
 {
@@ -174,7 +172,7 @@ namespace Aop.Api.Util
 
         public static IDictionary ParseJson(string body)
         {
-            return JsonConvert.DeserializeObject<IDictionary>(body);
+            return JsonConvert.Import(body) as IDictionary;
         }
     }
 }

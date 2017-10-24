@@ -1,4 +1,4 @@
-﻿
+﻿using Jayrock.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -93,17 +93,21 @@ namespace Aop.Api.Parser
                     {
                         // TODO not support yet
                     }
-                    else if (typeof(long).IsAssignableFrom(item.GetType()))
+                    else if (typeof(JsonNumber).IsAssignableFrom(item.GetType())) // list/array
                     {
-                        listObjs.Add(Convert.ToInt64(item));
-                    }
-                    else if (typeof(int).IsAssignableFrom(item.GetType()))
-                    {
-                        listObjs.Add(Convert.ToInt32(item));
-                    }
-                    else if (typeof(double).IsAssignableFrom(item.GetType()))
-                    {
-                        listObjs.Add(Convert.ToDouble(item.GetType()));
+                        JsonNumber jsonNumber = (JsonNumber)item;
+                        if (typeof(long).IsAssignableFrom(type))
+                        {
+                            listObjs.Add(jsonNumber.ToInt64());
+                        }
+                        else if (typeof(int).IsAssignableFrom(type))
+                        {
+                            listObjs.Add(jsonNumber.ToInt32());
+                        }
+                        else if (typeof(double).IsAssignableFrom(type))
+                        {
+                            listObjs.Add(jsonNumber.ToDouble());
+                        }
                     }
                     else // boolean, string, null
                     {

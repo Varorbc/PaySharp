@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9C11CAE5-5188-4E71-825B-68FC3135728A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Aop.Api</RootNamespace>
+    <AssemblyName>AopSdk</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DefaultAopClient.cs" />
+    <Compile Include="Domain\AgreementParams.cs" />
+    <Compile Include="Domain\AgreementSignParams.cs" />
+    <Compile Include="Domain\AlipayTradePayConsultModel.cs" />
+    <Compile Include="Domain\VoucherDetail.cs" />
+    <Compile Include="Domain\UseTime.cs" />
+    <Compile Include="Domain\TradeFundBill.cs" />
+    <Compile Include="Domain\SubMerchant.cs" />
+    <Compile Include="Domain\RoyaltyInfo.cs" />
+    <Compile Include="Domain\RoyaltyDetailInfos.cs" />
+    <Compile Include="Domain\RefundRoyaltyInfo.cs" />
+    <Compile Include="Domain\RefundDetail.cs" />
+    <Compile Include="Domain\OrderDetail.cs" />
+    <Compile Include="Domain\OpenApiRoyaltyDetailInfoPojo.cs" />
+    <Compile Include="Domain\InvoiceKeyInfo.cs" />
+    <Compile Include="Domain\InvoiceInfo.cs" />
+    <Compile Include="Domain\GoodsDetail.cs" />
+    <Compile Include="Domain\ForbbidenTime.cs" />
+    <Compile Include="Domain\ExtUserInfo.cs" />
+    <Compile Include="Domain\ExtendParams.cs" />
+    <Compile Include="Domain\CustomsDeclareRecordInfo.cs" />
+    <Compile Include="Domain\CustomsDeclareBuyerInfo.cs" />
+    <Compile Include="Domain\AlipayTradeWapPayModel.cs" />
+    <Compile Include="Domain\AlipayTradeWapMergePayModel.cs" />
+    <Compile Include="Domain\AlipayTradeVendorpayDevicedataUploadModel.cs" />
+    <Compile Include="Domain\AlipayTradeRefundModel.cs" />
+    <Compile Include="Domain\AlipayTradeQueryModel.cs" />
+    <Compile Include="Domain\AlipayTradePrecreateModel.cs" />
+    <Compile Include="Domain\AlipayTradePayModel.cs" />
+    <Compile Include="Domain\AlipayTradePagePayModel.cs" />
+    <Compile Include="Domain\AlipayTradePageMergePayModel.cs" />
+    <Compile Include="Domain\AlipayTradeOrderSettleModel.cs" />
+    <Compile Include="Domain\AlipayTradeMergePrecreateModel.cs" />
+    <Compile Include="Domain\AlipayTradeFastpayRefundQueryModel.cs" />
+    <Compile Include="Domain\AlipayTradeCustomsQueryModel.cs" />
+    <Compile Include="Domain\AlipayTradeCustomsDeclareModel.cs" />
+    <Compile Include="Domain\AlipayTradeCreateModel.cs" />
+    <Compile Include="Domain\AlipayTradeCloseModel.cs" />
+    <Compile Include="Domain\AlipayTradeCancelModel.cs" />
+    <Compile Include="Domain\AlipayTradeBatchRefundQueryModel.cs" />
+    <Compile Include="Domain\AlipayTradeBatchRefundModel.cs" />
+    <Compile Include="Domain\AlipayTradeAppPayModel.cs" />
+    <Compile Include="Domain\AlipayTradeAppMergePayModel.cs" />
+    <Compile Include="Domain\VoucherDetailInfo.cs" />
+    <Compile Include="IAopClient.cs" />
+    <Compile Include="IAopRequest.cs" />
+    <Compile Include="IAopUploadRequest.cs" />
+    <Compile Include="Jayrock\Json\BooleanObject.cs" />
+    <Compile Include="Jayrock\Json\Collections\KeyedCollection.cs" />
+    <Compile Include="Jayrock\Json\Compat.cs" />
+    <Compile Include="Jayrock\Json\Configuration\DictionarySectionHandler.cs" />
+    <Compile Include="Jayrock\Json\Configuration\ListSectionHandler.cs" />
+    <Compile Include="Jayrock\Json\Configuration\TypeListSectionHandler.cs" />
+    <Compile Include="Jayrock\Json\Diagnostics\DebugString.cs" />
+    <Compile Include="Jayrock\Json\IndentedTextWriter.cs" />
+    <Compile Include="Jayrock\Json\InternetDate.cs" />
+    <Compile Include="Jayrock\Json\Json\BufferedCharReader.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\AnyType.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\AnyImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\ArrayImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\BooleanExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\BooleanImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\ByteArrayExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\ByteArrayImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\ComponentExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\ComponentImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\DataRowExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\DataRowViewExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\DataSetExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\DataTableExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\DataViewExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\DateTimeExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\DateTimeImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\DictionaryExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\DictionaryImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\EnumerableExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\EnumImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\ExportAwareExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\ExporterBase.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\GuidImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\ImportAwareImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\ImporterBase.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\ListImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\NameValueCollectionExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\NameValueCollectionImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\NumberExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\NumberImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\StringExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\Converters\StringImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\CustomTypeDescriptor.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\ExportContext.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\ExporterCollection.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\ExporterListSectionHandler.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\IExporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\IImporter.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\IJsonExportable.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\IJsonImportable.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\ImportContext.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\ImporterCollection.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\ImporterListSectionHandler.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\JsonConvert.cs" />
+    <Compile Include="Jayrock\Json\Json\Conversion\JsonIgnoreAttribute.cs" />
+    <Compile Include="Jayrock\Json\Json\EmptyJsonWriter.cs" />
+    <Compile Include="Jayrock\Json\Json\InvalidMemberException.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonArray.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonBoolean.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonException.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonNull.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonNumber.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonObject.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonReader.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonReaderBase.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonRecorder.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonString.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonTextReader.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonTextWriter.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonToken.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonTokenClass.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonWriter.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonWriterBase.cs" />
+    <Compile Include="Jayrock\Json\Json\JsonWriterBracket.cs" />
+    <Compile Include="Jayrock\Json\UnixTime.cs" />
+    <Compile Include="Jayrock\Mask.cs" />
+    <Compile Include="Parser\IAopParser.cs" />
+    <Compile Include="Parser\IAopReader.cs" />
+    <Compile Include="Parser\AopAttribute.cs" />
+    <Compile Include="Parser\AopJsonParser.cs" />
+    <Compile Include="Parser\AopJsonReader.cs" />
+    <Compile Include="Parser\AopModelParser.cs" />
+    <Compile Include="Parser\AopXmlParser.cs" />
+    <Compile Include="Parser\EncryptParseItem.cs" />
+    <Compile Include="Request\AlipayFundCouponOperationQueryRequest.cs" />
+    <Compile Include="Request\AlipayFundCouponOrderAgreementPayRequest.cs" />
+    <Compile Include="Request\AlipayFundCouponOrderAppPayRequest.cs" />
+    <Compile Include="Request\AlipayFundCouponOrderDisburseRequest.cs" />
+    <Compile Include="Request\AlipayFundCouponOrderPagePayRequest.cs" />
+    <Compile Include="Request\AlipayFundCouponOrderRefundRequest.cs" />
+    <Compile Include="ResponseParseItem.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Request\MonitorHeartbeatSynRequest.cs" />
+    <Compile Include="Request\AlipayTradeWapPayRequest.cs" />
+    <Compile Include="Request\AlipayTradeVendorpayDevicedataUploadRequest.cs" />
+    <Compile Include="Request\AlipayTradeRefundRequest.cs" />
+    <Compile Include="Request\AlipayTradeQueryRequest.cs" />
+    <Compile Include="Request\AlipayTradePrecreateRequest.cs" />
+    <Compile Include="Request\AlipayTradePayRequest.cs" />
+    <Compile Include="Request\AlipayTradePagePayRequest.cs" />
+    <Compile Include="Request\AlipayTradeOrderSettleRequest.cs" />
+    <Compile Include="Request\AlipayTradeFastpayRefundQueryRequest.cs" />
+    <Compile Include="Request\AlipayTradeCustomsQueryRequest.cs" />
+    <Compile Include="Request\AlipayTradeCustomsDeclareRequest.cs" />
+    <Compile Include="Request\AlipayTradeCreateRequest.cs" />
+    <Compile Include="Request\AlipayTradeCloseRequest.cs" />
+    <Compile Include="Request\AlipayTradeCancelRequest.cs" />
+    <Compile Include="Request\AlipayTradeAppPayRequest.cs" />
+    <Compile Include="Request\AlipayFundTransToaccountTransferRequest.cs" />
+    <Compile Include="Request\AlipayFundTransOrderQueryRequest.cs" />
+    <Compile Include="Request\AlipayFundAuthOrderVoucherCreateRequest.cs" />
+    <Compile Include="Request\AlipayFundAuthOrderUnfreezeRequest.cs" />
+    <Compile Include="Request\AlipayFundAuthOrderFreezeRequest.cs" />
+    <Compile Include="Request\AlipayFundAuthOperationDetailQueryRequest.cs" />
+    <Compile Include="Request\AlipayFundAuthOperationCancelRequest.cs" />
+    <Compile Include="Request\AlipayDataDataserviceBillDownloadurlQueryRequest.cs" />
+    <Compile Include="Response\AlipayDataDataserviceBillDownloadurlQueryResponse.cs" />
+    <Compile Include="AopDictionary.cs" />
+    <Compile Include="AopException.cs" />
+    <Compile Include="AopObject.cs" />
+    <Compile Include="AopResponse.cs" />
+    <Compile Include="Response\AlipayFundAuthOperationCancelResponse.cs" />
+    <Compile Include="Response\AlipayFundAuthOperationDetailQueryResponse.cs" />
+    <Compile Include="Response\AlipayFundAuthOrderFreezeResponse.cs" />
+    <Compile Include="Response\AlipayFundAuthOrderUnfreezeResponse.cs" />
+    <Compile Include="Response\AlipayFundAuthOrderVoucherCreateResponse.cs" />
+    <Compile Include="Response\AlipayFundCouponOperationQueryResponse.cs" />
+    <Compile Include="Response\AlipayFundCouponOrderAgreementPayResponse.cs" />
+    <Compile Include="Response\AlipayFundCouponOrderAppPayResponse.cs" />
+    <Compile Include="Response\AlipayFundCouponOrderDisburseResponse.cs" />
+    <Compile Include="Response\AlipayFundCouponOrderPagePayResponse.cs" />
+    <Compile Include="Response\AlipayFundCouponOrderRefundResponse.cs" />
+    <Compile Include="Response\AlipayFundTransOrderQueryResponse.cs" />
+    <Compile Include="Response\AlipayFundTransToaccountTransferResponse.cs" />
+    <Compile Include="Response\AlipayTradeAppPayResponse.cs" />
+    <Compile Include="Response\AlipayTradeCancelResponse.cs" />
+    <Compile Include="Response\AlipayTradeCloseResponse.cs" />
+    <Compile Include="Response\AlipayTradeCreateResponse.cs" />
+    <Compile Include="Response\AlipayTradeCustomsDeclareResponse.cs" />
+    <Compile Include="Response\AlipayTradeCustomsQueryResponse.cs" />
+    <Compile Include="Response\AlipayTradeFastpayRefundQueryResponse.cs" />
+    <Compile Include="Response\AlipayTradeOrderSettleResponse.cs" />
+    <Compile Include="Response\AlipayTradePagePayResponse.cs" />
+    <Compile Include="Response\AlipayTradePayResponse.cs" />
+    <Compile Include="Response\AlipayTradePrecreateResponse.cs" />
+    <Compile Include="Response\AlipayTradeQueryResponse.cs" />
+    <Compile Include="Response\AlipayTradeRefundResponse.cs" />
+    <Compile Include="Response\AlipayTradeVendorpayDevicedataUploadResponse.cs" />
+    <Compile Include="Response\AlipayTradeWapPayResponse.cs" />
+    <Compile Include="Response\MonitorHeartbeatSynResponse.cs" />
+    <Compile Include="Util\FileItem.cs" />
+    <Compile Include="Util\RSAUtil.cs" />
+    <Compile Include="Util\AopUtils.cs" />
+    <Compile Include="Util\WebUtils.cs" />
+    <Compile Include="Util\AlipaySignature.cs" />
+    <Compile Include="Util\RSACryptoServiceProviderExtension.cs" />
+    <Compile Include="Util\StringUtil.cs" />
+    <Compile Include="Util\AlipayEncrypt.cs" />
+    <Compile Include="SignItem.cs" />
+    <Compile Include="AlipayConstants.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="readme.txt" />
+    <Content Include="version.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="project.json" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Jayrock.Json;
 using System;
 using System.Collections;
 using System.Reflection;
@@ -14,10 +14,10 @@ namespace Aop.Api.Parser
         /// </summary>
         /// <param name="res"></param>
         /// <returns></returns>
-        public JObject serializeAopObject(AopObject res)
+        public JsonObject serializeAopObject(AopObject res)
         {
             PropertyInfo[] pis = res.GetType().GetProperties();
-            JObject jo = new JObject();
+            JsonObject jo = new JsonObject();
             foreach (PropertyInfo pi in pis)
             {
                 if (!pi.CanRead)
@@ -32,7 +32,7 @@ namespace Aop.Api.Parser
                     Object serialized = serializeValue(value);
                     if (serialized != null)
                     {
-                        jo.Add(elementName, JToken.FromObject(serialized));
+                        jo.Put(elementName, serialized);
                     }
                 }
             }
@@ -103,12 +103,12 @@ namespace Aop.Api.Parser
                 return null;
             }
 
-            JObject jo = new JObject();
+            JsonObject jo = new JsonObject();
             foreach (String key in dic.Keys)
             {
                 Object dicValue = dic[key];
                 Object serializedValue = serializeValue(dicValue);
-                jo.Add(key, JToken.FromObject(serializedValue));
+                jo.Put(key, serializedValue);
             }
             return jo;
         }
@@ -125,7 +125,7 @@ namespace Aop.Api.Parser
                 return null;
             }
 
-            JArray ja = new JArray();
+            JsonArray ja = new JsonArray();
             foreach (var item in collection)
             {
                 ja.Add(serializeValue(item));
