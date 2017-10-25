@@ -133,6 +133,22 @@ namespace ICanPay.Core
                         }
                     }
                     break;
+                case GatewayTradeType.Barcode:
+                    {
+                        if (gateway is IPaymentBarcode paymentBarcode)
+                        {
+                            return paymentBarcode.BuildPaymentBarcode();
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Applet:
+                    {
+                        if (gateway is IPaymentApplet paymentApplet)
+                        {
+                            return paymentApplet.BuildPaymentApplet();
+                        }
+                    }
+                    break;
                 default:
                     break;
             }

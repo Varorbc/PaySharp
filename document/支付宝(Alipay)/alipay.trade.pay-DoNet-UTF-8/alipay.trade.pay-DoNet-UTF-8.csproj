@@ -43,9 +43,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -66,6 +63,7 @@
     <Content Include="Default.aspx" />
     <Content Include="Notify_url.aspx" />
     <Content Include="pagepay\pagepay.aspx" />
+    <Content Include="pay\pay.aspx" />
     <Content Include="readme.txt" />
     <Content Include="Return_url.aspx" />
     <Content Include="wappay\billdownload.aspx" />
@@ -99,6 +97,13 @@
     </Compile>
     <Compile Include="pagepay\pagepay.aspx.designer.cs">
       <DependentUpon>pagepay.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pay\pay.aspx.cs">
+      <DependentUpon>pay.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pay\pay.aspx.designer.cs">
+      <DependentUpon>pay.aspx</DependentUpon>
     </Compile>
     <Compile Include="Return_url.aspx.cs">
       <DependentUpon>Return_url.aspx</DependentUpon>
@@ -153,13 +158,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AlipaySdkCore\AlipaySdkCore.csproj">
-      <Project>{84ecf3e8-f4d1-4d22-a32e-42fd7e802b5d}</Project>
-      <Name>AlipaySdkCore</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -169,7 +167,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\alipay-sdk-NET\AopSdk.csproj">
+      <Project>{9c11cae5-5188-4e71-825b-68fc3135728a}</Project>
+      <Name>AopSdk</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

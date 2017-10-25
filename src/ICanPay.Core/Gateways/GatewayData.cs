@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,8 @@ namespace ICanPay.Core
         /// </summary>
         /// <param name="key">参数名</param>
         /// <param name="value">参数值</param>
-        public void Add(string key, object value)
+        /// <returns></returns>
+        public bool Add(string key, object value)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -48,6 +50,8 @@ namespace ICanPay.Core
             {
                 Values.Add(key, value);
             }
+
+            return true;
         }
 
         /// <summary>
@@ -262,6 +266,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 将Url格式数据转换为网关数据
         /// </summary>
+        /// <param name="url">url数据</param>
         /// <returns></returns>
         public void FromUrl(string url)
         {
@@ -288,9 +293,11 @@ namespace ICanPay.Core
         /// <summary>
         /// 将表单数据转换为网关数据
         /// </summary>
+        /// <param name="form">表单</param>
         /// <returns></returns>
         public void FromForm(IFormCollection form)
         {
+            Clear();
             try
             {
                 var allKeys = form.Keys;
@@ -309,13 +316,12 @@ namespace ICanPay.Core
         /// 将网关数据转换为表单数据
         /// </summary>
         /// <param name="url">请求地址</param>
-        /// <param name="charset">编码</param>
         /// <returns></returns>
-        public string ToForm(string url, string charset)
+        public string ToForm(string url)
         {
             var html = new StringBuilder();
             html.AppendLine("<body>");
-            html.AppendLine($"<form name='gateway' method='post' action ='{url}?charset={charset}'>");
+            html.AppendLine($"<form name='gateway' method='post' action ='{url}'>");
             foreach (var item in Values)
             {
                 html.AppendLine($"<input type='hidden' name='{item.Key}' value='{item.Value}'>");
@@ -339,11 +345,39 @@ namespace ICanPay.Core
         }
 
         /// <summary>
+        /// 将Json格式数据转成网关数据
+        /// </summary>
+        /// <param name="json">json数据</param>
+        /// <returns></returns>
+        public void FromJson(string json)
+        {
+            Clear();
+            if (!string.IsNullOrEmpty(json))
+            {
+                JObject jObject = JObject.Parse(json);
+                foreach (JProperty item in jObject.Children())
+                {
+                    Add(item.Name, item.Value.ToString());
+                }
+            }
+        }
+
+        /// <summary>
         /// 清空网关数据
         /// </summary>
         public void Clear()
         {
             Values.Clear();
+        }
+
+        /// <summary>
+        /// 移除指定参数
+        /// </summary>
+        /// <param name="key">参数名</param>
+        /// <returns></returns>
+        public bool Remove(string key)
+        {
+            return Values.Remove(key);
         }
 
         #endregion

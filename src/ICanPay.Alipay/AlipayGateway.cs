@@ -1,12 +1,14 @@
 ﻿using ICanPay.Core;
 using System.Threading.Tasks;
+using System;
 
 namespace ICanPay.Alipay
 {
     /// <summary>
     /// 支付宝网关
     /// </summary>
-    public sealed class AlipayGateway : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp
+    public sealed class AlipayGateway
+        : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp, IPaymentScan//, IPaymentBarcode
     {
 
         #region 私有字段
@@ -49,7 +51,7 @@ namespace ICanPay.Alipay
         {
             InitOrderParameter();
 
-            return GatewayData.ToForm(GatewayUrl, Merchant.Charset);
+            return GatewayData.ToForm(GatewayUrl);
         }
 
         public string BuildPaymentUrl()
@@ -64,6 +66,26 @@ namespace ICanPay.Alipay
             InitOrderParameter();
 
             return GetPaymentQueryString();
+        }
+
+        public string BuildPaymentScan()
+        {
+            InitOrderParameter();
+
+            return PreCreate();
+        }
+
+        public string BuildPaymentBarcode()
+        {
+            InitOrderParameter();
+
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
+                .GetAwaiter()
+                .GetResult();
+            ReadReturnResult(result, GatewayTradeType.Barcode);
+
+            return null;
         }
 
         protected override async Task<bool> CheckNotifyDataAsync()
@@ -113,6 +135,16 @@ namespace ICanPay.Alipay
             }
 
             Merchant.Method = Constant.SCAN;
+        }
+
+        protected override void SupplementaryBarcodeParameter()
+        {
+            if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
+            {
+                GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
+            }
+
+            Merchant.Method = Constant.BARCODE;
             Order.ProductCode = Constant.FACE_TO_FACE_PAYMENT;
         }
 
@@ -139,6 +171,57 @@ namespace ICanPay.Alipay
         private string GetPaymentQueryString()
         {
             return GatewayData.ToUrlEncode();
+        }
+
+        /// <summary>
+        /// 预创建订单
+        /// </summary>
+        /// <returns></returns>
+        private string PreCreate()
+        {
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
+                .GetAwaiter()
+                .GetResult();
+            ReadReturnResult(result, GatewayTradeType.Scan);
+
+            return Notify.QrCode;
+        }
+
+        /// <summary>
+        /// 读取返回结果
+        /// </summary>
+        /// <param name="result">结果</param>
+        /// <param name="gatewayTradeType">网关交易类型，仅限扫码，条码</param>
+        private void ReadReturnResult(string result, GatewayTradeType gatewayTradeType)
+        {
+            GatewayData.FromJson(result);
+            string sign = GatewayData.GetStringValue(Constant.SIGN);
+            result = GatewayData.GetStringValue(gatewayTradeType == GatewayTradeType.Scan ?
+                Constant.ALIPAY_TRADE_PRECREATE_RESPONSE :
+                Constant.ALIPAY_TRADE_PAY_RESPONSE);
+            GatewayData.FromJson(result);
+            ReadNotify<Notify>();
+            Notify.Sign = sign;
+
+            IsSuccessReturn();
+        }
+
+        /// <summary>
+        /// 是否是已成功的返回
+        /// </summary>
+        /// <returns></returns>
+        private void IsSuccessReturn()
+        {
+            if (Notify.Code != "10000")
+            {
+                if (!string.IsNullOrEmpty(Notify.SubMessage))
+                {
+                    throw new Exception(Notify.SubMessage);
+                }
+
+                throw new Exception(Notify.Message);
+            }
         }
 
         /// <summary>
@@ -193,7 +276,7 @@ namespace ICanPay.Alipay
             string data = HttpUtil.ReadPage(GetValidateNotifyUrl());
             GatewayData.FromXml(data);
             // 服务器异步通知的通知Id则会在输出标志成功接收到通知的success字符串后失效。
-            if (GatewayData.GetStringValue("is_success") == "T")
+            if (GatewayData.GetStringValue(Constant.IS_SUCCESS) == Constant.T)
             {
                 return true;
             }

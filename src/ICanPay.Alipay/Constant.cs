@@ -33,7 +33,7 @@
         public const string APP = "alipay.trade.app.pay";
         public const string WAP = "alipay.trade.wap.pay";
         public const string WEB = "alipay.trade.page.pay";
-        public const string SCAN = "alipay.trade.pay";
+        public const string BARCODE = "alipay.trade.pay";
         public const string TOTAL_AMOUNT = "total_amount";
         public const string BODY = "body";
         public const string GOODS_DETAIL = "goods_detail";
@@ -85,5 +85,22 @@
         public const string GMT_CLOSE = "gmt_close";
         public const string FUND_BILL_LIST = "fund_bill_list";
         public const string VOUCHER_DETAIL_LIST = "voucher_detail_list";
+        public const string BAR_CODE = "bar_code";
+        public const string WAVE_CODE = "wave_code";
+        public const string CODE = "code";
+        public const string MSG = "msg";
+        public const string SUBCODE = "sub_code";
+        public const string SUBMSG = "sub_msg";
+        public const string CARD_BALANCE = "card_balance";
+        public const string STORE_NAME = "store_name";
+        public const string BUYER_USER_ID = "buyer_user_id";
+        public const string DISCOUNT_GOODS_DETAIL = "discount_goods_detail";
+        public const string BUSINESS_PARAMS = "business_params";
+        public const string ALIPAY_TRADE_PAY_RESPONSE = "alipay_trade_pay_response";
+        public const string IS_SUCCESS = "is_success";
+        public const string T = "T";
+        public const string SCAN = "alipay.trade.precreate";
+        public const string QR_CODE = "qr_code";
+        public const string ALIPAY_TRADE_PRECREATE_RESPONSE = "alipay_trade_precreate_response";
     }
 }
