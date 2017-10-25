@@ -1,6 +1,6 @@
 ﻿using ICanPay.Core;
-using System.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
 
 namespace ICanPay.Alipay
 {
@@ -70,20 +70,16 @@ namespace ICanPay.Alipay
 
         public string BuildPaymentScan()
         {
-            InitOrderParameter();
+            PreCreate();
 
-            return PreCreate();
+            return Notify.QrCode;
         }
 
         public string BuildPaymentBarcode()
         {
             InitOrderParameter();
 
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
-                .GetAwaiter()
-                .GetResult();
-            ReadReturnResult(result, GatewayTradeType.Barcode);
+            Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
 
             return null;
         }
@@ -149,12 +145,10 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
-        /// 初始化订单参数
+        /// 初始化公共参数
         /// </summary>
-        protected override void InitOrderParameter()
+        private void InitPublicParameter()
         {
-            base.InitOrderParameter();
-            Merchant.BizContent = Util.SerializeObject(Order);
             GatewayData.Add(Constant.APP_ID, Merchant.AppId);
             GatewayData.Add(Constant.METHOD, Merchant.Method);
             GatewayData.Add(Constant.FORMAT, Merchant.Format);
@@ -164,8 +158,85 @@ namespace ICanPay.Alipay
             GatewayData.Add(Constant.VERSION, Merchant.Version);
             GatewayData.Add(Constant.NOTIFY_URL, Merchant.NotifyUrl);
             GatewayData.Add(Constant.BIZ_CONTENT, Merchant.BizContent);
+        }
+
+        /// <summary>
+        /// 初始化订单参数
+        /// </summary>
+        protected override void InitOrderParameter()
+        {
+            base.InitOrderParameter();
+            Merchant.BizContent = Util.SerializeObject(Order);
+            InitPublicParameter();
             Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
+        }
+
+        /// <summary>
+        /// 初始化查询参数
+        /// </summary>
+        /// <param name="outTradeNo">商户订单号</param>
+        protected override void InitQueryParameter(string outTradeNo)
+        {
+            InitCommonParameter(Constant.QUERY, outTradeNo);
+        }
+
+        /// <summary>
+        /// 初始化撤销/关闭参数
+        /// </summary>
+        /// <param name="outTradeNo">商户订单号</param>
+        protected override void InitCancelParameter(string outTradeNo)
+        {
+            InitCommonParameter(Constant.CANCEL, outTradeNo);
+        }
+
+        /// <summary>
+        /// 初始化相应接口的参数
+        /// </summary>
+        /// <param name="method">接口名称</param>
+        /// <param name="outTradeNo">订单号</param>
+        private void InitCommonParameter(string method,string outTradeNo)
+        {
+            Merchant.Method = method;
+            Merchant.BizContent = $"{{\"out_trade_no\":\"{outTradeNo}\"}}";
+            InitPublicParameter();
+            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+        }
+
+        /// <summary>
+        /// 查询订单
+        /// </summary>
+        /// <param name="outTradeNo">商户订单号</param>
+        private void Query(string outTradeNo)
+        {
+            InitQueryParameter(outTradeNo);
+
+            Commit(Constant.ALIPAY_TRADE_QUERY_RESPONSE);
+        }
+
+        /// <summary>
+        /// 撤销订单
+        /// </summary>
+        /// <param name="outTradeNo">商户订单号</param>
+        private void Cancel(string outTradeNo)
+        {
+            InitCancelParameter(outTradeNo);
+
+            Commit(Constant.ALIPAY_TRADE_CANCEL_RESPONSE);
+        }
+
+        /// <summary>
+        /// 提交请求
+        /// </summary>
+        /// <param name="type">结果类型</param>
+        private void Commit(string type)
+        {
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
+                .GetAwaiter()
+                .GetResult();
+            ReadReturnResult(result, type);
         }
 
         private string GetPaymentQueryString()
@@ -177,34 +248,26 @@ namespace ICanPay.Alipay
         /// 预创建订单
         /// </summary>
         /// <returns></returns>
-        private string PreCreate()
+        private void PreCreate()
         {
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
-                .GetAwaiter()
-                .GetResult();
-            ReadReturnResult(result, GatewayTradeType.Scan);
+            InitOrderParameter();
 
-            return Notify.QrCode;
+            Commit(Constant.ALIPAY_TRADE_PRECREATE_RESPONSE);
         }
 
         /// <summary>
         /// 读取返回结果
         /// </summary>
         /// <param name="result">结果</param>
-        /// <param name="gatewayTradeType">网关交易类型，仅限扫码，条码</param>
-        private void ReadReturnResult(string result, GatewayTradeType gatewayTradeType)
+        /// <param name="key">结果的对象名</param>
+        private void ReadReturnResult(string result, string key)
         {
             GatewayData.FromJson(result);
             string sign = GatewayData.GetStringValue(Constant.SIGN);
-            result = GatewayData.GetStringValue(gatewayTradeType == GatewayTradeType.Scan ?
-                Constant.ALIPAY_TRADE_PRECREATE_RESPONSE :
-                Constant.ALIPAY_TRADE_PAY_RESPONSE);
+            result = GatewayData.GetStringValue(key);
             GatewayData.FromJson(result);
             ReadNotify<Notify>();
             Notify.Sign = sign;
-
-            IsSuccessReturn();
         }
 
         /// <summary>

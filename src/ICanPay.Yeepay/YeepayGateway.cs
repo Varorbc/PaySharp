@@ -261,6 +261,16 @@ namespace ICanPay.Yeepay
             throw new NotImplementedException();
         }
 
+        protected override void InitQueryParameter(string outTradeNo)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void InitCancelParameter(string outTradeNo)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
 

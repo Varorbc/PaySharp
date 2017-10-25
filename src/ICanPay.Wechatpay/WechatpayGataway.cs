@@ -382,6 +382,16 @@ namespace ICanPay.Wechatpay
             HttpUtil.Write(GatewayData.ToXml());
         }
 
+        protected override void InitQueryParameter(string outTradeNo)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void InitCancelParameter(string outTradeNo)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

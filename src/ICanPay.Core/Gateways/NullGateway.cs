@@ -67,6 +67,14 @@ namespace ICanPay.Core
         {
         }
 
+        protected override void InitQueryParameter(string outTradeNo)
+        {
+        }
+
+        protected override void InitCancelParameter(string outTradeNo)
+        {
+        }
+
         #endregion
 
     }

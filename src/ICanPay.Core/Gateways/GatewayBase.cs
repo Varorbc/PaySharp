@@ -109,37 +109,7 @@ namespace ICanPay.Core
 
         #region 方法
 
-        /// <summary>
-        /// 验证订单是否支付成功
-        /// </summary>
-        internal async Task<bool> ValidateNotifyAsync()
-        {
-            if (await CheckNotifyDataAsync())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// 验证参数
-        /// </summary>
-        /// <param name="instance">验证对象</param>
-        private void ValidateParameter(object instance)
-        {
-            var validationContext = new ValidationContext(instance, new Dictionary<object, object>
-            {
-                { "GatewayTradeType", GatewayTradeType }
-            });
-            var results = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(instance, validationContext, results, true);
-
-            if (!isValid)
-            {
-                throw new Exception(results[0].ErrorMessage);
-            }
-        }
+        #region 抽象方法
 
         /// <summary>
         /// 检验网关返回的通知，确认订单是否支付成功
@@ -169,6 +139,61 @@ namespace ICanPay.Core
         {
             SupplementaryParameter();
         }
+
+        /// <summary>
+        /// 初始化查询参数
+        /// </summary>
+        /// <param name="outTradeNo">商户订单号</param>
+        protected abstract void InitQueryParameter(string outTradeNo);
+
+        /// <summary>
+        /// 初始化撤销/关闭参数
+        /// </summary>
+        /// <param name="outTradeNo">商户订单号</param>
+        protected abstract void InitCancelParameter(string outTradeNo);
+
+        /// <summary>
+        /// 补充移动支付的缺少参数
+        /// </summary>
+        protected abstract void SupplementaryAppParameter();
+
+        /// <summary>
+        /// 补充电脑网站支付的缺少参数
+        /// </summary>
+        protected abstract void SupplementaryWebParameter();
+
+        /// <summary>
+        /// 补充手机网站支付的缺少参数
+        /// </summary>
+        protected abstract void SupplementaryWapParameter();
+
+        /// <summary>
+        /// 补充扫码支付的缺少参数
+        /// </summary>
+        protected abstract void SupplementaryScanParameter();
+
+        /// <summary>
+        /// 补充公众号支付的缺少参数
+        /// </summary>
+        protected virtual void SupplementaryPublicParameter()
+        {
+        }
+
+        /// <summary>
+        /// 补充条码支付的缺少参数
+        /// </summary>
+        protected abstract void SupplementaryBarcodeParameter();
+
+        /// <summary>
+        /// 补充小程序支付的缺少参数
+        /// </summary>
+        protected virtual void SupplementaryAppletParameter()
+        {
+        }
+
+        #endregion
+
+        #region 私有方法
 
         /// <summary>
         /// 补充不同支付类型的缺少参数
@@ -221,42 +246,35 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// 补充移动支付的缺少参数
+        /// 验证订单是否支付成功
         /// </summary>
-        protected abstract void SupplementaryAppParameter();
-
-        /// <summary>
-        /// 补充电脑网站支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryWebParameter();
-
-        /// <summary>
-        /// 补充手机网站支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryWapParameter();
-
-        /// <summary>
-        /// 补充扫码支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryScanParameter();
-
-        /// <summary>
-        /// 补充公众号支付的缺少参数
-        /// </summary>
-        protected virtual void SupplementaryPublicParameter()
+        internal async Task<bool> ValidateNotifyAsync()
         {
+            if (await CheckNotifyDataAsync())
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
-        /// 补充条码支付的缺少参数
+        /// 验证参数
         /// </summary>
-        protected abstract void SupplementaryBarcodeParameter();
-
-        /// <summary>
-        /// 补充小程序支付的缺少参数
-        /// </summary>
-        protected virtual void SupplementaryAppletParameter()
+        /// <param name="instance">验证对象</param>
+        private void ValidateParameter(object instance)
         {
+            var validationContext = new ValidationContext(instance, new Dictionary<object, object>
+            {
+                { "GatewayTradeType", GatewayTradeType }
+            });
+            var results = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(instance, validationContext, results, true);
+
+            if (!isValid)
+            {
+                throw new ArgumentNullException(results[0].ErrorMessage);
+            }
         }
 
         /// <summary>
@@ -291,6 +309,8 @@ namespace ICanPay.Core
             .GetAwaiter()
             .GetResult();
         }
+
+        #endregion
 
         #endregion
 
