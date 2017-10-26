@@ -34,6 +34,10 @@ namespace ICanPay.Core
 
         public override string GatewayUrl { get; set; } = string.Empty;
 
+        protected override bool IsSuccessPay => false;
+
+        protected override bool IsWaitPay => false;
+
         #endregion
 
         #region 方法
@@ -67,11 +71,11 @@ namespace ICanPay.Core
         {
         }
 
-        protected override void InitQueryParameter(string outTradeNo)
+        protected override void InitQueryParameter()
         {
         }
 
-        protected override void InitCancelParameter(string outTradeNo)
+        protected override void InitCancelParameter()
         {
         }
 

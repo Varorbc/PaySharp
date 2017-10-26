@@ -59,6 +59,10 @@ namespace ICanPay.Tenpay
 
         public override string GatewayUrl { get; set; }
 
+        protected override bool IsSuccessPay => throw new NotImplementedException();
+
+        protected override bool IsWaitPay => throw new NotImplementedException();
+
         #endregion
 
 
@@ -351,12 +355,12 @@ namespace ICanPay.Tenpay
             throw new NotImplementedException();
         }
 
-        protected override void InitQueryParameter(string outTradeNo)
+        protected override void InitQueryParameter()
         {
             throw new NotImplementedException();
         }
 
-        protected override void InitCancelParameter(string outTradeNo)
+        protected override void InitCancelParameter()
         {
             throw new NotImplementedException();
         }

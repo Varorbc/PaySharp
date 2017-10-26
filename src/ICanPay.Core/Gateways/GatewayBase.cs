@@ -105,6 +105,16 @@ namespace ICanPay.Core
             }
         }
 
+        /// <summary>
+        /// 是否成功支付
+        /// </summary>
+        protected abstract bool IsSuccessPay { get; }
+
+        /// <summary>
+        /// 是否等待支付
+        /// </summary>
+        protected abstract bool IsWaitPay { get; }
+
         #endregion
 
         #region 方法
@@ -143,14 +153,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 初始化查询参数
         /// </summary>
-        /// <param name="outTradeNo">商户订单号</param>
-        protected abstract void InitQueryParameter(string outTradeNo);
+        protected abstract void InitQueryParameter();
 
         /// <summary>
         /// 初始化撤销/关闭参数
         /// </summary>
-        /// <param name="outTradeNo">商户订单号</param>
-        protected abstract void InitCancelParameter(string outTradeNo);
+        protected abstract void InitCancelParameter();
 
         /// <summary>
         /// 补充移动支付的缺少参数
@@ -310,9 +318,26 @@ namespace ICanPay.Core
             .GetResult();
         }
 
-        #endregion
+        protected void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
+
+        protected void OnPaymentSucceed(PaymentSucceedEventArgs e) => PaymentSucceed?.Invoke(this, e);
 
         #endregion
 
+        #endregion
+
+        #region 事件
+
+        /// <summary>
+        /// 网关同步返回的支付通知验证失败时触发,目前仅针对条码支付
+        /// </summary>
+        public event Action<object, PaymentFailedEventArgs> PaymentFailed;
+
+        /// <summary>
+        /// 网关同步返回的支付通知验证成功时触发,目前仅针对条码支付
+        /// </summary>
+        public event Action<object, PaymentSucceedEventArgs> PaymentSucceed;
+
+        #endregion
     }
 }

@@ -1,5 +1,5 @@
 ﻿using ICanPay.Core;
-using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ICanPay.Alipay
@@ -8,7 +8,7 @@ namespace ICanPay.Alipay
     /// 支付宝网关
     /// </summary>
     public sealed class AlipayGateway
-        : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp, IPaymentScan//, IPaymentBarcode
+        : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp, IPaymentScan,IPaymentBarcode
     {
 
         #region 私有字段
@@ -43,6 +43,10 @@ namespace ICanPay.Alipay
 
         public new Notify Notify => (Notify)base.Notify;
 
+        protected override bool IsWaitPay => Notify.TradeStatus == "WAIT_BUYER_PAY";
+
+        protected override bool IsSuccessPay => Notify.Code == "TRADE_SUCCESS";
+
         #endregion
 
         #region 方法
@@ -75,13 +79,25 @@ namespace ICanPay.Alipay
             return Notify.QrCode;
         }
 
-        public string BuildPaymentBarcode()
+        public void BuildPaymentBarcode()
         {
             InitOrderParameter();
 
             Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
 
-            return null;
+            for (int i = 0; i < 5; i++)
+            {
+                Thread.Sleep(5000);
+                Query();
+                if (IsSuccessPay)
+                {
+                    OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                    return;
+                }
+            }
+
+            Cancel();
+            OnPaymentFailed(new PaymentFailedEventArgs(this));
         }
 
         protected override async Task<bool> CheckNotifyDataAsync()
@@ -176,29 +192,27 @@ namespace ICanPay.Alipay
         /// 初始化查询参数
         /// </summary>
         /// <param name="outTradeNo">商户订单号</param>
-        protected override void InitQueryParameter(string outTradeNo)
+        protected override void InitQueryParameter()
         {
-            InitCommonParameter(Constant.QUERY, outTradeNo);
+            InitCommonParameter(Constant.QUERY);
         }
 
         /// <summary>
         /// 初始化撤销/关闭参数
         /// </summary>
-        /// <param name="outTradeNo">商户订单号</param>
-        protected override void InitCancelParameter(string outTradeNo)
+        protected override void InitCancelParameter()
         {
-            InitCommonParameter(Constant.CANCEL, outTradeNo);
+            InitCommonParameter(Constant.CANCEL);
         }
 
         /// <summary>
         /// 初始化相应接口的参数
         /// </summary>
         /// <param name="method">接口名称</param>
-        /// <param name="outTradeNo">订单号</param>
-        private void InitCommonParameter(string method,string outTradeNo)
+        private void InitCommonParameter(string method)
         {
             Merchant.Method = method;
-            Merchant.BizContent = $"{{\"out_trade_no\":\"{outTradeNo}\"}}";
+            Merchant.BizContent = $"{{\"out_trade_no\":\"{Order.OutTradeNo}\"}}";
             InitPublicParameter();
             Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
@@ -207,10 +221,9 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 查询订单
         /// </summary>
-        /// <param name="outTradeNo">商户订单号</param>
-        private void Query(string outTradeNo)
+        private void Query()
         {
-            InitQueryParameter(outTradeNo);
+            InitQueryParameter();
 
             Commit(Constant.ALIPAY_TRADE_QUERY_RESPONSE);
         }
@@ -218,10 +231,9 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 撤销订单
         /// </summary>
-        /// <param name="outTradeNo">商户订单号</param>
-        private void Cancel(string outTradeNo)
+        private void Cancel()
         {
-            InitCancelParameter(outTradeNo);
+            InitCancelParameter();
 
             Commit(Constant.ALIPAY_TRADE_CANCEL_RESPONSE);
         }
@@ -268,23 +280,6 @@ namespace ICanPay.Alipay
             GatewayData.FromJson(result);
             ReadNotify<Notify>();
             Notify.Sign = sign;
-        }
-
-        /// <summary>
-        /// 是否是已成功的返回
-        /// </summary>
-        /// <returns></returns>
-        private void IsSuccessReturn()
-        {
-            if (Notify.Code != "10000")
-            {
-                if (!string.IsNullOrEmpty(Notify.SubMessage))
-                {
-                    throw new Exception(Notify.SubMessage);
-                }
-
-                throw new Exception(Notify.Message);
-            }
         }
 
         /// <summary>

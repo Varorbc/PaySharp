@@ -137,7 +137,8 @@ namespace ICanPay.Core
                     {
                         if (gateway is IPaymentBarcode paymentBarcode)
                         {
-                            return paymentBarcode.BuildPaymentBarcode();
+                            paymentBarcode.BuildPaymentBarcode();
+                            return null;
                         }
                     }
                     break;

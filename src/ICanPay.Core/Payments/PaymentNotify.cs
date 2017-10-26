@@ -31,17 +31,17 @@ namespace ICanPay.Core
         #region 事件
 
         /// <summary>
-        /// 网关返回的支付通知验证失败时触发
+        /// 网关异步返回的支付通知验证失败时触发
         /// </summary>
         public event Action<object, PaymentFailedEventArgs> PaymentFailed;
 
         /// <summary>
-        /// 网关返回的支付通知验证成功时触发
+        /// 网关异步返回的支付通知验证成功时触发
         /// </summary>
         public event Action<object, PaymentSucceedEventArgs> PaymentSucceed;
 
         /// <summary>
-        /// 返回通知消息的网关无法识别时触发
+        /// 网关异步返回的支付通知无法识别时触发
         /// </summary>
         public event Action<object, UnknownGatewayEventArgs> UnknownGateway;
 
@@ -49,11 +49,11 @@ namespace ICanPay.Core
 
         #region 方法
 
-        protected virtual void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
+        private void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
 
-        protected virtual void OnPaymentSucceed(PaymentSucceedEventArgs e) => PaymentSucceed?.Invoke(this, e);
+        private void OnPaymentSucceed(PaymentSucceedEventArgs e) => PaymentSucceed?.Invoke(this, e);
 
-        protected virtual void OnUnknownGateway(UnknownGatewayEventArgs e) => UnknownGateway?.Invoke(this, e);
+        private void OnUnknownGateway(UnknownGatewayEventArgs e) => UnknownGateway?.Invoke(this, e);
 
         /// <summary>
         /// 接收并验证网关的支付通知

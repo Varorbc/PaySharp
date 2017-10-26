@@ -8,6 +8,6 @@
         /// <summary>
         /// 创建支付订单数据
         /// </summary>
-        string BuildPaymentBarcode();
+        void BuildPaymentBarcode();
     }
 }
