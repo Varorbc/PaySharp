@@ -14,8 +14,6 @@ Package  | NuGet
 ICanPay.Core		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Core.svg)](https://www.nuget.org/packages/ICanPay.Core)
 ICanPay.Alipay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Alipay.svg)](https://www.nuget.org/packages/ICanPay.Alipay)
 ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.svg)](https://www.nuget.org/packages/ICanPay.Wechatpay)
-ICanPay.Tenpay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Tenpay.svg)](https://www.nuget.org/packages/ICanPay.Tenpay)
-ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](https://www.nuget.org/packages/ICanPay.Yeepay)
 
 # 如何使用
 
@@ -176,6 +174,8 @@ https://docs.open.alipay.com/204/105051/
 https://docs.open.alipay.com/270/105898/
 
 https://docs.open.alipay.com/api_1/alipay.trade.pay
+
+https://docs.open.alipay.com/api_1/alipay.trade.precreate
 
 微信支付文档：
 

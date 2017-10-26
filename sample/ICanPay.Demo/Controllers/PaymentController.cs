@@ -1,8 +1,6 @@
 ﻿using ICanPay.Alipay;
 using ICanPay.Core;
-using ICanPay.Tenpay;
 using ICanPay.Wechatpay;
-using ICanPay.Yeepay;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -24,41 +22,6 @@ namespace ICanPay.Demo.Controllers
 
             return Content(content);
         }
-
-        /// <summary>
-        /// 创建易宝的支付订单
-        /// </summary>
-        private void CreateYeepayOrder()
-        {
-            var gateway = new YeepayGateway();
-            PaymentSetting paymentSetting = new PaymentSetting(gateway);
-            //paymentSetting.Merchant.UserName = "000000000000000";
-            //paymentSetting.Merchant.Key = "000000000000000000000000000000000000000000";
-            //paymentSetting.Merchant.NotifyUrl = new Uri("http://yourwebsite.com/Notify.aspx");
-
-            paymentSetting.Order.Amount = 0.01;
-            paymentSetting.Order.OutTradeNo = outTradeNo;
-            paymentSetting.Order.Body = "测试易宝";
-
-            paymentSetting.Payment();
-        }
-
-
-        private void CreateTenpayOrder()
-        {
-            var gateway = new TenpayGateway();
-            PaymentSetting paymentSetting = new PaymentSetting(gateway);
-            //paymentSetting.Merchant.UserName = "000000000000000";
-            //paymentSetting.Merchant.Key = "000000000000000000000000000000000000000000";
-            //paymentSetting.Merchant.NotifyUrl = new Uri("http://yourwebsite.com/Notify.aspx");
-
-            paymentSetting.Order.Amount = 0.01;
-            paymentSetting.Order.OutTradeNo = outTradeNo;
-            paymentSetting.Order.Body = "测测看";
-
-            paymentSetting.Payment();
-        }
-
 
         /// <summary>
         /// 创建支付宝的支付订单
@@ -86,7 +49,8 @@ namespace ICanPay.Demo.Controllers
             };
 
             var gateway = gateways.Get(GatewayType.Alipay);
-            gateway.GatewayTradeType = GatewayTradeType.App;
+            gateway.GatewayTradeType = GatewayTradeType.Web;
+
             //.BarcodePaymentFailed += Gateway_BarcodePaymentFailed;
 
             PaymentSetting paymentSetting = new PaymentSetting(gateway, order);
