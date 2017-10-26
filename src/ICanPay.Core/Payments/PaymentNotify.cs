@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ICanPay.Core
@@ -11,7 +10,7 @@ namespace ICanPay.Core
     {
         #region 私有字段
 
-        private ICollection<GatewayBase> gatewayList;
+        private IGateways gateways;
 
         #endregion
 
@@ -20,10 +19,10 @@ namespace ICanPay.Core
         /// <summary>
         /// 初始化支付通知
         /// </summary>
-        /// <param name="gatewayList">用于验证支付网关返回数据的网关列表</param>
-        public PaymentNotify(ICollection<GatewayBase> gatewayList)
+        /// <param name="gateways">用于验证支付网关返回数据的网关列表</param>
+        public PaymentNotify(IGateways gateways)
         {
-            this.gatewayList = gatewayList;
+            this.gateways = gateways;
         }
 
         #endregion
@@ -60,7 +59,7 @@ namespace ICanPay.Core
         /// </summary>
         public async Task ReceivedAsync()
         {
-            GatewayBase gateway = NotifyProcess.GetGateway(gatewayList);
+            GatewayBase gateway = NotifyProcess.GetGateway(gateways);
             if (gateway.GatewayType != GatewayType.None)
             {
                 if (await gateway.ValidateNotifyAsync())

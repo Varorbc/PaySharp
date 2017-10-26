@@ -1,22 +1,21 @@
 ﻿using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ICanPay.Demo.Controllers
 {
     public class NotifyController : Controller
     {
-        private ICollection<GatewayBase> gatewayList;
-        public NotifyController(ICollection<GatewayBase> gatewayList)
+        private IGateways gateways;
+        public NotifyController(IGateways gateways)
         {
-            this.gatewayList = gatewayList;
+            this.gateways = gateways;
         }
 
         public async Task Index()
         {
             // 订阅支付通知事件
-            PaymentNotify notify = new PaymentNotify(gatewayList);
+            PaymentNotify notify = new PaymentNotify(gateways);
             notify.PaymentSucceed += Notify_PaymentSucceed;
             notify.PaymentFailed += Notify_PaymentFailed;
             notify.UnknownGateway += Notify_UnknownGateway;

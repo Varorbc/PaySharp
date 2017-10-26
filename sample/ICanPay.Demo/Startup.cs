@@ -25,7 +25,7 @@ namespace ICanPay.Demo
 
             services.AddICanPay(a =>
             {
-                var gateways = new List<GatewayBase>();
+                var gateways = new Gateways();
 
                 // 设置商户数据
                 var alipayMerchant = new Alipay.Merchant

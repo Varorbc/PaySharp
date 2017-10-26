@@ -26,26 +26,28 @@ namespace ICanPay.Core
         /// <summary>
         /// 获取网关
         /// </summary>
-        public static GatewayBase GetGateway(ICollection<GatewayBase> gatewayList)
+        /// <param name="gateways">网关列表</param>
+        /// <returns></returns>
+        public static GatewayBase GetGateway(IGateways gateways)
         {
             var gatewayData = ReadNotifyData();
             GatewayBase gateway;
 
             if (IsAlipayGateway(gatewayData))
             {
-                gateway = gatewayList.GetGateway(GatewayType.Alipay);
+                gateway = gateways.Get(GatewayType.Alipay);
             }
             else if (IsWechatpayGateway(gatewayData))
             {
-                gateway = gatewayList.GetGateway(GatewayType.Wechatpay);
+                gateway = gateways.Get(GatewayType.Wechatpay);
             }
             else if (IsTenpayGateway(gatewayData))
             {
-                gateway = gatewayList.GetGateway(GatewayType.Tenpay);
+                gateway = gateways.Get(GatewayType.Tenpay);
             }
             else if (IsYeepayGateway(gatewayData))
             {
-                gateway = gatewayList.GetGateway(GatewayType.Yeepay);
+                gateway = gateways.Get(GatewayType.Yeepay);
             }
             else
             {
