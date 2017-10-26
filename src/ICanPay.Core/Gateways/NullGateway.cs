@@ -47,38 +47,6 @@ namespace ICanPay.Core
             return await Task.Run(() => { return false; });
         }
 
-        protected override void InitOrderParameter()
-        {
-        }
-
-        protected override void SupplementaryAppParameter()
-        {
-        }
-
-        protected override void SupplementaryWebParameter()
-        {
-        }
-
-        protected override void SupplementaryWapParameter()
-        {
-        }
-
-        protected override void SupplementaryScanParameter()
-        {
-        }
-
-        protected override void SupplementaryBarcodeParameter()
-        {
-        }
-
-        protected override void InitQueryParameter()
-        {
-        }
-
-        protected override void InitCancelParameter()
-        {
-        }
-
         #endregion
 
     }

@@ -9,7 +9,7 @@ namespace ICanPay.Yeepay
     /// <summary>
     /// 易宝网关
     /// </summary>
-    public sealed class YeepayGateway : GatewayBase, IPaymentForm, IPaymentUrl, IQueryNow
+    public sealed class YeepayGateway : GatewayBase, IFormPayment, IUrlPayment
     {
 
         #region 私有字段
@@ -48,7 +48,7 @@ namespace ICanPay.Yeepay
         /// 支付订单的Form HTML代码
         /// </summary>
         /// <returns></returns>
-        public string BuildPaymentForm()
+        public string BuildFormPayment()
         {
             InitOrderParameter();
             return GatewayData.ToForm(payGatewayUrl);
@@ -59,7 +59,7 @@ namespace ICanPay.Yeepay
         /// 创建支付订单数据的Url
         /// </summary>
         /// <returns></returns>
-        public string BuildPaymentUrl()
+        public string BuildUrlPayment()
         {
             InitOrderParameter();
             return string.Format("{0}?{1}", payGatewayUrl, GetPaymentQueryString());
@@ -145,7 +145,7 @@ namespace ICanPay.Yeepay
             //return string.Format("{0}?p0_Cmd=QueryOrdDetail&p1_MerId={1}&p2_Order={2}&hmac={3}", payGatewayUrl, Merchant.UserName, Order.Id, hmac);
         }
 
-        protected override void InitOrderParameter()
+        protected void InitOrderParameter()
         {
             GatewayData.Add("p0_Cmd", "Buy");
             //GatewayData.Add("p1_MerId", Merchant.UserName);
@@ -236,37 +236,12 @@ namespace ICanPay.Yeepay
             HttpUtil.Write(success);
         }
 
-        protected override void SupplementaryAppParameter()
+        public void InitFormPayment()
         {
             throw new NotImplementedException();
         }
 
-        protected override void SupplementaryWebParameter()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void SupplementaryWapParameter()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void SupplementaryScanParameter()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void SupplementaryBarcodeParameter()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void InitQueryParameter()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void InitCancelParameter()
+        public void InitUrlPayment()
         {
             throw new NotImplementedException();
         }

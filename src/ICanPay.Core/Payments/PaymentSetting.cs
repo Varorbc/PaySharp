@@ -56,27 +56,6 @@ namespace ICanPay.Core
             }
         }
 
-        public bool CanQueryNotify
-        {
-            get
-            {
-                if (gateway is IQueryUrl || gateway is IQueryForm)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        public bool CanQueryNow
-        {
-            get
-            {
-                return gateway is IQueryNow;
-            }
-        }
-
         #endregion
 
         #region 方法
@@ -93,60 +72,60 @@ namespace ICanPay.Core
             {
                 case GatewayTradeType.App:
                     {
-                        if (gateway is IPaymentApp paymentApp)
+                        if (gateway is IAppPayment appPayment)
                         {
-                            return paymentApp.BuildPaymentApp();
+                            return appPayment.BuildAppPayment();
                         }
                     }
                     break;
                 case GatewayTradeType.Wap:
                     {
-                        if (gateway is IPaymentUrl paymentUrl)
+                        if (gateway is IUrlPayment urlPayment)
                         {
-                            HttpUtil.Redirect(paymentUrl.BuildPaymentUrl());
+                            HttpUtil.Redirect(urlPayment.BuildUrlPayment());
                             return null;
                         }
                     }
                     break;
                 case GatewayTradeType.Web:
                     {
-                        if (gateway is IPaymentForm paymentForm)
+                        if (gateway is IFormPayment formPayment)
                         {
-                            HttpUtil.Write(paymentForm.BuildPaymentForm());
+                            HttpUtil.Write(formPayment.BuildFormPayment());
                             return null;
                         }
                     }
                     break;
                 case GatewayTradeType.Scan:
                     {
-                        if (gateway is IPaymentScan paymentScan)
+                        if (gateway is IScanPayment scanPayment)
                         {
-                            return paymentScan.BuildPaymentScan();
+                            return scanPayment.BuildScanPayment();
                         }
                     }
                     break;
                 case GatewayTradeType.Public:
                     {
-                        if (gateway is IPaymentPublic paymentPublic)
+                        if (gateway is IPublicPayment publicPayment)
                         {
-                            return paymentPublic.BuildPaymentPublic();
+                            return publicPayment.BuildPublicPayment();
                         }
                     }
                     break;
                 case GatewayTradeType.Barcode:
                     {
-                        if (gateway is IPaymentBarcode paymentBarcode)
+                        if (gateway is IBarcodePayment barcodePayment)
                         {
-                            paymentBarcode.BuildPaymentBarcode();
+                            barcodePayment.BuildBarcodePayment();
                             return null;
                         }
                     }
                     break;
                 case GatewayTradeType.Applet:
                     {
-                        if (gateway is IPaymentApplet paymentApplet)
+                        if (gateway is IAppletPayment appletPayment)
                         {
-                            return paymentApplet.BuildPaymentApplet();
+                            return appletPayment.BuildAppletPayment();
                         }
                     }
                     break;
@@ -157,41 +136,6 @@ namespace ICanPay.Core
             throw new NotSupportedException(gateway.GatewayType + " 没有实现支付接口");
         }
 
-        /// <summary>
-        /// 查询订单，订单的查询通知数据通过跟支付通知一样的形式反回。用处理网关通知一样的方法接受查询订单的数据。
-        /// </summary>
-        public void QueryNotify()
-        {
-            if (gateway is IQueryUrl queryUrl)
-            {
-                HttpUtil.Redirect(queryUrl.BuildQueryUrl());
-                return;
-            }
-
-            if (gateway is IQueryForm queryForm)
-            {
-                HttpUtil.Write(queryForm.BuildQueryForm());
-                return;
-            }
-
-            throw new NotSupportedException(gateway.GatewayType + " 没有实现 IQueryUrl 或 IQueryForm 查询接口");
-        }
-
-        /// <summary>
-        /// 查询订单，立即获得订单的查询结果
-        /// </summary>
-        /// <returns></returns>
-        public bool QueryNow()
-        {
-            if (gateway is IQueryNow queryNow)
-            {
-                return queryNow.QueryNow();
-            }
-
-            throw new NotSupportedException(gateway.GatewayType + " 没有实现 IQueryNow 查询接口");
-        }
-
         #endregion
-
     }
 }

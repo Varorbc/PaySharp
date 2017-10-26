@@ -30,10 +30,10 @@ namespace ICanPay.Demo.Controllers
             querySetting.Order.OutTradeNo = "1564515";
             querySetting.Order.Amount = 0.01;
 
-            if (querySetting.CanQueryNow && querySetting.QueryNow())
-            {
-                // 订单已支付
-            }
+            //if (querySetting.CanQueryNow && querySetting.QueryNow())
+            //{
+            //    // 订单已支付
+            //}
         }
 
         /// <summary>
@@ -71,10 +71,10 @@ namespace ICanPay.Demo.Controllers
             querySetting.Order.OutTradeNo = "885";
             querySetting.Order.Amount = 0.01;
 
-            if (querySetting.CanQueryNow && querySetting.QueryNow())
-            {
-                // 订单已支付
-            }
+            //if (querySetting.CanQueryNow && querySetting.QueryNow())
+            //{
+            //    // 订单已支付
+            //}
         }
     }
 }

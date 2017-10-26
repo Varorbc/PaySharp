@@ -142,116 +142,9 @@ namespace ICanPay.Core
             HttpUtil.Write(FAILURE);
         }
 
-        /// <summary>
-        /// 初始化订单参数
-        /// </summary>
-        protected virtual void InitOrderParameter()
-        {
-            SupplementaryParameter();
-        }
-
-        /// <summary>
-        /// 初始化查询参数
-        /// </summary>
-        protected abstract void InitQueryParameter();
-
-        /// <summary>
-        /// 初始化撤销/关闭参数
-        /// </summary>
-        protected abstract void InitCancelParameter();
-
-        /// <summary>
-        /// 补充移动支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryAppParameter();
-
-        /// <summary>
-        /// 补充电脑网站支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryWebParameter();
-
-        /// <summary>
-        /// 补充手机网站支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryWapParameter();
-
-        /// <summary>
-        /// 补充扫码支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryScanParameter();
-
-        /// <summary>
-        /// 补充公众号支付的缺少参数
-        /// </summary>
-        protected virtual void SupplementaryPublicParameter()
-        {
-        }
-
-        /// <summary>
-        /// 补充条码支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryBarcodeParameter();
-
-        /// <summary>
-        /// 补充小程序支付的缺少参数
-        /// </summary>
-        protected virtual void SupplementaryAppletParameter()
-        {
-        }
-
         #endregion
 
         #region 私有方法
-
-        /// <summary>
-        /// 补充不同支付类型的缺少参数
-        /// </summary>
-        private void SupplementaryParameter()
-        {
-            switch (GatewayTradeType)
-            {
-                case GatewayTradeType.App:
-                    {
-                        SupplementaryAppParameter();
-                    }
-                    break;
-                case GatewayTradeType.Wap:
-                    {
-                        SupplementaryWapParameter();
-                    }
-                    break;
-                case GatewayTradeType.Web:
-                    {
-                        SupplementaryWebParameter();
-                    }
-                    break;
-                case GatewayTradeType.Scan:
-                    {
-                        SupplementaryScanParameter();
-                    }
-                    break;
-                case GatewayTradeType.Public:
-                    {
-                        SupplementaryPublicParameter();
-                    }
-                    break;
-                case GatewayTradeType.Barcode:
-                    {
-                        SupplementaryBarcodeParameter();
-                    }
-                    break;
-                case GatewayTradeType.Applet:
-                    {
-                        SupplementaryAppletParameter();
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            ValidateParameter(Merchant);
-            ValidateParameter(Order);
-        }
 
         /// <summary>
         /// 验证订单是否支付成功
@@ -270,7 +163,7 @@ namespace ICanPay.Core
         /// 验证参数
         /// </summary>
         /// <param name="instance">验证对象</param>
-        private void ValidateParameter(object instance)
+        protected void ValidateParameter(object instance)
         {
             var validationContext = new ValidationContext(instance, new Dictionary<object, object>
             {

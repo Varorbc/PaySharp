@@ -8,7 +8,7 @@ namespace ICanPay.Alipay
     /// 支付宝网关
     /// </summary>
     public sealed class AlipayGateway
-        : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp, IPaymentScan,IPaymentBarcode
+        : GatewayBase, IFormPayment, IUrlPayment, IAppPayment, IScanPayment,IBarcodePayment
     {
 
         #region 私有字段
@@ -51,37 +51,37 @@ namespace ICanPay.Alipay
 
         #region 方法
 
-        public string BuildPaymentForm()
+        public string BuildFormPayment()
         {
-            InitOrderParameter();
+            InitFormPayment();
 
             return GatewayData.ToForm(GatewayUrl);
         }
 
-        public string BuildPaymentUrl()
+        public string BuildUrlPayment()
         {
-            InitOrderParameter();
+            InitUrlPayment();
 
             return $"{GatewayUrl}?{GetPaymentQueryString()}";
         }
 
-        public string BuildPaymentApp()
+        public string BuildAppPayment()
         {
-            InitOrderParameter();
+            InitAppPayment();
 
             return GetPaymentQueryString();
         }
 
-        public string BuildPaymentScan()
+        public string BuildScanPayment()
         {
             PreCreate();
 
             return Notify.QrCode;
         }
 
-        public void BuildPaymentBarcode()
+        public void BuildBarcodePayment()
         {
-            InitOrderParameter();
+            InitBarcodePayment();
 
             Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
 
@@ -111,13 +111,15 @@ namespace ICanPay.Alipay
             return false;
         }
 
-        protected override void SupplementaryAppParameter()
+        public void InitAppPayment()
         {
             Merchant.Method = Constant.APP;
             Order.ProductCode = Constant.QUICK_MSECURITY_PAY;
+
+            InitOrderParameter();
         }
 
-        protected override void SupplementaryWebParameter()
+        public void InitFormPayment()
         {
             if (!string.IsNullOrEmpty(Merchant.ReturnUrl))
             {
@@ -126,9 +128,11 @@ namespace ICanPay.Alipay
 
             Merchant.Method = Constant.WEB;
             Order.ProductCode = Constant.FAST_INSTANT_TRADE_PAY;
+
+            InitOrderParameter();
         }
 
-        protected override void SupplementaryWapParameter()
+        public void InitUrlPayment()
         {
             if (!string.IsNullOrEmpty(Merchant.ReturnUrl))
             {
@@ -137,9 +141,11 @@ namespace ICanPay.Alipay
 
             Merchant.Method = Constant.WAP;
             Order.ProductCode = Constant.QUICK_WAP_WAY;
+
+            InitOrderParameter();
         }
 
-        protected override void SupplementaryScanParameter()
+        public void InitScanPayment()
         {
             if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
             {
@@ -147,9 +153,11 @@ namespace ICanPay.Alipay
             }
 
             Merchant.Method = Constant.SCAN;
+
+            InitOrderParameter();
         }
 
-        protected override void SupplementaryBarcodeParameter()
+        public void InitBarcodePayment()
         {
             if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
             {
@@ -158,6 +166,8 @@ namespace ICanPay.Alipay
 
             Merchant.Method = Constant.BARCODE;
             Order.ProductCode = Constant.FACE_TO_FACE_PAYMENT;
+
+            InitOrderParameter();
         }
 
         /// <summary>
@@ -179,28 +189,23 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 初始化订单参数
         /// </summary>
-        protected override void InitOrderParameter()
+        private void InitOrderParameter()
         {
-            base.InitOrderParameter();
             Merchant.BizContent = Util.SerializeObject(Order);
             InitPublicParameter();
             Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
+
+            ValidateParameter(Merchant);
+            ValidateParameter(Order);
         }
 
-        /// <summary>
-        /// 初始化查询参数
-        /// </summary>
-        /// <param name="outTradeNo">商户订单号</param>
-        protected override void InitQueryParameter()
+        public void InitQuery()
         {
             InitCommonParameter(Constant.QUERY);
         }
 
-        /// <summary>
-        /// 初始化撤销/关闭参数
-        /// </summary>
-        protected override void InitCancelParameter()
+        public void InitCancel()
         {
             InitCommonParameter(Constant.CANCEL);
         }
@@ -223,7 +228,7 @@ namespace ICanPay.Alipay
         /// </summary>
         private void Query()
         {
-            InitQueryParameter();
+            InitQuery();
 
             Commit(Constant.ALIPAY_TRADE_QUERY_RESPONSE);
         }
@@ -233,7 +238,7 @@ namespace ICanPay.Alipay
         /// </summary>
         private void Cancel()
         {
-            InitCancelParameter();
+            InitCancel();
 
             Commit(Constant.ALIPAY_TRADE_CANCEL_RESPONSE);
         }

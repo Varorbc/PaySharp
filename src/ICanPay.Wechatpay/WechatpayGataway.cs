@@ -8,7 +8,7 @@ namespace ICanPay.Wechatpay
     /// 微信支付网关
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
-        IPaymentScan, IQueryNow, IPaymentApp, IPaymentUrl, IPaymentPublic//, IPaymentBarcode
+        IScanPayment, IAppPayment, IUrlPayment, IPublicPayment//, IBarcodePayment
     {
 
         #region 私有字段
@@ -64,27 +64,31 @@ namespace ICanPay.Wechatpay
             return false;
         }
 
-        public string BuildPaymentScan()
+        public string BuildScanPayment()
         {
+            InitScanPayment();
             UnifiedOrder();
             return Notify.CodeUrl;
         }
 
-        public string BuildPaymentApp()
+        public string BuildAppPayment()
         {
+            InitAppPayment();
             UnifiedOrder();
             InitAppParameter();
             return GatewayData.ToJson();
         }
 
-        public string BuildPaymentUrl()
+        public string BuildUrlPayment()
         {
+            InitUrlPayment();
             UnifiedOrder();
             return Notify.MWebUrl;
         }
 
-        public string BuildPaymentPublic()
+        public string BuildPublicPayment()
         {
+            InitPublicPayment();
             UnifiedOrder();
             InitPublicParameter();
             return GatewayData.ToJson();
@@ -92,8 +96,7 @@ namespace ICanPay.Wechatpay
 
         public string BuildPaymentBarcode()
         {
-            GatewayUrl = barcodeGatewayUrl;
-            InitOrderParameter();
+            InitBarcodePayment();
             string result = HttpUtil
                 .PostAsync(GatewayUrl, GatewayData.ToXml())
                 .GetAwaiter()
@@ -103,10 +106,8 @@ namespace ICanPay.Wechatpay
             throw new NotImplementedException();
         }
 
-        protected override void InitOrderParameter()
+        private void InitOrderParameter()
         {
-            base.InitOrderParameter();
-
             #region 商户数据
             Merchant.NonceStr = Util.GenerateNonceStr();
             GatewayData.Add(Constant.APPID, Merchant.AppId);
@@ -182,37 +183,38 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
-        protected override void SupplementaryAppParameter()
+        public void InitAppPayment()
         {
             Order.TradeType = Constant.APP;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
-        protected override void SupplementaryWebParameter()
+        public void InitFormPayment()
         {
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
-        protected override void SupplementaryWapParameter()
+        public void InitUrlPayment()
         {
             Order.TradeType = Constant.MWEB;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
-        protected override void SupplementaryScanParameter()
+        public void InitScanPayment()
         {
             Order.TradeType = Constant.NATIVE;
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
         }
 
-        protected override void SupplementaryPublicParameter()
+        public void InitPublicPayment()
         {
             Order.TradeType = Constant.JSAPI;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
-        protected override void SupplementaryBarcodeParameter()
+        public void InitBarcodePayment()
         {
+            GatewayUrl = barcodeGatewayUrl;
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
         }
 
@@ -228,6 +230,10 @@ namespace ICanPay.Wechatpay
         private void UnifiedOrder()
         {
             InitOrderParameter();
+
+            ValidateParameter(Merchant);
+            ValidateParameter(Order);
+
             string result = HttpUtil
                 .PostAsync(GatewayUrl, GatewayData.ToXml())
                 .GetAwaiter()
@@ -386,12 +392,12 @@ namespace ICanPay.Wechatpay
             HttpUtil.Write(GatewayData.ToXml());
         }
 
-        protected override void InitQueryParameter()
+        public void InitQuery()
         {
             throw new NotImplementedException();
         }
 
-        protected override void InitCancelParameter()
+        public void InitCancel()
         {
             throw new NotImplementedException();
         }
