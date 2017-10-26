@@ -217,6 +217,83 @@ namespace ICanPay.Core
 
         #endregion
 
+        #region 公共方法
+
+        /// <summary>
+        /// 支付
+        /// </summary>
+        public string Payment()
+        {
+            switch (GatewayTradeType)
+            {
+                case GatewayTradeType.App:
+                    {
+                        if (this is IAppPayment appPayment)
+                        {
+                            return appPayment.BuildAppPayment();
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Wap:
+                    {
+                        if (this is IUrlPayment urlPayment)
+                        {
+                            HttpUtil.Redirect(urlPayment.BuildUrlPayment());
+                            return null;
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Web:
+                    {
+                        if (this is IFormPayment formPayment)
+                        {
+                            HttpUtil.Write(formPayment.BuildFormPayment());
+                            return null;
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Scan:
+                    {
+                        if (this is IScanPayment scanPayment)
+                        {
+                            return scanPayment.BuildScanPayment();
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Public:
+                    {
+                        if (this is IPublicPayment publicPayment)
+                        {
+                            return publicPayment.BuildPublicPayment();
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Barcode:
+                    {
+                        if (this is IBarcodePayment barcodePayment)
+                        {
+                            barcodePayment.BuildBarcodePayment();
+                            return null;
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Applet:
+                    {
+                        if (this is IAppletPayment appletPayment)
+                        {
+                            return appletPayment.BuildAppletPayment();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            throw new NotSupportedException($"{GatewayType} 没有实现{GatewayTradeType}接口");
+        }
+
+        #endregion
+
         #endregion
 
         #region 事件

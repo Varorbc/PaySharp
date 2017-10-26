@@ -50,11 +50,11 @@ namespace ICanPay.Demo.Controllers
 
             var gateway = gateways.Get(GatewayType.Alipay);
             gateway.GatewayTradeType = GatewayTradeType.Web;
+            gateway.Order = order;
 
-            //.BarcodePaymentFailed += Gateway_BarcodePaymentFailed;
+            //gateway.PaymentFailed += Gateway_BarcodePaymentFailed;
 
-            PaymentSetting paymentSetting = new PaymentSetting(gateway, order);
-            return paymentSetting.Payment();
+            return gateway.Payment();
         }
 
         private void Gateway_BarcodePaymentFailed(object arg1, PaymentFailedEventArgs arg2)
@@ -78,9 +78,9 @@ namespace ICanPay.Demo.Controllers
 
             var gateway = gateways.Get(GatewayType.Wechatpay);
             gateway.GatewayTradeType = GatewayTradeType.Barcode;
+            gateway.Order = order;
 
-            PaymentSetting paymentSetting = new PaymentSetting(gateway, order);
-            return paymentSetting.Payment();
+            return gateway.Payment();
         }
     }
 }
