@@ -243,7 +243,7 @@ namespace ICanPay.Alipay
 
         protected override async Task<bool> CheckNotifyDataAsync()
         {
-            ReadNotify<Notify>();
+            await ReadNotifyAsync<Notify>();
             if (await IsSuccessResultAsync())
             {
                 return true;

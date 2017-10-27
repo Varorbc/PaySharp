@@ -1,6 +1,4 @@
-﻿using ICanPay.Alipay;
-using ICanPay.Core;
-using ICanPay.Wechatpay;
+﻿using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ICanPay.Demo.Controllers
@@ -38,9 +36,15 @@ namespace ICanPay.Demo.Controllers
         /// <summary>
         /// 关闭微信的订单
         /// </summary>
-        private void CancelWechatpayOrder()
+        private Wechatpay.Notify CancelWechatpayOrder()
         {
+            var gateway = gateways.Get(GatewayType.Wechatpay);
+            gateway.Order = new Wechatpay.Order
+            {
+                OutTradeNo = "123"
+            };
 
+            return (Wechatpay.Notify)gateway.Cancel();
         }
     }
 }

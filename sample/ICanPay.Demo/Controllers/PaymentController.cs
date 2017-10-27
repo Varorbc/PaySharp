@@ -1,6 +1,4 @@
-﻿using ICanPay.Alipay;
-using ICanPay.Core;
-using ICanPay.Wechatpay;
+﻿using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
