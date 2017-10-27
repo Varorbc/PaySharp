@@ -34,12 +34,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 用户代理
         /// </summary>
-        public static string UserAgent => Current.Request.Headers["UserAgent"];
+        public static string UserAgent => Current.Request.Headers["User-Agent"];
 
         /// <summary>
         /// 请求类型
         /// </summary>
-        public static string RequestType => Current.Request.Headers["RequestType"];
+        public static string RequestType => Current.Request.Method;
 
         /// <summary>
         /// 内容类型
