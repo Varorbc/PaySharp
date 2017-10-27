@@ -9,7 +9,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 生成撤销/关闭订单参数
         /// </summary>
-        string BuildCancel();
+        INotify BuildCancel();
 
         /// <summary>
         /// 初始化撤销/关闭订单参数

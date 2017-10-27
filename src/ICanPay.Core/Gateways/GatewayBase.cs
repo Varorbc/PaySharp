@@ -289,7 +289,33 @@ namespace ICanPay.Core
                     break;
             }
 
-            throw new NotSupportedException($"{GatewayType} 没有实现{GatewayTradeType}接口");
+            throw new NotSupportedException($"{GatewayType} 没有实现 {GatewayTradeType} 接口");
+        }
+
+        /// <summary>
+        /// 查询
+        /// </summary>
+        public INotify Query()
+        {
+            if (this is IQuery query)
+            {
+                return query.BuildQuery();
+            }
+
+            throw new NotSupportedException($"{GatewayType} 没有实现 IQuery 查询接口");
+        }
+
+        /// <summary>
+        /// 撤销/关闭
+        /// </summary>
+        public INotify Cancel()
+        {
+            if (this is ICancel cancel)
+            {
+                return cancel.BuildCancel();
+            }
+
+            throw new NotSupportedException($"{GatewayType} 没有实现 ICancel 查询接口");
         }
 
         #endregion

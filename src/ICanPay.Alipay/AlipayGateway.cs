@@ -209,13 +209,13 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 查询订单
         /// </summary>
-        public string BuildQuery()
+        public INotify BuildQuery()
         {
             InitQuery();
 
             Commit(Constant.ALIPAY_TRADE_QUERY_RESPONSE);
 
-            return null;
+            return Notify;
         }
 
         #endregion
@@ -230,13 +230,13 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 撤销订单
         /// </summary>
-        public string BuildCancel()
+        public INotify BuildCancel()
         {
             InitCancel();
 
             Commit(Constant.ALIPAY_TRADE_CANCEL_RESPONSE);
 
-            return null;
+            return Notify;
         }
 
         #endregion
