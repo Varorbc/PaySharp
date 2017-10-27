@@ -210,5 +210,12 @@ namespace ICanPay.Wechatpay
         /// </summary>
         [Display(Name = Constant.TRADE_STATE)]
         public string TradeState { get; set; }
+
+        /// <summary>
+        /// 是否重调
+        /// 是否需要继续调用撤销，Y-需要，N-不需要
+        /// </summary>
+        [Display(Name = Constant.RECALL)]
+        public string Recall { get; set; }
     }
 }

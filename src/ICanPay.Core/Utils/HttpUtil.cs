@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -98,32 +99,11 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// 读取网页，返回网页内容
+        /// Get请求
         /// </summary>
         /// <param name="url">url</param>
         /// <returns></returns>
-        public static string ReadPage(string url)
-        {
-            return ReadPage(url, Encoding.UTF8);
-        }
-
-        /// <summary>
-        /// 异步读取网页，返回网页内容
-        /// </summary>
-        /// <param name="url">url</param>
-        /// <returns></returns>
-        public static async Task<string> ReadPageAsync(string url)
-        {
-            return await ReadPageAsync(url, Encoding.UTF8);
-        }
-
-        /// <summary>
-        /// 读取网页，返回网页内容
-        /// </summary>
-        /// <param name="url">url</param>
-        /// <param name="encoding">编码</param>
-        /// <returns></returns>
-        public static string ReadPage(string url, Encoding encoding)
+        public static string Get(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
@@ -133,7 +113,7 @@ namespace ICanPay.Core
             {
                 using (WebResponse response = request.GetResponse())
                 {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream(), encoding))
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
                         if (reader != null)
                         {
@@ -142,7 +122,7 @@ namespace ICanPay.Core
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -155,14 +135,13 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// 读取网页，返回网页内容
+        /// 异步Post请求
         /// </summary>
         /// <param name="url">url</param>
-        /// <param name="encoding">编码</param>
         /// <returns></returns>
-        public static async Task<string> ReadPageAsync(string url, Encoding encoding)
+        public static async Task<string> GetAsync(string url)
         {
-            return await Task.Run(() => ReadPage(url, encoding));
+            return await Task.Run(() => Get(url));
         }
 
         /// <summary>
@@ -170,14 +149,20 @@ namespace ICanPay.Core
         /// </summary>
         /// <param name="url">url</param>
         /// <param name="data">数据</param>
+        /// <param name="cert">证书</param>
         /// <returns></returns>
-        public static string Post(string url, string data)
+        public static string Post(string url, string data, X509Certificate2 cert = null)
         {
             byte[] dataByte = Encoding.UTF8.GetBytes(data);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
             request.ContentLength = dataByte.Length;
+
+            if (cert != null)
+            {
+                request.ClientCertificates.Add(cert);
+            }
 
             try
             {
@@ -197,7 +182,7 @@ namespace ICanPay.Core
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -214,10 +199,11 @@ namespace ICanPay.Core
         /// </summary>
         /// <param name="url">url</param>
         /// <param name="data">数据</param>
+        /// <param name="cert">证书</param>
         /// <returns></returns>
-        public static async Task<string> PostAsync(string url, string data)
+        public static async Task<string> PostAsync(string url, string data, X509Certificate2 cert = null)
         {
-            return await Task.Run(() => Post(url, data));
+            return await Task.Run(() => Post(url, data, cert));
         }
 
         #endregion

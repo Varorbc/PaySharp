@@ -17,15 +17,6 @@ namespace ICanPay.Core
         {
         }
 
-        /// <summary>
-        /// 初始化未知网关
-        /// </summary>
-        /// <param name="gatewayData">网关数据</param>
-        public NullGateway(GatewayData gatewayData)
-            : base(gatewayData)
-        {
-        }
-
         #endregion
 
         #region 属性

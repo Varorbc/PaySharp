@@ -309,7 +309,7 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// ³·Ïú/¹Ø±Õ
+        /// ³·Ïú
         /// </summary>
         public INotify Cancel()
         {

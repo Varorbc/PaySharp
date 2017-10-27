@@ -1,5 +1,7 @@
 using ICanPay.Core;
 using System;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ICanPay.Wechatpay
@@ -8,22 +10,24 @@ namespace ICanPay.Wechatpay
     /// 微信支付网关
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
-        IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment,
+        IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment, IBarcodePayment,
         IQuery, ICancel
     {
 
         #region 私有字段
 
         private Merchant merchant;
-        private const string unifiedOrderGatewayUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-        private const string queryGatewayUrl = "https://api.mch.weixin.qq.com/pay/orderquery";
-        private const string cancelGatewayUrl = "https://api.mch.weixin.qq.com/pay/closeorder";
-        private const string refundGatewayUrl = "https://api.mch.weixin.qq.com/secapi/pay/refund";
-        private const string refundQueryGatewayUrl = "https://api.mch.weixin.qq.com/pay/refundquery";
-        private const string downloadBillGatewayUrl = "https://api.mch.weixin.qq.com/pay/downloadbill";
-        private const string reportGatewayUrl = "https://api.mch.weixin.qq.com/payitil/report";
-        private const string batchQueryCommentGatewayUrl = "https://api.mch.weixin.qq.com/billcommentsp/batchquerycomment";
-        private const string barcodeGatewayUrl = "https://api.mch.weixin.qq.com/pay/micropay";
+        private const string USERPAYING = "USERPAYING";
+        private const string UNIFIEDORDERGATEWAYURL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+        private const string QUERYGATEWAYURL = "https://api.mch.weixin.qq.com/pay/orderquery";
+        private const string CANCELGATEWAYURL = "https://api.mch.weixin.qq.com/secapi/pay/reverse";
+        private const string CLOSEORDERGATEWAYURL = "https://api.mch.weixin.qq.com/pay/closeorder";
+        private const string REFUNDGATEWAYURL = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+        private const string REFUNDQUERYGATEWAYURL = "https://api.mch.weixin.qq.com/pay/refundquery";
+        private const string DOWNLOADBILLGATEWAYURL = "https://api.mch.weixin.qq.com/pay/downloadbill";
+        private const string REPORTGATEWAYURL = "https://api.mch.weixin.qq.com/payitil/report";
+        private const string BATCHQUERYCOMMENTGATEWAYURL = "https://api.mch.weixin.qq.com/billcommentsp/batchquerycomment";
+        private const string BARCODEGATEWAYURL = "https://api.mch.weixin.qq.com/pay/micropay";
 
         #endregion
 
@@ -45,7 +49,7 @@ namespace ICanPay.Wechatpay
 
         public override GatewayType GatewayType => GatewayType.Wechatpay;
 
-        public override string GatewayUrl { get; set; } = unifiedOrderGatewayUrl;
+        public override string GatewayUrl { get; set; } = UNIFIEDORDERGATEWAYURL;
 
         public new Merchant Merchant => merchant;
 
@@ -53,9 +57,9 @@ namespace ICanPay.Wechatpay
 
         public new Notify Notify => (Notify)base.Notify;
 
-        protected override bool IsSuccessPay => throw new NotImplementedException();
+        protected override bool IsSuccessPay => Notify.TradeState.ToLower() == SUCCESS;
 
-        protected override bool IsWaitPay => throw new NotImplementedException();
+        protected override bool IsWaitPay => Notify.TradeState.ToLower() == USERPAYING;
 
         #endregion
 
@@ -182,19 +186,51 @@ namespace ICanPay.Wechatpay
 
         #region 条码支付
 
-        public string BuildPaymentBarcode()
+        public void BuildBarcodePayment()
         {
             InitBarcodePayment();
 
             Commit();
 
-            throw new NotImplementedException();
+            PollQueryTradeState();
         }
 
         public void InitBarcodePayment()
         {
-            GatewayUrl = barcodeGatewayUrl;
+            GatewayUrl = BARCODEGATEWAYURL;
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+        }
+
+        /// <summary>
+        /// 每隔5秒轮询判断用户是否支付,总共轮询5次
+        /// </summary>
+        private void PollQueryTradeState()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                Thread.Sleep(5000);
+                BuildQuery();
+                if (IsSuccessPay)
+                {
+                    OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                    return;
+                }
+            }
+
+            BuildCancel();
+            if (Notify.Recall == "Y")
+            {
+                BuildCancel();
+            }
+            OnPaymentFailed(new PaymentFailedEventArgs(this));
+        }
+
+        /// <summary>
+        /// 异步每隔5秒轮询判断用户是否支付,总共轮询5次
+        /// </summary>
+        private async Task PollAsync()
+        {
+            await Task.Run(() => PollQueryTradeState());
         }
 
         #endregion
@@ -203,7 +239,7 @@ namespace ICanPay.Wechatpay
 
         public void InitQuery()
         {
-            GatewayUrl = queryGatewayUrl;
+            GatewayUrl = QUERYGATEWAYURL;
             Merchant.NonceStr = Util.GenerateNonceStr();
             GatewayData.Add(Constant.APPID, Merchant.AppId);
             GatewayData.Add(Constant.MCH_ID, Merchant.MchId);
@@ -224,19 +260,19 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region 关闭订单
+        #region 撤销订单
 
         public void InitCancel()
         {
             InitQuery();
-            GatewayUrl = cancelGatewayUrl;
+            GatewayUrl = CANCELGATEWAYURL;
         }
 
         public INotify BuildCancel()
         {
             InitCancel();
 
-            Commit();
+            Commit(true);
 
             return Notify;
         }
@@ -343,7 +379,7 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private void UnifiedOrder()
         {
-            GatewayUrl = unifiedOrderGatewayUrl;
+            GatewayUrl = UNIFIEDORDERGATEWAYURL;
             InitOrderParameter();
 
             ValidateParameter(Merchant);
@@ -390,10 +426,13 @@ namespace ICanPay.Wechatpay
         /// <summary>
         /// 提交请求
         /// </summary>
-        private void Commit()
+        /// <param name="isCert">是否添加证书</param>
+        private void Commit(bool isCert = false)
         {
+            var cert = isCert ? new X509Certificate2(Merchant.SslCertPath, Merchant.SslCertPassword) : null;
+
             string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToXml())
+                .PostAsync(GatewayUrl, GatewayData.ToXml(), cert)
                 .GetAwaiter()
                 .GetResult();
             ReadReturnResult(result);

@@ -66,5 +66,6 @@
         public const string PROMOTION_DETAIL = "promotion_detail";
         public const string TRADE_STATE = "trade_state";
         public const string TRADE_STATE_DESC = "trade_state_desc";
+        public const string RECALL = "recall";
     }
 }
