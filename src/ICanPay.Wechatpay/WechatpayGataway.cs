@@ -8,7 +8,7 @@ namespace ICanPay.Wechatpay
     /// 微信支付网关
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
-        IScanPayment, IAppPayment, IUrlPayment, IPublicPayment,
+        IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment,
         IQuery, ICancel
     {
 
@@ -158,6 +158,24 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.PACKAGE, $"{Constant.PREPAY_ID}={Notify.PrepayId}");
             GatewayData.Add(Constant.SIGN_TYPE, "MD5");
             GatewayData.Add(Constant.PAYSIGN, BuildSign());
+        }
+
+        #endregion
+
+        #region 小程序支付
+
+        public string BuildAppletPayment()
+        {
+            InitAppletPayment();
+            UnifiedOrder();
+            InitPublicParameter();
+            return GatewayData.ToJson();
+        }
+
+        public void InitAppletPayment()
+        {
+            Order.TradeType = Constant.JSAPI;
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
         #endregion
