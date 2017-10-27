@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace ICanPay.Core
 {
@@ -14,8 +13,6 @@ namespace ICanPay.Core
         // 需要验证的参数名称数组，用于识别不同的网关类型。
         // 检查是否在发回的数据中，需要保证参数名称跟其他各个网关验证的参数名称不重复。
         // 建议使用网关中返回的不为空的参数名，并使用尽可能多的参数名。
-        private static string[] yeepayGatewayVerifyParmaNames = { "r0_Cmd", "r1_Code", "r2_TrxId", "r3_Amt", "r4_Cur", "r5_Pid", "r6_Order" };
-        private static string[] tenpayGatewayVerifyParmaNames = { "trade_mode", "trade_state", "transaction_id", "notify_id", "total_fee", "fee_type" };
         private static string[] alipayGatewayVerifyParmaNames = { "notify_type", "notify_id", "notify_time", "sign", "sign_type" };
         private static string[] wechatpayGatewayVerifyParmaNames = { "return_code", "appid", "mch_id", "nonce_str", "result_code" };
 
@@ -26,26 +23,20 @@ namespace ICanPay.Core
         /// <summary>
         /// 获取网关
         /// </summary>
-        public static GatewayBase GetGateway(ICollection<GatewayBase> gatewayList)
+        /// <param name="gateways">网关列表</param>
+        /// <returns></returns>
+        public static GatewayBase GetGateway(IGateways gateways)
         {
             var gatewayData = ReadNotifyData();
             GatewayBase gateway;
 
             if (IsAlipayGateway(gatewayData))
             {
-                gateway = gatewayList.GetGateway(GatewayType.Alipay);
+                gateway = gateways.Get(GatewayType.Alipay);
             }
             else if (IsWechatpayGateway(gatewayData))
             {
-                gateway = gatewayList.GetGateway(GatewayType.Wechatpay);
-            }
-            else if (IsTenpayGateway(gatewayData))
-            {
-                gateway = gatewayList.GetGateway(GatewayType.Tenpay);
-            }
-            else if (IsYeepayGateway(gatewayData))
-            {
-                gateway = gatewayList.GetGateway(GatewayType.Yeepay);
+                gateway = gateways.Get(GatewayType.Wechatpay);
             }
             else
             {
@@ -54,26 +45,6 @@ namespace ICanPay.Core
 
             gateway.GatewayData = gatewayData;
             return gateway;
-        }
-
-        /// <summary>
-        /// 验证是否是易宝网关
-        /// </summary>
-        /// <param name="gatewayData">网关数据</param>
-        /// <returns></returns>
-        private static bool IsYeepayGateway(GatewayData gatewayData)
-        {
-            return ExistParameter(yeepayGatewayVerifyParmaNames, gatewayData);
-        }
-
-        /// <summary>
-        /// 是否是财付通网关
-        /// </summary>
-        /// <param name="gatewayData">网关数据</param>
-        /// <returns></returns>
-        private static bool IsTenpayGateway(GatewayData gatewayData)
-        {
-            return ExistParameter(tenpayGatewayVerifyParmaNames, gatewayData);
         }
 
         /// <summary>

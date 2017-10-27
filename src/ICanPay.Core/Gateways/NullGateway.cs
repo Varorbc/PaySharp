@@ -34,6 +34,10 @@ namespace ICanPay.Core
 
         public override string GatewayUrl { get; set; } = string.Empty;
 
+        protected override bool IsSuccessPay => false;
+
+        protected override bool IsWaitPay => false;
+
         #endregion
 
         #region 方法
@@ -41,30 +45,6 @@ namespace ICanPay.Core
         protected override async Task<bool> CheckNotifyDataAsync()
         {
             return await Task.Run(() => { return false; });
-        }
-
-        protected override void InitOrderParameter()
-        {
-        }
-
-        protected override void SupplementaryAppParameter()
-        {
-        }
-
-        protected override void SupplementaryWebParameter()
-        {
-        }
-
-        protected override void SupplementaryWapParameter()
-        {
-        }
-
-        protected override void SupplementaryScanParameter()
-        {
-        }
-
-        protected override void SupplementaryBarcodeParameter()
-        {
         }
 
         #endregion

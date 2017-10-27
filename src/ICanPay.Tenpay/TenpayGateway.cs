@@ -9,7 +9,7 @@ namespace ICanPay.Tenpay
     /// <summary>
     /// 财付通网关
     /// </summary>
-    public sealed class TenpayGateway : GatewayBase, IPaymentUrl, IPaymentForm, IQueryNow
+    public sealed class TenpayGateway : GatewayBase, IUrlPayment, IFormPayment
     {
 
         #region 私有字段
@@ -59,6 +59,10 @@ namespace ICanPay.Tenpay
 
         public override string GatewayUrl { get; set; }
 
+        protected override bool IsSuccessPay => throw new NotImplementedException();
+
+        protected override bool IsWaitPay => throw new NotImplementedException();
+
         #endregion
 
 
@@ -67,14 +71,14 @@ namespace ICanPay.Tenpay
         /// <summary>
         /// 支付订单数据的Url
         /// </summary>
-        public string BuildPaymentUrl()
+        public string BuildUrlPayment()
         {
             InitOrderParameter();
             return string.Format("{0}?{1}", payGatewayUrl, GetPaymentQueryString());
         }
 
 
-        public string BuildPaymentForm()
+        public string BuildFormPayment()
         {
             InitOrderParameter();
             return GatewayData.ToForm(payGatewayUrl);
@@ -84,7 +88,7 @@ namespace ICanPay.Tenpay
         /// <summary>
         /// 初始化订单参数
         /// </summary>
-        protected override void InitOrderParameter()
+        protected void InitOrderParameter()
         {
             //GatewayData.Add("body", Order.Subject);
             //GatewayData.Add("fee_type", "1");
@@ -326,27 +330,12 @@ namespace ICanPay.Tenpay
             //return string.Format("out_trade_no={0}&partner={1}", Order.Id, Merchant.UserName);
         }
 
-        protected override void SupplementaryAppParameter()
+        public void InitUrlPayment()
         {
             throw new NotImplementedException();
         }
 
-        protected override void SupplementaryWebParameter()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void SupplementaryWapParameter()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void SupplementaryScanParameter()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void SupplementaryBarcodeParameter()
+        public void InitFormPayment()
         {
             throw new NotImplementedException();
         }

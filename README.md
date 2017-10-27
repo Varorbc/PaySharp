@@ -14,8 +14,6 @@ Package  | NuGet
 ICanPay.Core		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Core.svg)](https://www.nuget.org/packages/ICanPay.Core)
 ICanPay.Alipay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Alipay.svg)](https://www.nuget.org/packages/ICanPay.Alipay)
 ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.svg)](https://www.nuget.org/packages/ICanPay.Wechatpay)
-ICanPay.Tenpay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Tenpay.svg)](https://www.nuget.org/packages/ICanPay.Tenpay)
-ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](https://www.nuget.org/packages/ICanPay.Yeepay)
 
 # 如何使用
 
@@ -25,7 +23,7 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 		{
 			services.AddICanPay(a =>
 			{
-				var gateways = new List<GatewayBase>();
+				var gateways = new Gateways();
 
 				// 设置商户数据
 				var alipayMerchant = new Alipay.Merchant
@@ -65,16 +63,15 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 		using ICanPay.Alipay;
 		using ICanPay.Core;
 		using Microsoft.AspNetCore.Mvc;
-		using System.Collections.Generic;
 
 		namespace ICanPay.Demo.Controllers
 		{
 			public class PaymentController : Controller
 			{
-				private ICollection<GatewayBase> gatewayList;
-				public PaymentController(ICollection<GatewayBase> gatewayList)
+				private IGateways gateways;
+				public PaymentController(IGateways gateways)
 				{
-					this.gatewayList = gatewayList;
+					this.gateways = gateways;
 				}
 
 				public IActionResult Index()
@@ -107,11 +104,11 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 						}
 					};
 
-					var gateway = gatewayList.GetGateway(GatewayType.Alipay);
+					var gateway = gateways.Get(GatewayType.Alipay);
 					gateway.GatewayTradeType = GatewayTradeType.Web;
+					gateway.Order = order;
 
-					PaymentSetting paymentSetting = new PaymentSetting(gateway, order);
-					return paymentSetting.Payment();
+					return gateway.Payment();
 				}
 			}
 		}
@@ -120,23 +117,22 @@ ICanPay.Yeepay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Yeepay.svg)](
 
         using ICanPay.Core;
 		using Microsoft.AspNetCore.Mvc;
-		using System.Collections.Generic;
 		using System.Threading.Tasks;
 
 		namespace ICanPay.Demo.Controllers
 		{
 			public class NotifyController : Controller
 			{
-				private ICollection<GatewayBase> gatewayList;
-				public NotifyController(ICollection<GatewayBase> gatewayList)
+				private IGateways gateways;
+				public NotifyController(IGateways gateways)
 				{
-					this.gatewayList = gatewayList;
+					this.gateways = gateways;
 				}
 
 				public async Task Index()
 				{
 					// 订阅支付通知事件
-					PaymentNotify notify = new PaymentNotify(gatewayList);
+					PaymentNotify notify = new PaymentNotify(gateways);
 					notify.PaymentSucceed += Notify_PaymentSucceed;
 					notify.PaymentFailed += Notify_PaymentFailed;
 					notify.UnknownGateway += Notify_UnknownGateway;
@@ -178,6 +174,8 @@ https://docs.open.alipay.com/204/105051/
 https://docs.open.alipay.com/270/105898/
 
 https://docs.open.alipay.com/api_1/alipay.trade.pay
+
+https://docs.open.alipay.com/api_1/alipay.trade.precreate
 
 微信支付文档：
 

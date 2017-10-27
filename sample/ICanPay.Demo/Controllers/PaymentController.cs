@@ -1,62 +1,27 @@
 ﻿using ICanPay.Alipay;
 using ICanPay.Core;
-using ICanPay.Tenpay;
 using ICanPay.Wechatpay;
-using ICanPay.Yeepay;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 
 namespace ICanPay.Demo.Controllers
 {
     public class PaymentController : Controller
     {
-        private ICollection<GatewayBase> gatewayList;
-        public PaymentController(ICollection<GatewayBase> gatewayList)
+        private IGateways gateways;
+        private string outTradeNo = DateTime.Now.ToString("yyyyMMddhhmmss");
+
+        public PaymentController(IGateways gateways)
         {
-            this.gatewayList = gatewayList;
+            this.gateways = gateways;
         }
 
         public IActionResult Index()
         {
-            string content = CreateWechatpayOrder();
+            string content = CreateAlipayOrder();
 
             return Content(content);
         }
-
-        /// <summary>
-        /// 创建易宝的支付订单
-        /// </summary>
-        private void CreateYeepayOrder()
-        {
-            var gateway = new YeepayGateway();
-            PaymentSetting paymentSetting = new PaymentSetting(gateway);
-            //paymentSetting.Merchant.UserName = "000000000000000";
-            //paymentSetting.Merchant.Key = "000000000000000000000000000000000000000000";
-            //paymentSetting.Merchant.NotifyUrl = new Uri("http://yourwebsite.com/Notify.aspx");
-
-            paymentSetting.Order.Amount = 0.01;
-            paymentSetting.Order.OutTradeNo = "24";
-            paymentSetting.Order.Body = "测试易宝";
-
-            paymentSetting.Payment();
-        }
-
-
-        private void CreateTenpayOrder()
-        {
-            var gateway = new TenpayGateway();
-            PaymentSetting paymentSetting = new PaymentSetting(gateway);
-            //paymentSetting.Merchant.UserName = "000000000000000";
-            //paymentSetting.Merchant.Key = "000000000000000000000000000000000000000000";
-            //paymentSetting.Merchant.NotifyUrl = new Uri("http://yourwebsite.com/Notify.aspx");
-
-            paymentSetting.Order.Amount = 0.01;
-            paymentSetting.Order.OutTradeNo = "93";
-            paymentSetting.Order.Body = "测测看";
-
-            paymentSetting.Payment();
-        }
-
 
         /// <summary>
         /// 创建支付宝的支付订单
@@ -66,26 +31,35 @@ namespace ICanPay.Demo.Controllers
             var order = new Alipay.Order()
             {
                 Amount = 0.01,
-                OutTradeNo = "35",
+                OutTradeNo = outTradeNo,
                 Subject = "测测看支付宝",
-                Body = "1234",
-                ExtendParams = new ExtendParam()
-                {
-                    HbFqNum = "3"
-                },
-                GoodsDetail = new Goods[] {
-                    new Goods()
-                    {
-                        Id = "12"
-                    }
-                }
+                //AuthCode = "12323",
+                //Scene = Alipay.Constant.BAR_CODE
+                //Body = "1234",
+                //ExtendParams = new ExtendParam()
+                //{
+                //    HbFqNum = "3"
+                //},
+                //GoodsDetail = new Goods[] {
+                //    new Goods()
+                //    {
+                //        Id = "12"
+                //    }
+                //}
             };
 
-            var gateway = gatewayList.GetGateway(GatewayType.Alipay);
+            var gateway = gateways.Get(GatewayType.Alipay);
             gateway.GatewayTradeType = GatewayTradeType.Web;
+            gateway.Order = order;
 
-            PaymentSetting paymentSetting = new PaymentSetting(gateway, order);
-            return paymentSetting.Payment();
+            //gateway.PaymentFailed += Gateway_BarcodePaymentFailed;
+
+            return gateway.Payment();
+        }
+
+        private void Gateway_BarcodePaymentFailed(object arg1, PaymentFailedEventArgs arg2)
+        {
+            throw new NotImplementedException();
         }
 
 
@@ -97,15 +71,16 @@ namespace ICanPay.Demo.Controllers
             var order = new Wechatpay.Order()
             {
                 Amount = 0.01,
-                OutTradeNo = "35",
+                OutTradeNo = outTradeNo,
                 Body = "测测看微信支付",
+                AuthCode = "123"
             };
 
-            var gateway = gatewayList.GetGateway(GatewayType.Wechatpay);
-            gateway.GatewayTradeType = GatewayTradeType.App;
+            var gateway = gateways.Get(GatewayType.Wechatpay);
+            gateway.GatewayTradeType = GatewayTradeType.Barcode;
+            gateway.Order = order;
 
-            PaymentSetting paymentSetting = new PaymentSetting(gateway, order);
-            return paymentSetting.Payment();
+            return gateway.Payment();
         }
     }
 }

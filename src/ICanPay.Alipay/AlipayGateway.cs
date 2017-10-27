@@ -1,6 +1,6 @@
 ﻿using ICanPay.Core;
+using System.Threading;
 using System.Threading.Tasks;
-using System;
 
 namespace ICanPay.Alipay
 {
@@ -8,7 +8,8 @@ namespace ICanPay.Alipay
     /// 支付宝网关
     /// </summary>
     public sealed class AlipayGateway
-        : GatewayBase, IPaymentForm, IPaymentUrl, IPaymentApp, IPaymentScan//, IPaymentBarcode
+        : GatewayBase, IFormPayment, IUrlPayment, IAppPayment, IScanPayment, IBarcodePayment,
+        IQuery, ICancel
     {
 
         #region 私有字段
@@ -43,50 +44,202 @@ namespace ICanPay.Alipay
 
         public new Notify Notify => (Notify)base.Notify;
 
+        protected override bool IsWaitPay => Notify.TradeStatus == "WAIT_BUYER_PAY";
+
+        protected override bool IsSuccessPay => Notify.Code == "TRADE_SUCCESS";
+
         #endregion
 
         #region 方法
 
-        public string BuildPaymentForm()
+        #region 表单支付
+
+        public string BuildFormPayment()
         {
-            InitOrderParameter();
+            InitFormPayment();
 
             return GatewayData.ToForm(GatewayUrl);
         }
 
-        public string BuildPaymentUrl()
+        public void InitFormPayment()
         {
+            if (!string.IsNullOrEmpty(Merchant.ReturnUrl))
+            {
+                GatewayData.Add(Constant.RETURN_URL, Merchant.ReturnUrl);
+            }
+
+            Merchant.Method = Constant.WEB;
+            Order.ProductCode = Constant.FAST_INSTANT_TRADE_PAY;
+
             InitOrderParameter();
+        }
+
+        #endregion
+
+        #region Url支付
+
+        public string BuildUrlPayment()
+        {
+            InitUrlPayment();
 
             return $"{GatewayUrl}?{GetPaymentQueryString()}";
         }
 
-        public string BuildPaymentApp()
+        public void InitUrlPayment()
         {
+            if (!string.IsNullOrEmpty(Merchant.ReturnUrl))
+            {
+                GatewayData.Add(Constant.RETURN_URL, Merchant.ReturnUrl);
+            }
+
+            Merchant.Method = Constant.WAP;
+            Order.ProductCode = Constant.QUICK_WAP_WAY;
+
             InitOrderParameter();
+        }
+
+        #endregion
+
+        #region App支付
+
+        public string BuildAppPayment()
+        {
+            InitAppPayment();
 
             return GetPaymentQueryString();
         }
 
-        public string BuildPaymentScan()
+        public void InitAppPayment()
         {
-            InitOrderParameter();
+            Merchant.Method = Constant.APP;
+            Order.ProductCode = Constant.QUICK_MSECURITY_PAY;
 
-            return PreCreate();
+            InitOrderParameter();
         }
 
-        public string BuildPaymentBarcode()
-        {
-            InitOrderParameter();
+        #endregion
 
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
-                .GetAwaiter()
-                .GetResult();
-            ReadReturnResult(result, GatewayTradeType.Barcode);
+        #region 扫码支付
+
+        public string BuildScanPayment()
+        {
+            PreCreate();
+
+            return Notify.QrCode;
+        }
+
+        /// <summary>
+        /// 预创建订单
+        /// </summary>
+        /// <returns></returns>
+        private void PreCreate()
+        {
+            InitScanPayment();
+
+            Commit(Constant.ALIPAY_TRADE_PRECREATE_RESPONSE);
+        }
+
+        public void InitScanPayment()
+        {
+            if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
+            {
+                GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
+            }
+
+            Merchant.Method = Constant.SCAN;
+
+            InitOrderParameter();
+        }
+
+        #endregion
+
+        #region 条码支付
+
+        public void BuildBarcodePayment()
+        {
+            InitBarcodePayment();
+
+            Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
+
+            Poll();
+        }
+
+        public void InitBarcodePayment()
+        {
+            if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
+            {
+                GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
+            }
+
+            Merchant.Method = Constant.BARCODE;
+            Order.ProductCode = Constant.FACE_TO_FACE_PAYMENT;
+
+            InitOrderParameter();
+        }
+
+        /// <summary>
+        /// 轮询判断用户是否支付
+        /// </summary>
+        private void Poll()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                Thread.Sleep(5000);
+                BuildQuery();
+                if (IsSuccessPay)
+                {
+                    OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                    return;
+                }
+            }
+
+            BuildCancel();
+            OnPaymentFailed(new PaymentFailedEventArgs(this));
+        }
+
+        #endregion
+
+        #region 查询订单
+
+        public void InitQuery()
+        {
+            InitCommonParameter(Constant.QUERY);
+        }
+
+        /// <summary>
+        /// 查询订单
+        /// </summary>
+        public string BuildQuery()
+        {
+            InitQuery();
+
+            Commit(Constant.ALIPAY_TRADE_QUERY_RESPONSE);
 
             return null;
         }
+
+        #endregion
+
+        #region 撤销订单
+
+        public void InitCancel()
+        {
+            InitCommonParameter(Constant.CANCEL);
+        }
+
+        /// <summary>
+        /// 撤销订单
+        /// </summary>
+        public string BuildCancel()
+        {
+            InitCancel();
+
+            Commit(Constant.ALIPAY_TRADE_CANCEL_RESPONSE);
+
+            return null;
+        }
+
+        #endregion
 
         protected override async Task<bool> CheckNotifyDataAsync()
         {
@@ -99,62 +252,11 @@ namespace ICanPay.Alipay
             return false;
         }
 
-        protected override void SupplementaryAppParameter()
-        {
-            Merchant.Method = Constant.APP;
-            Order.ProductCode = Constant.QUICK_MSECURITY_PAY;
-        }
-
-        protected override void SupplementaryWebParameter()
-        {
-            if (!string.IsNullOrEmpty(Merchant.ReturnUrl))
-            {
-                GatewayData.Add(Constant.RETURN_URL, Merchant.ReturnUrl);
-            }
-
-            Merchant.Method = Constant.WEB;
-            Order.ProductCode = Constant.FAST_INSTANT_TRADE_PAY;
-        }
-
-        protected override void SupplementaryWapParameter()
-        {
-            if (!string.IsNullOrEmpty(Merchant.ReturnUrl))
-            {
-                GatewayData.Add(Constant.RETURN_URL, Merchant.ReturnUrl);
-            }
-
-            Merchant.Method = Constant.WAP;
-            Order.ProductCode = Constant.QUICK_WAP_WAY;
-        }
-
-        protected override void SupplementaryScanParameter()
-        {
-            if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
-            {
-                GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
-            }
-
-            Merchant.Method = Constant.SCAN;
-        }
-
-        protected override void SupplementaryBarcodeParameter()
-        {
-            if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
-            {
-                GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
-            }
-
-            Merchant.Method = Constant.BARCODE;
-            Order.ProductCode = Constant.FACE_TO_FACE_PAYMENT;
-        }
-
         /// <summary>
-        /// 初始化订单参数
+        /// 初始化公共参数
         /// </summary>
-        protected override void InitOrderParameter()
+        private void InitPublicParameter()
         {
-            base.InitOrderParameter();
-            Merchant.BizContent = Util.SerializeObject(Order);
             GatewayData.Add(Constant.APP_ID, Merchant.AppId);
             GatewayData.Add(Constant.METHOD, Merchant.Method);
             GatewayData.Add(Constant.FORMAT, Merchant.Format);
@@ -164,8 +266,46 @@ namespace ICanPay.Alipay
             GatewayData.Add(Constant.VERSION, Merchant.Version);
             GatewayData.Add(Constant.NOTIFY_URL, Merchant.NotifyUrl);
             GatewayData.Add(Constant.BIZ_CONTENT, Merchant.BizContent);
+        }
+
+        /// <summary>
+        /// 初始化订单参数
+        /// </summary>
+        private void InitOrderParameter()
+        {
+            Merchant.BizContent = Util.SerializeObject(Order);
+            InitPublicParameter();
             Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
+
+            ValidateParameter(Merchant);
+            ValidateParameter(Order);
+        }
+
+        /// <summary>
+        /// 初始化相应接口的参数
+        /// </summary>
+        /// <param name="method">接口名称</param>
+        private void InitCommonParameter(string method)
+        {
+            Merchant.Method = method;
+            Merchant.BizContent = $"{{\"out_trade_no\":\"{Order.OutTradeNo}\"}}";
+            InitPublicParameter();
+            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+        }
+
+        /// <summary>
+        /// 提交请求
+        /// </summary>
+        /// <param name="type">结果类型</param>
+        private void Commit(string type)
+        {
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
+                .GetAwaiter()
+                .GetResult();
+            ReadReturnResult(result, type);
         }
 
         private string GetPaymentQueryString()
@@ -174,54 +314,18 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
-        /// 预创建订单
-        /// </summary>
-        /// <returns></returns>
-        private string PreCreate()
-        {
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
-                .GetAwaiter()
-                .GetResult();
-            ReadReturnResult(result, GatewayTradeType.Scan);
-
-            return Notify.QrCode;
-        }
-
-        /// <summary>
         /// 读取返回结果
         /// </summary>
         /// <param name="result">结果</param>
-        /// <param name="gatewayTradeType">网关交易类型，仅限扫码，条码</param>
-        private void ReadReturnResult(string result, GatewayTradeType gatewayTradeType)
+        /// <param name="key">结果的对象名</param>
+        private void ReadReturnResult(string result, string key)
         {
             GatewayData.FromJson(result);
             string sign = GatewayData.GetStringValue(Constant.SIGN);
-            result = GatewayData.GetStringValue(gatewayTradeType == GatewayTradeType.Scan ?
-                Constant.ALIPAY_TRADE_PRECREATE_RESPONSE :
-                Constant.ALIPAY_TRADE_PAY_RESPONSE);
+            result = GatewayData.GetStringValue(key);
             GatewayData.FromJson(result);
             ReadNotify<Notify>();
             Notify.Sign = sign;
-
-            IsSuccessReturn();
-        }
-
-        /// <summary>
-        /// 是否是已成功的返回
-        /// </summary>
-        /// <returns></returns>
-        private void IsSuccessReturn()
-        {
-            if (Notify.Code != "10000")
-            {
-                if (!string.IsNullOrEmpty(Notify.SubMessage))
-                {
-                    throw new Exception(Notify.SubMessage);
-                }
-
-                throw new Exception(Notify.Message);
-            }
         }
 
         /// <summary>

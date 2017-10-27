@@ -105,41 +105,21 @@ namespace ICanPay.Core
             }
         }
 
+        /// <summary>
+        /// 是否成功支付
+        /// </summary>
+        protected abstract bool IsSuccessPay { get; }
+
+        /// <summary>
+        /// 是否等待支付
+        /// </summary>
+        protected abstract bool IsWaitPay { get; }
+
         #endregion
 
         #region 方法
 
-        /// <summary>
-        /// 验证订单是否支付成功
-        /// </summary>
-        internal async Task<bool> ValidateNotifyAsync()
-        {
-            if (await CheckNotifyDataAsync())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// 验证参数
-        /// </summary>
-        /// <param name="instance">验证对象</param>
-        private void ValidateParameter(object instance)
-        {
-            var validationContext = new ValidationContext(instance, new Dictionary<object, object>
-            {
-                { "GatewayTradeType", GatewayTradeType }
-            });
-            var results = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(instance, validationContext, results, true);
-
-            if (!isValid)
-            {
-                throw new Exception(results[0].ErrorMessage);
-            }
-        }
+        #region 抽象方法
 
         /// <summary>
         /// 检验网关返回的通知，确认订单是否支付成功
@@ -162,101 +142,40 @@ namespace ICanPay.Core
             HttpUtil.Write(FAILURE);
         }
 
-        /// <summary>
-        /// 初始化订单参数
-        /// </summary>
-        protected virtual void InitOrderParameter()
-        {
-            SupplementaryParameter();
-        }
+        #endregion
+
+        #region 私有方法
 
         /// <summary>
-        /// 补充不同支付类型的缺少参数
+        /// 验证订单是否支付成功
         /// </summary>
-        private void SupplementaryParameter()
+        internal async Task<bool> ValidateNotifyAsync()
         {
-            switch (GatewayTradeType)
+            if (await CheckNotifyDataAsync())
             {
-                case GatewayTradeType.App:
-                    {
-                        SupplementaryAppParameter();
-                    }
-                    break;
-                case GatewayTradeType.Wap:
-                    {
-                        SupplementaryWapParameter();
-                    }
-                    break;
-                case GatewayTradeType.Web:
-                    {
-                        SupplementaryWebParameter();
-                    }
-                    break;
-                case GatewayTradeType.Scan:
-                    {
-                        SupplementaryScanParameter();
-                    }
-                    break;
-                case GatewayTradeType.Public:
-                    {
-                        SupplementaryPublicParameter();
-                    }
-                    break;
-                case GatewayTradeType.Barcode:
-                    {
-                        SupplementaryBarcodeParameter();
-                    }
-                    break;
-                case GatewayTradeType.Applet:
-                    {
-                        SupplementaryAppletParameter();
-                    }
-                    break;
-                default:
-                    break;
+                return true;
             }
 
-            ValidateParameter(Merchant);
-            ValidateParameter(Order);
+            return false;
         }
 
         /// <summary>
-        /// 补充移动支付的缺少参数
+        /// 验证参数
         /// </summary>
-        protected abstract void SupplementaryAppParameter();
-
-        /// <summary>
-        /// 补充电脑网站支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryWebParameter();
-
-        /// <summary>
-        /// 补充手机网站支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryWapParameter();
-
-        /// <summary>
-        /// 补充扫码支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryScanParameter();
-
-        /// <summary>
-        /// 补充公众号支付的缺少参数
-        /// </summary>
-        protected virtual void SupplementaryPublicParameter()
+        /// <param name="instance">验证对象</param>
+        protected void ValidateParameter(object instance)
         {
-        }
+            var validationContext = new ValidationContext(instance, new Dictionary<object, object>
+            {
+                { "GatewayTradeType", GatewayTradeType }
+            });
+            var results = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(instance, validationContext, results, true);
 
-        /// <summary>
-        /// 补充条码支付的缺少参数
-        /// </summary>
-        protected abstract void SupplementaryBarcodeParameter();
-
-        /// <summary>
-        /// 补充小程序支付的缺少参数
-        /// </summary>
-        protected virtual void SupplementaryAppletParameter()
-        {
+            if (!isValid)
+            {
+                throw new ArgumentNullException(results[0].ErrorMessage);
+            }
         }
 
         /// <summary>
@@ -292,7 +211,103 @@ namespace ICanPay.Core
             .GetResult();
         }
 
+        protected void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
+
+        protected void OnPaymentSucceed(PaymentSucceedEventArgs e) => PaymentSucceed?.Invoke(this, e);
+
         #endregion
 
+        #region 公共方法
+
+        /// <summary>
+        /// 支付
+        /// </summary>
+        public string Payment()
+        {
+            switch (GatewayTradeType)
+            {
+                case GatewayTradeType.App:
+                    {
+                        if (this is IAppPayment appPayment)
+                        {
+                            return appPayment.BuildAppPayment();
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Wap:
+                    {
+                        if (this is IUrlPayment urlPayment)
+                        {
+                            HttpUtil.Redirect(urlPayment.BuildUrlPayment());
+                            return null;
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Web:
+                    {
+                        if (this is IFormPayment formPayment)
+                        {
+                            HttpUtil.Write(formPayment.BuildFormPayment());
+                            return null;
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Scan:
+                    {
+                        if (this is IScanPayment scanPayment)
+                        {
+                            return scanPayment.BuildScanPayment();
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Public:
+                    {
+                        if (this is IPublicPayment publicPayment)
+                        {
+                            return publicPayment.BuildPublicPayment();
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Barcode:
+                    {
+                        if (this is IBarcodePayment barcodePayment)
+                        {
+                            barcodePayment.BuildBarcodePayment();
+                            return null;
+                        }
+                    }
+                    break;
+                case GatewayTradeType.Applet:
+                    {
+                        if (this is IAppletPayment appletPayment)
+                        {
+                            return appletPayment.BuildAppletPayment();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            throw new NotSupportedException($"{GatewayType} 没有实现{GatewayTradeType}接口");
+        }
+
+        #endregion
+
+        #endregion
+
+        #region 事件
+
+        /// <summary>
+        /// 网关同步返回的支付通知验证失败时触发,目前仅针对条码支付
+        /// </summary>
+        public event Action<object, PaymentFailedEventArgs> PaymentFailed;
+
+        /// <summary>
+        /// 网关同步返回的支付通知验证成功时触发,目前仅针对条码支付
+        /// </summary>
+        public event Action<object, PaymentSucceedEventArgs> PaymentSucceed;
+
+        #endregion
     }
 }

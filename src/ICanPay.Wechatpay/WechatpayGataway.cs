@@ -8,7 +8,8 @@ namespace ICanPay.Wechatpay
     /// 微信支付网关
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
-        IPaymentScan, IQueryNow, IPaymentApp, IPaymentUrl, IPaymentPublic//, IPaymentBarcode
+        IScanPayment, IAppPayment, IUrlPayment, IPublicPayment,
+        IQuery, ICancel
     {
 
         #region 私有字段
@@ -45,9 +46,171 @@ namespace ICanPay.Wechatpay
 
         public new Notify Notify => (Notify)base.Notify;
 
+        protected override bool IsSuccessPay => throw new NotImplementedException();
+
+        protected override bool IsWaitPay => throw new NotImplementedException();
+
         #endregion
 
         #region 方法
+
+        #region 扫码支付
+
+        public string BuildScanPayment()
+        {
+            InitScanPayment();
+            UnifiedOrder();
+            return Notify.CodeUrl;
+        }
+
+        public void InitScanPayment()
+        {
+            Order.TradeType = Constant.NATIVE;
+            Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+        }
+
+        #endregion
+
+        #region App支付
+
+        public string BuildAppPayment()
+        {
+            InitAppPayment();
+            UnifiedOrder();
+            InitAppParameter();
+            return GatewayData.ToJson();
+        }
+
+        public void InitAppPayment()
+        {
+            Order.TradeType = Constant.APP;
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+        }
+
+        /// <summary>
+        /// 初始化APP端调起支付的参数
+        /// </summary>
+        private void InitAppParameter()
+        {
+            GatewayData.Clear();
+            Merchant.NonceStr = Util.GenerateNonceStr();
+            GatewayData.Add(Constant.APPID, Merchant.AppId);
+            GatewayData.Add(Constant.PARTNERID, Merchant.MchId);
+            GatewayData.Add(Constant.PREPAYID, Notify.PrepayId);
+            GatewayData.Add(Constant.PACKAGE, "Sign=WXPay");
+            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
+            GatewayData.Add(Constant.TIMESTAMP, DateTime.Now.ToTimeStamp());
+            GatewayData.Add(Constant.SIGN, BuildSign());
+        }
+
+        #endregion
+
+        #region Url支付
+
+        public string BuildUrlPayment()
+        {
+            InitUrlPayment();
+            UnifiedOrder();
+            return Notify.MWebUrl;
+        }
+
+        public void InitUrlPayment()
+        {
+            Order.TradeType = Constant.MWEB;
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+        }
+
+        #endregion
+
+        #region 公众号支付
+
+        public string BuildPublicPayment()
+        {
+            InitPublicPayment();
+            UnifiedOrder();
+            InitPublicParameter();
+            return GatewayData.ToJson();
+        }
+
+        public void InitPublicPayment()
+        {
+            Order.TradeType = Constant.JSAPI;
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+        }
+
+        /// <summary>
+        /// 初始化公众号调起支付的参数
+        /// </summary>
+        private void InitPublicParameter()
+        {
+            GatewayData.Clear();
+            Merchant.NonceStr = Util.GenerateNonceStr();
+            GatewayData.Add(Constant.APPID, Merchant.AppId);
+            GatewayData.Add(Constant.TIMESTAMP, DateTime.Now.ToTimeStamp());
+            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
+            GatewayData.Add(Constant.PACKAGE, $"{Constant.PREPAY_ID}={Notify.PrepayId}");
+            GatewayData.Add(Constant.SIGN_TYPE, "MD5");
+            GatewayData.Add(Constant.PAYSIGN, BuildSign());
+        }
+
+        #endregion
+
+        #region 条码支付
+
+        public string BuildPaymentBarcode()
+        {
+            InitBarcodePayment();
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToXml())
+                .GetAwaiter()
+                .GetResult();
+            ReadReturnResult(result);
+
+            throw new NotImplementedException();
+        }
+
+        public void InitBarcodePayment()
+        {
+            GatewayUrl = barcodeGatewayUrl;
+            Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+        }
+
+        #endregion
+
+        #region 查询订单
+
+        public void InitQuery()
+        {
+            GatewayData.Add(Constant.MCH_ID, Merchant.MchId);
+            GatewayData.Add(Constant.OUT_TRADE_NO, Order.OutTradeNo);
+            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
+            GatewayData.Add(Constant.SIGN, BuildSign());
+        }
+
+        public string BuildQuery()
+        {
+            InitQuery();
+            return HttpUtil
+                .PostAsync(queryGatewayUrl, GatewayData.ToXml())
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        #endregion
+
+        #region 关闭订单
+
+        public void InitCancel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string BuildCancel()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
         protected override async Task<bool> CheckNotifyDataAsync()
         {
@@ -60,49 +223,8 @@ namespace ICanPay.Wechatpay
             return false;
         }
 
-        public string BuildPaymentScan()
+        private void InitOrderParameter()
         {
-            UnifiedOrder();
-            return Notify.CodeUrl;
-        }
-
-        public string BuildPaymentApp()
-        {
-            UnifiedOrder();
-            InitAppParameter();
-            return GatewayData.ToJson();
-        }
-
-        public string BuildPaymentUrl()
-        {
-            UnifiedOrder();
-            return Notify.MWebUrl;
-        }
-
-        public string BuildPaymentPublic()
-        {
-            UnifiedOrder();
-            InitPublicParameter();
-            return GatewayData.ToJson();
-        }
-
-        public string BuildPaymentBarcode()
-        {
-            GatewayUrl = barcodeGatewayUrl;
-            InitOrderParameter();
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToXml())
-                .GetAwaiter()
-                .GetResult();
-            ReadReturnResult(result);
-
-            throw new NotImplementedException();
-        }
-
-        protected override void InitOrderParameter()
-        {
-            base.InitOrderParameter();
-
             #region 商户数据
             Merchant.NonceStr = Util.GenerateNonceStr();
             GatewayData.Add(Constant.APPID, Merchant.AppId);
@@ -178,43 +300,14 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
-        protected override void SupplementaryAppParameter()
-        {
-            Order.TradeType = Constant.APP;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
-        }
-
-        protected override void SupplementaryWebParameter()
+        public void InitFormPayment()
         {
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
-        }
-
-        protected override void SupplementaryWapParameter()
-        {
-            Order.TradeType = Constant.MWEB;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
-        }
-
-        protected override void SupplementaryScanParameter()
-        {
-            Order.TradeType = Constant.NATIVE;
-            Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
-        }
-
-        protected override void SupplementaryPublicParameter()
-        {
-            Order.TradeType = Constant.JSAPI;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
-        }
-
-        protected override void SupplementaryBarcodeParameter()
-        {
-            Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
         }
 
         public bool QueryNow()
         {
-            return CheckQueryResult(QueryOrder());
+            return CheckQueryResult(BuildQuery());
         }
 
         /// <summary>
@@ -224,20 +317,15 @@ namespace ICanPay.Wechatpay
         private void UnifiedOrder()
         {
             InitOrderParameter();
+
+            ValidateParameter(Merchant);
+            ValidateParameter(Order);
+
             string result = HttpUtil
                 .PostAsync(GatewayUrl, GatewayData.ToXml())
                 .GetAwaiter()
                 .GetResult();
             ReadReturnResult(result);
-        }
-
-        private string QueryOrder()
-        {
-            InitQueryOrderParameter();
-            return HttpUtil
-                .PostAsync(queryGatewayUrl, GatewayData.ToXml())
-                .GetAwaiter()
-                .GetResult();
         }
 
         /// <summary>
@@ -332,48 +420,6 @@ namespace ICanPay.Wechatpay
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// 初始化查询订单参数
-        /// </summary>
-        private void InitQueryOrderParameter()
-        {
-            GatewayData.Add(Constant.MCH_ID, Merchant.MchId);
-            GatewayData.Add(Constant.OUT_TRADE_NO, Order.OutTradeNo);
-            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
-            GatewayData.Add(Constant.SIGN, BuildSign());
-        }
-
-        /// <summary>
-        /// 初始化APP端调起支付的参数
-        /// </summary>
-        private void InitAppParameter()
-        {
-            GatewayData.Clear();
-            Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Constant.APPID, Merchant.AppId);
-            GatewayData.Add(Constant.PARTNERID, Merchant.MchId);
-            GatewayData.Add(Constant.PREPAYID, Notify.PrepayId);
-            GatewayData.Add(Constant.PACKAGE, "Sign=WXPay");
-            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
-            GatewayData.Add(Constant.TIMESTAMP, DateTime.Now.ToTimeStamp());
-            GatewayData.Add(Constant.SIGN, BuildSign());
-        }
-
-        /// <summary>
-        /// 初始化公众号调起支付的参数
-        /// </summary>
-        private void InitPublicParameter()
-        {
-            GatewayData.Clear();
-            Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Constant.APPID, Merchant.AppId);
-            GatewayData.Add(Constant.TIMESTAMP, DateTime.Now.ToTimeStamp());
-            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
-            GatewayData.Add(Constant.PACKAGE, $"{Constant.PREPAY_ID}={Notify.PrepayId}");
-            GatewayData.Add(Constant.SIGN_TYPE, "MD5");
-            GatewayData.Add(Constant.PAYSIGN, BuildSign());
         }
 
         public override void WriteSuccessFlag()

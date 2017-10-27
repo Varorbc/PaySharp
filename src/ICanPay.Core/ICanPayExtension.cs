@@ -2,14 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ICanPay.Core
 {
     public static class ICanPayExtension
     {
-        public static void AddICanPay(this IServiceCollection services, Func<IServiceProvider, ICollection<GatewayBase>> func)
+        public static void AddICanPay(this IServiceCollection services, Func<IServiceProvider, IGateways> func)
         {
             AddStaticHttpContext(services);
 

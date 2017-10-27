@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ICanPay.Core
 {
@@ -23,14 +21,6 @@ namespace ICanPay.Core
             {
                 DefaultValueHandling = DefaultValueHandling.Ignore
             });
-        }
-
-        /// <summary>
-        /// 通过网关类型获取网关
-        /// </summary>
-        public static GatewayBase GetGateway(this ICollection<GatewayBase> gatewayList, GatewayType gatewayType)
-        {
-            return gatewayList.FirstOrDefault(a => a.GatewayType == gatewayType);
         }
 
         /// <summary>
