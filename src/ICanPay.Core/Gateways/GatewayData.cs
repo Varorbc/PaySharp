@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace ICanPay.Core
@@ -65,7 +66,8 @@ namespace ICanPay.Core
 
             foreach (var item in properties)
             {
-                var key = item.Name.ToSnakeCase();
+                var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
+                var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
                 var value = item.GetValue(obj);
 
                 if (value is null || string.IsNullOrEmpty(value.ToString()))
@@ -405,18 +407,9 @@ namespace ICanPay.Core
 
             foreach (var item in properties)
             {
-                string key;
                 var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
-                if (renameAttribute.Count() > 0)
-                {
-                    key = ((ReNameAttribute)renameAttribute[0]).Name;
-                }
-                else
-                {
-                    key = item.Name.ToSnakeCase();
-                }
-                
-                object value = GetValue(key);
+                var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
+                var value = GetValue(key);
 
                 if (value != null)
                 {
@@ -425,6 +418,14 @@ namespace ICanPay.Core
             }
 
             return (T)obj;
+        }
+
+        /// <summary>
+        /// 异步将网关参数转为类型
+        /// </summary>
+        public async Task<T> ToObjectAsync<T>()
+        {
+            return await Task.Run(() => ToObject<T>());
         }
 
         /// <summary>

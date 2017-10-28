@@ -64,11 +64,6 @@ namespace ICanPay.Alipay
 
         public void InitFormPayment()
         {
-            if (!string.IsNullOrEmpty(Merchant.ReturnUrl))
-            {
-                GatewayData.Add(Constant.RETURN_URL, Merchant.ReturnUrl);
-            }
-
             Merchant.Method = Constant.WEB;
             Order.ProductCode = Constant.FAST_INSTANT_TRADE_PAY;
 
@@ -88,11 +83,6 @@ namespace ICanPay.Alipay
 
         public void InitUrlPayment()
         {
-            if (!string.IsNullOrEmpty(Merchant.ReturnUrl))
-            {
-                GatewayData.Add(Constant.RETURN_URL, Merchant.ReturnUrl);
-            }
-
             Merchant.Method = Constant.WAP;
             Order.ProductCode = Constant.QUICK_WAP_WAY;
 
@@ -142,11 +132,6 @@ namespace ICanPay.Alipay
 
         public void InitScanPayment()
         {
-            if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
-            {
-                GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
-            }
-
             Merchant.Method = Constant.SCAN;
 
             InitOrderParameter();
@@ -167,11 +152,6 @@ namespace ICanPay.Alipay
 
         public void InitBarcodePayment()
         {
-            if (!string.IsNullOrEmpty(Merchant.AppAuthToken))
-            {
-                GatewayData.Add(Constant.APP_AUTH_TOKEN, Merchant.AppAuthToken);
-            }
-
             Merchant.Method = Constant.BARCODE;
             Order.ProductCode = Constant.FACE_TO_FACE_PAYMENT;
 
@@ -252,7 +232,7 @@ namespace ICanPay.Alipay
 
         protected override async Task<bool> CheckNotifyDataAsync()
         {
-            await ReadNotifyAsync<Notify>();
+            base.Notify = await GatewayData.ToObjectAsync<Notify>();
             if (await IsSuccessResultAsync())
             {
                 return true;
@@ -262,28 +242,12 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
-        /// 初始化公共参数
-        /// </summary>
-        private void InitPublicParameter()
-        {
-            GatewayData.Add(Constant.APP_ID, Merchant.AppId);
-            GatewayData.Add(Constant.METHOD, Merchant.Method);
-            GatewayData.Add(Constant.FORMAT, Merchant.Format);
-            GatewayData.Add(Constant.CHARSET, Merchant.Charset);
-            GatewayData.Add(Constant.SIGN_TYPE, Merchant.SignType);
-            GatewayData.Add(Constant.TIMESTAMP, Merchant.Timestamp.ToString(TIME_FORMAT));
-            GatewayData.Add(Constant.VERSION, Merchant.Version);
-            GatewayData.Add(Constant.NOTIFY_URL, Merchant.NotifyUrl);
-            GatewayData.Add(Constant.BIZ_CONTENT, Merchant.BizContent);
-        }
-
-        /// <summary>
         /// 初始化订单参数
         /// </summary>
         private void InitOrderParameter()
         {
             Merchant.BizContent = Util.SerializeObject(Order);
-            InitPublicParameter();
+            GatewayData.Add(Merchant);
             Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
 
@@ -299,7 +263,7 @@ namespace ICanPay.Alipay
         {
             Merchant.Method = method;
             Merchant.BizContent = $"{{\"out_trade_no\":\"{Order.OutTradeNo}\"}}";
-            InitPublicParameter();
+            GatewayData.Add(Merchant);
             Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
         }
@@ -333,7 +297,7 @@ namespace ICanPay.Alipay
             string sign = GatewayData.GetStringValue(Constant.SIGN);
             result = GatewayData.GetStringValue(key);
             GatewayData.FromJson(result);
-            ReadNotify<Notify>();
+            base.Notify = GatewayData.ToObject<Notify>();
             Notify.Sign = sign;
         }
 
