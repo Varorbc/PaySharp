@@ -178,42 +178,6 @@ namespace ICanPay.Core
             }
         }
 
-        /// <summary>
-        /// 读取通知
-        /// </summary>
-        protected void ReadNotify<T>() where T : INotify
-        {
-            var type = typeof(T);
-            var notify = Activator.CreateInstance(type);
-            var properties = type.GetProperties();
-
-            foreach (var item in properties)
-            {
-                string key = item
-                    .GetCustomAttributesData()[0]
-                    .NamedArguments[0]
-                    .TypedValue
-                    .Value
-                    .ToString();
-                object value = GatewayData.GetValue(key);
-
-                if (value != null)
-                {
-                    item.SetValue(notify, Convert.ChangeType(value, item.PropertyType));
-                }
-            }
-
-            Notify = (INotify)notify;
-        }
-
-        /// <summary>
-        /// 异步读取通知
-        /// </summary>
-        protected async Task ReadNotifyAsync<T>() where T : INotify
-        {
-            await Task.Run(() => ReadNotify<T>());
-        }
-
         protected void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
 
         protected void OnPaymentSucceed(PaymentSucceedEventArgs e) => PaymentSucceed?.Invoke(this, e);

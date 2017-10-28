@@ -55,6 +55,38 @@ namespace ICanPay.Core
         }
 
         /// <summary>
+        /// 添加参数
+        /// </summary>
+        /// <returns></returns>
+        public bool Add(object obj)
+        {
+            var type = obj.GetType();
+            var properties = type.GetProperties();
+
+            foreach (var item in properties)
+            {
+                var key = item.Name.ToSnakeCase();
+                var value = item.GetValue(obj);
+
+                if (value is null || string.IsNullOrEmpty(value.ToString()))
+                {
+                    continue;
+                }
+
+                if (Exists(key))
+                {
+                    Values[key] = value;
+                }
+                else
+                {
+                    Values.Add(key, value);
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// 根据参数名获取参数值
         /// </summary>
         /// <param name="key">参数名</param>
@@ -360,6 +392,39 @@ namespace ICanPay.Core
                     Add(item.Name, item.Value.ToString());
                 }
             }
+        }
+
+        /// <summary>
+        /// 将网关参数转为类型
+        /// </summary>
+        public T ToObject<T>()
+        {
+            var type = typeof(T);
+            var obj = Activator.CreateInstance(type);
+            var properties = type.GetProperties();
+
+            foreach (var item in properties)
+            {
+                string key;
+                var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
+                if (renameAttribute.Count() > 0)
+                {
+                    key = ((ReNameAttribute)renameAttribute[0]).Name;
+                }
+                else
+                {
+                    key = item.Name.ToSnakeCase();
+                }
+                
+                object value = GetValue(key);
+
+                if (value != null)
+                {
+                    item.SetValue(obj, Convert.ChangeType(value, item.PropertyType));
+                }
+            }
+
+            return (T)obj;
         }
 
         /// <summary>
