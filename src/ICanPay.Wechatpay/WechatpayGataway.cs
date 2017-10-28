@@ -1,5 +1,7 @@
 using ICanPay.Core;
 using System;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ICanPay.Wechatpay
@@ -8,15 +10,24 @@ namespace ICanPay.Wechatpay
     /// 微信支付网关
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
-        IScanPayment, IAppPayment, IUrlPayment, IPublicPayment,
+        IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment, IBarcodePayment,
         IQuery, ICancel
     {
 
         #region 私有字段
 
         private Merchant merchant;
-        private const string queryGatewayUrl = "https://api.mch.weixin.qq.com/pay/orderquery";
-        private const string barcodeGatewayUrl = "https://api.mch.weixin.qq.com/pay/micropay";
+        private const string USERPAYING = "USERPAYING";
+        private const string UNIFIEDORDERGATEWAYURL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+        private const string QUERYGATEWAYURL = "https://api.mch.weixin.qq.com/pay/orderquery";
+        private const string CANCELGATEWAYURL = "https://api.mch.weixin.qq.com/secapi/pay/reverse";
+        private const string CLOSEORDERGATEWAYURL = "https://api.mch.weixin.qq.com/pay/closeorder";
+        private const string REFUNDGATEWAYURL = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+        private const string REFUNDQUERYGATEWAYURL = "https://api.mch.weixin.qq.com/pay/refundquery";
+        private const string DOWNLOADBILLGATEWAYURL = "https://api.mch.weixin.qq.com/pay/downloadbill";
+        private const string REPORTGATEWAYURL = "https://api.mch.weixin.qq.com/payitil/report";
+        private const string BATCHQUERYCOMMENTGATEWAYURL = "https://api.mch.weixin.qq.com/billcommentsp/batchquerycomment";
+        private const string BARCODEGATEWAYURL = "https://api.mch.weixin.qq.com/pay/micropay";
 
         #endregion
 
@@ -38,7 +49,7 @@ namespace ICanPay.Wechatpay
 
         public override GatewayType GatewayType => GatewayType.Wechatpay;
 
-        public override string GatewayUrl { get; set; } = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+        public override string GatewayUrl { get; set; } = UNIFIEDORDERGATEWAYURL;
 
         public new Merchant Merchant => merchant;
 
@@ -46,9 +57,9 @@ namespace ICanPay.Wechatpay
 
         public new Notify Notify => (Notify)base.Notify;
 
-        protected override bool IsSuccessPay => throw new NotImplementedException();
+        protected override bool IsSuccessPay => Notify.TradeState.ToLower() == SUCCESS;
 
-        protected override bool IsWaitPay => throw new NotImplementedException();
+        protected override bool IsWaitPay => Notify.TradeState.ToLower() == USERPAYING;
 
         #endregion
 
@@ -155,24 +166,71 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
+        #region 小程序支付
+
+        public string BuildAppletPayment()
+        {
+            InitAppletPayment();
+            UnifiedOrder();
+            InitPublicParameter();
+            return GatewayData.ToJson();
+        }
+
+        public void InitAppletPayment()
+        {
+            Order.TradeType = Constant.JSAPI;
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+        }
+
+        #endregion
+
         #region 条码支付
 
-        public string BuildPaymentBarcode()
+        public void BuildBarcodePayment()
         {
             InitBarcodePayment();
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToXml())
-                .GetAwaiter()
-                .GetResult();
-            ReadReturnResult(result);
 
-            throw new NotImplementedException();
+            Commit();
+
+            PollQueryTradeState();
         }
 
         public void InitBarcodePayment()
         {
-            GatewayUrl = barcodeGatewayUrl;
+            GatewayUrl = BARCODEGATEWAYURL;
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+        }
+
+        /// <summary>
+        /// 每隔5秒轮询判断用户是否支付,总共轮询5次
+        /// </summary>
+        private void PollQueryTradeState()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                Thread.Sleep(5000);
+                BuildQuery();
+                if (IsSuccessPay)
+                {
+                    OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                    return;
+                }
+            }
+
+            BuildCancel();
+            if (Notify.Recall == "Y")
+            {
+                BuildCancel();
+            }
+            OnPaymentFailed(new PaymentFailedEventArgs(this));
+        }
+
+        /// <summary>
+        /// 异步每隔5秒轮询判断用户是否支付,总共轮询5次
+        /// </summary>
+        private async Task PollAsync()
+        {
+            await Task.Run(() => PollQueryTradeState());
         }
 
         #endregion
@@ -181,42 +239,52 @@ namespace ICanPay.Wechatpay
 
         public void InitQuery()
         {
+            GatewayUrl = QUERYGATEWAYURL;
+            Merchant.NonceStr = Util.GenerateNonceStr();
+            GatewayData.Add(Constant.APPID, Merchant.AppId);
             GatewayData.Add(Constant.MCH_ID, Merchant.MchId);
             GatewayData.Add(Constant.OUT_TRADE_NO, Order.OutTradeNo);
             GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
+            GatewayData.Add(Constant.SIGN_TYPE, Merchant.SignType);
             GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
-        public string BuildQuery()
+        public INotify BuildQuery()
         {
             InitQuery();
-            return HttpUtil
-                .PostAsync(queryGatewayUrl, GatewayData.ToXml())
-                .GetAwaiter()
-                .GetResult();
+
+            Commit();
+
+            return Notify;
         }
 
         #endregion
 
-        #region 关闭订单
+        #region 撤销订单
 
         public void InitCancel()
         {
-            throw new NotImplementedException();
+            InitQuery();
+            GatewayUrl = CANCELGATEWAYURL;
         }
 
-        public string BuildCancel()
+        public INotify BuildCancel()
         {
-            throw new NotImplementedException();
+            InitCancel();
+
+            Commit(true);
+
+            return Notify;
         }
 
         #endregion
 
         protected override async Task<bool> CheckNotifyDataAsync()
         {
+            await ReadNotifyAsync<Notify>();
+
             if (IsSuccessResult())
             {
-                ReadNotifyOrder();
                 return true;
             }
 
@@ -305,36 +373,19 @@ namespace ICanPay.Wechatpay
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
-        public bool QueryNow()
-        {
-            return CheckQueryResult(BuildQuery());
-        }
-
         /// <summary>
         /// 统一下单
         /// </summary>
         /// <returns></returns>
         private void UnifiedOrder()
         {
+            GatewayUrl = UNIFIEDORDERGATEWAYURL;
             InitOrderParameter();
 
             ValidateParameter(Merchant);
             ValidateParameter(Order);
 
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToXml())
-                .GetAwaiter()
-                .GetResult();
-            ReadReturnResult(result);
-        }
-
-        /// <summary>
-        /// 读取通知中的订单金额、订单编号
-        /// </summary>
-        private void ReadNotifyOrder()
-        {
-            Order.OutTradeNo = GatewayData.GetStringValue(Constant.OUT_TRADE_NO);
-            Order.Amount = GatewayData.GetIntValue(Constant.TOTAL_FEE) * 0.01;
+            Commit();
         }
 
         /// <summary>
@@ -359,30 +410,12 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// 获得微信支付的URL
-        /// </summary>
-        /// <param name="resultXml">创建订单返回的数据</param>
-        /// <returns></returns>
-        private string GetWeixinPaymentUrl(string resultXml)
-        {
-            GatewayData.FromXml(resultXml);
-            if (IsSuccessResult())
-            {
-                return GatewayData.GetStringValue(Constant.CODE_URL);
-            }
-
-            return string.Empty;
-        }
-
-        /// <summary>
         /// 是否是已成功支付的支付通知
         /// </summary>
         /// <returns></returns>
         private bool IsSuccessResult()
         {
-            if (string.Compare(GatewayData.GetStringValue(Constant.RETURN_CODE), SUCCESS) == 0 &&
-                string.Compare(GatewayData.GetStringValue(Constant.RESULT_CODE), SUCCESS) == 0 &&
-                string.Compare(GatewayData.GetStringValue(Constant.SIGN), BuildSign()) == 0)
+            if (Notify.ReturnCode.ToLower() == SUCCESS && Notify.ResultCode.ToLower() == SUCCESS && Notify.Sign == BuildSign())
             {
                 return true;
             }
@@ -391,35 +424,32 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
+        /// 提交请求
+        /// </summary>
+        /// <param name="isCert">是否添加证书</param>
+        private void Commit(bool isCert = false)
+        {
+            var cert = isCert ? new X509Certificate2(Merchant.SslCertPath, Merchant.SslCertPassword) : null;
+
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToXml(), cert)
+                .GetAwaiter()
+                .GetResult();
+            ReadReturnResult(result);
+        }
+
+        /// <summary>
         /// 是否是已成功的返回
         /// </summary>
         /// <returns></returns>
-        private void IsSuccessReturn()
+        private bool IsSuccessReturn()
         {
             if (Notify.ReturnCode == FAIL)
             {
                 throw new Exception(Notify.ReturnMsg);
             }
-        }
 
-        /// <summary>
-        /// 检查查询结果
-        /// </summary>
-        /// <param name="resultXml">查询结果的XML</param>
-        /// <returns></returns>
-        private bool CheckQueryResult(string resultXml)
-        {
-            GatewayData.FromXml(resultXml);
-            if (IsSuccessResult())
-            {
-                if (string.Compare(Order.OutTradeNo, GatewayData.GetStringValue(Constant.OUT_TRADE_NO)) == 0 &&
-                   Order.Amount == GatewayData.GetIntValue(Constant.TOTAL_FEE) / 100.0)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return true;
         }
 
         public override void WriteSuccessFlag()

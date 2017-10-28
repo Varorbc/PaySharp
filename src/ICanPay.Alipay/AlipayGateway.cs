@@ -14,6 +14,7 @@ namespace ICanPay.Alipay
 
         #region 私有字段
 
+        private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do";
         private Merchant merchant;
 
         #endregion
@@ -36,7 +37,7 @@ namespace ICanPay.Alipay
 
         public override GatewayType GatewayType => GatewayType.Alipay;
 
-        public override string GatewayUrl { get; set; } = "https://openapi.alipay.com/gateway.do";
+        public override string GatewayUrl { get; set; } = GATEWAYURL;
 
         public new Merchant Merchant => merchant;
 
@@ -161,7 +162,7 @@ namespace ICanPay.Alipay
 
             Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
 
-            Poll();
+            PollQueryTradeState();
         }
 
         public void InitBarcodePayment()
@@ -178,9 +179,9 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
-        /// 轮询判断用户是否支付
+        /// 每隔5秒轮询判断用户是否支付,总共轮询5次
         /// </summary>
-        private void Poll()
+        private void PollQueryTradeState()
         {
             for (int i = 0; i < 5; i++)
             {
@@ -197,6 +198,14 @@ namespace ICanPay.Alipay
             OnPaymentFailed(new PaymentFailedEventArgs(this));
         }
 
+        /// <summary>
+        /// 异步每隔5秒轮询判断用户是否支付,总共轮询5次
+        /// </summary>
+        private async Task PollAsync()
+        {
+            await Task.Run(() => PollQueryTradeState());
+        }
+
         #endregion
 
         #region 查询订单
@@ -209,13 +218,13 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 查询订单
         /// </summary>
-        public string BuildQuery()
+        public INotify BuildQuery()
         {
             InitQuery();
 
             Commit(Constant.ALIPAY_TRADE_QUERY_RESPONSE);
 
-            return null;
+            return Notify;
         }
 
         #endregion
@@ -230,20 +239,20 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 撤销订单
         /// </summary>
-        public string BuildCancel()
+        public INotify BuildCancel()
         {
             InitCancel();
 
             Commit(Constant.ALIPAY_TRADE_CANCEL_RESPONSE);
 
-            return null;
+            return Notify;
         }
 
         #endregion
 
         protected override async Task<bool> CheckNotifyDataAsync()
         {
-            ReadNotify<Notify>();
+            await ReadNotifyAsync<Notify>();
             if (await IsSuccessResultAsync())
             {
                 return true;
@@ -377,7 +386,7 @@ namespace ICanPay.Alipay
         /// </summary>
         private bool ValidateNotifyId()
         {
-            string data = HttpUtil.ReadPage(GetValidateNotifyUrl());
+            string data = HttpUtil.Get(GetValidateNotifyUrl());
             GatewayData.FromXml(data);
             // 服务器异步通知的通知Id则会在输出标志成功接收到通知的success字符串后失效。
             if (GatewayData.GetStringValue(Constant.IS_SUCCESS) == Constant.T)

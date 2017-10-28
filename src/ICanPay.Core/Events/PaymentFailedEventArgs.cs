@@ -20,5 +20,19 @@ namespace ICanPay.Core
 
         #endregion
 
+        #region 属性
+
+        /// <summary>
+        /// 通知数据
+        /// </summary>
+        public INotify Notify
+        {
+            get
+            {
+                return gateway.Notify;
+            }
+        }
+
+        #endregion
     }
 }

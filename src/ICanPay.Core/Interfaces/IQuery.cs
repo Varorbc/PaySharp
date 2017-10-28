@@ -9,7 +9,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 生成查询订单参数
         /// </summary>
-        string BuildQuery();
+        INotify BuildQuery();
 
         /// <summary>
         /// 初始化查询订单参数

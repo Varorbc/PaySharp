@@ -124,13 +124,13 @@ namespace ICanPay.Core
         /// 是否是Xml格式数据
         /// </summary>
         /// <returns></returns>
-        private static bool IsXmlData => string.Compare(HttpUtil.UserAgent, "text/xml") == 0;
+        private static bool IsXmlData => HttpUtil.ContentType == "text/xml" || HttpUtil.ContentType == "application/xml";
 
         /// <summary>
         /// 是否是GET请求
         /// </summary>
         /// <returns></returns>
-        private static bool IsGetRequest => string.Compare(HttpUtil.RequestType, "GET") == 0;
+        private static bool IsGetRequest => HttpUtil.RequestType == "GET";
 
         #endregion
 

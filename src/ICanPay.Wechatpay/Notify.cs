@@ -126,6 +126,12 @@ namespace ICanPay.Wechatpay
         public double CouponFee { get; set; }
 
         /// <summary>
+        /// 代金券使用数量
+        /// </summary>
+        [Display(Name = Constant.COUPON_COUNT)]
+        public int CouponCount { get; set; }
+
+        /// <summary>
         /// 货币类型
         /// 符合ISO 4217标准的三位字母代码，默认人民币：CNY，详见货币类型
         /// </summary>
@@ -183,5 +189,33 @@ namespace ICanPay.Wechatpay
         /// </summary>
         [Display(Name = Constant.PROMOTION_DETAIL)]
         public string PromotionDetail { get; set; }
+
+        /// <summary>
+        /// 交易状态描述
+        /// 对当前查询订单状态的描述和下一步操作的指引
+        /// </summary>
+        [Display(Name = Constant.TRADE_STATE_DESC)]
+        public string TradeStateDesc { get; set; }
+
+        /// <summary>
+        /// 交易状态
+        /// SUCCESS—支付成功
+        /// REFUND—转入退款
+        /// NOTPAY—未支付
+        /// CLOSED—已关闭
+        /// REVOKED—已撤销（刷卡支付）
+        /// USERPAYING--用户支付中
+        /// PAYERROR--支付失败(其他原因，如银行返回失败)
+        /// 支付状态机请见下单API页面
+        /// </summary>
+        [Display(Name = Constant.TRADE_STATE)]
+        public string TradeState { get; set; }
+
+        /// <summary>
+        /// 是否重调
+        /// 是否需要继续调用撤销，Y-需要，N-不需要
+        /// </summary>
+        [Display(Name = Constant.RECALL)]
+        public string Recall { get; set; }
     }
 }
