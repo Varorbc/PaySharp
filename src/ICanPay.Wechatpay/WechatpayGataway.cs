@@ -241,12 +241,10 @@ namespace ICanPay.Wechatpay
         {
             GatewayUrl = QUERYGATEWAYURL;
             Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Constant.APPID, Merchant.AppId);
-            GatewayData.Add(Constant.MCH_ID, Merchant.MchId);
+            GatewayData.Add(Merchant);
             GatewayData.Add(Constant.OUT_TRADE_NO, Order.OutTradeNo);
-            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
-            GatewayData.Add(Constant.SIGN_TYPE, Merchant.SignType);
-            GatewayData.Add(Constant.SIGN, BuildSign());
+            Merchant.Sign = BuildSign();
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
         }
 
         public INotify BuildQuery()
@@ -281,7 +279,7 @@ namespace ICanPay.Wechatpay
 
         protected override async Task<bool> CheckNotifyDataAsync()
         {
-            await ReadNotifyAsync<Notify>();
+            base.Notify = await GatewayData.ToObjectAsync<Notify>();
 
             if (IsSuccessResult())
             {
@@ -293,79 +291,12 @@ namespace ICanPay.Wechatpay
 
         private void InitOrderParameter()
         {
-            #region 商户数据
             Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Constant.APPID, Merchant.AppId);
-            GatewayData.Add(Constant.MCH_ID, Merchant.MchId);
-            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
-            GatewayData.Add(Constant.SIGN_TYPE, Merchant.SignType);
-            GatewayData.Add(Constant.NOTIFY_URL, Merchant.NotifyUrl);
-            GatewayData.Add(Constant.DEVICE_INFO, Constant.WEB);
-
-            #endregion
-
-            #region 订单数据
-
-            GatewayData.Add(Constant.BODY, Order.Body);
-            GatewayData.Add(Constant.OUT_TRADE_NO, Order.OutTradeNo);
-            GatewayData.Add(Constant.FEE_TYPE, Order.FeeType);
-            GatewayData.Add(Constant.TOTAL_FEE, Order.Amount * 100);
-            GatewayData.Add(Constant.TIME_START, Order.TimeStart);
-            GatewayData.Add(Constant.SPBILL_CREATE_IP, Order.SpbillCreateIp);
-
-            if (!string.IsNullOrEmpty(Order.TradeType))
-            {
-                GatewayData.Add(Constant.TRADE_TYPE, Order.TradeType);
-            }
-
-            if (!string.IsNullOrEmpty(Order.Detail))
-            {
-                GatewayData.Add(Constant.DETAIL, Order.Detail);
-            }
-
-            if (!string.IsNullOrEmpty(Order.Attach))
-            {
-                GatewayData.Add(Constant.ATTACH, Order.Attach);
-            }
-
-            if (!string.IsNullOrEmpty(Order.TimeExpire))
-            {
-                GatewayData.Add(Constant.TIME_EXPIRE, Order.TimeExpire);
-            }
-
-            if (!string.IsNullOrEmpty(Order.GoodsTag))
-            {
-                GatewayData.Add(Constant.GOODS_TAG, Order.GoodsTag);
-            }
-
-            if (!string.IsNullOrEmpty(Order.ProductId))
-            {
-                GatewayData.Add(Constant.PRODUCT_ID, Order.ProductId);
-            }
-
-            if (!string.IsNullOrEmpty(Order.LimitPay))
-            {
-                GatewayData.Add(Constant.LIMIT_PAY, Order.LimitPay);
-            }
-
-            if (!string.IsNullOrEmpty(Order.OpenId))
-            {
-                GatewayData.Add(Constant.OPENID, Order.OpenId);
-            }
-
-            if (!string.IsNullOrEmpty(Order.SceneInfo))
-            {
-                GatewayData.Add(Constant.SCENE_INFO, Order.SceneInfo);
-            }
-
-            if (!string.IsNullOrEmpty(Order.AuthCode))
-            {
-                GatewayData.Add(Constant.AUTH_CODE, Order.AuthCode);
-            }
-
-            #endregion
-
-            GatewayData.Add(Constant.SIGN, BuildSign());
+            Merchant.DeviceInfo = Constant.WEB;
+            GatewayData.Add(Merchant);
+            GatewayData.Add(Order);
+            Merchant.Sign = BuildSign();
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
         }
 
         public void InitFormPayment()
@@ -395,7 +326,7 @@ namespace ICanPay.Wechatpay
         private void ReadReturnResult(string result)
         {
             GatewayData.FromXml(result);
-            ReadNotify<Notify>();
+            base.Notify = GatewayData.ToObject<Notify>();
             IsSuccessReturn();
         }
 

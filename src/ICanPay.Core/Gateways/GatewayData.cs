@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace ICanPay.Core
@@ -49,6 +50,39 @@ namespace ICanPay.Core
             else
             {
                 Values.Add(key, value);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 添加参数
+        /// </summary>
+        /// <returns></returns>
+        public bool Add(object obj)
+        {
+            var type = obj.GetType();
+            var properties = type.GetProperties();
+
+            foreach (var item in properties)
+            {
+                var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
+                var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
+                var value = item.GetValue(obj);
+
+                if (value is null || string.IsNullOrEmpty(value.ToString()))
+                {
+                    continue;
+                }
+
+                if (Exists(key))
+                {
+                    Values[key] = value;
+                }
+                else
+                {
+                    Values.Add(key, value);
+                }
             }
 
             return true;
@@ -360,6 +394,38 @@ namespace ICanPay.Core
                     Add(item.Name, item.Value.ToString());
                 }
             }
+        }
+
+        /// <summary>
+        /// 将网关参数转为类型
+        /// </summary>
+        public T ToObject<T>()
+        {
+            var type = typeof(T);
+            var obj = Activator.CreateInstance(type);
+            var properties = type.GetProperties();
+
+            foreach (var item in properties)
+            {
+                var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
+                var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
+                var value = GetValue(key);
+
+                if (value != null)
+                {
+                    item.SetValue(obj, Convert.ChangeType(value, item.PropertyType));
+                }
+            }
+
+            return (T)obj;
+        }
+
+        /// <summary>
+        /// 异步将网关参数转为类型
+        /// </summary>
+        public async Task<T> ToObjectAsync<T>()
+        {
+            return await Task.Run(() => ToObject<T>());
         }
 
         /// <summary>

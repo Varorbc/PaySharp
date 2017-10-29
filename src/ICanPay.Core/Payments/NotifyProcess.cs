@@ -113,7 +113,11 @@ namespace ICanPay.Core
                 }
                 else
                 {
-                    gatewayData.FromForm(HttpUtil.Form);
+                    try
+                    {
+                        gatewayData.FromForm(HttpUtil.Form);
+                    }
+                    catch { }
                 }
             }
 

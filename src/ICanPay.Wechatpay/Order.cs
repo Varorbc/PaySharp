@@ -88,6 +88,7 @@ namespace ICanPay.Wechatpay
         /// </summary>
         [StringLength(128, ErrorMessage = "用户标识最大长度为128位")]
         [Necessary(GatewayTradeType.Public, ErrorMessage = "请设置用户标识")]
+        [ReName(Name = Constant.OPENID)]
         public string OpenId { get; set; }
 
         /// <summary>
