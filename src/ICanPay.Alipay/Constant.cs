@@ -17,6 +17,10 @@
         public const string BARCODE = "alipay.trade.pay";
         public const string QUERY = "alipay.trade.query";
         public const string CANCEL = "alipay.trade.cancel";
+        public const string CLOSE = "alipay.trade.close";
+        public const string REFUND = "alipay.trade.refund";
+        public const string REFUNDQUERY = "alipay.trade.fastpay.refund.query";
+        public const string BILLDOWNLOAD = "alipay.data.dataservice.bill.downloadurl.query";
         public const string TOTAL_AMOUNT = "total_amount";
         public const string GOODS_ID = "goods_id";
         public const string GOODS_NAME = "goods_name";

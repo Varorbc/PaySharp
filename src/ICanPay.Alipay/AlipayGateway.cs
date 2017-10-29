@@ -181,7 +181,7 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 异步每隔5秒轮询判断用户是否支付,总共轮询5次
         /// </summary>
-        private async Task PollAsync()
+        private async Task PollQueryTradeStateAsync()
         {
             await Task.Run(() => PollQueryTradeState());
         }
@@ -316,7 +316,7 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
-        /// 检查支付通知，是否支付成功，签名是否正确。
+        /// 检查支付通知，是否支付成功
         /// </summary>
         /// <returns></returns>
         private bool ValidateNotifyParameter()
