@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ICanPay.Core
+namespace ICanPay.Core.Utils
 {
     /// <summary>
     /// 加密工具类

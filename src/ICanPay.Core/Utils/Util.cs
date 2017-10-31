@@ -2,7 +2,7 @@
 using System;
 using System.Text;
 
-namespace ICanPay.Core
+namespace ICanPay.Core.Utils
 {
     /// <summary>
     /// 工具类
