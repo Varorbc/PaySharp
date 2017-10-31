@@ -1,4 +1,6 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Utils;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -148,7 +150,13 @@ namespace ICanPay.Alipay
 
             Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
 
-            PollQueryTradeState();
+            if (!string.IsNullOrEmpty(Notify.TradeNo))
+            {
+                PollQueryTradeState(new Auxiliary
+                {
+                    TradeNo = Notify.TradeNo
+                });
+            }
         }
 
         public void InitBarcodePayment()
@@ -162,12 +170,12 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 每隔5秒轮询判断用户是否支付,总共轮询5次
         /// </summary>
-        private void PollQueryTradeState()
+        private void PollQueryTradeState(IAuxiliary auxiliary)
         {
             for (int i = 0; i < 5; i++)
             {
                 Thread.Sleep(5000);
-                BuildQuery();
+                BuildQuery(auxiliary);
                 if (IsSuccessPay)
                 {
                     OnPaymentSucceed(new PaymentSucceedEventArgs(this));
@@ -175,33 +183,33 @@ namespace ICanPay.Alipay
                 }
             }
 
-            BuildCancel();
+            BuildCancel(auxiliary);
             OnPaymentFailed(new PaymentFailedEventArgs(this));
         }
 
         /// <summary>
         /// 异步每隔5秒轮询判断用户是否支付,总共轮询5次
         /// </summary>
-        private async Task PollQueryTradeStateAsync()
+        private async Task PollQueryTradeStateAsync(IAuxiliary auxiliary)
         {
-            await Task.Run(() => PollQueryTradeState());
+            await Task.Run(() => PollQueryTradeState(auxiliary));
         }
 
         #endregion
 
         #region 查询订单
 
-        public void InitQuery()
+        public void InitQuery(IAuxiliary auxiliary)
         {
-            InitCommonParameter(Constant.QUERY);
+            InitAuxiliaryParameter(Constant.QUERY, auxiliary);
         }
 
         /// <summary>
         /// 查询订单
         /// </summary>
-        public INotify BuildQuery()
+        public INotify BuildQuery(IAuxiliary auxiliary)
         {
-            InitQuery();
+            InitQuery(auxiliary);
 
             Commit(Constant.ALIPAY_TRADE_QUERY_RESPONSE);
 
@@ -212,17 +220,17 @@ namespace ICanPay.Alipay
 
         #region 撤销订单
 
-        public void InitCancel()
+        public void InitCancel(IAuxiliary auxiliary)
         {
-            InitCommonParameter(Constant.CANCEL);
+            InitAuxiliaryParameter(Constant.CANCEL, auxiliary);
         }
 
         /// <summary>
         /// 撤销订单
         /// </summary>
-        public INotify BuildCancel()
+        public INotify BuildCancel(IAuxiliary auxiliary)
         {
-            InitCancel();
+            InitCancel(auxiliary);
 
             Commit(Constant.ALIPAY_TRADE_CANCEL_RESPONSE);
 
@@ -233,42 +241,48 @@ namespace ICanPay.Alipay
 
         #region 关闭订单
 
-        public INotify BuildClose()
+        public INotify BuildClose(IAuxiliary auxiliary)
         {
-            InitClose();
+            InitClose(auxiliary);
 
             Commit(Constant.ALIPAY_TRADE_CLOSE_RESPONSE);
 
             return Notify;
         }
 
-        public void InitClose()
+        public void InitClose(IAuxiliary auxiliary)
         {
-            InitCommonParameter(Constant.CLOSE);
+            InitAuxiliaryParameter(Constant.CLOSE, auxiliary);
         }
 
         #endregion
 
         #region 对账单下载
 
-        /// <summary>
-        /// 对账单下载
-        /// </summary>
-        /// <param name="type">	账单类型，商户通过接口或商户经开放平台授权后其所属服务商通过接口可以获取以下账单类型：trade、signcustomer；trade指商户基于支付宝交易收单的业务账单；signcustomer是指基于商户支付宝余额收入及支出等资金变动的帐务账单；</param>
-        /// <param name="date">	账单时间：日账单格式为yyyy-MM-dd，月账单格式为yyyy-MM。</param>
-        public Stream BuildBillDownload(string type, string date)
+        public Stream BuildBillDownload(IAuxiliary auxiliary)
         {
-            InitBillDownload(type, date);
+            InitBillDownload(auxiliary);
 
             Commit(Constant.ALIPAY_DATA_DATASERVICE_BILL_DOWNLOADURL_QUERY_RESPONSE);
 
             return HttpUtil.Download(Notify.BillDownloadUrl);
         }
 
-        public void InitBillDownload(string type, string date)
+        public void InitBillDownload(IAuxiliary auxiliary)
         {
+            var t = (Auxiliary)auxiliary;
+            if (string.IsNullOrEmpty(t.BillType))
+            {
+                throw new ArgumentNullException("账单类型不可为空");
+            }
+
+            if (string.IsNullOrEmpty(t.BillDate))
+            {
+                throw new ArgumentNullException("账单时间不可为空");
+            }
+
             Merchant.Method = Constant.BILLDOWNLOAD;
-            Merchant.BizContent = $"{{\"bill_type\":\"{type}\",\"bill_date\":\"{date}\"}}";
+            Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
             GatewayData.Add(Merchant);
             BuildSign();
         }
@@ -300,13 +314,18 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
-        /// 初始化相应接口的参数
+        /// 初始化辅助接口的参数
         /// </summary>
         /// <param name="method">接口名称</param>
-        private void InitCommonParameter(string method)
+        private void InitAuxiliaryParameter(string method, IAuxiliary auxiliary)
         {
+            if (string.IsNullOrEmpty(auxiliary.OutTradeNo) && string.IsNullOrEmpty(auxiliary.TradeNo))
+            {
+                throw new ArgumentNullException("商户订单号和支付宝订单号不可同时为空");
+            }
+
             Merchant.Method = method;
-            Merchant.BizContent = $"{{\"out_trade_no\":\"{Order.OutTradeNo}\"}}";
+            Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
             GatewayData.Add(Merchant);
             BuildSign();
         }

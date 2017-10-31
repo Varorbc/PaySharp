@@ -26,5 +26,10 @@
         /// </summary>
         string NotifyUrl { get; set; }
 
+        ///// <summary>
+        ///// 验证
+        ///// </summary>
+        ///// <param name="gatewayTradeType">网关交易类型</param>
+        //void Validate(GatewayTradeType gatewayTradeType);
     }
 }

@@ -1,3 +1,4 @@
+using ICanPay.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 namespace ICanPay.Core
 {
     /// <summary>
-    /// 支付网关的抽象基类
+    /// 网关的抽象基类
     /// </summary>
     public abstract class GatewayBase
     {
@@ -77,17 +78,17 @@ namespace ICanPay.Core
         public INotify Notify { get; set; }
 
         /// <summary>
-        /// 支付网关的类型
+        /// 网关的类型
         /// </summary>
         public abstract GatewayType GatewayType { get; }
 
         /// <summary>
-        /// 支付网关的地址
+        /// 网关的地址
         /// </summary>
         public abstract string GatewayUrl { get; set; }
 
         /// <summary>
-        /// 支付网关的交易类型
+        /// 网关的交易类型
         /// </summary>
         public GatewayTradeType GatewayTradeType { get; set; }
 
@@ -168,7 +169,7 @@ namespace ICanPay.Core
         {
             var validationContext = new ValidationContext(instance, new Dictionary<object, object>
             {
-                { "GatewayTradeType", GatewayTradeType }
+                {nameof(Core.GatewayTradeType), GatewayTradeType }
             });
             var results = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(instance, validationContext, results, true);
@@ -263,11 +264,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 查询
         /// </summary>
-        public INotify Query()
+        /// <param name="auxiliary">辅助参数</param>
+        public INotify Query(IAuxiliary auxiliary)
         {
             if (this is IQuery query)
             {
-                return query.BuildQuery();
+                return query.BuildQuery(auxiliary);
             }
 
             throw new NotSupportedException($"{GatewayType} 没有实现 IQuery 接口");
@@ -276,11 +278,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 撤销
         /// </summary>
-        public INotify Cancel()
+        /// <param name="auxiliary">辅助参数</param>
+        public INotify Cancel(IAuxiliary auxiliary)
         {
             if (this is ICancel cancel)
             {
-                return cancel.BuildCancel();
+                return cancel.BuildCancel(auxiliary);
             }
 
             throw new NotSupportedException($"{GatewayType} 没有实现 ICancel 接口");
@@ -289,11 +292,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 关闭
         /// </summary>
-        public INotify Close()
+        /// <param name="auxiliary">辅助参数</param>
+        public INotify Close(IAuxiliary auxiliary)
         {
             if (this is IClose close)
             {
-                return close.BuildClose();
+                return close.BuildClose(auxiliary);
             }
 
             throw new NotSupportedException($"{GatewayType} 没有实现 IClose 接口");
@@ -302,11 +306,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 退款
         /// </summary>
-        public INotify Refund()
+        /// <param name="auxiliary">辅助参数</param>
+        public INotify Refund(IAuxiliary auxiliary)
         {
             if (this is IRefund refund)
             {
-                return refund.BuildRefund();
+                return refund.BuildRefund(auxiliary);
             }
 
             throw new NotSupportedException($"{GatewayType} 没有实现 IRefund 接口");
@@ -315,11 +320,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 退款
         /// </summary>
-        public INotify RefundQuery()
+        /// <param name="auxiliary">辅助参数</param>
+        public INotify RefundQuery(IAuxiliary auxiliary)
         {
             if (this is IRefundQuery refundQuery)
             {
-                return refundQuery.BuildRefundQuery();
+                return refundQuery.BuildRefundQuery(auxiliary);
             }
 
             throw new NotSupportedException($"{GatewayType} 没有实现 IRefundQuery 接口");
@@ -328,13 +334,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 账单下载
         /// </summary>
-        /// <param name="type">账单类型</param>
-        /// <param name="date">账单时间</param>
-        public void BillDownload(string type, string date)
+        /// <param name="auxiliary">辅助参数</param>
+        public void BillDownload(IAuxiliary auxiliary)
         {
             if (this is IBillDownload billDownload)
             {
-                HttpUtil.Write(billDownload.BuildBillDownload(type, date), $"{DateTime.Now.ToString(timeFormat)}.xls");
+                HttpUtil.Write(billDownload.BuildBillDownload(auxiliary), $"{DateTime.Now.ToString(timeFormat)}.xls");
                 return;
             }
 

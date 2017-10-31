@@ -9,11 +9,13 @@ namespace ICanPay.Core
         /// <summary>
         /// 生成查询订单参数
         /// </summary>
-        INotify BuildQuery();
+        /// <param name="auxiliary">辅助参数</param>
+        INotify BuildQuery(IAuxiliary auxiliary);
 
         /// <summary>
         /// 初始化查询订单参数
         /// </summary>
-        void InitQuery();
+        /// <param name="auxiliary">辅助参数</param>
+        void InitQuery(IAuxiliary auxiliary);
     }
 }

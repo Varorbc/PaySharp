@@ -10,15 +10,13 @@ namespace ICanPay.Core
         /// <summary>
         /// 生成账单下载订单参数
         /// </summary>
-        /// <param name="type">账单类型</param>
-        /// <param name="date">账单时间</param>
-        Stream BuildBillDownload(string type, string date);
+        /// <param name="auxiliary">辅助参数</param>
+        Stream BuildBillDownload(IAuxiliary auxiliary);
 
         /// <summary>
         /// 初始化账单下载订单参数
         /// </summary>
-        /// <param name="type">账单类型</param>
-        /// <param name="date">账单时间</param>
-        void InitBillDownload(string type, string date);
+        /// <param name="auxiliary">辅助参数</param>
+        void InitBillDownload(IAuxiliary auxiliary);
     }
 }

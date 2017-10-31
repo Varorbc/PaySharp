@@ -9,11 +9,13 @@ namespace ICanPay.Core
         /// <summary>
         /// 生成退款订单参数
         /// </summary>
-        INotify BuildRefund();
+        /// <param name="auxiliary">辅助参数</param>
+        INotify BuildRefund(IAuxiliary auxiliary);
 
         /// <summary>
         /// 初始化退款订单参数
         /// </summary>
-        void InitRefund();
+        /// <param name="auxiliary">辅助参数</param>
+        void InitRefund(IAuxiliary auxiliary);
     }
 }

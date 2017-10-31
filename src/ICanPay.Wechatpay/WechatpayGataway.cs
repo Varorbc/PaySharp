@@ -1,4 +1,5 @@
 using ICanPay.Core;
+using ICanPay.Core.Utils;
 using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
@@ -192,7 +193,14 @@ namespace ICanPay.Wechatpay
 
             Commit();
 
-            PollQueryTradeState();
+            if (!string.IsNullOrEmpty(Notify.TransactionId))
+            {
+                PollQueryTradeState(new Auxiliary
+                {
+                    TradeNo = Notify.TransactionId,
+                    OutTradeNo = Notify.OutTradeNo
+                });
+            }
         }
 
         public void InitBarcodePayment()
@@ -204,12 +212,12 @@ namespace ICanPay.Wechatpay
         /// <summary>
         /// 每隔5秒轮询判断用户是否支付,总共轮询5次
         /// </summary>
-        private void PollQueryTradeState()
+        private void PollQueryTradeState(IAuxiliary auxiliary)
         {
             for (int i = 0; i < 5; i++)
             {
                 Thread.Sleep(5000);
-                BuildQuery();
+                BuildQuery(auxiliary);
                 if (IsSuccessPay)
                 {
                     OnPaymentSucceed(new PaymentSucceedEventArgs(this));
@@ -217,10 +225,10 @@ namespace ICanPay.Wechatpay
                 }
             }
 
-            BuildCancel();
+            BuildCancel(auxiliary);
             if (Notify.Recall == "Y")
             {
-                BuildCancel();
+                BuildCancel(auxiliary);
             }
             OnPaymentFailed(new PaymentFailedEventArgs(this));
         }
@@ -228,28 +236,29 @@ namespace ICanPay.Wechatpay
         /// <summary>
         /// 异步每隔5秒轮询判断用户是否支付,总共轮询5次
         /// </summary>
-        private async Task PollAsync()
+        private async Task PollAsync(IAuxiliary auxiliary)
         {
-            await Task.Run(() => PollQueryTradeState());
+            await Task.Run(() => PollQueryTradeState(auxiliary));
         }
 
         #endregion
 
         #region 查询订单
 
-        public void InitQuery()
+        public void InitQuery(IAuxiliary auxiliary)
         {
             GatewayUrl = QUERYGATEWAYURL;
             Merchant.NonceStr = Util.GenerateNonceStr();
             GatewayData.Add(Merchant);
-            GatewayData.Add(Constant.OUT_TRADE_NO, Order.OutTradeNo);
+            GatewayData.Add(Constant.OUT_TRADE_NO, auxiliary.OutTradeNo);
+            GatewayData.Add(Constant.TRANSACTION_ID, auxiliary.TradeNo);
             Merchant.Sign = BuildSign();
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
         }
 
-        public INotify BuildQuery()
+        public INotify BuildQuery(IAuxiliary auxiliary)
         {
-            InitQuery();
+            InitQuery(auxiliary);
 
             Commit();
 
@@ -260,15 +269,15 @@ namespace ICanPay.Wechatpay
 
         #region 撤销订单
 
-        public void InitCancel()
+        public void InitCancel(IAuxiliary auxiliary)
         {
-            InitQuery();
+            InitQuery(auxiliary);
             GatewayUrl = CANCELGATEWAYURL;
         }
 
-        public INotify BuildCancel()
+        public INotify BuildCancel(IAuxiliary auxiliary)
         {
-            InitCancel();
+            InitCancel(auxiliary);
 
             Commit(true);
 

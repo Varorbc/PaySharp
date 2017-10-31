@@ -25,12 +25,12 @@ namespace ICanPay.Demo.Controllers
         private void AlipayBillDownload()
         {
             var gateway = gateways.Get(GatewayType.Alipay);
-            gateway.Order = new Alipay.Order
-            {
-                OutTradeNo = "123"
-            };
 
-            gateway.BillDownload("trade", "2017-10");
+            gateway.BillDownload(new Alipay.Auxiliary
+            {
+                BillType = "trade",
+                BillDate = "2017-10-31"
+            });
         }
     }
 }

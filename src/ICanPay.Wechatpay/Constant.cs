@@ -21,5 +21,6 @@
         public const string TIMESTAMP = "timestamp";
         public const string PREPAYID = "prepayid";
         public const string PAYSIGN = "paySign";
+        public const string TRANSACTION_ID = "transaction_id";
     }
 }

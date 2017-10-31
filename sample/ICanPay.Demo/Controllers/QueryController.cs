@@ -12,39 +12,37 @@ namespace ICanPay.Demo.Controllers
             this.gateways = gateways;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string id)
         {
-            QueryAlipayOrder();
+            var notify = (Alipay.Notify)QueryAlipayOrder(id);
 
-            return Ok();
+            return Json(notify);
         }
 
         /// <summary>
         /// 查询支付宝的订单
         /// </summary>
-        private Alipay.Notify QueryAlipayOrder()
+        private Alipay.Notify QueryAlipayOrder(string id)
         {
             var gateway = gateways.Get(GatewayType.Alipay);
-            gateway.Order = new Alipay.Order
-            {
-                OutTradeNo = "123"
-            };
 
-            return (Alipay.Notify)gateway.Query();
+            return (Alipay.Notify)gateway.Query(new Alipay.Auxiliary
+            {
+                OutTradeNo = id
+            });
         }
 
         /// <summary>
         /// 查询微信的订单
         /// </summary>
-        private Wechatpay.Notify QueryWechatpayOrder()
+        private Wechatpay.Notify QueryWechatpayOrder(string id)
         {
             var gateway = gateways.Get(GatewayType.Wechatpay);
-            gateway.Order = new Wechatpay.Order
-            {
-                OutTradeNo = "123"
-            };
 
-            return (Wechatpay.Notify)gateway.Query();
+            return (Wechatpay.Notify)gateway.Query(new Wechatpay.Auxiliary
+            {
+                OutTradeNo = id
+            });
         }
     }
 }
