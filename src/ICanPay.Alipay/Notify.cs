@@ -217,5 +217,10 @@ namespace ICanPay.Alipay
         /// 当前预下单请求生成的二维码码串，可以用二维码生成工具根据该码串值生成对应的二维码
         /// </summary>
         public string QrCode { get; set; }
+
+        /// <summary>
+        /// 账单下载地址链接，获取连接后30秒后未下载，链接地址失效。
+        /// </summary>
+        public string BillDownloadUrl { get; set; }
     }
 }

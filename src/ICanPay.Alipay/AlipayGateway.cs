@@ -9,7 +9,7 @@ namespace ICanPay.Alipay
     /// </summary>
     public sealed class AlipayGateway
         : GatewayBase, IFormPayment, IUrlPayment, IAppPayment, IScanPayment, IBarcodePayment,
-        IQuery, ICancel
+        IQuery, ICancel, IClose
     {
 
         #region 私有字段
@@ -230,6 +230,24 @@ namespace ICanPay.Alipay
 
         #endregion
 
+        #region 关闭订单
+
+        public INotify BuildClose()
+        {
+            InitClose();
+
+            Commit(Constant.ALIPAY_TRADE_CLOSE_RESPONSE);
+
+            return Notify;
+        }
+
+        public void InitClose()
+        {
+            InitCommonParameter(Constant.CLOSE);
+        }
+
+        #endregion
+
         protected override async Task<bool> CheckNotifyDataAsync()
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>();
@@ -248,8 +266,7 @@ namespace ICanPay.Alipay
         {
             Merchant.BizContent = Util.SerializeObject(Order);
             GatewayData.Add(Merchant);
-            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            BuildSign();
 
             ValidateParameter(Merchant);
             ValidateParameter(Order);
@@ -264,8 +281,7 @@ namespace ICanPay.Alipay
             Merchant.Method = method;
             Merchant.BizContent = $"{{\"out_trade_no\":\"{Order.OutTradeNo}\"}}";
             GatewayData.Add(Merchant);
-            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            BuildSign();
         }
 
         /// <summary>
@@ -299,6 +315,15 @@ namespace ICanPay.Alipay
             GatewayData.FromJson(result);
             base.Notify = GatewayData.ToObject<Notify>();
             Notify.Sign = sign;
+        }
+
+        /// <summary>
+        /// 生成签名
+        /// </summary>
+        private void BuildSign()
+        {
+            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
         }
 
         /// <summary>

@@ -35,5 +35,9 @@
         public const string ALIPAY_TRADE_PRECREATE_RESPONSE = "alipay_trade_precreate_response";
         public const string ALIPAY_TRADE_QUERY_RESPONSE = "alipay_trade_query_response";
         public const string ALIPAY_TRADE_CANCEL_RESPONSE = "alipay_trade_cancel_response";
+        public const string ALIPAY_TRADE_CLOSE_RESPONSE = "alipay_trade_close_response";
+        public const string ALIPAY_TRADE_REFUND_RESPONSE = "alipay_trade_refund_response";
+        public const string ALIPAY_TRADE_FASTPAY_REFUND_QUERY_RESPONSE = "alipay_trade_fastpay_refund_query_response";
+        public const string ALIPAY_DATA_DATASERVICE_BILL_DOWNLOADURL_QUERY_RESPONSE = "alipay_data_dataservice_bill_downloadurl_query_response";
     }
 }

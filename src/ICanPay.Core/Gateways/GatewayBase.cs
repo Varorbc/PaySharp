@@ -269,7 +269,7 @@ namespace ICanPay.Core
                 return query.BuildQuery();
             }
 
-            throw new NotSupportedException($"{GatewayType} 没有实现 IQuery 查询接口");
+            throw new NotSupportedException($"{GatewayType} 没有实现 IQuery 接口");
         }
 
         /// <summary>
@@ -282,7 +282,46 @@ namespace ICanPay.Core
                 return cancel.BuildCancel();
             }
 
-            throw new NotSupportedException($"{GatewayType} 没有实现 ICancel 查询接口");
+            throw new NotSupportedException($"{GatewayType} 没有实现 ICancel 接口");
+        }
+
+        /// <summary>
+        /// 关闭
+        /// </summary>
+        public INotify Close()
+        {
+            if (this is IClose close)
+            {
+                return close.BuildClose();
+            }
+
+            throw new NotSupportedException($"{GatewayType} 没有实现 IClose 接口");
+        }
+
+        /// <summary>
+        /// 退款
+        /// </summary>
+        public INotify Refund()
+        {
+            if (this is IRefund refund)
+            {
+                return refund.BuildRefund();
+            }
+
+            throw new NotSupportedException($"{GatewayType} 没有实现 IRefund 接口");
+        }
+
+        /// <summary>
+        /// 退款
+        /// </summary>
+        public INotify RefundQuery()
+        {
+            if (this is IRefundQuery refundQuery)
+            {
+                return refundQuery.BuildRefundQuery();
+            }
+
+            throw new NotSupportedException($"{GatewayType} 没有实现 IRefundQuery 接口");
         }
 
         #endregion

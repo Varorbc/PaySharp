@@ -33,7 +33,7 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 时间戳
         /// </summary>
-        public DateTime Timestamp = DateTime.Now;
+        public string Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         /// <summary>
         /// 版本
