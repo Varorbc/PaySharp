@@ -50,7 +50,7 @@ namespace ICanPay.Demo
 
                 gateways.Add(new AlipayGateway(alipayMerchant)
                 {
-                    GatewayUrl = "https://openapi.alipaydev.com/gateway.do"
+                    GatewayUrl = "https://openapi.alipaydev.com/gateway.do?charset=UTF-8"
                 });
                 gateways.Add(new WechatpayGataway(wechatpayMerchant));
 

@@ -46,8 +46,7 @@ namespace ICanPay.Demo.Controllers
                 //}
             };
 
-            var gateway = gateways.Get(GatewayType.Alipay);
-            gateway.GatewayTradeType = GatewayTradeType.Web;
+            var gateway = gateways.Get(GatewayType.Alipay, GatewayTradeType.Web);
             gateway.Order = order;
 
             //gateway.PaymentFailed += Gateway_BarcodePaymentFailed;

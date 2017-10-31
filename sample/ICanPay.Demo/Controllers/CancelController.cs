@@ -34,7 +34,7 @@ namespace ICanPay.Demo.Controllers
         }
 
         /// <summary>
-        /// 关闭微信的订单
+        /// 撤销微信的订单
         /// </summary>
         private Wechatpay.Notify CancelWechatpayOrder()
         {

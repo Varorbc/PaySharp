@@ -75,6 +75,12 @@ namespace ICanPay.Core
             {
                 foreach (var item in info)
                 {
+                    var notAddattributes = item.GetCustomAttributes(typeof(NotAddAttribute), true);
+                    if (notAddattributes.Length > 0)
+                    {
+                        continue;
+                    }
+
                     var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
                     var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
                     object value;
