@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -63,29 +64,47 @@ namespace ICanPay.Core
         {
             var type = obj.GetType();
             var properties = type.GetProperties();
+            var fields = type.GetFields();
 
-            foreach (var item in properties)
-            {
-                var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
-                var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
-                var value = item.GetValue(obj);
-
-                if (value is null || string.IsNullOrEmpty(value.ToString()))
-                {
-                    continue;
-                }
-
-                if (Exists(key))
-                {
-                    Values[key] = value;
-                }
-                else
-                {
-                    Values.Add(key, value);
-                }
-            }
+            Add(properties);
+            Add(fields);
 
             return true;
+
+            void Add(MemberInfo[] info)
+            {
+                foreach (var item in info)
+                {
+                    var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
+                    var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
+                    object value;
+                    switch (item.MemberType)
+                    {
+                        case MemberTypes.Field:
+                            value = ((FieldInfo)item).GetValue(obj);
+                            break;
+                        case MemberTypes.Property:
+                            value = ((PropertyInfo)item).GetValue(obj);
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+
+                    if (value is null || string.IsNullOrEmpty(value.ToString()))
+                    {
+                        continue;
+                    }
+
+                    if (Exists(key))
+                    {
+                        Values[key] = value;
+                    }
+                    else
+                    {
+                        Values.Add(key, value);
+                    }
+                }
+            }
         }
 
         /// <summary>
