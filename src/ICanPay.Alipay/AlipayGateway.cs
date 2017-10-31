@@ -1,4 +1,5 @@
 ﻿using ICanPay.Core;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,12 +10,12 @@ namespace ICanPay.Alipay
     /// </summary>
     public sealed class AlipayGateway
         : GatewayBase, IFormPayment, IUrlPayment, IAppPayment, IScanPayment, IBarcodePayment,
-        IQuery, ICancel, IClose
+        IQuery, ICancel, IClose, IBillDownload
     {
 
         #region 私有字段
 
-        private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do";
+        private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do?charset=UTF-8";
         private Merchant merchant;
 
         #endregion
@@ -244,6 +245,32 @@ namespace ICanPay.Alipay
         public void InitClose()
         {
             InitCommonParameter(Constant.CLOSE);
+        }
+
+        #endregion
+
+        #region 对账单下载
+
+        /// <summary>
+        /// 对账单下载
+        /// </summary>
+        /// <param name="type">	账单类型，商户通过接口或商户经开放平台授权后其所属服务商通过接口可以获取以下账单类型：trade、signcustomer；trade指商户基于支付宝交易收单的业务账单；signcustomer是指基于商户支付宝余额收入及支出等资金变动的帐务账单；</param>
+        /// <param name="date">	账单时间：日账单格式为yyyy-MM-dd，月账单格式为yyyy-MM。</param>
+        public Stream BuildBillDownload(string type, string date)
+        {
+            InitBillDownload(type, date);
+
+            Commit(Constant.ALIPAY_DATA_DATASERVICE_BILL_DOWNLOADURL_QUERY_RESPONSE);
+
+            return HttpUtil.Download(Notify.BillDownloadUrl);
+        }
+
+        public void InitBillDownload(string type, string date)
+        {
+            Merchant.Method = Constant.BILLDOWNLOAD;
+            Merchant.BizContent = $"{{\"bill_type\":\"{type}\",\"bill_date\":\"{date}\"}}";
+            GatewayData.Add(Merchant);
+            BuildSign();
         }
 
         #endregion

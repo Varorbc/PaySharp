@@ -24,6 +24,7 @@ namespace ICanPay.Core
         #region 私有字段
 
         private GatewayData gatewayData;
+        private string timeFormat = "yyyyMMddHHmmss";
 
         #endregion
 
@@ -322,6 +323,22 @@ namespace ICanPay.Core
             }
 
             throw new NotSupportedException($"{GatewayType} 没有实现 IRefundQuery 接口");
+        }
+
+        /// <summary>
+        /// 账单下载
+        /// </summary>
+        /// <param name="type">账单类型</param>
+        /// <param name="date">账单时间</param>
+        public void BillDownload(string type, string date)
+        {
+            if (this is IBillDownload billDownload)
+            {
+                HttpUtil.Write(billDownload.BuildBillDownload(type, date), $"{DateTime.Now.ToString(timeFormat)}.xls");
+                return;
+            }
+
+            throw new NotSupportedException($"{GatewayType} 没有实现 IBillDownload 接口");
         }
 
         #endregion

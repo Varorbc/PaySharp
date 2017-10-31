@@ -99,6 +99,27 @@ namespace ICanPay.Core
         }
 
         /// <summary>
+        /// 输出内容
+        /// </summary>
+        /// <param name="stream">流</param>
+        /// <param name="fileName">文件名</param>
+        public static void Write(Stream stream, string fileName)
+        {
+            stream.Position = 0;
+            long size = stream.Length;
+            byte[] buffer = new byte[size];
+            stream.Read(buffer, 0, (int)size);
+            stream.Close();
+
+            Current.Response.ContentType = "application/octet-stream";
+            Current.Response.Headers.Add("Content-Disposition", "attachment;filename=" + WebUtility.UrlEncode(fileName));
+            Current.Response.Headers.Add("Content-Length", size.ToString());
+
+            Current.Response.Body.WriteAsync(buffer, 0, (int)size).GetAwaiter().GetResult();
+            Current.Response.Body.Close();
+        }
+
+        /// <summary>
         /// Get请求
         /// </summary>
         /// <param name="url">url</param>
@@ -204,6 +225,56 @@ namespace ICanPay.Core
         public static async Task<string> PostAsync(string url, string data, X509Certificate2 cert = null)
         {
             return await Task.Run(() => Post(url, data, cert));
+        }
+
+        /// <summary>
+        /// 下载
+        /// </summary>
+        /// <param name="url">url</param>
+        /// <returns></returns>
+        public static Stream Download(string url)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            Stream stream;
+
+            try
+            {
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        stream = new MemoryStream();
+                        byte[] buffer = new byte[1024];
+                        int size = responseStream.Read(buffer, 0, buffer.Length);
+                        while (size > 0)
+                        {
+                            stream.Write(buffer, 0, size);
+                            size = responseStream.Read(buffer, 0, buffer.Length);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                request.Abort();
+            }
+
+            stream.Close();
+            return stream;
+        }
+
+        /// <summary>
+        /// 异步下载
+        /// </summary>
+        /// <param name="url">url</param>
+        /// <returns></returns>
+        public static async Task<Stream> DownloadAsync(string url)
+        {
+            return await Task.Run(() => Download(url));
         }
 
         #endregion
