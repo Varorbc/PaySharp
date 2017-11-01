@@ -11,9 +11,9 @@ namespace ICanPay.Alipay
     /// 支付宝网关
     /// </summary>
     public sealed class AlipayGateway
-        : GatewayBase, 
-        IFormPayment, IUrlPayment, IAppPayment, IScanPayment, IBarcodePayment,IAppletPayment,
-        IQuery, ICancel, IClose, IBillDownload
+        : GatewayBase,
+        IFormPayment, IUrlPayment, IAppPayment, IScanPayment, IBarcodePayment, IAppletPayment,
+        IQuery, ICancel, IClose, IBillDownload, IRefund, IRefundQuery
     {
 
         #region 私有字段
@@ -207,7 +207,6 @@ namespace ICanPay.Alipay
 
         public void InitAppletPayment()
         {
-            throw new NotImplementedException();
         }
 
         #endregion
@@ -293,6 +292,42 @@ namespace ICanPay.Alipay
 
         #endregion
 
+        #region 订单退款
+
+        public INotify BuildRefund(IAuxiliary auxiliary)
+        {
+            InitRefund(auxiliary);
+
+            Commit(Constant.ALIPAY_TRADE_REFUND_RESPONSE);
+
+            return Notify;
+        }
+
+        public void InitRefund(IAuxiliary auxiliary)
+        {
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Refund, auxiliary);
+        }
+
+        #endregion
+
+        #region 查询退款订单
+
+        public INotify BuildRefundQuery(IAuxiliary auxiliary)
+        {
+            InitRefundQuery(auxiliary);
+
+            Commit(Constant.ALIPAY_TRADE_FASTPAY_REFUND_QUERY_RESPONSE);
+
+            return Notify;
+        }
+
+        public void InitRefundQuery(IAuxiliary auxiliary)
+        {
+            InitAuxiliaryParameter(GatewayAuxiliaryType.RefundQuery, auxiliary);
+        }
+
+        #endregion
+
         protected override async Task<bool> CheckNotifyDataAsync()
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>();
@@ -334,6 +369,12 @@ namespace ICanPay.Alipay
                     break;
                 case GatewayAuxiliaryType.Cancel:
                     Merchant.Method = Constant.CANCEL;
+                    break;
+                case GatewayAuxiliaryType.Refund:
+                    Merchant.Method = Constant.REFUND;
+                    break;
+                case GatewayAuxiliaryType.RefundQuery:
+                    Merchant.Method = Constant.REFUNDQUERY;
                     break;
                 default:
                     break;

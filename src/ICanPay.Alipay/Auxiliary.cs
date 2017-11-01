@@ -27,6 +27,7 @@ namespace ICanPay.Alipay
         /// 标识一次退款请求，同一笔交易多次退款需要保证唯一，如需部分退款，则此参数必传。
         /// </summary>
         [StringLength(64, ErrorMessage = "退款请求号最大长度为64位")]
+        [Necessary(GatewayAuxiliaryType.RefundQuery, ErrorMessage = "请设置退款请求号")]
         public string OutRequestNo { get; set; }
 
         /// <summary>
@@ -39,6 +40,7 @@ namespace ICanPay.Alipay
         /// 需要退款的金额，该金额不能大于订单金额,单位为元，支持两位小数
         /// </summary>
         [Range(0.01, 100000000, ErrorMessage = "需要退款的金额超出范围")]
+        [Necessary(GatewayAuxiliaryType.Refund, ErrorMessage = "请设置退款金额")]
         public double RefundAmount { get; set; }
 
         /// <summary>
@@ -77,13 +79,10 @@ namespace ICanPay.Alipay
 
         public bool Validate(GatewayAuxiliaryType gatewayAuxiliaryType)
         {
-            if (gatewayAuxiliaryType == GatewayAuxiliaryType.Query ||
-                gatewayAuxiliaryType == GatewayAuxiliaryType.Close ||
-                gatewayAuxiliaryType == GatewayAuxiliaryType.Cancel)
-                if (string.IsNullOrEmpty(OutTradeNo) && string.IsNullOrEmpty(TradeNo))
-                {
-                    throw new ArgumentNullException("商户订单号和支付宝订单号不可同时为空");
-                }
+            if (string.IsNullOrEmpty(OutTradeNo) && string.IsNullOrEmpty(TradeNo))
+            {
+                throw new ArgumentNullException("商户订单号和支付宝订单号不可同时为空");
+            }
 
             return true;
         }
