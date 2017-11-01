@@ -1,6 +1,7 @@
 ﻿using ICanPay.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Alipay
@@ -38,7 +39,6 @@ namespace ICanPay.Alipay
         /// 需要退款的金额，该金额不能大于订单金额,单位为元，支持两位小数
         /// </summary>
         [Range(0.01, 100000000, ErrorMessage = "需要退款的金额超出范围")]
-        [Required(ErrorMessage = "请设置需要退款的金额")]
         public double RefundAmount { get; set; }
 
         /// <summary>
@@ -65,17 +65,27 @@ namespace ICanPay.Alipay
         /// signcustomer是指基于商户支付宝余额收入及支出等资金变动的帐务账单；
         /// </summary>
         [StringLength(10, ErrorMessage = "账单类型最大长度为10位")]
+        [Necessary(GatewayAuxiliaryType.BillDownload, ErrorMessage = "请设置账单类型")]
         public string BillType { get; set; }
 
         /// <summary>
         /// 账单时间：日账单格式为yyyy-MM-dd，月账单格式为yyyy-MM。
         /// </summary>
         [StringLength(15, ErrorMessage = "账单时间最大长度为15位")]
+        [Necessary(GatewayAuxiliaryType.BillDownload, ErrorMessage = "请设置账单时间")]
         public string BillDate { get; set; }
 
-        public bool Validate()
+        public bool Validate(GatewayAuxiliaryType gatewayAuxiliaryType)
         {
-            throw new System.NotImplementedException();
+            if (gatewayAuxiliaryType == GatewayAuxiliaryType.Query ||
+                gatewayAuxiliaryType == GatewayAuxiliaryType.Close ||
+                gatewayAuxiliaryType == GatewayAuxiliaryType.Cancel)
+                if (string.IsNullOrEmpty(OutTradeNo) && string.IsNullOrEmpty(TradeNo))
+                {
+                    throw new ArgumentNullException("商户订单号和支付宝订单号不可同时为空");
+                }
+
+            return true;
         }
     }
 }

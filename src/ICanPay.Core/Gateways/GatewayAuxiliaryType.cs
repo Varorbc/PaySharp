@@ -7,6 +7,11 @@ namespace ICanPay.Core
     public enum GatewayAuxiliaryType
     {
         /// <summary>
+        /// 无操作
+        /// </summary>
+        NoAction,
+
+        /// <summary>
         /// 查询
         /// </summary>
         Query,

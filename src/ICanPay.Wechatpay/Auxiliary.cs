@@ -17,7 +17,7 @@ namespace ICanPay.Wechatpay
         [ReName(Name = Constant.TRANSACTION_ID)]
         public string TradeNo { get; set; }
 
-        public bool Validate()
+        public bool Validate(GatewayAuxiliaryType gatewayAuxiliaryType)
         {
             throw new System.NotImplementedException();
         }

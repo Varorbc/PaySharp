@@ -1,7 +1,6 @@
 using ICanPay.Core.Utils;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace ICanPay.Core
@@ -25,6 +24,7 @@ namespace ICanPay.Core
         #region 私有字段
 
         private GatewayData gatewayData;
+        private GatewayAuxiliaryType gatewayAuxiliaryType;
         private string timeFormat = "yyyyMMddHHmmss";
 
         #endregion
@@ -167,17 +167,11 @@ namespace ICanPay.Core
         /// <param name="instance">验证对象</param>
         protected void ValidateParameter(object instance)
         {
-            var validationContext = new ValidationContext(instance, new Dictionary<object, object>
+            ValidateUtil.Validate(instance, new Dictionary<object, object>
             {
-                {nameof(Core.GatewayTradeType), GatewayTradeType }
+                {nameof(Core.GatewayTradeType), GatewayTradeType },
+                {nameof(GatewayAuxiliaryType), gatewayAuxiliaryType }
             });
-            var results = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(instance, validationContext, results, true);
-
-            if (!isValid)
-            {
-                throw new ArgumentNullException(results[0].ErrorMessage);
-            }
         }
 
         protected void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
@@ -280,6 +274,7 @@ namespace ICanPay.Core
 
             if (this is IQuery query)
             {
+                gatewayAuxiliaryType = GatewayAuxiliaryType.Query;
                 return query.BuildQuery(auxiliary);
             }
 
@@ -299,6 +294,7 @@ namespace ICanPay.Core
 
             if (this is ICancel cancel)
             {
+                gatewayAuxiliaryType = GatewayAuxiliaryType.Cancel;
                 return cancel.BuildCancel(auxiliary);
             }
 
@@ -318,6 +314,7 @@ namespace ICanPay.Core
 
             if (this is IClose close)
             {
+                gatewayAuxiliaryType = GatewayAuxiliaryType.Close;
                 return close.BuildClose(auxiliary);
             }
 
@@ -337,6 +334,7 @@ namespace ICanPay.Core
 
             if (this is IRefund refund)
             {
+                gatewayAuxiliaryType = GatewayAuxiliaryType.Refund;
                 return refund.BuildRefund(auxiliary);
             }
 
@@ -344,7 +342,7 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// 退款
+        /// 退款查询
         /// </summary>
         /// <param name="auxiliary">辅助参数</param>
         public INotify RefundQuery(IAuxiliary auxiliary)
@@ -356,6 +354,7 @@ namespace ICanPay.Core
 
             if (this is IRefundQuery refundQuery)
             {
+                gatewayAuxiliaryType = GatewayAuxiliaryType.RefundQuery;
                 return refundQuery.BuildRefundQuery(auxiliary);
             }
 
@@ -375,6 +374,7 @@ namespace ICanPay.Core
 
             if (this is IBillDownload billDownload)
             {
+                gatewayAuxiliaryType = GatewayAuxiliaryType.BillDownload;
                 HttpUtil.Write(billDownload.BuildBillDownload(auxiliary), $"{DateTime.Now.ToString(timeFormat)}.xls");
                 return;
             }

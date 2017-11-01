@@ -11,7 +11,8 @@ namespace ICanPay.Alipay
     /// 支付宝网关
     /// </summary>
     public sealed class AlipayGateway
-        : GatewayBase, IFormPayment, IUrlPayment, IAppPayment, IScanPayment, IBarcodePayment,
+        : GatewayBase, 
+        IFormPayment, IUrlPayment, IAppPayment, IScanPayment, IBarcodePayment,IAppletPayment,
         IQuery, ICancel, IClose, IBillDownload
     {
 
@@ -197,11 +198,25 @@ namespace ICanPay.Alipay
 
         #endregion
 
+        #region 小程序支付
+
+        public string BuildAppletPayment()
+        {
+            return BuildAppPayment();
+        }
+
+        public void InitAppletPayment()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         #region 查询订单
 
         public void InitQuery(IAuxiliary auxiliary)
         {
-            InitAuxiliaryParameter(Constant.QUERY, auxiliary);
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Query, auxiliary);
         }
 
         /// <summary>
@@ -222,7 +237,7 @@ namespace ICanPay.Alipay
 
         public void InitCancel(IAuxiliary auxiliary)
         {
-            InitAuxiliaryParameter(Constant.CANCEL, auxiliary);
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Cancel, auxiliary);
         }
 
         /// <summary>
@@ -252,7 +267,7 @@ namespace ICanPay.Alipay
 
         public void InitClose(IAuxiliary auxiliary)
         {
-            InitAuxiliaryParameter(Constant.CLOSE, auxiliary);
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Close, auxiliary);
         }
 
         #endregion
@@ -270,17 +285,6 @@ namespace ICanPay.Alipay
 
         public void InitBillDownload(IAuxiliary auxiliary)
         {
-            var t = (Auxiliary)auxiliary;
-            if (string.IsNullOrEmpty(t.BillType))
-            {
-                throw new ArgumentNullException("账单类型不可为空");
-            }
-
-            if (string.IsNullOrEmpty(t.BillDate))
-            {
-                throw new ArgumentNullException("账单时间不可为空");
-            }
-
             Merchant.Method = Constant.BILLDOWNLOAD;
             Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
             GatewayData.Add(Merchant);
@@ -317,14 +321,23 @@ namespace ICanPay.Alipay
         /// 初始化辅助接口的参数
         /// </summary>
         /// <param name="method">接口名称</param>
-        private void InitAuxiliaryParameter(string method, IAuxiliary auxiliary)
+        private void InitAuxiliaryParameter(GatewayAuxiliaryType gatewayAuxiliaryType, IAuxiliary auxiliary)
         {
-            if (string.IsNullOrEmpty(auxiliary.OutTradeNo) && string.IsNullOrEmpty(auxiliary.TradeNo))
+            auxiliary.Validate(gatewayAuxiliaryType);
+            switch (gatewayAuxiliaryType)
             {
-                throw new ArgumentNullException("商户订单号和支付宝订单号不可同时为空");
+                case GatewayAuxiliaryType.Query:
+                    Merchant.Method = Constant.QUERY;
+                    break;
+                case GatewayAuxiliaryType.Close:
+                    Merchant.Method = Constant.CLOSE;
+                    break;
+                case GatewayAuxiliaryType.Cancel:
+                    Merchant.Method = Constant.CANCEL;
+                    break;
+                default:
+                    break;
             }
-
-            Merchant.Method = method;
             Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
             GatewayData.Add(Merchant);
             BuildSign();

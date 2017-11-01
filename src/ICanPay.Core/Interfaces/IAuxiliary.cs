@@ -20,6 +20,7 @@ namespace ICanPay.Core
         /// 验证
         /// </summary>
         /// <returns></returns>
-        bool Validate();
+        /// <param name="gatewayAuxiliaryType">辅助类型</param>
+        bool Validate(GatewayAuxiliaryType gatewayAuxiliaryType);
     }
 }
