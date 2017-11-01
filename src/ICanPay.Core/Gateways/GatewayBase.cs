@@ -191,8 +191,14 @@ namespace ICanPay.Core
         /// <summary>
         /// 支付
         /// </summary>
-        public string Payment()
+        public string Payment(IOrder order)
         {
+            if(order is null)
+            {
+                throw new ArgumentNullException(nameof(IOrder));
+            }
+            Order = order;
+
             switch (GatewayTradeType)
             {
                 case GatewayTradeType.App:
@@ -267,6 +273,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Query(IAuxiliary auxiliary)
         {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
             if (this is IQuery query)
             {
                 return query.BuildQuery(auxiliary);
@@ -281,6 +292,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Cancel(IAuxiliary auxiliary)
         {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
             if (this is ICancel cancel)
             {
                 return cancel.BuildCancel(auxiliary);
@@ -295,6 +311,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Close(IAuxiliary auxiliary)
         {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
             if (this is IClose close)
             {
                 return close.BuildClose(auxiliary);
@@ -309,6 +330,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Refund(IAuxiliary auxiliary)
         {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
             if (this is IRefund refund)
             {
                 return refund.BuildRefund(auxiliary);
@@ -323,6 +349,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify RefundQuery(IAuxiliary auxiliary)
         {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
             if (this is IRefundQuery refundQuery)
             {
                 return refundQuery.BuildRefundQuery(auxiliary);
@@ -337,6 +368,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public void BillDownload(IAuxiliary auxiliary)
         {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
             if (this is IBillDownload billDownload)
             {
                 HttpUtil.Write(billDownload.BuildBillDownload(auxiliary), $"{DateTime.Now.ToString(timeFormat)}.xls");

@@ -105,9 +105,8 @@ ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.s
 					};
 
 					var gateway = gateways.Get(GatewayType.Alipay, GatewayTradeType.Web);
-					gateway.Order = order;
 
-					return gateway.Payment();
+					return gateway.Payment(order);
 				}
 			}
 		}
