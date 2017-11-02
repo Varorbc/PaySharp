@@ -1,5 +1,4 @@
 ﻿using ICanPay.Core;
-using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Wechatpay
 {
@@ -186,5 +185,71 @@ namespace ICanPay.Wechatpay
         /// 是否需要继续调用撤销，Y-需要，N-不需要
         /// </summary>
         public string Recall { get; set; }
+
+        /// <summary>
+        /// 是否重调
+        /// 是否需要继续调用撤销，Y-需要，N-不需要
+        /// </summary>
+        public string OutRefundNo { get; set; }
+
+        /// <summary>
+        /// 微信退款单号	
+        /// </summary>
+        public string RefundId { get; set; }
+
+        /// <summary>
+        /// 退款金额	
+        /// </summary>
+        public string RefundFee { get; set; }
+
+        /// <summary>
+        /// 应结退款金额	
+        /// </summary>
+        public string SettlementRefundFee { get; set; }
+
+        /// <summary>
+        /// 现金退款金额	
+        /// </summary>
+        public string CashRefundFee { get; set; }
+
+        /// <summary>
+        /// 代金券退款总金额
+        /// </summary>
+        public string CouponRefundFee { get; set; }
+
+        /// <summary>
+        /// 订单总退款次数
+        /// </summary>
+        public string TotalRefundCount { get; set; }
+
+        /// <summary>
+        /// 退款笔数
+        /// </summary>
+        public string RefundCount { get; set; }
+
+        /// <summary>
+        /// 退款状态
+        /// </summary>
+        public string RefundStatus { get; set; }
+
+        /// <summary>
+        /// 退款成功时间
+        /// </summary>
+        public string SuccessTime { get; set; }
+
+        /// <summary>
+        /// 退款入账账户
+        /// </summary>
+        public string RefundRecvAccout { get; set; }
+
+        /// <summary>
+        /// 退款资金来源
+        /// </summary>
+        public string RefundAccount { get; set; }
+
+        /// <summary>
+        /// 退款发起来源
+        /// </summary>
+        public string RefundRequestSource { get; set; }
     }
 }

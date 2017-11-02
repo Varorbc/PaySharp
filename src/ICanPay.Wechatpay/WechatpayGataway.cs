@@ -12,7 +12,7 @@ namespace ICanPay.Wechatpay
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
         IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment, IBarcodePayment,
-        IQuery, ICancel
+        IQuery, ICancel, IRefund, IRefundQuery
     {
 
         #region 私有字段
@@ -248,12 +248,7 @@ namespace ICanPay.Wechatpay
         public void InitQuery(IAuxiliary auxiliary)
         {
             GatewayUrl = QUERYGATEWAYURL;
-            Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Merchant);
-            GatewayData.Add(Constant.OUT_TRADE_NO, auxiliary.OutTradeNo);
-            GatewayData.Add(Constant.TRANSACTION_ID, auxiliary.TradeNo);
-            Merchant.Sign = BuildSign();
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            InitAuxiliaryParameter(auxiliary);
         }
 
         public INotify BuildQuery(IAuxiliary auxiliary)
@@ -271,8 +266,8 @@ namespace ICanPay.Wechatpay
 
         public void InitCancel(IAuxiliary auxiliary)
         {
-            InitQuery(auxiliary);
             GatewayUrl = CANCELGATEWAYURL;
+            InitAuxiliaryParameter(auxiliary);
         }
 
         public INotify BuildCancel(IAuxiliary auxiliary)
@@ -282,6 +277,44 @@ namespace ICanPay.Wechatpay
             Commit(true);
 
             return Notify;
+        }
+
+        #endregion
+
+        #region 订单退款
+
+        public INotify BuildRefund(IAuxiliary auxiliary)
+        {
+            InitRefund(auxiliary);
+
+            Commit(true);
+
+            return Notify;
+        }
+
+        public void InitRefund(IAuxiliary auxiliary)
+        {
+            GatewayUrl = REFUNDGATEWAYURL;
+            InitAuxiliaryParameter(auxiliary);
+        }
+
+        #endregion
+
+        #region 查询退款
+
+        public INotify BuildRefundQuery(IAuxiliary auxiliary)
+        {
+            InitRefundQuery(auxiliary);
+
+            Commit();
+
+            return Notify;
+        }
+
+        public void InitRefundQuery(IAuxiliary auxiliary)
+        {
+            GatewayUrl = REFUNDQUERYGATEWAYURL;
+            InitAuxiliaryParameter(auxiliary);
         }
 
         #endregion
@@ -300,10 +333,21 @@ namespace ICanPay.Wechatpay
 
         private void InitOrderParameter()
         {
+            Order.Amount *= 100;
             Merchant.NonceStr = Util.GenerateNonceStr();
             Merchant.DeviceInfo = Constant.WEB;
             GatewayData.Add(Merchant);
             GatewayData.Add(Order);
+            Merchant.Sign = BuildSign();
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+        }
+
+        private void InitAuxiliaryParameter(IAuxiliary auxiliary)
+        {
+            auxiliary.Validate(GatewayAuxiliaryType.NoAction);
+            Merchant.NonceStr = Util.GenerateNonceStr();
+            GatewayData.Add(Merchant);
+            GatewayData.Add(auxiliary);
             Merchant.Sign = BuildSign();
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
         }

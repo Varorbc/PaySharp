@@ -7,8 +7,5 @@ namespace ICanPay.Core
     /// </summary>
     public class NotAddAttribute : Attribute
     {
-        public NotAddAttribute()
-        {
-        }
     }
 }

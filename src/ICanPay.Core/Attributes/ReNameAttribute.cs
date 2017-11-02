@@ -8,9 +8,5 @@ namespace ICanPay.Core
     public class ReNameAttribute : Attribute
     {
         public string Name { get; set; }
-
-        public ReNameAttribute()
-        {
-        }
     }
 }

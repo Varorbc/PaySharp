@@ -46,7 +46,7 @@ namespace ICanPay.Wechatpay
         public string SpbillCreateIp { get; set; }
 
         /// <summary>
-        /// 标价金额,订单总金额，单位为分，详见支付金额
+        /// 标价金额,订单总金额，单位为元，详见支付金额
         /// </summary>
         public double Amount { get; set; }
 
