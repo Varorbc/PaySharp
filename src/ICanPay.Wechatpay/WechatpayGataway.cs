@@ -12,7 +12,7 @@ namespace ICanPay.Wechatpay
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
         IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment, IBarcodePayment,
-        IQuery, ICancel, IRefund, IRefundQuery
+        IQuery, ICancel, IClose, IRefund, IRefundQuery
     {
 
         #region 私有字段
@@ -286,6 +286,25 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
+        #region 关闭订单
+
+        public INotify BuildClose(IAuxiliary auxiliary)
+        {
+            InitClose(auxiliary);
+
+            Commit();
+
+            return Notify;
+        }
+
+        public void InitClose(IAuxiliary auxiliary)
+        {
+            GatewayUrl = CLOSEORDERGATEWAYURL;
+            InitAuxiliaryParameter(auxiliary);
+        }
+
+        #endregion
+
         #region 订单退款
 
         public INotify BuildRefund(IAuxiliary auxiliary)
@@ -414,6 +433,7 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
             Merchant.Sign = BuildSign();
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            GatewayUrl = AUTHCODETOOPENIDURL;
 
             Commit();
 
