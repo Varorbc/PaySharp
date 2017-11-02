@@ -1,4 +1,4 @@
-using ICanPay.Core;
+ï»¿using ICanPay.Core;
 using ICanPay.Core.Utils;
 using System;
 using System.Security.Cryptography.X509Certificates;
@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace ICanPay.Wechatpay
 {
     /// <summary>
-    /// Î¢ĞÅÖ§¸¶Íø¹Ø
+    /// å¾®ä¿¡æ”¯ä»˜ç½‘å…³
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
         IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment, IBarcodePayment,
         IQuery, ICancel, IRefund, IRefundQuery
     {
 
-        #region Ë½ÓĞ×Ö¶Î
+        #region ç§æœ‰å­—æ®µ
 
         private readonly Merchant merchant;
         private const string USERPAYING = "USERPAYING";
@@ -32,12 +32,12 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ¹¹Ôìº¯Êı
+        #region æ„é€ å‡½æ•°
 
         /// <summary>
-        /// ³õÊ¼»¯Î¢ĞÅÖ§¸¶Íø¹Ø
+        /// åˆå§‹åŒ–å¾®ä¿¡æ”¯ä»˜ç½‘å…³
         /// </summary>
-        /// <param name="merchant">ÉÌ»§Êı¾İ</param>
+        /// <param name="merchant">å•†æˆ·æ•°æ®</param>
         public WechatpayGataway(Merchant merchant)
             : base(merchant)
         {
@@ -46,7 +46,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ÊôĞÔ
+        #region å±æ€§
 
         public override GatewayType GatewayType => GatewayType.Wechatpay;
 
@@ -64,9 +64,9 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ·½·¨
+        #region æ–¹æ³•
 
-        #region É¨ÂëÖ§¸¶
+        #region æ‰«ç æ”¯ä»˜
 
         public string BuildScanPayment()
         {
@@ -83,7 +83,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region AppÖ§¸¶
+        #region Appæ”¯ä»˜
 
         public string BuildAppPayment()
         {
@@ -100,7 +100,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// ³õÊ¼»¯APP¶Ëµ÷ÆğÖ§¸¶µÄ²ÎÊı
+        /// åˆå§‹åŒ–APPç«¯è°ƒèµ·æ”¯ä»˜çš„å‚æ•°
         /// </summary>
         private void InitAppParameter()
         {
@@ -117,7 +117,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region UrlÖ§¸¶
+        #region Urlæ”¯ä»˜
 
         public string BuildUrlPayment()
         {
@@ -134,7 +134,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ¹«ÖÚºÅÖ§¸¶
+        #region å…¬ä¼—å·æ”¯ä»˜
 
         public string BuildPublicPayment()
         {
@@ -151,7 +151,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// ³õÊ¼»¯¹«ÖÚºÅµ÷ÆğÖ§¸¶µÄ²ÎÊı
+        /// åˆå§‹åŒ–å…¬ä¼—å·è°ƒèµ·æ”¯ä»˜çš„å‚æ•°
         /// </summary>
         private void InitPublicParameter()
         {
@@ -167,7 +167,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region Ğ¡³ÌĞòÖ§¸¶
+        #region å°ç¨‹åºæ”¯ä»˜
 
         public string BuildAppletPayment()
         {
@@ -185,7 +185,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ÌõÂëÖ§¸¶
+        #region æ¡ç æ”¯ä»˜
 
         public void BuildBarcodePayment()
         {
@@ -210,7 +210,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// Ã¿¸ô5ÃëÂÖÑ¯ÅĞ¶ÏÓÃ»§ÊÇ·ñÖ§¸¶,×Ü¹²ÂÖÑ¯5´Î
+        /// æ¯éš”5ç§’è½®è¯¢åˆ¤æ–­ç”¨æˆ·æ˜¯å¦æ”¯ä»˜,æ€»å…±è½®è¯¢5æ¬¡
         /// </summary>
         private void PollQueryTradeState(IAuxiliary auxiliary)
         {
@@ -234,7 +234,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// Òì²½Ã¿¸ô5ÃëÂÖÑ¯ÅĞ¶ÏÓÃ»§ÊÇ·ñÖ§¸¶,×Ü¹²ÂÖÑ¯5´Î
+        /// å¼‚æ­¥æ¯éš”5ç§’è½®è¯¢åˆ¤æ–­ç”¨æˆ·æ˜¯å¦æ”¯ä»˜,æ€»å…±è½®è¯¢5æ¬¡
         /// </summary>
         private async Task PollAsync(IAuxiliary auxiliary)
         {
@@ -243,7 +243,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ²éÑ¯¶©µ¥
+        #region æŸ¥è¯¢è®¢å•
 
         public void InitQuery(IAuxiliary auxiliary)
         {
@@ -262,7 +262,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ³·Ïú¶©µ¥
+        #region æ’¤é”€è®¢å•
 
         public void InitCancel(IAuxiliary auxiliary)
         {
@@ -281,7 +281,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ¶©µ¥ÍË¿î
+        #region è®¢å•é€€æ¬¾
 
         public INotify BuildRefund(IAuxiliary auxiliary)
         {
@@ -300,7 +300,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ²éÑ¯ÍË¿î
+        #region æŸ¥è¯¢é€€æ¬¾
 
         public INotify BuildRefundQuery(IAuxiliary auxiliary)
         {
@@ -358,7 +358,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// Í³Ò»ÏÂµ¥
+        /// ç»Ÿä¸€ä¸‹å•
         /// </summary>
         /// <returns></returns>
         private void UnifiedOrder()
@@ -373,7 +373,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// ¶ÁÈ¡·µ»Ø½á¹û
+        /// è¯»å–è¿”å›ç»“æœ
         /// </summary>
         /// <param name="result"></param>
         private void ReadReturnResult(string result)
@@ -384,7 +384,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// »ñµÃÇ©Ãû
+        /// è·å¾—ç­¾å
         /// </summary>
         /// <returns></returns>
         private string BuildSign()
@@ -394,7 +394,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// ÊÇ·ñÊÇÒÑ³É¹¦Ö§¸¶µÄÖ§¸¶Í¨Öª
+        /// æ˜¯å¦æ˜¯å·²æˆåŠŸæ”¯ä»˜çš„æ”¯ä»˜é€šçŸ¥
         /// </summary>
         /// <returns></returns>
         private bool IsSuccessResult()
@@ -408,9 +408,9 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// Ìá½»ÇëÇó
+        /// æäº¤è¯·æ±‚
         /// </summary>
-        /// <param name="isCert">ÊÇ·ñÌí¼ÓÖ¤Êé</param>
+        /// <param name="isCert">æ˜¯å¦æ·»åŠ è¯ä¹¦</param>
         private void Commit(bool isCert = false)
         {
             var cert = isCert ? new X509Certificate2(Merchant.SslCertPath, Merchant.SslCertPassword) : null;
@@ -423,7 +423,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// ÊÇ·ñÊÇÒÑ³É¹¦µÄ·µ»Ø
+        /// æ˜¯å¦æ˜¯å·²æˆåŠŸçš„è¿”å›
         /// </summary>
         /// <returns></returns>
         private bool IsSuccessReturn()

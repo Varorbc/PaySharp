@@ -1,4 +1,4 @@
-using ICanPay.Core;
+ï»¿using ICanPay.Core;
 using System;
 using System.IO;
 using System.Text;
@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace ICanPay.Yeepay
 {
     /// <summary>
-    /// Ò×±¦Íø¹Ø
+    /// æ˜“å®ç½‘å…³
     /// </summary>
     public sealed class YeepayGateway : GatewayBase, IFormPayment, IUrlPayment
     {
 
-        #region Ë½ÓĞ×Ö¶Î
+        #region ç§æœ‰å­—æ®µ
 
         const string payGatewayUrl = "https://www.yeepay.com/app-merchant-proxy/node";
         static string[] notifyParmaName = new string[] { "p1_MerId", "r0_Cmd", "r1_Code", "r2_TrxId", "r3_Amt", "r4_Cur", "r5_Pid", "r6_Order", "r7_Uid", "r8_MP", "r9_BType" };
@@ -20,10 +20,10 @@ namespace ICanPay.Yeepay
         #endregion
 
 
-        #region ¹¹Ôìº¯Êı
+        #region æ„é€ å‡½æ•°
 
         /// <summary>
-        /// ³õÊ¼»¯Ò×±¦Íø¹Ø
+        /// åˆå§‹åŒ–æ˜“å®ç½‘å…³
         /// </summary>
         public YeepayGateway()
         {
@@ -31,9 +31,9 @@ namespace ICanPay.Yeepay
 
 
         /// <summary>
-        /// ³õÊ¼»¯Ò×±¦Íø¹Ø
+        /// åˆå§‹åŒ–æ˜“å®ç½‘å…³
         /// </summary>
-        /// <param name="gatewayData">Íø¹ØÊı¾İ</param>
+        /// <param name="gatewayData">ç½‘å…³æ•°æ®</param>
         public YeepayGateway(GatewayData gatewayData)
             : base(gatewayData)
         {
@@ -42,10 +42,10 @@ namespace ICanPay.Yeepay
         #endregion
 
 
-        #region ·½·¨
+        #region æ–¹æ³•
 
         /// <summary>
-        /// Ö§¸¶¶©µ¥µÄForm HTML´úÂë
+        /// æ”¯ä»˜è®¢å•çš„Form HTMLä»£ç 
         /// </summary>
         /// <returns></returns>
         public string BuildFormPayment()
@@ -56,7 +56,7 @@ namespace ICanPay.Yeepay
 
 
         /// <summary>
-        /// ´´½¨Ö§¸¶¶©µ¥Êı¾İµÄUrl
+        /// åˆ›å»ºæ”¯ä»˜è®¢å•æ•°æ®çš„Url
         /// </summary>
         /// <returns></returns>
         public string BuildUrlPayment()
@@ -67,7 +67,7 @@ namespace ICanPay.Yeepay
 
 
         /// <summary>
-        /// ÑéÖ¤¶©µ¥ÊÇ·ñÖ§¸¶³É¹¦
+        /// éªŒè¯è®¢å•æ˜¯å¦æ”¯ä»˜æˆåŠŸ
         /// </summary>
         /// <returns></returns>
         protected override async Task<bool> CheckNotifyDataAsync()
@@ -83,7 +83,7 @@ namespace ICanPay.Yeepay
 
 
         /// <summary>
-        /// ÊÇ·ñÊÇÒÑ³É¹¦Ö§¸¶µÄÖ§¸¶Í¨Öª
+        /// æ˜¯å¦æ˜¯å·²æˆåŠŸæ”¯ä»˜çš„æ”¯ä»˜é€šçŸ¥
         /// </summary>
         /// <returns></returns>
         private bool IsSuccessResult()
@@ -100,7 +100,7 @@ namespace ICanPay.Yeepay
 
 
         /// <summary>
-        /// ¶ÁÈ¡Í¨ÖªÖĞµÄ¶©µ¥½ğ¶î¡¢¶©µ¥±àºÅ
+        /// è¯»å–é€šçŸ¥ä¸­çš„è®¢å•é‡‘é¢ã€è®¢å•ç¼–å·
         /// </summary>
         private void ReadNotifyOrder()
         {
@@ -110,7 +110,7 @@ namespace ICanPay.Yeepay
 
 
         /// <summary>
-        /// »ñµÃ¶©µ¥Ç©Ãû
+        /// è·å¾—è®¢å•ç­¾å
         /// </summary>
         /// <returns></returns>
         private string GetOrderSign()
@@ -161,7 +161,7 @@ namespace ICanPay.Yeepay
 
 
         /// <summary>
-        /// Í¨ÖªÊı¾İµÄÇ©Ãû
+        /// é€šçŸ¥æ•°æ®çš„ç­¾å
         /// </summary>
         /// <returns></returns>
         private string NotifySign()
@@ -172,7 +172,7 @@ namespace ICanPay.Yeepay
 
 
         /// <summary>
-        /// »ñµÃÍ¨ÖªÇ©ÃûĞèÒªµÄ²ÎÊıµÄÖµ
+        /// è·å¾—é€šçŸ¥ç­¾åéœ€è¦çš„å‚æ•°çš„å€¼
         /// </summary>
         private string GetNotifySignParameterValue()
         {
@@ -191,7 +191,7 @@ namespace ICanPay.Yeepay
 
 
         /// <summary>
-        /// ²éÑ¯¶©µ¥ÊÇ·ñÖ§¸¶³É¹¦
+        /// æŸ¥è¯¢è®¢å•æ˜¯å¦æ”¯ä»˜æˆåŠŸ
         /// </summary>
         /// <returns></returns>
         public bool QueryNow()
@@ -249,7 +249,7 @@ namespace ICanPay.Yeepay
         #endregion
 
 
-        #region ÊôĞÔ
+        #region å±æ€§
 
 
         public override GatewayType GatewayType
@@ -270,18 +270,18 @@ namespace ICanPay.Yeepay
         #endregion
 
 
-        #region Ò×±¦Ç©ÃûËã·¨
+        #region æ˜“å®ç­¾åç®—æ³•
 
         /// <summary>
-        /// Ò×±¦Ç©ÃûËã·¨
+        /// æ˜“å®ç­¾åç®—æ³•
         /// </summary>
         private static class YeepayHmacMD5
         {
             /// <summary>
-            /// Éú³ÉÒ×±¦Ç©Ãû
+            /// ç”Ÿæˆæ˜“å®ç­¾å
             /// </summary>
-            /// <param name="signString">É¢ÁĞ×Ö·û´®</param>
-            /// <param name="key">ÉÌ»§ÃÜÔ¿</param>
+            /// <param name="signString">æ•£åˆ—å­—ç¬¦ä¸²</param>
+            /// <param name="key">å•†æˆ·å¯†é’¥</param>
             public static string HmacSign(string signString, string key)
             {
                 byte[] k_ipad = new byte[64];
@@ -334,7 +334,7 @@ namespace ICanPay.Yeepay
             }
 
             /// <summary>
-            /// HmacMD5¼ÓÃÜ
+            /// HmacMD5åŠ å¯†
             /// </summary>
             private class HmacMD5
             {

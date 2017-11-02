@@ -1,25 +1,25 @@
-using System;
+ï»¿using System;
 using System.Threading.Tasks;
 
 namespace ICanPay.Core
 {
     /// <summary>
-    /// Íø¹Ø·µ»ØµÄÖ§¸¶Í¨ÖªÊı¾İµÄ½ÓÊÜ
+    /// ç½‘å…³è¿”å›çš„æ”¯ä»˜é€šçŸ¥æ•°æ®çš„æ¥å—
     /// </summary>
     public class PaymentNotify
     {
-        #region Ë½ÓĞ×Ö¶Î
+        #region ç§æœ‰å­—æ®µ
 
         private readonly IGateways gateways;
 
         #endregion
 
-        #region ¹¹Ôìº¯Êı
+        #region æ„é€ å‡½æ•°
 
         /// <summary>
-        /// ³õÊ¼»¯Ö§¸¶Í¨Öª
+        /// åˆå§‹åŒ–æ”¯ä»˜é€šçŸ¥
         /// </summary>
-        /// <param name="gateways">ÓÃÓÚÑéÖ¤Ö§¸¶Íø¹Ø·µ»ØÊı¾İµÄÍø¹ØÁĞ±í</param>
+        /// <param name="gateways">ç”¨äºéªŒè¯æ”¯ä»˜ç½‘å…³è¿”å›æ•°æ®çš„ç½‘å…³åˆ—è¡¨</param>
         public PaymentNotify(IGateways gateways)
         {
             this.gateways = gateways;
@@ -27,26 +27,26 @@ namespace ICanPay.Core
 
         #endregion
 
-        #region ÊÂ¼ş
+        #region äº‹ä»¶
 
         /// <summary>
-        /// Íø¹ØÒì²½·µ»ØµÄÖ§¸¶Í¨ÖªÑéÖ¤Ê§°ÜÊ±´¥·¢
+        /// ç½‘å…³å¼‚æ­¥è¿”å›çš„æ”¯ä»˜é€šçŸ¥éªŒè¯å¤±è´¥æ—¶è§¦å‘
         /// </summary>
         public event Action<object, PaymentFailedEventArgs> PaymentFailed;
 
         /// <summary>
-        /// Íø¹ØÒì²½·µ»ØµÄÖ§¸¶Í¨ÖªÑéÖ¤³É¹¦Ê±´¥·¢
+        /// ç½‘å…³å¼‚æ­¥è¿”å›çš„æ”¯ä»˜é€šçŸ¥éªŒè¯æˆåŠŸæ—¶è§¦å‘
         /// </summary>
         public event Action<object, PaymentSucceedEventArgs> PaymentSucceed;
 
         /// <summary>
-        /// Íø¹ØÒì²½·µ»ØµÄÖ§¸¶Í¨ÖªÎŞ·¨Ê¶±ğÊ±´¥·¢
+        /// ç½‘å…³å¼‚æ­¥è¿”å›çš„æ”¯ä»˜é€šçŸ¥æ— æ³•è¯†åˆ«æ—¶è§¦å‘
         /// </summary>
         public event Action<object, UnknownGatewayEventArgs> UnknownGateway;
 
         #endregion
 
-        #region ·½·¨
+        #region æ–¹æ³•
 
         private void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
 
@@ -55,7 +55,7 @@ namespace ICanPay.Core
         private void OnUnknownGateway(UnknownGatewayEventArgs e) => UnknownGateway?.Invoke(this, e);
 
         /// <summary>
-        /// ½ÓÊÕ²¢ÑéÖ¤Íø¹ØµÄÖ§¸¶Í¨Öª
+        /// æ¥æ”¶å¹¶éªŒè¯ç½‘å…³çš„æ”¯ä»˜é€šçŸ¥
         /// </summary>
         public async Task ReceivedAsync()
         {

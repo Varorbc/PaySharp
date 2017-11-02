@@ -1,4 +1,4 @@
-using ICanPay.Core.Utils;
+ï»¿using ICanPay.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 namespace ICanPay.Core
 {
     /// <summary>
-    /// Íø¹ØµÄ³éÏó»ùÀà
+    /// ç½‘å…³çš„æŠ½è±¡åŸºç±»
     /// </summary>
     public abstract class GatewayBase
     {
-        #region ¹«¹²×Ö¶Î
+        #region å…¬å…±å­—æ®µ
 
         public const string TRUE = "true";
         public const string FALSE = "false";
@@ -21,7 +21,7 @@ namespace ICanPay.Core
 
         #endregion
 
-        #region Ë½ÓĞ×Ö¶Î
+        #region ç§æœ‰å­—æ®µ
 
         private GatewayData gatewayData;
         private GatewayAuxiliaryType gatewayAuxiliaryType;
@@ -29,10 +29,10 @@ namespace ICanPay.Core
 
         #endregion
 
-        #region ¹¹Ôìº¯Êı
+        #region æ„é€ å‡½æ•°
 
         /// <summary>
-        /// ¹¹Ôìº¯Êı
+        /// æ„é€ å‡½æ•°
         /// </summary>
         protected GatewayBase()
             : this(new GatewayData())
@@ -40,9 +40,9 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// ¹¹Ôìº¯Êı
+        /// æ„é€ å‡½æ•°
         /// </summary>
-        /// <param name="merchant">ÉÌ»§Êı¾İ</param>
+        /// <param name="merchant">å•†æˆ·æ•°æ®</param>
         protected GatewayBase(IMerchant merchant)
             : this(new GatewayData())
         {
@@ -50,9 +50,9 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// ¹¹Ôìº¯Êı
+        /// æ„é€ å‡½æ•°
         /// </summary>
-        /// <param name="gatewayData">Íø¹ØÊı¾İ</param>
+        /// <param name="gatewayData">ç½‘å…³æ•°æ®</param>
         protected GatewayBase(GatewayData gatewayData)
         {
             this.gatewayData = gatewayData;
@@ -60,40 +60,40 @@ namespace ICanPay.Core
 
         #endregion
 
-        #region ÊôĞÔ
+        #region å±æ€§
 
         /// <summary>
-        /// ¶©µ¥Êı¾İ
+        /// è®¢å•æ•°æ®
         /// </summary>
         public IOrder Order { get; set; }
 
         /// <summary>
-        /// ÉÌ»§Êı¾İ
+        /// å•†æˆ·æ•°æ®
         /// </summary>
         public IMerchant Merchant { get; set; }
 
         /// <summary>
-        /// Í¨ÖªÊı¾İ
+        /// é€šçŸ¥æ•°æ®
         /// </summary>
         public INotify Notify { get; set; }
 
         /// <summary>
-        /// Íø¹ØµÄÀàĞÍ
+        /// ç½‘å…³çš„ç±»å‹
         /// </summary>
         public abstract GatewayType GatewayType { get; }
 
         /// <summary>
-        /// Íø¹ØµÄµØÖ·
+        /// ç½‘å…³çš„åœ°å€
         /// </summary>
         public abstract string GatewayUrl { get; set; }
 
         /// <summary>
-        /// Íø¹ØµÄ½»Ò×ÀàĞÍ
+        /// ç½‘å…³çš„äº¤æ˜“ç±»å‹
         /// </summary>
         public GatewayTradeType GatewayTradeType { get; set; }
 
         /// <summary>
-        /// Íø¹ØÊı¾İ
+        /// ç½‘å…³æ•°æ®
         /// </summary>
         public GatewayData GatewayData
         {
@@ -108,28 +108,28 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// ÊÇ·ñ³É¹¦Ö§¸¶
+        /// æ˜¯å¦æˆåŠŸæ”¯ä»˜
         /// </summary>
         protected abstract bool IsSuccessPay { get; }
 
         /// <summary>
-        /// ÊÇ·ñµÈ´ıÖ§¸¶
+        /// æ˜¯å¦ç­‰å¾…æ”¯ä»˜
         /// </summary>
         protected abstract bool IsWaitPay { get; }
 
         #endregion
 
-        #region ·½·¨
+        #region æ–¹æ³•
 
-        #region ³éÏó·½·¨
+        #region æŠ½è±¡æ–¹æ³•
 
         /// <summary>
-        /// ¼ìÑéÍø¹Ø·µ»ØµÄÍ¨Öª£¬È·ÈÏ¶©µ¥ÊÇ·ñÖ§¸¶³É¹¦
+        /// æ£€éªŒç½‘å…³è¿”å›çš„é€šçŸ¥ï¼Œç¡®è®¤è®¢å•æ˜¯å¦æ”¯ä»˜æˆåŠŸ
         /// </summary>
         protected abstract Task<bool> CheckNotifyDataAsync();
 
         /// <summary>
-        /// µ±½ÓÊÕµ½Ö§¸¶Íø¹ØÍ¨Öª²¢ÑéÖ¤ÎŞÎóÊ±°´ÕÕÖ§¸¶Íø¹ØÒªÇó¸ñÊ½Êä³ö±íÊ¾³É¹¦½ÓÊÕµ½Íø¹ØÍ¨ÖªµÄ×Ö·û´®
+        /// å½“æ¥æ”¶åˆ°æ”¯ä»˜ç½‘å…³é€šçŸ¥å¹¶éªŒè¯æ— è¯¯æ—¶æŒ‰ç…§æ”¯ä»˜ç½‘å…³è¦æ±‚æ ¼å¼è¾“å‡ºè¡¨ç¤ºæˆåŠŸæ¥æ”¶åˆ°ç½‘å…³é€šçŸ¥çš„å­—ç¬¦ä¸²
         /// </summary>
         public virtual void WriteSuccessFlag()
         {
@@ -137,7 +137,7 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// µ±½ÓÊÕµ½Ö§¸¶Íø¹ØÍ¨Öª²¢ÑéÖ¤ÓĞÎóÊ±°´ÕÕÖ§¸¶Íø¹ØÒªÇó¸ñÊ½Êä³ö±íÊ¾Ê§°Ü½ÓÊÕµ½Íø¹ØÍ¨ÖªµÄ×Ö·û´®
+        /// å½“æ¥æ”¶åˆ°æ”¯ä»˜ç½‘å…³é€šçŸ¥å¹¶éªŒè¯æœ‰è¯¯æ—¶æŒ‰ç…§æ”¯ä»˜ç½‘å…³è¦æ±‚æ ¼å¼è¾“å‡ºè¡¨ç¤ºå¤±è´¥æ¥æ”¶åˆ°ç½‘å…³é€šçŸ¥çš„å­—ç¬¦ä¸²
         /// </summary>
         public virtual void WriteFailureFlag()
         {
@@ -146,10 +146,10 @@ namespace ICanPay.Core
 
         #endregion
 
-        #region Ë½ÓĞ·½·¨
+        #region ç§æœ‰æ–¹æ³•
 
         /// <summary>
-        /// ÑéÖ¤¶©µ¥ÊÇ·ñÖ§¸¶³É¹¦
+        /// éªŒè¯è®¢å•æ˜¯å¦æ”¯ä»˜æˆåŠŸ
         /// </summary>
         internal async Task<bool> ValidateNotifyAsync()
         {
@@ -162,9 +162,9 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// ÑéÖ¤²ÎÊı
+        /// éªŒè¯å‚æ•°
         /// </summary>
-        /// <param name="instance">ÑéÖ¤¶ÔÏó</param>
+        /// <param name="instance">éªŒè¯å¯¹è±¡</param>
         protected void ValidateParameter(object instance)
         {
             ValidateUtil.Validate(instance, new Dictionary<object, object>
@@ -180,10 +180,10 @@ namespace ICanPay.Core
 
         #endregion
 
-        #region ¹«¹²·½·¨
+        #region å…¬å…±æ–¹æ³•
 
         /// <summary>
-        /// Ö§¸¶
+        /// æ”¯ä»˜
         /// </summary>
         public string Payment(IOrder order)
         {
@@ -258,13 +258,13 @@ namespace ICanPay.Core
                     break;
             }
 
-            throw new NotSupportedException($"{GatewayType} Ã»ÓĞÊµÏÖ {GatewayTradeType} ½Ó¿Ú");
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° {GatewayTradeType} æ¥å£");
         }
 
         /// <summary>
-        /// ²éÑ¯
+        /// æŸ¥è¯¢
         /// </summary>
-        /// <param name="auxiliary">¸¨Öú²ÎÊı</param>
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
         public INotify Query(IAuxiliary auxiliary)
         {
             if (auxiliary is null)
@@ -278,13 +278,13 @@ namespace ICanPay.Core
                 return query.BuildQuery(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} Ã»ÓĞÊµÏÖ IQuery ½Ó¿Ú");
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° IQuery æ¥å£");
         }
 
         /// <summary>
-        /// ³·Ïú
+        /// æ’¤é”€
         /// </summary>
-        /// <param name="auxiliary">¸¨Öú²ÎÊı</param>
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
         public INotify Cancel(IAuxiliary auxiliary)
         {
             if (auxiliary is null)
@@ -298,13 +298,13 @@ namespace ICanPay.Core
                 return cancel.BuildCancel(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} Ã»ÓĞÊµÏÖ ICancel ½Ó¿Ú");
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° ICancel æ¥å£");
         }
 
         /// <summary>
-        /// ¹Ø±Õ
+        /// å…³é—­
         /// </summary>
-        /// <param name="auxiliary">¸¨Öú²ÎÊı</param>
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
         public INotify Close(IAuxiliary auxiliary)
         {
             if (auxiliary is null)
@@ -318,13 +318,13 @@ namespace ICanPay.Core
                 return close.BuildClose(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} Ã»ÓĞÊµÏÖ IClose ½Ó¿Ú");
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° IClose æ¥å£");
         }
 
         /// <summary>
-        /// ÍË¿î
+        /// é€€æ¬¾
         /// </summary>
-        /// <param name="auxiliary">¸¨Öú²ÎÊı</param>
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
         public INotify Refund(IAuxiliary auxiliary)
         {
             if (auxiliary is null)
@@ -338,13 +338,13 @@ namespace ICanPay.Core
                 return refund.BuildRefund(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} Ã»ÓĞÊµÏÖ IRefund ½Ó¿Ú");
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° IRefund æ¥å£");
         }
 
         /// <summary>
-        /// ÍË¿î²éÑ¯
+        /// é€€æ¬¾æŸ¥è¯¢
         /// </summary>
-        /// <param name="auxiliary">¸¨Öú²ÎÊı</param>
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
         public INotify RefundQuery(IAuxiliary auxiliary)
         {
             if (auxiliary is null)
@@ -358,13 +358,13 @@ namespace ICanPay.Core
                 return refundQuery.BuildRefundQuery(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} Ã»ÓĞÊµÏÖ IRefundQuery ½Ó¿Ú");
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° IRefundQuery æ¥å£");
         }
 
         /// <summary>
-        /// ÕËµ¥ÏÂÔØ
+        /// è´¦å•ä¸‹è½½
         /// </summary>
-        /// <param name="auxiliary">¸¨Öú²ÎÊı</param>
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
         public void BillDownload(IAuxiliary auxiliary)
         {
             if (auxiliary is null)
@@ -379,22 +379,22 @@ namespace ICanPay.Core
                 return;
             }
 
-            throw new NotSupportedException($"{GatewayType} Ã»ÓĞÊµÏÖ IBillDownload ½Ó¿Ú");
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° IBillDownload æ¥å£");
         }
 
         #endregion
 
         #endregion
 
-        #region ÊÂ¼ş
+        #region äº‹ä»¶
 
         /// <summary>
-        /// Íø¹ØÍ¬²½·µ»ØµÄÖ§¸¶Í¨ÖªÑéÖ¤Ê§°ÜÊ±´¥·¢,Ä¿Ç°½öÕë¶ÔÌõÂëÖ§¸¶
+        /// ç½‘å…³åŒæ­¥è¿”å›çš„æ”¯ä»˜é€šçŸ¥éªŒè¯å¤±è´¥æ—¶è§¦å‘,ç›®å‰ä»…é’ˆå¯¹æ¡ç æ”¯ä»˜
         /// </summary>
         public event Action<object, PaymentFailedEventArgs> PaymentFailed;
 
         /// <summary>
-        /// Íø¹ØÍ¬²½·µ»ØµÄÖ§¸¶Í¨ÖªÑéÖ¤³É¹¦Ê±´¥·¢,Ä¿Ç°½öÕë¶ÔÌõÂëÖ§¸¶
+        /// ç½‘å…³åŒæ­¥è¿”å›çš„æ”¯ä»˜é€šçŸ¥éªŒè¯æˆåŠŸæ—¶è§¦å‘,ç›®å‰ä»…é’ˆå¯¹æ¡ç æ”¯ä»˜
         /// </summary>
         public event Action<object, PaymentSucceedEventArgs> PaymentSucceed;
 
