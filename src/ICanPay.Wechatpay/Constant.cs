@@ -28,5 +28,10 @@
         public const string CNY = "cny";
         public const string REFUND_DESC = "refund_desc";
         public const string REFUND_ID = "REFUND_ID";
+        public const string UNIONID = "unionid";
+        public const string ERRCODE = "errcode";
+        public const string ERRMSG = "errmsg";
+        public const string MCH_ID = "mch_id";
+        public const string AUTH_CODE = "auth_code";
     }
 }

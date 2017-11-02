@@ -29,6 +29,8 @@ namespace ICanPay.Wechatpay
         private const string REPORTGATEWAYURL = "https://api.mch.weixin.qq.com/payitil/report";
         private const string BATCHQUERYCOMMENTGATEWAYURL = "https://api.mch.weixin.qq.com/billcommentsp/batchquerycomment";
         private const string BARCODEGATEWAYURL = "https://api.mch.weixin.qq.com/pay/micropay";
+        private const string ACCESSTOKENURL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type=authorization_code";
+        private const string AUTHCODETOOPENIDURL = "https://api.mch.weixin.qq.com/tools/authcodetoopenid";
 
         #endregion
 
@@ -88,7 +90,6 @@ namespace ICanPay.Wechatpay
         public string BuildAppPayment()
         {
             InitAppPayment();
-            UnifiedOrder();
             InitAppParameter();
             return GatewayData.ToJson();
         }
@@ -97,6 +98,7 @@ namespace ICanPay.Wechatpay
         {
             Order.TradeType = Constant.APP;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            UnifiedOrder();
         }
 
         /// <summary>
@@ -122,7 +124,6 @@ namespace ICanPay.Wechatpay
         public string BuildUrlPayment()
         {
             InitUrlPayment();
-            UnifiedOrder();
             return Notify.MWebUrl;
         }
 
@@ -130,6 +131,7 @@ namespace ICanPay.Wechatpay
         {
             Order.TradeType = Constant.MWEB;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            UnifiedOrder();
         }
 
         #endregion
@@ -139,15 +141,17 @@ namespace ICanPay.Wechatpay
         public string BuildPublicPayment()
         {
             InitPublicPayment();
-            UnifiedOrder();
             InitPublicParameter();
             return GatewayData.ToJson();
         }
 
         public void InitPublicPayment()
         {
+            OAuth oAuth = GetAccessTokenByCode(Order.Code);
+            Order.OpenId = oAuth.OpenId;
             Order.TradeType = Constant.JSAPI;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            UnifiedOrder();
         }
 
         /// <summary>
@@ -172,7 +176,6 @@ namespace ICanPay.Wechatpay
         public string BuildAppletPayment()
         {
             InitAppletPayment();
-            UnifiedOrder();
             InitPublicParameter();
             return GatewayData.ToJson();
         }
@@ -181,6 +184,7 @@ namespace ICanPay.Wechatpay
         {
             Order.TradeType = Constant.JSAPI;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            UnifiedOrder();
         }
 
         #endregion
@@ -205,8 +209,9 @@ namespace ICanPay.Wechatpay
 
         public void InitBarcodePayment()
         {
-            GatewayUrl = BARCODEGATEWAYURL;
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+            UnifiedOrder();
+            GatewayUrl = BARCODEGATEWAYURL;
         }
 
         /// <summary>
@@ -333,6 +338,7 @@ namespace ICanPay.Wechatpay
 
         private void InitOrderParameter()
         {
+            GatewayData.Clear();
             Order.Amount *= 100;
             Merchant.NonceStr = Util.GenerateNonceStr();
             Merchant.DeviceInfo = Constant.WEB;
@@ -370,6 +376,48 @@ namespace ICanPay.Wechatpay
             ValidateParameter(Order);
 
             Commit();
+        }
+
+        /// <summary>
+        /// 通过code获取AccessToken
+        /// </summary>
+        /// <param name="code"></param>
+        public OAuth GetAccessTokenByCode(string code)
+        {
+            string result = HttpUtil
+                .GetAsync(string.Format(ACCESSTOKENURL, Merchant.AppId, Merchant.AppSecret, code))
+                .GetAwaiter()
+                .GetResult();
+            GatewayData.FromJson(result);
+
+            int _code = GatewayData.GetIntValue(Constant.ERRCODE);
+            int _msg = GatewayData.GetIntValue(Constant.ERRMSG);
+            if (_code == 40029)
+            {
+                throw new Exception(_code + " " + _msg);
+            }
+
+            return GatewayData.ToObject<OAuth>();
+        }
+
+        /// <summary>
+        /// 通过授权码获取OpenId
+        /// </summary>
+        /// <param name="authCode">授权码</param>
+        public string GetOpenIdByAuthCode(string authCode)
+        {
+            GatewayData.Clear();
+            Merchant.NonceStr = Util.GenerateNonceStr();
+            GatewayData.Add(Constant.APPID, Merchant.AppId);
+            GatewayData.Add(Constant.MCH_ID, Merchant.AppId);
+            GatewayData.Add(Constant.AUTH_CODE, Merchant.AppId);
+            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
+            Merchant.Sign = BuildSign();
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+
+            Commit();
+
+            return Notify.OpenId;
         }
 
         /// <summary>
