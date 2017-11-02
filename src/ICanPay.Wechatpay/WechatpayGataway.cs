@@ -17,7 +17,7 @@ namespace ICanPay.Wechatpay
 
         #region Ë½ÓÐ×Ö¶Î
 
-        private Merchant merchant;
+        private readonly Merchant merchant;
         private const string USERPAYING = "USERPAYING";
         private const string UNIFIEDORDERGATEWAYURL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         private const string QUERYGATEWAYURL = "https://api.mch.weixin.qq.com/pay/orderquery";

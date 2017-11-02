@@ -136,10 +136,7 @@ namespace ICanPay.Core.Utils
                 {
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
-                        if (reader != null)
-                        {
-                            return reader.ReadToEnd().Trim();
-                        }
+                        return reader.ReadToEnd().Trim();
                     }
                 }
             }
@@ -151,8 +148,6 @@ namespace ICanPay.Core.Utils
             {
                 request.Abort();
             }
-
-            return string.Empty;
         }
 
         /// <summary>
@@ -196,10 +191,7 @@ namespace ICanPay.Core.Utils
                 {
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
-                        if (reader != null)
-                        {
-                            return reader.ReadToEnd().Trim();
-                        }
+                        return reader.ReadToEnd().Trim();
                     }
                 }
             }
@@ -211,8 +203,6 @@ namespace ICanPay.Core.Utils
             {
                 request.Abort();
             }
-
-            return string.Empty;
         }
 
         /// <summary>

@@ -245,11 +245,11 @@ namespace ICanPay.Core
             sb.Append("<xml>");
             foreach (var item in Values)
             {
-                if (item.Value.GetType() == typeof(double))
+                if (item.Value is double)
                 {
                     sb.AppendFormat("<{0}>{1}</{0}>", item.Key, item.Value);
                 }
-                else if (item.Value.GetType() == typeof(string))
+                else if (item.Value is string)
                 {
                     sb.AppendFormat("<{0}><![CDATA[{1}]]></{0}>", item.Key, item.Value);
                 }
@@ -414,8 +414,9 @@ namespace ICanPay.Core
             Clear();
             if (!string.IsNullOrEmpty(json))
             {
-                JObject jObject = JObject.Parse(json);
-                foreach (JProperty item in jObject.Children())
+                var jObject = JObject.Parse(json);
+                var list = jObject.Children().OfType<JProperty>();
+                foreach (var item in list)
                 {
                     Add(item.Name, item.Value.ToString());
                 }

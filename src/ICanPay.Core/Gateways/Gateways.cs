@@ -10,7 +10,7 @@ namespace ICanPay.Core
     {
         #region 私有字段
 
-        private ICollection<GatewayBase> list;
+        private readonly ICollection<GatewayBase> list;
 
         #endregion
 

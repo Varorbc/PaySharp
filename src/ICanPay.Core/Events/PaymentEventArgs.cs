@@ -12,7 +12,7 @@ namespace ICanPay.Core
         #region 私有字段
 
         protected GatewayBase gateway;
-        private string notifyServerHostAddress;
+        private readonly string notifyServerHostAddress;
 
         #endregion
 
@@ -22,7 +22,7 @@ namespace ICanPay.Core
         /// 初始化支付事件数据的基类
         /// </summary>
         /// <param name="gateway">支付网关</param>
-        public PaymentEventArgs(GatewayBase gateway)
+        protected PaymentEventArgs(GatewayBase gateway)
         {
             this.gateway = gateway;
             notifyServerHostAddress = HttpUtil.LocalIpAddress.ToString();

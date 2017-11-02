@@ -19,7 +19,7 @@ namespace ICanPay.Alipay
         #region 私有字段
 
         private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do?charset=UTF-8";
-        private Merchant merchant;
+        private readonly Merchant merchant;
 
         #endregion
 

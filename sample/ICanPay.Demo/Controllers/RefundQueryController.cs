@@ -30,7 +30,7 @@ namespace ICanPay.Demo.Controllers
             {
                 OutTradeNo = id,
                 TradeNo = "12",
-                OutRequestNo = "123"
+                OutRefundNo = "123"
             });
         }
 

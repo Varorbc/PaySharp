@@ -10,7 +10,7 @@ namespace ICanPay.Core
     {
         #region Ë½ÓÐ×Ö¶Î
 
-        private IGateways gateways;
+        private readonly IGateways gateways;
 
         #endregion
 

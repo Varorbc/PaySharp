@@ -25,7 +25,7 @@ namespace ICanPay.Core
 
         private GatewayData gatewayData;
         private GatewayAuxiliaryType gatewayAuxiliaryType;
-        private string timeFormat = "yyyyMMddHHmmss";
+        private readonly string timeFormat = "yyyyMMddHHmmss";
 
         #endregion
 

@@ -39,13 +39,13 @@ namespace ICanPay.Wechatpay
         public string Key { get; set; }
 
         /// <summary>
-        /// 公众帐号secert（仅JSAPI支付的时候需要配置）
+        /// 应用Secret
         /// </summary>
         [NotAdd]
         public string AppSecret { get; set; }
 
         /// <summary>
-        /// 证书路径,注意应该填写绝对路径（仅退款、撤销订单时需要）
+        /// 证书路径,注意应该填写绝对路径
         /// </summary>
         [NotAdd]
         public string SslCertPath { get; set; }
