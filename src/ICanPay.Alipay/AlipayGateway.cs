@@ -273,13 +273,15 @@ namespace ICanPay.Alipay
 
         #region 对账单下载
 
-        public Stream BuildBillDownload(IAuxiliary auxiliary)
+        public FileStream BuildBillDownload(IAuxiliary auxiliary)
         {
             InitBillDownload(auxiliary);
 
             Commit(Constant.ALIPAY_DATA_DATASERVICE_BILL_DOWNLOADURL_QUERY_RESPONSE);
 
-            return HttpUtil.Download(Notify.BillDownloadUrl);
+            GatewayData.FromUrl(Notify.BillDownloadUrl);
+
+            return HttpUtil.Download(Notify.BillDownloadUrl, $"{DateTime.Now.ToString(TIMEFORMAT)}.{GatewayData.GetStringValue(Constant.FILETYPE)}");
         }
 
         public void InitBillDownload(IAuxiliary auxiliary)

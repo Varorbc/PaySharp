@@ -22,6 +22,7 @@ namespace ICanPay.Core
         #region 属性
 
         public SortedDictionary<string, object> Values { get; set; } = new SortedDictionary<string, object>();
+        private readonly string defaultResult = "defaultResult";
 
         #endregion
 
@@ -245,17 +246,14 @@ namespace ICanPay.Core
             sb.Append("<xml>");
             foreach (var item in Values)
             {
-                if (item.Value is double)
-                {
-                    sb.AppendFormat("<{0}>{1}</{0}>", item.Key, item.Value);
-                }
-                else if (item.Value is string)
+                if (item.Value is string)
                 {
                     sb.AppendFormat("<{0}><![CDATA[{1}]]></{0}>", item.Key, item.Value);
+
                 }
                 else
                 {
-                    throw new Exception("GatewayData字段数据类型错误");
+                    sb.AppendFormat("<{0}>{1}</{0}>", item.Key, item.Value);
                 }
             }
             sb.Append("</xml>");
@@ -270,18 +268,25 @@ namespace ICanPay.Core
         /// <returns></returns>
         public void FromXml(string xml)
         {
-            Clear();
-            if (!string.IsNullOrEmpty(xml))
+            try
             {
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(xml);
-                var xmlNode = xmlDoc.FirstChild;
-                var nodes = xmlNode.ChildNodes;
-                foreach (var item in nodes)
+                Clear();
+                if (!string.IsNullOrEmpty(xml))
                 {
-                    var xe = (XmlElement)item;
-                    Add(xe.Name, xe.InnerText);
+                    var xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(xml);
+                    var xmlNode = xmlDoc.FirstChild;
+                    var nodes = xmlNode.ChildNodes;
+                    foreach (var item in nodes)
+                    {
+                        var xe = (XmlElement)item;
+                        Add(xe.Name, xe.InnerText);
+                    }
                 }
+            }
+            catch
+            {
+                Add(defaultResult, xml);
             }
         }
 
@@ -330,23 +335,30 @@ namespace ICanPay.Core
         /// <returns></returns>
         public void FromUrl(string url)
         {
-            Clear();
-            if (!string.IsNullOrEmpty(url))
+            try
             {
-                int index = url.IndexOf('?');
-
-                if (index == 0)
+                Clear();
+                if (!string.IsNullOrEmpty(url))
                 {
-                    url = url.Substring(index + 1);
-                }
+                    int index = url.IndexOf('?');
 
-                var regex = new Regex(@"(^|&)?(\w+)=([^&]+)(&|$)?", RegexOptions.Compiled);
-                var mc = regex.Matches(url);
+                    if (index == 0)
+                    {
+                        url = url.Substring(index + 1);
+                    }
 
-                foreach (Match item in mc)
-                {
-                    Add(item.Result("$2"), WebUtility.UrlDecode(item.Result("$3")));
+                    var regex = new Regex(@"(^|&)?(\w+)=([^&]+)(&|$)?", RegexOptions.Compiled);
+                    var mc = regex.Matches(url);
+
+                    foreach (Match item in mc)
+                    {
+                        Add(item.Result("$2"), WebUtility.UrlDecode(item.Result("$3")));
+                    }
                 }
+            }
+            catch
+            {
+                Add(defaultResult, url);
             }
         }
 
@@ -357,9 +369,9 @@ namespace ICanPay.Core
         /// <returns></returns>
         public void FromForm(IFormCollection form)
         {
-            Clear();
             try
             {
+                Clear();
                 var allKeys = form.Keys;
 
                 foreach (var item in allKeys)
@@ -411,15 +423,22 @@ namespace ICanPay.Core
         /// <returns></returns>
         public void FromJson(string json)
         {
-            Clear();
-            if (!string.IsNullOrEmpty(json))
+            try
             {
-                var jObject = JObject.Parse(json);
-                var list = jObject.Children().OfType<JProperty>();
-                foreach (var item in list)
+                Clear();
+                if (!string.IsNullOrEmpty(json))
                 {
-                    Add(item.Name, item.Value.ToString());
+                    var jObject = JObject.Parse(json);
+                    var list = jObject.Children().OfType<JProperty>();
+                    foreach (var item in list)
+                    {
+                        Add(item.Name, item.Value.ToString());
+                    }
                 }
+            }
+            catch
+            {
+                Add(defaultResult, json);
             }
         }
 
@@ -471,6 +490,15 @@ namespace ICanPay.Core
         public bool Remove(string key)
         {
             return Values.Remove(key);
+        }
+
+        /// <summary>
+        /// 获取默认结果,当From无法转换时,值才存在
+        /// </summary>
+        /// <returns></returns>
+        public string GetDefaultResult()
+        {
+            return GetStringValue(defaultResult);
         }
 
         #endregion

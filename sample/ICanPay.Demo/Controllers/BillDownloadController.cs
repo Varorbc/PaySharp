@@ -14,7 +14,7 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index()
         {
-            AlipayBillDownload();
+            WechatpayBillDownload();
 
             return Ok();
         }
@@ -30,6 +30,20 @@ namespace ICanPay.Demo.Controllers
             {
                 BillType = "trade",
                 BillDate = "2017-10-31"
+            });
+        }
+
+        /// <summary>
+        /// 微信对账单下载
+        /// </summary>
+        private void WechatpayBillDownload()
+        {
+            var gateway = gateways.Get(GatewayType.Wechatpay);
+
+            gateway.BillDownload(new Wechatpay.Auxiliary
+            {
+                BillType = "ALL",
+                BillDate = "20171002"
             });
         }
     }

@@ -99,20 +99,19 @@ namespace ICanPay.Core.Utils
         }
 
         /// <summary>
-        /// 输出内容
+        /// 输出文件
         /// </summary>
-        /// <param name="stream">流</param>
-        /// <param name="fileName">文件名</param>
-        public static void Write(Stream stream, string fileName)
+        /// <param name="stream">文件流</param>
+        public static void Write(FileStream stream)
         {
-            stream.Position = 0;
             long size = stream.Length;
             byte[] buffer = new byte[size];
             stream.Read(buffer, 0, (int)size);
-            stream.Close();
+            stream.Dispose();
+            File.Delete(stream.Name);
 
             Current.Response.ContentType = "application/octet-stream";
-            Current.Response.Headers.Add("Content-Disposition", "attachment;filename=" + WebUtility.UrlEncode(fileName));
+            Current.Response.Headers.Add("Content-Disposition", "attachment;filename=" + WebUtility.UrlEncode(Path.GetFileName(stream.Name)));
             Current.Response.Headers.Add("Content-Length", size.ToString());
 
             Current.Response.Body.WriteAsync(buffer, 0, (int)size).GetAwaiter().GetResult();
@@ -221,11 +220,11 @@ namespace ICanPay.Core.Utils
         /// 下载
         /// </summary>
         /// <param name="url">url</param>
+        /// <param name="path">下载路径</param>
         /// <returns></returns>
-        public static Stream Download(string url)
+        public static FileStream Download(string url, string path)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            Stream stream;
 
             try
             {
@@ -233,14 +232,18 @@ namespace ICanPay.Core.Utils
                 {
                     using (Stream responseStream = response.GetResponseStream())
                     {
-                        stream = new MemoryStream();
+                        FileStream fileStream = new FileStream(path, FileMode.Create);
                         byte[] buffer = new byte[1024];
                         int size = responseStream.Read(buffer, 0, buffer.Length);
                         while (size > 0)
                         {
-                            stream.Write(buffer, 0, size);
+                            fileStream.Write(buffer, 0, size);
                             size = responseStream.Read(buffer, 0, buffer.Length);
                         }
+
+                        fileStream.Position = 0;
+                        return fileStream;
+
                     }
                 }
             }
@@ -252,19 +255,17 @@ namespace ICanPay.Core.Utils
             {
                 request.Abort();
             }
-
-            stream.Close();
-            return stream;
         }
 
         /// <summary>
         /// 异步下载
         /// </summary>
         /// <param name="url">url</param>
+        /// <param name="path">下载路径</param>
         /// <returns></returns>
-        public static async Task<Stream> DownloadAsync(string url)
+        public static async Task<FileStream> DownloadAsync(string url, string path)
         {
-            return await Task.Run(() => Download(url));
+            return await Task.Run(() => Download(url, path));
         }
 
         #endregion

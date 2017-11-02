@@ -40,5 +40,6 @@
         public const string ALIPAY_TRADE_FASTPAY_REFUND_QUERY_RESPONSE = "alipay_trade_fastpay_refund_query_response";
         public const string ALIPAY_DATA_DATASERVICE_BILL_DOWNLOADURL_QUERY_RESPONSE = "alipay_data_dataservice_bill_downloadurl_query_response";
         public const string OUT_REQUEST_NO = "out_request_no";
+        public const string FILETYPE = "fileType";
     }
 }

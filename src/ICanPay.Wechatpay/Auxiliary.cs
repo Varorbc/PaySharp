@@ -31,12 +31,12 @@ namespace ICanPay.Wechatpay
         /// </summary>
         [StringLength(32, ErrorMessage = "微信退款单号最大长度为32位")]
         [ReName(Name = Constant.REFUND_ID)]
-        public string RefundNo { get ; set ; }
+        public string RefundNo { get; set; }
 
         /// <summary>
         /// 标价金额,订单总金额，单位为元，详见支付金额
         /// </summary>
-        [ReName(Name =Constant.TOTAL_FEE)]
+        [ReName(Name = Constant.TOTAL_FEE)]
         [Necessary(GatewayAuxiliaryType.Refund)]
         public double Amount { get; set; }
 
@@ -74,11 +74,27 @@ namespace ICanPay.Wechatpay
         /// </summary>
         public int Offset { get; set; }
 
+        /// <summary>
+        /// 对账单日期，下载对账单的日期，格式：20140603
+        /// </summary>
+        public string BillDate { get; set; }
+
+        /// <summary>
+        /// 账单类型	，
+        /// ALL，返回当日所有订单信息，默认值
+        /// SUCCESS，返回当日成功支付的订单
+        /// REFUND，返回当日退款订单
+        /// </summary>
+        public string BillType { get; set; }
+
         public bool Validate(GatewayAuxiliaryType gatewayAuxiliaryType)
         {
-            if (string.IsNullOrEmpty(OutTradeNo) && string.IsNullOrEmpty(TradeNo))
+            if (gatewayAuxiliaryType != GatewayAuxiliaryType.BillDownload)
             {
-                throw new ArgumentNullException("商户订单号和支付宝订单号不可同时为空");
+                if (string.IsNullOrEmpty(OutTradeNo) && string.IsNullOrEmpty(TradeNo))
+                {
+                    throw new ArgumentNullException("商户订单号和支付宝订单号不可同时为空");
+                }
             }
 
             return true;

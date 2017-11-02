@@ -31,6 +31,7 @@ namespace ICanPay.Alipay
         [ReName(Name = Constant.OUT_REQUEST_NO)]
         public string OutRefundNo { get; set; }
 
+        [JsonIgnore]
         public string RefundNo { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         /// <summary>

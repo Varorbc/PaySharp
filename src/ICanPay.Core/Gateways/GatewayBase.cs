@@ -18,6 +18,7 @@ namespace ICanPay.Core
         public const string FAILURE = "failure";
         public const string FAIL = "FAIL";
         public const string TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+        public const string TIMEFORMAT = "yyyyMMddHHmmss";
 
         #endregion
 
@@ -25,7 +26,6 @@ namespace ICanPay.Core
 
         private GatewayData gatewayData;
         private GatewayAuxiliaryType gatewayAuxiliaryType;
-        private readonly string timeFormat = "yyyyMMddHHmmss";
 
         #endregion
 
@@ -375,7 +375,7 @@ namespace ICanPay.Core
             if (this is IBillDownload billDownload)
             {
                 gatewayAuxiliaryType = GatewayAuxiliaryType.BillDownload;
-                HttpUtil.Write(billDownload.BuildBillDownload(auxiliary), $"{DateTime.Now.ToString(timeFormat)}.xls");
+                HttpUtil.Write(billDownload.BuildBillDownload(auxiliary));
                 return;
             }
 

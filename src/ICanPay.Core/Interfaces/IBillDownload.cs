@@ -11,7 +11,7 @@ namespace ICanPay.Core
         /// 生成账单下载订单参数
         /// </summary>
         /// <param name="auxiliary">辅助参数</param>
-        Stream BuildBillDownload(IAuxiliary auxiliary);
+        FileStream BuildBillDownload(IAuxiliary auxiliary);
 
         /// <summary>
         /// 初始化账单下载订单参数
