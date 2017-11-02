@@ -7,7 +7,7 @@
     <Title>ICanPay.Core</Title>
     <Authors>Varorbc</Authors>
     <Description>支付核心</Description>
-    <Version>1.0.8</Version>
+    <Version>1.0.9</Version>
     <PackageTags>dotnetcore;pay;</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Varorbc/ICanPay</RepositoryUrl>
