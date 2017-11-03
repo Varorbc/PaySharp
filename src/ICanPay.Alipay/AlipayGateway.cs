@@ -53,13 +53,15 @@ namespace ICanPay.Alipay
 
         protected override bool IsSuccessPay => Notify.Code == "TRADE_SUCCESS";
 
-        #endregion
+        protected override string[] NotifyVerifyParameter => new string[] { "notify_type", "notify_id", "notify_time", "sign", "sign_type" };
 
-        #region 方法
+    #endregion
 
-        #region 表单支付
+    #region 方法
 
-        public string BuildFormPayment()
+    #region 表单支付
+
+    public string BuildFormPayment()
         {
             InitFormPayment();
 

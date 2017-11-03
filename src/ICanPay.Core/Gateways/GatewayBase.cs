@@ -117,6 +117,11 @@ namespace ICanPay.Core
         /// </summary>
         protected abstract bool IsWaitPay { get; }
 
+        /// <summary>
+        /// 需要验证的参数名称数组，用于识别不同的网关类型。
+        /// </summary>
+        protected internal abstract string[] NotifyVerifyParameter { get; }
+
         #endregion
 
         #region 方法
@@ -187,7 +192,7 @@ namespace ICanPay.Core
         /// </summary>
         public string Payment(IOrder order)
         {
-            if(order is null)
+            if (order is null)
             {
                 throw new ArgumentNullException(nameof(IOrder));
             }

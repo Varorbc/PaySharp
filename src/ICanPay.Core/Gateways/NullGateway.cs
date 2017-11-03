@@ -29,6 +29,8 @@ namespace ICanPay.Core
 
         protected override bool IsWaitPay => false;
 
+        protected internal override string[] NotifyVerifyParameter => new string[0];
+
         #endregion
 
         #region 方法

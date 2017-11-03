@@ -66,6 +66,8 @@ namespace ICanPay.Wechatpay
 
         protected override bool IsWaitPay => Notify.TradeState.ToLower() == USERPAYING;
 
+        protected override string[] NotifyVerifyParameter => new string[] { "return_code", "appid", "mch_id", "nonce_str", "result_code" };
+
         #endregion
 
         #region 方法
