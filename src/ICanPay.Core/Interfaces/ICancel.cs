@@ -9,11 +9,13 @@ namespace ICanPay.Core
         /// <summary>
         /// 生成撤销订单参数
         /// </summary>
-        INotify BuildCancel();
+        /// <param name="auxiliary">辅助参数</param>
+        INotify BuildCancel(IAuxiliary auxiliary);
 
         /// <summary>
         /// 初始化撤销订单参数
         /// </summary>
-        void InitCancel();
+        /// <param name="auxiliary">辅助参数</param>
+        void InitCancel(IAuxiliary auxiliary);
     }
 }

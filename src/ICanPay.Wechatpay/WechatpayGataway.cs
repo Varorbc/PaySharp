@@ -1,22 +1,25 @@
-using ICanPay.Core;
+ï»¿using ICanPay.Core;
+using ICanPay.Core.Utils;
 using System;
+using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ICanPay.Wechatpay
 {
     /// <summary>
-    /// Î¢ĞÅÖ§¸¶Íø¹Ø
+    /// å¾®ä¿¡æ”¯ä»˜ç½‘å…³
     /// </summary>
     public sealed class WechatpayGataway : GatewayBase,
         IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment, IBarcodePayment,
-        IQuery, ICancel
+        IQuery, ICancel, IClose, IBillDownload, IRefund, IRefundQuery
     {
 
-        #region Ë½ÓĞ×Ö¶Î
+        #region ç§æœ‰å­—æ®µ
 
-        private Merchant merchant;
+        private readonly Merchant merchant;
         private const string USERPAYING = "USERPAYING";
         private const string UNIFIEDORDERGATEWAYURL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         private const string QUERYGATEWAYURL = "https://api.mch.weixin.qq.com/pay/orderquery";
@@ -28,15 +31,17 @@ namespace ICanPay.Wechatpay
         private const string REPORTGATEWAYURL = "https://api.mch.weixin.qq.com/payitil/report";
         private const string BATCHQUERYCOMMENTGATEWAYURL = "https://api.mch.weixin.qq.com/billcommentsp/batchquerycomment";
         private const string BARCODEGATEWAYURL = "https://api.mch.weixin.qq.com/pay/micropay";
+        private const string ACCESSTOKENURL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type=authorization_code";
+        private const string AUTHCODETOOPENIDURL = "https://api.mch.weixin.qq.com/tools/authcodetoopenid";
 
         #endregion
 
-        #region ¹¹Ôìº¯Êı
+        #region æ„é€ å‡½æ•°
 
         /// <summary>
-        /// ³õÊ¼»¯Î¢ĞÅÖ§¸¶Íø¹Ø
+        /// åˆå§‹åŒ–å¾®ä¿¡æ”¯ä»˜ç½‘å…³
         /// </summary>
-        /// <param name="merchant">ÉÌ»§Êı¾İ</param>
+        /// <param name="merchant">å•†æˆ·æ•°æ®</param>
         public WechatpayGataway(Merchant merchant)
             : base(merchant)
         {
@@ -45,7 +50,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ÊôĞÔ
+        #region å±æ€§
 
         public override GatewayType GatewayType => GatewayType.Wechatpay;
 
@@ -63,9 +68,9 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ·½·¨
+        #region æ–¹æ³•
 
-        #region É¨ÂëÖ§¸¶
+        #region æ‰«ç æ”¯ä»˜
 
         public string BuildScanPayment()
         {
@@ -82,12 +87,11 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region AppÖ§¸¶
+        #region Appæ”¯ä»˜
 
         public string BuildAppPayment()
         {
             InitAppPayment();
-            UnifiedOrder();
             InitAppParameter();
             return GatewayData.ToJson();
         }
@@ -96,10 +100,11 @@ namespace ICanPay.Wechatpay
         {
             Order.TradeType = Constant.APP;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            UnifiedOrder();
         }
 
         /// <summary>
-        /// ³õÊ¼»¯APP¶Ëµ÷ÆğÖ§¸¶µÄ²ÎÊı
+        /// åˆå§‹åŒ–APPç«¯è°ƒèµ·æ”¯ä»˜çš„å‚æ•°
         /// </summary>
         private void InitAppParameter()
         {
@@ -116,12 +121,11 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region UrlÖ§¸¶
+        #region Urlæ”¯ä»˜
 
         public string BuildUrlPayment()
         {
             InitUrlPayment();
-            UnifiedOrder();
             return Notify.MWebUrl;
         }
 
@@ -129,28 +133,31 @@ namespace ICanPay.Wechatpay
         {
             Order.TradeType = Constant.MWEB;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            UnifiedOrder();
         }
 
         #endregion
 
-        #region ¹«ÖÚºÅÖ§¸¶
+        #region å…¬ä¼—å·æ”¯ä»˜
 
         public string BuildPublicPayment()
         {
             InitPublicPayment();
-            UnifiedOrder();
             InitPublicParameter();
             return GatewayData.ToJson();
         }
 
         public void InitPublicPayment()
         {
+            OAuth oAuth = GetAccessTokenByCode(Order.Code);
+            Order.OpenId = oAuth.OpenId;
             Order.TradeType = Constant.JSAPI;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            UnifiedOrder();
         }
 
         /// <summary>
-        /// ³õÊ¼»¯¹«ÖÚºÅµ÷ÆğÖ§¸¶µÄ²ÎÊı
+        /// åˆå§‹åŒ–å…¬ä¼—å·è°ƒèµ·æ”¯ä»˜çš„å‚æ•°
         /// </summary>
         private void InitPublicParameter()
         {
@@ -166,12 +173,11 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region Ğ¡³ÌĞòÖ§¸¶
+        #region å°ç¨‹åºæ”¯ä»˜
 
         public string BuildAppletPayment()
         {
             InitAppletPayment();
-            UnifiedOrder();
             InitPublicParameter();
             return GatewayData.ToJson();
         }
@@ -180,11 +186,12 @@ namespace ICanPay.Wechatpay
         {
             Order.TradeType = Constant.JSAPI;
             Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            UnifiedOrder();
         }
 
         #endregion
 
-        #region ÌõÂëÖ§¸¶
+        #region æ¡ç æ”¯ä»˜
 
         public void BuildBarcodePayment()
         {
@@ -192,24 +199,32 @@ namespace ICanPay.Wechatpay
 
             Commit();
 
-            PollQueryTradeState();
+            if (!string.IsNullOrEmpty(Notify.TransactionId))
+            {
+                PollQueryTradeState(new Auxiliary
+                {
+                    TradeNo = Notify.TransactionId,
+                    OutTradeNo = Notify.OutTradeNo
+                });
+            }
         }
 
         public void InitBarcodePayment()
         {
-            GatewayUrl = BARCODEGATEWAYURL;
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+            UnifiedOrder();
+            GatewayUrl = BARCODEGATEWAYURL;
         }
 
         /// <summary>
-        /// Ã¿¸ô5ÃëÂÖÑ¯ÅĞ¶ÏÓÃ»§ÊÇ·ñÖ§¸¶,×Ü¹²ÂÖÑ¯5´Î
+        /// æ¯éš”5ç§’è½®è¯¢åˆ¤æ–­ç”¨æˆ·æ˜¯å¦æ”¯ä»˜,æ€»å…±è½®è¯¢5æ¬¡
         /// </summary>
-        private void PollQueryTradeState()
+        private void PollQueryTradeState(IAuxiliary auxiliary)
         {
             for (int i = 0; i < 5; i++)
             {
                 Thread.Sleep(5000);
-                BuildQuery();
+                BuildQuery(auxiliary);
                 if (IsSuccessPay)
                 {
                     OnPaymentSucceed(new PaymentSucceedEventArgs(this));
@@ -217,39 +232,35 @@ namespace ICanPay.Wechatpay
                 }
             }
 
-            BuildCancel();
+            BuildCancel(auxiliary);
             if (Notify.Recall == "Y")
             {
-                BuildCancel();
+                BuildCancel(auxiliary);
             }
             OnPaymentFailed(new PaymentFailedEventArgs(this));
         }
 
         /// <summary>
-        /// Òì²½Ã¿¸ô5ÃëÂÖÑ¯ÅĞ¶ÏÓÃ»§ÊÇ·ñÖ§¸¶,×Ü¹²ÂÖÑ¯5´Î
+        /// å¼‚æ­¥æ¯éš”5ç§’è½®è¯¢åˆ¤æ–­ç”¨æˆ·æ˜¯å¦æ”¯ä»˜,æ€»å…±è½®è¯¢5æ¬¡
         /// </summary>
-        private async Task PollAsync()
+        private async Task PollAsync(IAuxiliary auxiliary)
         {
-            await Task.Run(() => PollQueryTradeState());
+            await Task.Run(() => PollQueryTradeState(auxiliary));
         }
 
         #endregion
 
-        #region ²éÑ¯¶©µ¥
+        #region æŸ¥è¯¢è®¢å•
 
-        public void InitQuery()
+        public void InitQuery(IAuxiliary auxiliary)
         {
             GatewayUrl = QUERYGATEWAYURL;
-            Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Merchant);
-            GatewayData.Add(Constant.OUT_TRADE_NO, Order.OutTradeNo);
-            Merchant.Sign = BuildSign();
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Query, auxiliary);
         }
 
-        public INotify BuildQuery()
+        public INotify BuildQuery(IAuxiliary auxiliary)
         {
-            InitQuery();
+            InitQuery(auxiliary);
 
             Commit();
 
@@ -258,21 +269,114 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        #region ³·Ïú¶©µ¥
+        #region æ’¤é”€è®¢å•
 
-        public void InitCancel()
+        public void InitCancel(IAuxiliary auxiliary)
         {
-            InitQuery();
             GatewayUrl = CANCELGATEWAYURL;
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Cancel, auxiliary);
         }
 
-        public INotify BuildCancel()
+        public INotify BuildCancel(IAuxiliary auxiliary)
         {
-            InitCancel();
+            InitCancel(auxiliary);
 
             Commit(true);
 
             return Notify;
+        }
+
+        #endregion
+
+        #region å…³é—­è®¢å•
+
+        public INotify BuildClose(IAuxiliary auxiliary)
+        {
+            InitClose(auxiliary);
+
+            Commit();
+
+            return Notify;
+        }
+
+        public void InitClose(IAuxiliary auxiliary)
+        {
+            GatewayUrl = CLOSEORDERGATEWAYURL;
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Close, auxiliary);
+        }
+
+        #endregion
+
+        #region è®¢å•é€€æ¬¾
+
+        public INotify BuildRefund(IAuxiliary auxiliary)
+        {
+            InitRefund(auxiliary);
+
+            Commit(true);
+
+            return Notify;
+        }
+
+        public void InitRefund(IAuxiliary auxiliary)
+        {
+            GatewayUrl = REFUNDGATEWAYURL;
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Refund, auxiliary);
+        }
+
+        #endregion
+
+        #region æŸ¥è¯¢é€€æ¬¾
+
+        public INotify BuildRefundQuery(IAuxiliary auxiliary)
+        {
+            InitRefundQuery(auxiliary);
+
+            Commit();
+
+            return Notify;
+        }
+
+        public void InitRefundQuery(IAuxiliary auxiliary)
+        {
+            GatewayUrl = REFUNDQUERYGATEWAYURL;
+            InitAuxiliaryParameter(GatewayAuxiliaryType.RefundQuery, auxiliary);
+        }
+
+        #endregion
+
+        #region å¯¹è´¦å•ä¸‹è½½
+
+        public FileStream BuildBillDownload(IAuxiliary auxiliary)
+        {
+            InitBillDownload(auxiliary);
+
+            Commit();
+
+            string result = GatewayData.GetDefaultResult();
+
+            return CreateCsv(result);
+        }
+
+        public void InitBillDownload(IAuxiliary auxiliary)
+        {
+            GatewayUrl = DOWNLOADBILLGATEWAYURL;
+            InitAuxiliaryParameter(GatewayAuxiliaryType.BillDownload, auxiliary);
+        }
+
+        /// <summary>
+        /// åˆ›å»ºCsvæ–‡ä»¶
+        /// </summary>
+        /// <param name="content">å†…å®¹</param>
+        /// <returns></returns>
+        private FileStream CreateCsv(string content)
+        {
+            byte[] buffer = Encoding.UTF8.GetBytes(content);
+            FileStream fileStream = new FileStream($"{DateTime.Now.ToString(TIMEFORMAT)}.csv", FileMode.Create);
+            fileStream.Write(buffer, 0, buffer.Length);
+            fileStream.Position = 0;
+
+            return fileStream;
         }
 
         #endregion
@@ -291,10 +395,22 @@ namespace ICanPay.Wechatpay
 
         private void InitOrderParameter()
         {
+            GatewayData.Clear();
+            Order.Amount *= 100;
             Merchant.NonceStr = Util.GenerateNonceStr();
             Merchant.DeviceInfo = Constant.WEB;
             GatewayData.Add(Merchant);
             GatewayData.Add(Order);
+            Merchant.Sign = BuildSign();
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+        }
+
+        private void InitAuxiliaryParameter(GatewayAuxiliaryType gatewayAuxiliaryType, IAuxiliary auxiliary)
+        {
+            auxiliary.Validate(gatewayAuxiliaryType);
+            Merchant.NonceStr = Util.GenerateNonceStr();
+            GatewayData.Add(Merchant);
+            GatewayData.Add(auxiliary);
             Merchant.Sign = BuildSign();
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
         }
@@ -305,7 +421,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// Í³Ò»ÏÂµ¥
+        /// ç»Ÿä¸€ä¸‹å•
         /// </summary>
         /// <returns></returns>
         private void UnifiedOrder()
@@ -320,7 +436,50 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// ¶ÁÈ¡·µ»Ø½á¹û
+        /// é€šè¿‡codeè·å–AccessToken
+        /// </summary>
+        /// <param name="code"></param>
+        public OAuth GetAccessTokenByCode(string code)
+        {
+            string result = HttpUtil
+                .GetAsync(string.Format(ACCESSTOKENURL, Merchant.AppId, Merchant.AppSecret, code))
+                .GetAwaiter()
+                .GetResult();
+            GatewayData.FromJson(result);
+
+            int _code = GatewayData.GetIntValue(Constant.ERRCODE);
+            int _msg = GatewayData.GetIntValue(Constant.ERRMSG);
+            if (_code == 40029)
+            {
+                throw new Exception($"{_code} {_msg}");
+            }
+
+            return GatewayData.ToObject<OAuth>();
+        }
+
+        /// <summary>
+        /// é€šè¿‡æˆæƒç è·å–OpenId
+        /// </summary>
+        /// <param name="authCode">æˆæƒç </param>
+        public string GetOpenIdByAuthCode(string authCode)
+        {
+            GatewayData.Clear();
+            Merchant.NonceStr = Util.GenerateNonceStr();
+            GatewayData.Add(Constant.APPID, Merchant.AppId);
+            GatewayData.Add(Constant.MCH_ID, Merchant.AppId);
+            GatewayData.Add(Constant.AUTH_CODE, Merchant.AppId);
+            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
+            Merchant.Sign = BuildSign();
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            GatewayUrl = AUTHCODETOOPENIDURL;
+
+            Commit();
+
+            return Notify.OpenId;
+        }
+
+        /// <summary>
+        /// è¯»å–è¿”å›ç»“æœ
         /// </summary>
         /// <param name="result"></param>
         private void ReadReturnResult(string result)
@@ -331,17 +490,17 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// »ñµÃÇ©Ãû
+        /// è·å¾—ç­¾å
         /// </summary>
         /// <returns></returns>
         private string BuildSign()
         {
-            string data = GatewayData.ToUrl(Constant.SIGN) + "&key=" + Merchant.Key;
+            string data = $"{GatewayData.ToUrl(Constant.SIGN)}&key={Merchant.Key}";
             return EncryptUtil.MD5(data);
         }
 
         /// <summary>
-        /// ÊÇ·ñÊÇÒÑ³É¹¦Ö§¸¶µÄÖ§¸¶Í¨Öª
+        /// æ˜¯å¦æ˜¯å·²æˆåŠŸæ”¯ä»˜çš„æ”¯ä»˜é€šçŸ¥
         /// </summary>
         /// <returns></returns>
         private bool IsSuccessResult()
@@ -355,9 +514,9 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// Ìá½»ÇëÇó
+        /// æäº¤è¯·æ±‚
         /// </summary>
-        /// <param name="isCert">ÊÇ·ñÌí¼ÓÖ¤Êé</param>
+        /// <param name="isCert">æ˜¯å¦æ·»åŠ è¯ä¹¦</param>
         private void Commit(bool isCert = false)
         {
             var cert = isCert ? new X509Certificate2(Merchant.SslCertPath, Merchant.SslCertPassword) : null;
@@ -370,7 +529,7 @@ namespace ICanPay.Wechatpay
         }
 
         /// <summary>
-        /// ÊÇ·ñÊÇÒÑ³É¹¦µÄ·µ»Ø
+        /// æ˜¯å¦æ˜¯å·²æˆåŠŸçš„è¿”å›
         /// </summary>
         /// <returns></returns>
         private bool IsSuccessReturn()

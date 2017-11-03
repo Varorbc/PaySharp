@@ -33,7 +33,7 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 时间戳
         /// </summary>
-        public DateTime Timestamp = DateTime.Now;
+        public string Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         /// <summary>
         /// 版本
@@ -65,6 +65,7 @@ namespace ICanPay.Alipay
         /// 商户私钥
         /// </summary>
         [Required(ErrorMessage = "请设置商户私钥")]
+        [NotAdd]
         public string Privatekey { get; set; }
 
         /// <summary>
@@ -72,6 +73,7 @@ namespace ICanPay.Alipay
         /// 查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥
         /// </summary>
         [Required(ErrorMessage = "请设置支付宝公钥")]
+        [NotAdd]
         public string AlipayPublicKey { get; set; }
 
         private string returnUrl;

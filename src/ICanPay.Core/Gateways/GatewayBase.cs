@@ -1,16 +1,16 @@
+ï»¿using ICanPay.Core.Utils;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace ICanPay.Core
 {
     /// <summary>
-    /// Ö§¸¶Íø¹ØµÄ³éÏó»ùÀà
+    /// ç½‘å…³çš„æŠ½è±¡åŸºç±»
     /// </summary>
     public abstract class GatewayBase
     {
-        #region ¹«¹²×Ö¶Î
+        #region å…¬å…±å­—æ®µ
 
         public const string TRUE = "true";
         public const string FALSE = "false";
@@ -18,19 +18,21 @@ namespace ICanPay.Core
         public const string FAILURE = "failure";
         public const string FAIL = "FAIL";
         public const string TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+        public const string TIMEFORMAT = "yyyyMMddHHmmss";
 
         #endregion
 
-        #region Ë½ÓĞ×Ö¶Î
+        #region ç§æœ‰å­—æ®µ
 
         private GatewayData gatewayData;
+        private GatewayAuxiliaryType gatewayAuxiliaryType;
 
         #endregion
 
-        #region ¹¹Ôìº¯Êı
+        #region æ„é€ å‡½æ•°
 
         /// <summary>
-        /// ¹¹Ôìº¯Êı
+        /// æ„é€ å‡½æ•°
         /// </summary>
         protected GatewayBase()
             : this(new GatewayData())
@@ -38,9 +40,9 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// ¹¹Ôìº¯Êı
+        /// æ„é€ å‡½æ•°
         /// </summary>
-        /// <param name="merchant">ÉÌ»§Êı¾İ</param>
+        /// <param name="merchant">å•†æˆ·æ•°æ®</param>
         protected GatewayBase(IMerchant merchant)
             : this(new GatewayData())
         {
@@ -48,9 +50,9 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// ¹¹Ôìº¯Êı
+        /// æ„é€ å‡½æ•°
         /// </summary>
-        /// <param name="gatewayData">Íø¹ØÊı¾İ</param>
+        /// <param name="gatewayData">ç½‘å…³æ•°æ®</param>
         protected GatewayBase(GatewayData gatewayData)
         {
             this.gatewayData = gatewayData;
@@ -58,40 +60,40 @@ namespace ICanPay.Core
 
         #endregion
 
-        #region ÊôĞÔ
+        #region å±æ€§
 
         /// <summary>
-        /// ¶©µ¥Êı¾İ
+        /// è®¢å•æ•°æ®
         /// </summary>
         public IOrder Order { get; set; }
 
         /// <summary>
-        /// ÉÌ»§Êı¾İ
+        /// å•†æˆ·æ•°æ®
         /// </summary>
         public IMerchant Merchant { get; set; }
 
         /// <summary>
-        /// Í¨ÖªÊı¾İ
+        /// é€šçŸ¥æ•°æ®
         /// </summary>
         public INotify Notify { get; set; }
 
         /// <summary>
-        /// Ö§¸¶Íø¹ØµÄÀàĞÍ
+        /// ç½‘å…³çš„ç±»å‹
         /// </summary>
         public abstract GatewayType GatewayType { get; }
 
         /// <summary>
-        /// Ö§¸¶Íø¹ØµÄµØÖ·
+        /// ç½‘å…³çš„åœ°å€
         /// </summary>
         public abstract string GatewayUrl { get; set; }
 
         /// <summary>
-        /// Ö§¸¶Íø¹ØµÄ½»Ò×ÀàĞÍ
+        /// ç½‘å…³çš„äº¤æ˜“ç±»å‹
         /// </summary>
         public GatewayTradeType GatewayTradeType { get; set; }
 
         /// <summary>
-        /// Íø¹ØÊı¾İ
+        /// ç½‘å…³æ•°æ®
         /// </summary>
         public GatewayData GatewayData
         {
@@ -106,28 +108,28 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// ÊÇ·ñ³É¹¦Ö§¸¶
+        /// æ˜¯å¦æˆåŠŸæ”¯ä»˜
         /// </summary>
         protected abstract bool IsSuccessPay { get; }
 
         /// <summary>
-        /// ÊÇ·ñµÈ´ıÖ§¸¶
+        /// æ˜¯å¦ç­‰å¾…æ”¯ä»˜
         /// </summary>
         protected abstract bool IsWaitPay { get; }
 
         #endregion
 
-        #region ·½·¨
+        #region æ–¹æ³•
 
-        #region ³éÏó·½·¨
+        #region æŠ½è±¡æ–¹æ³•
 
         /// <summary>
-        /// ¼ìÑéÍø¹Ø·µ»ØµÄÍ¨Öª£¬È·ÈÏ¶©µ¥ÊÇ·ñÖ§¸¶³É¹¦
+        /// æ£€éªŒç½‘å…³è¿”å›çš„é€šçŸ¥ï¼Œç¡®è®¤è®¢å•æ˜¯å¦æ”¯ä»˜æˆåŠŸ
         /// </summary>
         protected abstract Task<bool> CheckNotifyDataAsync();
 
         /// <summary>
-        /// µ±½ÓÊÕµ½Ö§¸¶Íø¹ØÍ¨Öª²¢ÑéÖ¤ÎŞÎóÊ±°´ÕÕÖ§¸¶Íø¹ØÒªÇó¸ñÊ½Êä³ö±íÊ¾³É¹¦½ÓÊÕµ½Íø¹ØÍ¨ÖªµÄ×Ö·û´®
+        /// å½“æ¥æ”¶åˆ°æ”¯ä»˜ç½‘å…³é€šçŸ¥å¹¶éªŒè¯æ— è¯¯æ—¶æŒ‰ç…§æ”¯ä»˜ç½‘å…³è¦æ±‚æ ¼å¼è¾“å‡ºè¡¨ç¤ºæˆåŠŸæ¥æ”¶åˆ°ç½‘å…³é€šçŸ¥çš„å­—ç¬¦ä¸²
         /// </summary>
         public virtual void WriteSuccessFlag()
         {
@@ -135,7 +137,7 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// µ±½ÓÊÕµ½Ö§¸¶Íø¹ØÍ¨Öª²¢ÑéÖ¤ÓĞÎóÊ±°´ÕÕÖ§¸¶Íø¹ØÒªÇó¸ñÊ½Êä³ö±íÊ¾Ê§°Ü½ÓÊÕµ½Íø¹ØÍ¨ÖªµÄ×Ö·û´®
+        /// å½“æ¥æ”¶åˆ°æ”¯ä»˜ç½‘å…³é€šçŸ¥å¹¶éªŒè¯æœ‰è¯¯æ—¶æŒ‰ç…§æ”¯ä»˜ç½‘å…³è¦æ±‚æ ¼å¼è¾“å‡ºè¡¨ç¤ºå¤±è´¥æ¥æ”¶åˆ°ç½‘å…³é€šçŸ¥çš„å­—ç¬¦ä¸²
         /// </summary>
         public virtual void WriteFailureFlag()
         {
@@ -144,10 +146,10 @@ namespace ICanPay.Core
 
         #endregion
 
-        #region Ë½ÓĞ·½·¨
+        #region ç§æœ‰æ–¹æ³•
 
         /// <summary>
-        /// ÑéÖ¤¶©µ¥ÊÇ·ñÖ§¸¶³É¹¦
+        /// éªŒè¯è®¢å•æ˜¯å¦æ”¯ä»˜æˆåŠŸ
         /// </summary>
         internal async Task<bool> ValidateNotifyAsync()
         {
@@ -160,22 +162,16 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// ÑéÖ¤²ÎÊı
+        /// éªŒè¯å‚æ•°
         /// </summary>
-        /// <param name="instance">ÑéÖ¤¶ÔÏó</param>
+        /// <param name="instance">éªŒè¯å¯¹è±¡</param>
         protected void ValidateParameter(object instance)
         {
-            var validationContext = new ValidationContext(instance, new Dictionary<object, object>
+            ValidateUtil.Validate(instance, new Dictionary<object, object>
             {
-                { "GatewayTradeType", GatewayTradeType }
+                {nameof(Core.GatewayTradeType), GatewayTradeType },
+                {nameof(GatewayAuxiliaryType), gatewayAuxiliaryType }
             });
-            var results = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(instance, validationContext, results, true);
-
-            if (!isValid)
-            {
-                throw new ArgumentNullException(results[0].ErrorMessage);
-            }
         }
 
         protected void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
@@ -184,13 +180,19 @@ namespace ICanPay.Core
 
         #endregion
 
-        #region ¹«¹²·½·¨
+        #region å…¬å…±æ–¹æ³•
 
         /// <summary>
-        /// Ö§¸¶
+        /// æ”¯ä»˜
         /// </summary>
-        public string Payment()
+        public string Payment(IOrder order)
         {
+            if(order is null)
+            {
+                throw new ArgumentNullException(nameof(IOrder));
+            }
+            Order = order;
+
             switch (GatewayTradeType)
             {
                 case GatewayTradeType.App:
@@ -256,48 +258,143 @@ namespace ICanPay.Core
                     break;
             }
 
-            throw new NotSupportedException($"{GatewayType} Ã»ÓĞÊµÏÖ {GatewayTradeType} ½Ó¿Ú");
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° {GatewayTradeType} æ¥å£");
         }
 
         /// <summary>
-        /// ²éÑ¯
+        /// æŸ¥è¯¢
         /// </summary>
-        public INotify Query()
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
+        public INotify Query(IAuxiliary auxiliary)
         {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
             if (this is IQuery query)
             {
-                return query.BuildQuery();
+                gatewayAuxiliaryType = GatewayAuxiliaryType.Query;
+                return query.BuildQuery(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} Ã»ÓĞÊµÏÖ IQuery ²éÑ¯½Ó¿Ú");
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° IQuery æ¥å£");
         }
 
         /// <summary>
-        /// ³·Ïú
+        /// æ’¤é”€
         /// </summary>
-        public INotify Cancel()
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
+        public INotify Cancel(IAuxiliary auxiliary)
         {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
             if (this is ICancel cancel)
             {
-                return cancel.BuildCancel();
+                gatewayAuxiliaryType = GatewayAuxiliaryType.Cancel;
+                return cancel.BuildCancel(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} Ã»ÓĞÊµÏÖ ICancel ²éÑ¯½Ó¿Ú");
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° ICancel æ¥å£");
+        }
+
+        /// <summary>
+        /// å…³é—­
+        /// </summary>
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
+        public INotify Close(IAuxiliary auxiliary)
+        {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
+            if (this is IClose close)
+            {
+                gatewayAuxiliaryType = GatewayAuxiliaryType.Close;
+                return close.BuildClose(auxiliary);
+            }
+
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° IClose æ¥å£");
+        }
+
+        /// <summary>
+        /// é€€æ¬¾
+        /// </summary>
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
+        public INotify Refund(IAuxiliary auxiliary)
+        {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
+            if (this is IRefund refund)
+            {
+                gatewayAuxiliaryType = GatewayAuxiliaryType.Refund;
+                return refund.BuildRefund(auxiliary);
+            }
+
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° IRefund æ¥å£");
+        }
+
+        /// <summary>
+        /// é€€æ¬¾æŸ¥è¯¢
+        /// </summary>
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
+        public INotify RefundQuery(IAuxiliary auxiliary)
+        {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
+            if (this is IRefundQuery refundQuery)
+            {
+                gatewayAuxiliaryType = GatewayAuxiliaryType.RefundQuery;
+                return refundQuery.BuildRefundQuery(auxiliary);
+            }
+
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° IRefundQuery æ¥å£");
+        }
+
+        /// <summary>
+        /// è´¦å•ä¸‹è½½
+        /// </summary>
+        /// <param name="auxiliary">è¾…åŠ©å‚æ•°</param>
+        public void BillDownload(IAuxiliary auxiliary)
+        {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(IAuxiliary));
+            }
+
+            if (this is IBillDownload billDownload)
+            {
+                gatewayAuxiliaryType = GatewayAuxiliaryType.BillDownload;
+                HttpUtil.Write(billDownload.BuildBillDownload(auxiliary));
+                return;
+            }
+
+            throw new NotSupportedException($"{GatewayType} æ²¡æœ‰å®ç° IBillDownload æ¥å£");
         }
 
         #endregion
 
         #endregion
 
-        #region ÊÂ¼ş
+        #region äº‹ä»¶
 
         /// <summary>
-        /// Íø¹ØÍ¬²½·µ»ØµÄÖ§¸¶Í¨ÖªÑéÖ¤Ê§°ÜÊ±´¥·¢,Ä¿Ç°½öÕë¶ÔÌõÂëÖ§¸¶
+        /// ç½‘å…³åŒæ­¥è¿”å›çš„æ”¯ä»˜é€šçŸ¥éªŒè¯å¤±è´¥æ—¶è§¦å‘,ç›®å‰ä»…é’ˆå¯¹æ¡ç æ”¯ä»˜
         /// </summary>
         public event Action<object, PaymentFailedEventArgs> PaymentFailed;
 
         /// <summary>
-        /// Íø¹ØÍ¬²½·µ»ØµÄÖ§¸¶Í¨ÖªÑéÖ¤³É¹¦Ê±´¥·¢,Ä¿Ç°½öÕë¶ÔÌõÂëÖ§¸¶
+        /// ç½‘å…³åŒæ­¥è¿”å›çš„æ”¯ä»˜é€šçŸ¥éªŒè¯æˆåŠŸæ—¶è§¦å‘,ç›®å‰ä»…é’ˆå¯¹æ¡ç æ”¯ä»˜
         /// </summary>
         public event Action<object, PaymentSucceedEventArgs> PaymentSucceed;
 

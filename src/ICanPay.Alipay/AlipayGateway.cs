@@ -1,4 +1,7 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Utils;
+using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,14 +11,15 @@ namespace ICanPay.Alipay
     /// 支付宝网关
     /// </summary>
     public sealed class AlipayGateway
-        : GatewayBase, IFormPayment, IUrlPayment, IAppPayment, IScanPayment, IBarcodePayment,
-        IQuery, ICancel
+        : GatewayBase,
+        IFormPayment, IUrlPayment, IAppPayment, IScanPayment, IBarcodePayment, IAppletPayment,
+        IQuery, ICancel, IClose, IBillDownload, IRefund, IRefundQuery
     {
 
         #region 私有字段
 
-        private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do";
-        private Merchant merchant;
+        private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do?charset=UTF-8";
+        private readonly Merchant merchant;
 
         #endregion
 
@@ -147,7 +151,13 @@ namespace ICanPay.Alipay
 
             Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
 
-            PollQueryTradeState();
+            if (!string.IsNullOrEmpty(Notify.TradeNo))
+            {
+                PollQueryTradeState(new Auxiliary
+                {
+                    TradeNo = Notify.TradeNo
+                });
+            }
         }
 
         public void InitBarcodePayment()
@@ -161,12 +171,12 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 每隔5秒轮询判断用户是否支付,总共轮询5次
         /// </summary>
-        private void PollQueryTradeState()
+        private void PollQueryTradeState(IAuxiliary auxiliary)
         {
             for (int i = 0; i < 5; i++)
             {
                 Thread.Sleep(5000);
-                BuildQuery();
+                BuildQuery(auxiliary);
                 if (IsSuccessPay)
                 {
                     OnPaymentSucceed(new PaymentSucceedEventArgs(this));
@@ -174,33 +184,46 @@ namespace ICanPay.Alipay
                 }
             }
 
-            BuildCancel();
+            BuildCancel(auxiliary);
             OnPaymentFailed(new PaymentFailedEventArgs(this));
         }
 
         /// <summary>
         /// 异步每隔5秒轮询判断用户是否支付,总共轮询5次
         /// </summary>
-        private async Task PollAsync()
+        private async Task PollQueryTradeStateAsync(IAuxiliary auxiliary)
         {
-            await Task.Run(() => PollQueryTradeState());
+            await Task.Run(() => PollQueryTradeState(auxiliary));
+        }
+
+        #endregion
+
+        #region 小程序支付
+
+        public string BuildAppletPayment()
+        {
+            return BuildAppPayment();
+        }
+
+        public void InitAppletPayment()
+        {
         }
 
         #endregion
 
         #region 查询订单
 
-        public void InitQuery()
+        public void InitQuery(IAuxiliary auxiliary)
         {
-            InitCommonParameter(Constant.QUERY);
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Query, auxiliary);
         }
 
         /// <summary>
         /// 查询订单
         /// </summary>
-        public INotify BuildQuery()
+        public INotify BuildQuery(IAuxiliary auxiliary)
         {
-            InitQuery();
+            InitQuery(auxiliary);
 
             Commit(Constant.ALIPAY_TRADE_QUERY_RESPONSE);
 
@@ -211,21 +234,98 @@ namespace ICanPay.Alipay
 
         #region 撤销订单
 
-        public void InitCancel()
+        public void InitCancel(IAuxiliary auxiliary)
         {
-            InitCommonParameter(Constant.CANCEL);
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Cancel, auxiliary);
         }
 
         /// <summary>
         /// 撤销订单
         /// </summary>
-        public INotify BuildCancel()
+        public INotify BuildCancel(IAuxiliary auxiliary)
         {
-            InitCancel();
+            InitCancel(auxiliary);
 
             Commit(Constant.ALIPAY_TRADE_CANCEL_RESPONSE);
 
             return Notify;
+        }
+
+        #endregion
+
+        #region 关闭订单
+
+        public INotify BuildClose(IAuxiliary auxiliary)
+        {
+            InitClose(auxiliary);
+
+            Commit(Constant.ALIPAY_TRADE_CLOSE_RESPONSE);
+
+            return Notify;
+        }
+
+        public void InitClose(IAuxiliary auxiliary)
+        {
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Close, auxiliary);
+        }
+
+        #endregion
+
+        #region 对账单下载
+
+        public FileStream BuildBillDownload(IAuxiliary auxiliary)
+        {
+            InitBillDownload(auxiliary);
+
+            Commit(Constant.ALIPAY_DATA_DATASERVICE_BILL_DOWNLOADURL_QUERY_RESPONSE);
+
+            GatewayData.FromUrl(Notify.BillDownloadUrl);
+
+            return HttpUtil.Download(Notify.BillDownloadUrl, $"{DateTime.Now.ToString(TIMEFORMAT)}.{GatewayData.GetStringValue(Constant.FILETYPE)}");
+        }
+
+        public void InitBillDownload(IAuxiliary auxiliary)
+        {
+            Merchant.Method = Constant.BILLDOWNLOAD;
+            Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
+            GatewayData.Add(Merchant);
+            BuildSign();
+        }
+
+        #endregion
+
+        #region 订单退款
+
+        public INotify BuildRefund(IAuxiliary auxiliary)
+        {
+            InitRefund(auxiliary);
+
+            Commit(Constant.ALIPAY_TRADE_REFUND_RESPONSE);
+
+            return Notify;
+        }
+
+        public void InitRefund(IAuxiliary auxiliary)
+        {
+            InitAuxiliaryParameter(GatewayAuxiliaryType.Refund, auxiliary);
+        }
+
+        #endregion
+
+        #region 查询退款订单
+
+        public INotify BuildRefundQuery(IAuxiliary auxiliary)
+        {
+            InitRefundQuery(auxiliary);
+
+            Commit(Constant.ALIPAY_TRADE_FASTPAY_REFUND_QUERY_RESPONSE);
+
+            return Notify;
+        }
+
+        public void InitRefundQuery(IAuxiliary auxiliary)
+        {
+            InitAuxiliaryParameter(GatewayAuxiliaryType.RefundQuery, auxiliary);
         }
 
         #endregion
@@ -248,24 +348,42 @@ namespace ICanPay.Alipay
         {
             Merchant.BizContent = Util.SerializeObject(Order);
             GatewayData.Add(Merchant);
-            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            BuildSign();
 
             ValidateParameter(Merchant);
             ValidateParameter(Order);
         }
 
         /// <summary>
-        /// 初始化相应接口的参数
+        /// 初始化辅助接口的参数
         /// </summary>
         /// <param name="method">接口名称</param>
-        private void InitCommonParameter(string method)
+        private void InitAuxiliaryParameter(GatewayAuxiliaryType gatewayAuxiliaryType, IAuxiliary auxiliary)
         {
-            Merchant.Method = method;
-            Merchant.BizContent = $"{{\"out_trade_no\":\"{Order.OutTradeNo}\"}}";
+            auxiliary.Validate(gatewayAuxiliaryType);
+            switch (gatewayAuxiliaryType)
+            {
+                case GatewayAuxiliaryType.Query:
+                    Merchant.Method = Constant.QUERY;
+                    break;
+                case GatewayAuxiliaryType.Close:
+                    Merchant.Method = Constant.CLOSE;
+                    break;
+                case GatewayAuxiliaryType.Cancel:
+                    Merchant.Method = Constant.CANCEL;
+                    break;
+                case GatewayAuxiliaryType.Refund:
+                    Merchant.Method = Constant.REFUND;
+                    break;
+                case GatewayAuxiliaryType.RefundQuery:
+                    Merchant.Method = Constant.REFUNDQUERY;
+                    break;
+                default:
+                    break;
+            }
+            Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
             GatewayData.Add(Merchant);
-            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            BuildSign();
         }
 
         /// <summary>
@@ -302,6 +420,15 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
+        /// 生成签名
+        /// </summary>
+        private void BuildSign()
+        {
+            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
+            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+        }
+
+        /// <summary>
         /// 是否是已成功支付的支付通知
         /// </summary>
         /// <returns></returns>
@@ -316,7 +443,7 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
-        /// 检查支付通知，是否支付成功，签名是否正确。
+        /// 检查支付通知，是否支付成功
         /// </summary>
         /// <returns></returns>
         private bool ValidateNotifyParameter()

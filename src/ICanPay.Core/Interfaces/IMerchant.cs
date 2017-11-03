@@ -25,6 +25,5 @@
         /// 网关回发通知URL
         /// </summary>
         string NotifyUrl { get; set; }
-
     }
 }

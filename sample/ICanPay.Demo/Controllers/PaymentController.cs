@@ -46,13 +46,11 @@ namespace ICanPay.Demo.Controllers
                 //}
             };
 
-            var gateway = gateways.Get(GatewayType.Alipay);
-            gateway.GatewayTradeType = GatewayTradeType.Web;
-            gateway.Order = order;
+            var gateway = gateways.Get(GatewayType.Alipay, GatewayTradeType.Web);
 
             //gateway.PaymentFailed += Gateway_BarcodePaymentFailed;
 
-            return gateway.Payment();
+            return gateway.Payment(order);
         }
 
         private void Gateway_BarcodePaymentFailed(object arg1, PaymentFailedEventArgs arg2)
@@ -74,11 +72,9 @@ namespace ICanPay.Demo.Controllers
                 AuthCode = "123"
             };
 
-            var gateway = gateways.Get(GatewayType.Wechatpay);
-            gateway.GatewayTradeType = GatewayTradeType.Barcode;
-            gateway.Order = order;
+            var gateway = gateways.Get(GatewayType.Wechatpay, GatewayTradeType.Barcode);
 
-            return gateway.Payment();
+            return gateway.Payment(order);
         }
     }
 }

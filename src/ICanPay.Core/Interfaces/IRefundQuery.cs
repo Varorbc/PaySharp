@@ -2,20 +2,20 @@
 namespace ICanPay.Core
 {
     /// <summary>
-    /// 查询订单接口
+    /// 退款查询
     /// </summary>
-    public interface IQuery
+    public interface IRefundQuery
     {
         /// <summary>
-        /// 生成查询订单参数
+        /// 生成退款查询订单参数
         /// </summary>
         /// <param name="auxiliary">辅助参数</param>
-        INotify BuildQuery(IAuxiliary auxiliary);
+        INotify BuildRefundQuery(IAuxiliary auxiliary);
 
         /// <summary>
-        /// 初始化查询订单参数
+        /// 初始化退款查询订单参数
         /// </summary>
         /// <param name="auxiliary">辅助参数</param>
-        void InitQuery(IAuxiliary auxiliary);
+        void InitRefundQuery(IAuxiliary auxiliary);
     }
 }

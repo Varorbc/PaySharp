@@ -2,20 +2,20 @@
 namespace ICanPay.Core
 {
     /// <summary>
-    /// 查询订单接口
+    /// 关闭订单
     /// </summary>
-    public interface IQuery
+    public interface IClose
     {
         /// <summary>
-        /// 生成查询订单参数
+        /// 生成关闭订单参数
         /// </summary>
         /// <param name="auxiliary">辅助参数</param>
-        INotify BuildQuery(IAuxiliary auxiliary);
+        INotify BuildClose(IAuxiliary auxiliary);
 
         /// <summary>
-        /// 初始化查询订单参数
+        /// 初始化关闭订单参数
         /// </summary>
         /// <param name="auxiliary">辅助参数</param>
-        void InitQuery(IAuxiliary auxiliary);
+        void InitClose(IAuxiliary auxiliary);
     }
 }

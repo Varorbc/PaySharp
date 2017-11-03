@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ICanPay.Core
+namespace ICanPay.Core.Utils
 {
     /// <summary>
     /// 加密工具类
@@ -72,7 +72,7 @@ namespace ICanPay.Core
             byte[] signatureBytes = null;
             try
             {
-                RSACryptoServiceProvider rsaCsp = null;
+                RSA rsaCsp = null;
                 if (keyFromFile)
                 {
                     //文件读取
@@ -102,11 +102,11 @@ namespace ICanPay.Core
 
                 if ("RSA2".Equals(signType))
                 {
-                    signatureBytes = rsaCsp.SignData(dataBytes, "SHA256");
+                    signatureBytes = rsaCsp.SignData(dataBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
                 }
                 else
                 {
-                    signatureBytes = rsaCsp.SignData(dataBytes, "SHA1");
+                    signatureBytes = rsaCsp.SignData(dataBytes, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
                 }
             }
             catch (Exception)
@@ -117,7 +117,7 @@ namespace ICanPay.Core
             return Convert.ToBase64String(signatureBytes);
         }
 
-        private static RSACryptoServiceProvider LoadCertificateFile(string filename, string signType)
+        private static RSA LoadCertificateFile(string filename, string signType)
         {
             using (FileStream fs = File.OpenRead(filename))
             {
@@ -139,7 +139,7 @@ namespace ICanPay.Core
             }
         }
 
-        private static RSACryptoServiceProvider LoadCertificateString(string strKey, string signType)
+        private static RSA LoadCertificateString(string strKey, string signType)
         {
             byte[] data = Convert.FromBase64String(strKey);
             try
@@ -152,7 +152,7 @@ namespace ICanPay.Core
             return null;
         }
 
-        private static RSACryptoServiceProvider DecodeRSAPrivateKey(byte[] privkey, string signType)
+        private static RSA DecodeRSAPrivateKey(byte[] privkey, string signType)
         {
             byte[] MODULUS, E, D, P, Q, DP, DQ, IQ;
             MemoryStream mem = new MemoryStream(privkey);
@@ -212,18 +212,14 @@ namespace ICanPay.Core
                 elems = GetIntegerSize(binr);
                 IQ = binr.ReadBytes(elems);
 
-                CspParameters CspParameters = new CspParameters
-                {
-                    Flags = CspProviderFlags.UseMachineKeyStore
-                };
-
                 int bitLen = 1024;
                 if ("RSA2".Equals(signType))
                 {
                     bitLen = 2048;
                 }
 
-                RSACryptoServiceProvider RSA = new RSACryptoServiceProvider(bitLen, CspParameters);
+                RSA RSA = RSA.Create();
+                RSA.KeySize = bitLen;
                 RSAParameters RSAparams = new RSAParameters
                 {
                     Modulus = MODULUS,

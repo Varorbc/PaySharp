@@ -1,21 +1,22 @@
-﻿
+﻿using System.IO;
+
 namespace ICanPay.Core
 {
     /// <summary>
-    /// 查询订单接口
+    /// 账单下载
     /// </summary>
-    public interface IQuery
+    public interface IBillDownload
     {
         /// <summary>
-        /// 生成查询订单参数
+        /// 生成账单下载订单参数
         /// </summary>
         /// <param name="auxiliary">辅助参数</param>
-        INotify BuildQuery(IAuxiliary auxiliary);
+        FileStream BuildBillDownload(IAuxiliary auxiliary);
 
         /// <summary>
-        /// 初始化查询订单参数
+        /// 初始化账单下载订单参数
         /// </summary>
         /// <param name="auxiliary">辅助参数</param>
-        void InitQuery(IAuxiliary auxiliary);
+        void InitBillDownload(IAuxiliary auxiliary);
     }
 }

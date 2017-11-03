@@ -1,27 +1,28 @@
-using System;
+ï»¿using System;
+using ICanPay.Core.Utils;
 
 namespace ICanPay.Core
 {
     /// <summary>
-    /// Ö§¸¶ÊÂ¼şÊı¾İµÄ»ùÀà
+    /// æ”¯ä»˜äº‹ä»¶æ•°æ®çš„åŸºç±»
     /// </summary>
     public abstract class PaymentEventArgs : EventArgs
     {
 
-        #region Ë½ÓĞ×Ö¶Î
+        #region ç§æœ‰å­—æ®µ
 
         protected GatewayBase gateway;
-        private string notifyServerHostAddress;
+        private readonly string notifyServerHostAddress;
 
         #endregion
 
-        #region ¹¹Ôìº¯Êı
+        #region æ„é€ å‡½æ•°
 
         /// <summary>
-        /// ³õÊ¼»¯Ö§¸¶ÊÂ¼şÊı¾İµÄ»ùÀà
+        /// åˆå§‹åŒ–æ”¯ä»˜äº‹ä»¶æ•°æ®çš„åŸºç±»
         /// </summary>
-        /// <param name="gateway">Ö§¸¶Íø¹Ø</param>
-        public PaymentEventArgs(GatewayBase gateway)
+        /// <param name="gateway">æ”¯ä»˜ç½‘å…³</param>
+        protected PaymentEventArgs(GatewayBase gateway)
         {
             this.gateway = gateway;
             notifyServerHostAddress = HttpUtil.LocalIpAddress.ToString();
@@ -29,10 +30,10 @@ namespace ICanPay.Core
 
         #endregion
 
-        #region ÊôĞÔ
+        #region å±æ€§
 
         /// <summary>
-        /// ·¢ËÍÖ§¸¶Í¨ÖªµÄÍø¹ØIPµØÖ·
+        /// å‘é€æ”¯ä»˜é€šçŸ¥çš„ç½‘å…³IPåœ°å€
         /// </summary>
         public string NotifyServerHostAddress
         {
@@ -43,7 +44,7 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// Ö§¸¶Íø¹ØµÄÊı¾İ
+        /// æ”¯ä»˜ç½‘å…³çš„æ•°æ®
         /// </summary>
         public GatewayData GatewayData
         {
@@ -54,7 +55,7 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// Ö§¸¶Íø¹ØÀàĞÍ
+        /// æ”¯ä»˜ç½‘å…³ç±»å‹
         /// </summary>
         public GatewayType GatewayType
         {

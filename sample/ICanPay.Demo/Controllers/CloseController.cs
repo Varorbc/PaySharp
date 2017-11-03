@@ -3,43 +3,43 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ICanPay.Demo.Controllers
 {
-    public class CancelController : Controller
+    public class CloseController : Controller
     {
         private IGateways gateways;
 
-        public CancelController(IGateways gateways)
+        public CloseController(IGateways gateways)
         {
             this.gateways = gateways;
         }
 
         public IActionResult Index(string id)
         {
-            var notify = (Alipay.Notify)CancelAlipayOrder(id);
+            var notify = (Alipay.Notify)CloseAlipayOrder(id);
 
             return Json(notify);
         }
 
         /// <summary>
-        /// 撤销支付宝的订单
+        /// 关闭支付宝的订单
         /// </summary>
-        private Alipay.Notify CancelAlipayOrder(string id)
+        private Alipay.Notify CloseAlipayOrder(string id)
         {
             var gateway = gateways.Get(GatewayType.Alipay);
 
-            return (Alipay.Notify)gateway.Cancel(new Alipay.Auxiliary
+            return (Alipay.Notify)gateway.Close(new Alipay.Auxiliary
             {
                 OutTradeNo = id
             });
         }
 
         /// <summary>
-        /// 撤销微信的订单
+        /// 关闭微信的订单
         /// </summary>
-        private Wechatpay.Notify CancelWechatpayOrder(string id)
+        private Wechatpay.Notify CloseWechatpayOrder(string id)
         {
             var gateway = gateways.Get(GatewayType.Wechatpay);
 
-            return (Wechatpay.Notify)gateway.Cancel(new Wechatpay.Auxiliary
+            return (Wechatpay.Notify)gateway.Query(new Wechatpay.Auxiliary
             {
                 OutTradeNo = id
             });

@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ICanPay.Core
+namespace ICanPay.Core.Utils
 {
     /// <summary>
     /// Http工具类
@@ -99,6 +99,26 @@ namespace ICanPay.Core
         }
 
         /// <summary>
+        /// 输出文件
+        /// </summary>
+        /// <param name="stream">文件流</param>
+        public static void Write(FileStream stream)
+        {
+            long size = stream.Length;
+            byte[] buffer = new byte[size];
+            stream.Read(buffer, 0, (int)size);
+            stream.Dispose();
+            File.Delete(stream.Name);
+
+            Current.Response.ContentType = "application/octet-stream";
+            Current.Response.Headers.Add("Content-Disposition", "attachment;filename=" + WebUtility.UrlEncode(Path.GetFileName(stream.Name)));
+            Current.Response.Headers.Add("Content-Length", size.ToString());
+
+            Current.Response.Body.WriteAsync(buffer, 0, (int)size).GetAwaiter().GetResult();
+            Current.Response.Body.Close();
+        }
+
+        /// <summary>
         /// Get请求
         /// </summary>
         /// <param name="url">url</param>
@@ -115,10 +135,7 @@ namespace ICanPay.Core
                 {
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
-                        if (reader != null)
-                        {
-                            return reader.ReadToEnd().Trim();
-                        }
+                        return reader.ReadToEnd().Trim();
                     }
                 }
             }
@@ -130,8 +147,6 @@ namespace ICanPay.Core
             {
                 request.Abort();
             }
-
-            return string.Empty;
         }
 
         /// <summary>
@@ -175,10 +190,7 @@ namespace ICanPay.Core
                 {
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
-                        if (reader != null)
-                        {
-                            return reader.ReadToEnd().Trim();
-                        }
+                        return reader.ReadToEnd().Trim();
                     }
                 }
             }
@@ -190,8 +202,6 @@ namespace ICanPay.Core
             {
                 request.Abort();
             }
-
-            return string.Empty;
         }
 
         /// <summary>
@@ -204,6 +214,58 @@ namespace ICanPay.Core
         public static async Task<string> PostAsync(string url, string data, X509Certificate2 cert = null)
         {
             return await Task.Run(() => Post(url, data, cert));
+        }
+
+        /// <summary>
+        /// 下载
+        /// </summary>
+        /// <param name="url">url</param>
+        /// <param name="path">下载路径</param>
+        /// <returns></returns>
+        public static FileStream Download(string url, string path)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+            try
+            {
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        FileStream fileStream = new FileStream(path, FileMode.Create);
+                        byte[] buffer = new byte[1024];
+                        int size = responseStream.Read(buffer, 0, buffer.Length);
+                        while (size > 0)
+                        {
+                            fileStream.Write(buffer, 0, size);
+                            size = responseStream.Read(buffer, 0, buffer.Length);
+                        }
+
+                        fileStream.Position = 0;
+                        return fileStream;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                request.Abort();
+            }
+        }
+
+        /// <summary>
+        /// 异步下载
+        /// </summary>
+        /// <param name="url">url</param>
+        /// <param name="path">下载路径</param>
+        /// <returns></returns>
+        public static async Task<FileStream> DownloadAsync(string url, string path)
+        {
+            return await Task.Run(() => Download(url, path));
         }
 
         #endregion

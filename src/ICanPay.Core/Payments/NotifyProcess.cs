@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using ICanPay.Core.Utils;
 
 namespace ICanPay.Core
 {

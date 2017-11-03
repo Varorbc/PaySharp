@@ -17,6 +17,10 @@
         public const string BARCODE = "alipay.trade.pay";
         public const string QUERY = "alipay.trade.query";
         public const string CANCEL = "alipay.trade.cancel";
+        public const string CLOSE = "alipay.trade.close";
+        public const string REFUND = "alipay.trade.refund";
+        public const string REFUNDQUERY = "alipay.trade.fastpay.refund.query";
+        public const string BILLDOWNLOAD = "alipay.data.dataservice.bill.downloadurl.query";
         public const string TOTAL_AMOUNT = "total_amount";
         public const string GOODS_ID = "goods_id";
         public const string GOODS_NAME = "goods_name";
@@ -31,5 +35,11 @@
         public const string ALIPAY_TRADE_PRECREATE_RESPONSE = "alipay_trade_precreate_response";
         public const string ALIPAY_TRADE_QUERY_RESPONSE = "alipay_trade_query_response";
         public const string ALIPAY_TRADE_CANCEL_RESPONSE = "alipay_trade_cancel_response";
+        public const string ALIPAY_TRADE_CLOSE_RESPONSE = "alipay_trade_close_response";
+        public const string ALIPAY_TRADE_REFUND_RESPONSE = "alipay_trade_refund_response";
+        public const string ALIPAY_TRADE_FASTPAY_REFUND_QUERY_RESPONSE = "alipay_trade_fastpay_refund_query_response";
+        public const string ALIPAY_DATA_DATASERVICE_BILL_DOWNLOADURL_QUERY_RESPONSE = "alipay_data_dataservice_bill_downloadurl_query_response";
+        public const string OUT_REQUEST_NO = "out_request_no";
+        public const string FILETYPE = "fileType";
     }
 }

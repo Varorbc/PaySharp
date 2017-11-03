@@ -46,7 +46,7 @@ namespace ICanPay.Wechatpay
         public string SpbillCreateIp { get; set; }
 
         /// <summary>
-        /// 标价金额,订单总金额，单位为分，详见支付金额
+        /// 标价金额,订单总金额，单位为元，详见支付金额
         /// </summary>
         public double Amount { get; set; }
 
@@ -86,10 +86,13 @@ namespace ICanPay.Wechatpay
         /// openid如何获取，可参考【获取openid】。
         /// 企业号请使用【企业号OAuth2.0接口】获取企业号内成员userid，再调用【企业号userid转openid接口】进行转换
         /// </summary>
-        [StringLength(128, ErrorMessage = "用户标识最大长度为128位")]
-        [Necessary(GatewayTradeType.Public, ErrorMessage = "请设置用户标识")]
-        [ReName(Name = Constant.OPENID)]
         public string OpenId { get; set; }
+
+        /// <summary>
+        /// 授权临时票据
+        /// </summary>
+        [Necessary(GatewayTradeType.Public, ErrorMessage = "请设置用户标识")]
+        public string Code { get; set; }
 
         /// <summary>
         /// 场景信息,该字段用于上报场景信息，目前支持上报实际门店信息。该字段为JSON对象数据，对象格式为{"store_info":{"id": "门店ID","name": "名称","area_code": "编码","address": "地址" }}
