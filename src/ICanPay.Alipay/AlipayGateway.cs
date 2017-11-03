@@ -39,8 +39,6 @@ namespace ICanPay.Alipay
 
         #region 属性
 
-        public override GatewayType GatewayType => GatewayType.Alipay;
-
         public override string GatewayUrl { get; set; } = GATEWAYURL;
 
         public new Merchant Merchant => merchant;

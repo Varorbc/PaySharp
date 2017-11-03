@@ -5,7 +5,7 @@ namespace ICanPay.Demo.Controllers
 {
     public class CloseController : Controller
     {
-        private IGateways gateways;
+        private readonly IGateways gateways;
 
         public CloseController(IGateways gateways)
         {
@@ -24,7 +24,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private Alipay.Notify CloseAlipayOrder(string id)
         {
-            var gateway = gateways.Get(GatewayType.Alipay);
+            var gateway = gateways.Get<Alipay.AlipayGateway>();
 
             return (Alipay.Notify)gateway.Close(new Alipay.Auxiliary
             {
@@ -37,7 +37,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private Wechatpay.Notify CloseWechatpayOrder(string id)
         {
-            var gateway = gateways.Get(GatewayType.Wechatpay);
+            var gateway = gateways.Get<Wechatpay.WechatpayGataway>();
 
             return (Wechatpay.Notify)gateway.Query(new Wechatpay.Auxiliary
             {

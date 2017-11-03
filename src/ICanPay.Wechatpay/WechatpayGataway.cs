@@ -52,8 +52,6 @@ namespace ICanPay.Wechatpay
 
         #region 属性
 
-        public override GatewayType GatewayType => GatewayType.Wechatpay;
-
         public override string GatewayUrl { get; set; } = UNIFIEDORDERGATEWAYURL;
 
         public new Merchant Merchant => merchant;

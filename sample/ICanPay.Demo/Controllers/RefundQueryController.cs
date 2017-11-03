@@ -5,7 +5,7 @@ namespace ICanPay.Demo.Controllers
 {
     public class RefundQueryController : Controller
     {
-        private IGateways gateways;
+        private readonly IGateways gateways;
 
         public RefundQueryController(IGateways gateways)
         {
@@ -24,7 +24,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private Alipay.Notify RefundQueryAlipayOrder(string id)
         {
-            var gateway = gateways.Get(GatewayType.Alipay);
+            var gateway = gateways.Get<Alipay.AlipayGateway>();
 
             return (Alipay.Notify)gateway.RefundQuery(new Alipay.Auxiliary
             {
@@ -39,7 +39,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private Wechatpay.Notify RefundQueryWechatpayOrder(string id)
         {
-            var gateway = gateways.Get(GatewayType.Wechatpay);
+            var gateway = gateways.Get<Wechatpay.WechatpayGataway>();
 
             return (Wechatpay.Notify)gateway.RefundQuery(new Wechatpay.Auxiliary
             {

@@ -60,7 +60,11 @@ namespace ICanPay.Core
         public async Task ReceivedAsync()
         {
             GatewayBase gateway = NotifyProcess.GetGateway(gateways);
-            if (gateway.GatewayType != GatewayType.None)
+            if (gateway is NullGateway)
+            {
+                OnUnknownGateway(new UnknownGatewayEventArgs(gateway));
+            }
+            else
             {
                 if (await gateway.ValidateNotifyAsync())
                 {
@@ -72,10 +76,6 @@ namespace ICanPay.Core
                     OnPaymentFailed(new PaymentFailedEventArgs(gateway));
                     gateway.WriteFailureFlag();
                 }
-            }
-            else
-            {
-                OnUnknownGateway(new UnknownGatewayEventArgs(gateway));
             }
         }
 

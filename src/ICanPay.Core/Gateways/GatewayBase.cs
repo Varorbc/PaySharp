@@ -78,11 +78,6 @@ namespace ICanPay.Core
         public INotify Notify { get; set; }
 
         /// <summary>
-        /// 网关的类型
-        /// </summary>
-        public abstract GatewayType GatewayType { get; }
-
-        /// <summary>
         /// 网关的地址
         /// </summary>
         public abstract string GatewayUrl { get; set; }
@@ -263,7 +258,7 @@ namespace ICanPay.Core
                     break;
             }
 
-            throw new NotSupportedException($"{GatewayType} 没有实现 {GatewayTradeType} 接口");
+            throw new NotSupportedException($"{GetType()} 没有实现 {GatewayTradeType} 接口");
         }
 
         /// <summary>
@@ -283,7 +278,7 @@ namespace ICanPay.Core
                 return query.BuildQuery(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} 没有实现 IQuery 接口");
+            throw new NotSupportedException($"{GetType()} 没有实现 IQuery 接口");
         }
 
         /// <summary>
@@ -303,7 +298,7 @@ namespace ICanPay.Core
                 return cancel.BuildCancel(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} 没有实现 ICancel 接口");
+            throw new NotSupportedException($"{GetType()} 没有实现 ICancel 接口");
         }
 
         /// <summary>
@@ -323,7 +318,7 @@ namespace ICanPay.Core
                 return close.BuildClose(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} 没有实现 IClose 接口");
+            throw new NotSupportedException($"{GetType()} 没有实现 IClose 接口");
         }
 
         /// <summary>
@@ -343,7 +338,7 @@ namespace ICanPay.Core
                 return refund.BuildRefund(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} 没有实现 IRefund 接口");
+            throw new NotSupportedException($"{GetType()} 没有实现 IRefund 接口");
         }
 
         /// <summary>
@@ -363,7 +358,7 @@ namespace ICanPay.Core
                 return refundQuery.BuildRefundQuery(auxiliary);
             }
 
-            throw new NotSupportedException($"{GatewayType} 没有实现 IRefundQuery 接口");
+            throw new NotSupportedException($"{GetType()} 没有实现 IRefundQuery 接口");
         }
 
         /// <summary>
@@ -384,7 +379,7 @@ namespace ICanPay.Core
                 return;
             }
 
-            throw new NotSupportedException($"{GatewayType} 没有实现 IBillDownload 接口");
+            throw new NotSupportedException($"{GetType()} 没有实现 IBillDownload 接口");
         }
 
         #endregion

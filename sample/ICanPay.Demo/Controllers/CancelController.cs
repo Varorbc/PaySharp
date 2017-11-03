@@ -5,7 +5,7 @@ namespace ICanPay.Demo.Controllers
 {
     public class CancelController : Controller
     {
-        private IGateways gateways;
+        private readonly IGateways gateways;
 
         public CancelController(IGateways gateways)
         {
@@ -24,7 +24,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private Alipay.Notify CancelAlipayOrder(string id)
         {
-            var gateway = gateways.Get(GatewayType.Alipay);
+            var gateway = gateways.Get<Alipay.AlipayGateway>();
 
             return (Alipay.Notify)gateway.Cancel(new Alipay.Auxiliary
             {
@@ -37,7 +37,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private Wechatpay.Notify CancelWechatpayOrder(string id)
         {
-            var gateway = gateways.Get(GatewayType.Wechatpay);
+            var gateway = gateways.Get<Wechatpay.WechatpayGataway>();
 
             return (Wechatpay.Notify)gateway.Cancel(new Wechatpay.Auxiliary
             {

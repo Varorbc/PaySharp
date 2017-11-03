@@ -12,19 +12,19 @@ namespace ICanPay.Core
         bool Add(GatewayBase gateway);
 
         /// <summary>
-        /// 通过网关类型获取网关
+        /// 获取指定网关
         /// </summary>
-        /// <param name="gatewayType">网关类型</param>
+        /// <typeparam name="T">网关类型</typeparam>
         /// <returns></returns>
-        GatewayBase Get(GatewayType gatewayType);
+        GatewayBase Get<T>();
 
         /// <summary>
-        /// 通过网关类型,交易类型获取网关
+        /// 通过交易类型获取网关
         /// </summary>
-        /// <param name="gatewayType">网关类型</param>
+        /// <typeparam name="T">网关类型</typeparam>
         /// <param name="gatewayTradeType">网关交易类型</param>
         /// <returns></returns>
-        GatewayBase Get(GatewayType gatewayType, GatewayTradeType gatewayTradeType);
+        GatewayBase Get<T>(GatewayTradeType gatewayTradeType);
 
         /// <summary>
         /// 获取网关列表
