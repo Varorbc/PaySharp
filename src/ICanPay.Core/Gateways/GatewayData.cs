@@ -15,7 +15,7 @@ using System.Xml;
 namespace ICanPay.Core
 {
     /// <summary>
-    /// 支付网关数据
+    /// 网关数据
     /// </summary>
     public class GatewayData
     {

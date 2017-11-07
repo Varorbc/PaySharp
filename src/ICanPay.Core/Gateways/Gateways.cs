@@ -45,24 +45,26 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// 通过网关类型获取网关
+        /// 获取指定网关
         /// </summary>
-        /// <param name="gatewayType">网关类型</param>
+        /// <typeparam name="T">网关类型</typeparam>
         /// <returns></returns>
-        public GatewayBase Get(GatewayType gatewayType)
+        public GatewayBase Get<T>()
         {
-            return list.FirstOrDefault(a => a.GatewayType == gatewayType);
+            var gatewayBase = list.FirstOrDefault(a => a is T);
+
+            return gatewayBase;
         }
 
         /// <summary>
-        /// 通过网关类型,交易类型获取网关
+        /// 通过交易类型获取网关
         /// </summary>
-        /// <param name="gatewayType">网关类型</param>
+        /// <typeparam name="T">网关类型</typeparam>
         /// <param name="gatewayTradeType">网关交易类型</param>
         /// <returns></returns>
-        public GatewayBase Get(GatewayType gatewayType,GatewayTradeType gatewayTradeType)
+        public GatewayBase Get<T>(GatewayTradeType gatewayTradeType)
         {
-            var gatewayBase = list.FirstOrDefault(a => a.GatewayType == gatewayType);
+            var gatewayBase = Get<T>();
             gatewayBase.GatewayTradeType = gatewayTradeType;
 
             return gatewayBase;

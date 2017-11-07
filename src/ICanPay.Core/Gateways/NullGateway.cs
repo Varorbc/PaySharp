@@ -21,13 +21,13 @@ namespace ICanPay.Core
 
         #region 属性
 
-        public override GatewayType GatewayType => GatewayType.None;
-
         public override string GatewayUrl { get; set; } = string.Empty;
 
         protected override bool IsSuccessPay => false;
 
         protected override bool IsWaitPay => false;
+
+        protected internal override string[] NotifyVerifyParameter => new string[0];
 
         #endregion
 

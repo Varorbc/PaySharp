@@ -1,5 +1,5 @@
-﻿using System.IO;
-using ICanPay.Core.Utils;
+﻿using ICanPay.Core.Utils;
+using System.IO;
 
 namespace ICanPay.Core
 {
@@ -8,16 +8,6 @@ namespace ICanPay.Core
     /// </summary>
     internal static class NotifyProcess
     {
-
-        #region 私有字段
-
-        // 需要验证的参数名称数组，用于识别不同的网关类型。
-        // 检查是否在发回的数据中，需要保证参数名称跟其他各个网关验证的参数名称不重复。
-        // 建议使用网关中返回的不为空的参数名，并使用尽可能多的参数名。
-        private static string[] alipayGatewayVerifyParmaNames = { "notify_type", "notify_id", "notify_time", "sign", "sign_type" };
-        private static string[] wechatpayGatewayVerifyParmaNames = { "return_code", "appid", "mch_id", "nonce_str", "result_code" };
-
-        #endregion
 
         #region 方法
 
@@ -29,43 +19,24 @@ namespace ICanPay.Core
         public static GatewayBase GetGateway(IGateways gateways)
         {
             var gatewayData = ReadNotifyData();
-            GatewayBase gateway;
+            GatewayBase gateway = null;
 
-            if (IsAlipayGateway(gatewayData))
+            foreach(var item in gateways.GetList())
             {
-                gateway = gateways.Get(GatewayType.Alipay);
+                if(ExistParameter(item.NotifyVerifyParameter, gatewayData))
+                {
+                    gateway = item;
+                    break;
+                }
             }
-            else if (IsWechatpayGateway(gatewayData))
-            {
-                gateway = gateways.Get(GatewayType.Wechatpay);
-            }
-            else
+
+            if (gateway is null)
             {
                 gateway = new NullGateway();
             }
 
             gateway.GatewayData = gatewayData;
             return gateway;
-        }
-
-        /// <summary>
-        /// 是否是支付宝网关
-        /// </summary>
-        /// <param name="gatewayData">网关数据</param>
-        /// <returns></returns>
-        private static bool IsAlipayGateway(GatewayData gatewayData)
-        {
-            return ExistParameter(alipayGatewayVerifyParmaNames, gatewayData);
-        }
-
-        /// <summary>
-        /// 是否是微信支付网关
-        /// </summary>
-        /// <param name="gatewayData">网关数据</param>
-        /// <returns></returns>
-        private static bool IsWechatpayGateway(GatewayData gatewayData)
-        {
-            return ExistParameter(wechatpayGatewayVerifyParmaNames, gatewayData);
         }
 
         /// <summary>

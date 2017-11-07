@@ -6,8 +6,8 @@ namespace ICanPay.Demo.Controllers
 {
     public class PaymentController : Controller
     {
-        private IGateways gateways;
-        private string outTradeNo = DateTime.Now.ToString("yyyyMMddhhmmss");
+        private readonly IGateways gateways;
+        private readonly string outTradeNo = DateTime.Now.ToString("yyyyMMddhhmmss");
 
         public PaymentController(IGateways gateways)
         {
@@ -46,7 +46,7 @@ namespace ICanPay.Demo.Controllers
                 //}
             };
 
-            var gateway = gateways.Get(GatewayType.Alipay, GatewayTradeType.Web);
+            var gateway = gateways.Get<Alipay.AlipayGateway>(GatewayTradeType.Web);
 
             //gateway.PaymentFailed += Gateway_BarcodePaymentFailed;
 
@@ -72,7 +72,7 @@ namespace ICanPay.Demo.Controllers
                 AuthCode = "123"
             };
 
-            var gateway = gateways.Get(GatewayType.Wechatpay, GatewayTradeType.Barcode);
+            var gateway = gateways.Get<Wechatpay.WechatpayGataway>(GatewayTradeType.Barcode);
 
             return gateway.Payment(order);
         }

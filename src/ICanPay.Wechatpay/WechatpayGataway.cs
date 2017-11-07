@@ -52,8 +52,6 @@ namespace ICanPay.Wechatpay
 
         #region 属性
 
-        public override GatewayType GatewayType => GatewayType.Wechatpay;
-
         public override string GatewayUrl { get; set; } = UNIFIEDORDERGATEWAYURL;
 
         public new Merchant Merchant => merchant;
@@ -65,6 +63,8 @@ namespace ICanPay.Wechatpay
         protected override bool IsSuccessPay => Notify.TradeState.ToLower() == SUCCESS;
 
         protected override bool IsWaitPay => Notify.TradeState.ToLower() == USERPAYING;
+
+        protected override string[] NotifyVerifyParameter => new string[] { "return_code", "appid", "mch_id", "nonce_str", "result_code" };
 
         #endregion
 

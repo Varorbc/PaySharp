@@ -1,5 +1,5 @@
-﻿using System;
-using ICanPay.Core.Utils;
+﻿using ICanPay.Core.Utils;
+using System;
 
 namespace ICanPay.Core
 {
@@ -57,11 +57,11 @@ namespace ICanPay.Core
         /// <summary>
         /// 支付网关类型
         /// </summary>
-        public GatewayType GatewayType
+        public Type GatewayType
         {
             get
             {
-                return gateway.GatewayType;
+                return gateway.GetType();
             }
         }
 

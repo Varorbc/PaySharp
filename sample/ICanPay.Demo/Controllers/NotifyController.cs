@@ -6,7 +6,8 @@ namespace ICanPay.Demo.Controllers
 {
     public class NotifyController : Controller
     {
-        private IGateways gateways;
+        private readonly IGateways gateways;
+
         public NotifyController(IGateways gateways)
         {
             this.gateways = gateways;
@@ -27,7 +28,7 @@ namespace ICanPay.Demo.Controllers
         private void Notify_PaymentSucceed(object sender, PaymentSucceedEventArgs e)
         {
             // 支付成功时时的处理代码
-            if (e.GatewayType == GatewayType.Alipay)
+            if (e.GatewayType == typeof(Alipay.AlipayGateway))
             {
                 var alipayNotify = (Alipay.Notify)e.Notify;
             }

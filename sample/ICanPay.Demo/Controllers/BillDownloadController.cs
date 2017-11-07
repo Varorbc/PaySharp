@@ -24,7 +24,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private void AlipayBillDownload()
         {
-            var gateway = gateways.Get(GatewayType.Alipay);
+            var gateway = gateways.Get<Alipay.AlipayGateway>();
 
             gateway.BillDownload(new Alipay.Auxiliary
             {
@@ -38,7 +38,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private void WechatpayBillDownload()
         {
-            var gateway = gateways.Get(GatewayType.Wechatpay);
+            var gateway = gateways.Get<Wechatpay.WechatpayGataway>();
 
             gateway.BillDownload(new Wechatpay.Auxiliary
             {

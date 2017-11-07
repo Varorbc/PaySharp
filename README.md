@@ -123,7 +123,7 @@ ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.s
 						}
 					};
 
-					var gateway = gateways.Get(GatewayType.Alipay, GatewayTradeType.Web);
+					var gateway = gateways.Get<AlipayGateway>(GatewayTradeType.Web);
 
 					return gateway.Payment(order);
 				}
@@ -161,7 +161,7 @@ ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.s
 				private void Notify_PaymentSucceed(object sender, PaymentSucceedEventArgs e)
 				{
 					// 支付成功时时的处理代码
-					if (e.GatewayType == GatewayType.Alipay)
+					if (e.GatewayType == typeof(AlipayGateway))
 					{
 						var alipayNotify = (Alipay.Notify)e.Notify;
 					}
