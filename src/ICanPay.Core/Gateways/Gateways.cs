@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ICanPay.Core
@@ -51,9 +52,11 @@ namespace ICanPay.Core
         /// <returns></returns>
         public GatewayBase Get<T>()
         {
-            var gatewayBase = list.FirstOrDefault(a => a is T);
+            var gatewayList = list
+                .Where(a => a is T)
+                .ToList();
 
-            return gatewayBase;
+            return gatewayList.Count > 0 ? gatewayList[0] : throw new Exception("找不到指定网关");
         }
 
         /// <summary>
@@ -64,10 +67,14 @@ namespace ICanPay.Core
         /// <returns></returns>
         public GatewayBase Get<T>(GatewayTradeType gatewayTradeType)
         {
-            var gatewayBase = Get<T>();
-            gatewayBase.GatewayTradeType = gatewayTradeType;
+            var gatewayList = list
+                .Where(a => a is T && a.GatewayTradeType == gatewayTradeType)
+                .ToList();
 
-            return gatewayBase;
+            var gateway = gatewayList.Count > 0 ? gatewayList[0] : Get<T>();
+            gateway.GatewayTradeType = gatewayTradeType;
+
+            return gateway;
         }
 
         /// <summary>
