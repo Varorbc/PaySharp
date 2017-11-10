@@ -3,7 +3,7 @@
 
 ICanPay是一个提供了多个支付网关支付处理的跨平台类库，使用ICanPay可以简化订单的创建、查询、退款和接收网关返回的支付通知等操作。
 
-目前支持的支付网关有：支付宝(Alipay)、微信支付(Wechatpay)
+目前支持的支付网关有：支付宝(Alipay)、微信支付(Wechatpay)、银联支付(Unionpay)
 
 	# 支付宝：
 
@@ -33,6 +33,7 @@ Package  | NuGet
 ICanPay.Core		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Core.svg)](https://www.nuget.org/packages/ICanPay.Core)
 ICanPay.Alipay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Alipay.svg)](https://www.nuget.org/packages/ICanPay.Alipay)
 ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.svg)](https://www.nuget.org/packages/ICanPay.Wechatpay)
+ICanPay.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Unionpay.svg)](https://www.nuget.org/packages/ICanPay.Unionpay)
 
 # 如何使用
 
@@ -184,19 +185,15 @@ ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.s
 
 支付宝支付文档：
 
-https://docs.open.alipay.com/203/105288/
-
-https://docs.open.alipay.com/204/105051/
-
-https://docs.open.alipay.com/270/105898/
-
-https://docs.open.alipay.com/api_1/alipay.trade.pay
-
-https://docs.open.alipay.com/api_1/alipay.trade.precreate
+https://openhome.alipay.com/developmentDocument.htm
 
 微信支付文档：
 
 https://pay.weixin.qq.com/wiki/doc/api/index.html
+
+银联支付文档：
+
+https://open.unionpay.com/ajweb/help/api
 
 # 致谢
 

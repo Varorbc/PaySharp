@@ -1,0 +1,4 @@
+使用5.0.0报文版本的开发包示例时候需要（新入网接入都使用5.1.0报文版本）：
+1.将工程根目录下的Web.config替换为本目录下的Web.config.5_0_0
+2.按照Web.config.5_0_0中配置项acpsdk.validateCert.dir配置验证签名证书
+3.5.1.0和5.0.0报文其他区别可以参考https://open.unionpay.com/ajweb/help/faq/search?keyword=5.0.0
