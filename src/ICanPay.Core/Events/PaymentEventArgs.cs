@@ -25,7 +25,7 @@ namespace ICanPay.Core
         protected PaymentEventArgs(GatewayBase gateway)
         {
             _gateway = gateway;
-            _notifyServerHostAddress = HttpUtil.LocalIpAddress.ToString();
+            _notifyServerHostAddress = HttpUtil.RemoteIpAddress.ToString();
         }
 
         #endregion
