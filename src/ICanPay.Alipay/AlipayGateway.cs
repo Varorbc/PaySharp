@@ -361,7 +361,8 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 初始化辅助接口的参数
         /// </summary>
-        /// <param name="method">接口名称</param>
+        /// <param name="gatewayAuxiliaryType">辅助类型</param>
+        /// <param name="auxiliary">辅助参数</param>
         private void InitAuxiliaryParameter(GatewayAuxiliaryType gatewayAuxiliaryType, IAuxiliary auxiliary)
         {
             auxiliary.Validate(gatewayAuxiliaryType);
