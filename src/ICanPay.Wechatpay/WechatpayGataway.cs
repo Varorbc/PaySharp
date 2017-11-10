@@ -19,8 +19,7 @@ namespace ICanPay.Wechatpay
 
         #region 私有字段
 
-        private readonly Merchant merchant;
-        private const string USERPAYING = "USERPAYING";
+        private readonly Merchant _merchant;
         private const string UNIFIEDORDERGATEWAYURL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         private const string QUERYGATEWAYURL = "https://api.mch.weixin.qq.com/pay/orderquery";
         private const string CANCELGATEWAYURL = "https://api.mch.weixin.qq.com/secapi/pay/reverse";
@@ -45,7 +44,7 @@ namespace ICanPay.Wechatpay
         public WechatpayGataway(Merchant merchant)
             : base(merchant)
         {
-            this.merchant = merchant;
+            _merchant = merchant;
         }
 
         #endregion
@@ -54,7 +53,7 @@ namespace ICanPay.Wechatpay
 
         public override string GatewayUrl { get; set; } = UNIFIEDORDERGATEWAYURL;
 
-        public new Merchant Merchant => merchant;
+        public new Merchant Merchant => _merchant;
 
         public new Order Order => (Order)base.Order;
 
@@ -62,9 +61,10 @@ namespace ICanPay.Wechatpay
 
         protected override bool IsSuccessPay => Notify.TradeState.ToLower() == SUCCESS;
 
-        protected override bool IsWaitPay => Notify.TradeState.ToLower() == USERPAYING;
+        protected override bool IsWaitPay => Notify.TradeState.ToLower() == Constant.USERPAYING;
 
-        protected override string[] NotifyVerifyParameter => new string[] { "return_code", "appid", "mch_id", "nonce_str", "result_code" };
+        protected override string[] NotifyVerifyParameter => new string[]
+        { Constant.RETURN_CODE, Constant.APPID, Constant.MCH_ID, Constant.NONCE_STR, Constant.RESULT_CODE };
 
         #endregion
 
@@ -201,11 +201,13 @@ namespace ICanPay.Wechatpay
 
             if (!string.IsNullOrEmpty(Notify.TransactionId))
             {
-                PollQueryTradeState(new Auxiliary
+                PollQueryTradeStateAsync(new Auxiliary
                 {
                     TradeNo = Notify.TransactionId,
                     OutTradeNo = Notify.OutTradeNo
-                });
+                })
+                .GetAwaiter()
+                .GetResult();
             }
         }
 
@@ -243,7 +245,7 @@ namespace ICanPay.Wechatpay
         /// <summary>
         /// 异步每隔5秒轮询判断用户是否支付,总共轮询5次
         /// </summary>
-        private async Task PollAsync(IAuxiliary auxiliary)
+        private async Task PollQueryTradeStateAsync(IAuxiliary auxiliary)
         {
             await Task.Run(() => PollQueryTradeState(auxiliary));
         }
@@ -381,7 +383,7 @@ namespace ICanPay.Wechatpay
 
         #endregion
 
-        protected override async Task<bool> CheckNotifyDataAsync()
+        protected override async Task<bool> ValidateNotifyAsync()
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>();
 
@@ -393,6 +395,9 @@ namespace ICanPay.Wechatpay
             return false;
         }
 
+        /// <summary>
+        /// 初始化订单参数
+        /// </summary>
         private void InitOrderParameter()
         {
             GatewayData.Clear();
@@ -405,6 +410,11 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
         }
 
+        /// <summary>
+        /// 初始化辅助参数
+        /// </summary>
+        /// <param name="gatewayAuxiliaryType">辅助类型</param>
+        /// <param name="auxiliary">辅助参数</param>
         private void InitAuxiliaryParameter(GatewayAuxiliaryType gatewayAuxiliaryType, IAuxiliary auxiliary)
         {
             auxiliary.Validate(gatewayAuxiliaryType);
@@ -413,11 +423,6 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(auxiliary);
             Merchant.Sign = BuildSign();
             GatewayData.Add(Constant.SIGN, Merchant.Sign);
-        }
-
-        public void InitFormPayment()
-        {
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
         }
 
         /// <summary>
@@ -542,9 +547,15 @@ namespace ICanPay.Wechatpay
             return true;
         }
 
-        public override void WriteSuccessFlag()
+        protected override void WriteSuccessFlag()
         {
             GatewayData.Add(Constant.RETURN_CODE, SUCCESS);
+            HttpUtil.Write(GatewayData.ToXml());
+        }
+
+        protected override void WriteFailureFlag()
+        {
+            GatewayData.Add(Constant.RETURN_CODE, FAIL);
             HttpUtil.Write(GatewayData.ToXml());
         }
 

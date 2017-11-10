@@ -8,17 +8,6 @@ namespace ICanPay.Core
     public class NullGateway : GatewayBase
     {
 
-        #region 构造函数
-
-        /// <summary>
-        /// 初始化未知网关
-        /// </summary>
-        public NullGateway()
-        {
-        }
-
-        #endregion
-
         #region 属性
 
         public override string GatewayUrl { get; set; } = string.Empty;
@@ -33,7 +22,7 @@ namespace ICanPay.Core
 
         #region 方法
 
-        protected override async Task<bool> CheckNotifyDataAsync()
+        protected internal override async Task<bool> ValidateNotifyAsync()
         {
             return await Task.Run(() => { return false; });
         }

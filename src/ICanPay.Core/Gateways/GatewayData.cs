@@ -19,10 +19,31 @@ namespace ICanPay.Core
     /// </summary>
     public class GatewayData
     {
+        #region 私有字段
+
+        private readonly SortedDictionary<string, object> _values;
+        private readonly string _defaultResult = "defaultResult";
+
+        #endregion
+
         #region 属性
 
-        public SortedDictionary<string, object> Values { get; set; } = new SortedDictionary<string, object>();
-        private readonly string defaultResult = "defaultResult";
+        public object this[string key]
+        {
+            get => _values[key];
+            set => _values[key] = value;
+        }
+
+        public int Count => _values.Count;
+
+        #endregion
+
+        #region 构造函数
+
+        public GatewayData()
+        {
+            _values = new SortedDictionary<string, object>();
+        }
 
         #endregion
 
@@ -48,11 +69,11 @@ namespace ICanPay.Core
 
             if (Exists(key))
             {
-                Values[key] = value;
+                _values[key] = value;
             }
             else
             {
-                Values.Add(key, value);
+                _values.Add(key, value);
             }
 
             return true;
@@ -105,11 +126,11 @@ namespace ICanPay.Core
 
                     if (Exists(key))
                     {
-                        Values[key] = value;
+                        _values[key] = value;
                     }
                     else
                     {
-                        Values.Add(key, value);
+                        _values.Add(key, value);
                     }
                 }
             }
@@ -122,7 +143,7 @@ namespace ICanPay.Core
         /// <returns>参数值</returns>
         public object GetValue(string key)
         {
-            Values.TryGetValue(key, out object value);
+            _values.TryGetValue(key, out object value);
             return value;
         }
 
@@ -229,7 +250,7 @@ namespace ICanPay.Core
         /// </summary>
         /// <param name="key">参数名</param>
         /// <returns></returns>
-        public bool Exists(string key) => Values.ContainsKey(key);
+        public bool Exists(string key) => _values.ContainsKey(key);
 
         /// <summary>
         /// 将网关数据转成Xml格式数据
@@ -237,14 +258,14 @@ namespace ICanPay.Core
         /// <returns></returns>
         public string ToXml()
         {
-            if (Values.Count == 0)
+            if (_values.Count == 0)
             {
                 return string.Empty;
             }
 
             var sb = new StringBuilder();
             sb.Append("<xml>");
-            foreach (var item in Values)
+            foreach (var item in _values)
             {
                 if (item.Value is string)
                 {
@@ -286,7 +307,7 @@ namespace ICanPay.Core
             }
             catch
             {
-                Add(defaultResult, xml);
+                Add(_defaultResult, xml);
             }
         }
 
@@ -298,7 +319,7 @@ namespace ICanPay.Core
         public string ToUrl(params string[] key)
         {
             var sb = new StringBuilder();
-            foreach (var item in Values)
+            foreach (var item in _values)
             {
                 if (!key.Contains(item.Key))
                 {
@@ -317,7 +338,7 @@ namespace ICanPay.Core
         public string ToUrlEncode(params string[] key)
         {
             var sb = new StringBuilder();
-            foreach (var item in Values)
+            foreach (var item in _values)
             {
                 if (!key.Contains(item.Key))
                 {
@@ -358,7 +379,7 @@ namespace ICanPay.Core
             }
             catch
             {
-                Add(defaultResult, url);
+                Add(_defaultResult, url);
             }
         }
 
@@ -379,9 +400,7 @@ namespace ICanPay.Core
                     Add(item, WebUtility.UrlDecode(form[item]));
                 }
             }
-            catch
-            {
-            }
+            catch { }
         }
 
         /// <summary>
@@ -394,7 +413,7 @@ namespace ICanPay.Core
             var html = new StringBuilder();
             html.AppendLine("<body>");
             html.AppendLine($"<form name='gateway' method='post' action ='{url}'>");
-            foreach (var item in Values)
+            foreach (var item in _values)
             {
                 html.AppendLine($"<input type='hidden' name='{item.Key}' value='{item.Value}'>");
             }
@@ -413,7 +432,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(Values);
+            return JsonConvert.SerializeObject(_values);
         }
 
         /// <summary>
@@ -438,7 +457,7 @@ namespace ICanPay.Core
             }
             catch
             {
-                Add(defaultResult, json);
+                Add(_defaultResult, json);
             }
         }
 
@@ -479,7 +498,7 @@ namespace ICanPay.Core
         /// </summary>
         public void Clear()
         {
-            Values.Clear();
+            _values.Clear();
         }
 
         /// <summary>
@@ -489,7 +508,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public bool Remove(string key)
         {
-            return Values.Remove(key);
+            return _values.Remove(key);
         }
 
         /// <summary>
@@ -498,7 +517,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public string GetDefaultResult()
         {
-            return GetStringValue(defaultResult);
+            return GetStringValue(_defaultResult);
         }
 
         #endregion

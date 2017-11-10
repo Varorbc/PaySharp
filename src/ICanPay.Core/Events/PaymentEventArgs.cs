@@ -11,8 +11,8 @@ namespace ICanPay.Core
 
         #region 私有字段
 
-        protected GatewayBase gateway;
-        private readonly string notifyServerHostAddress;
+        protected GatewayBase _gateway;
+        private readonly string _notifyServerHostAddress;
 
         #endregion
 
@@ -24,8 +24,8 @@ namespace ICanPay.Core
         /// <param name="gateway">支付网关</param>
         protected PaymentEventArgs(GatewayBase gateway)
         {
-            this.gateway = gateway;
-            notifyServerHostAddress = HttpUtil.LocalIpAddress.ToString();
+            _gateway = gateway;
+            _notifyServerHostAddress = HttpUtil.LocalIpAddress.ToString();
         }
 
         #endregion
@@ -39,7 +39,7 @@ namespace ICanPay.Core
         {
             get
             {
-                return notifyServerHostAddress;
+                return _notifyServerHostAddress;
             }
         }
 
@@ -50,7 +50,7 @@ namespace ICanPay.Core
         {
             get
             {
-                return gateway.GatewayData;
+                return _gateway.GatewayData;
             }
         }
 
@@ -61,7 +61,18 @@ namespace ICanPay.Core
         {
             get
             {
-                return gateway.GetType();
+                return _gateway.GetType();
+            }
+        }
+
+        /// <summary>
+        /// 通知数据
+        /// </summary>
+        public INotify Notify
+        {
+            get
+            {
+                return _gateway.Notify;
             }
         }
 

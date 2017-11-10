@@ -41,5 +41,9 @@
         public const string ALIPAY_DATA_DATASERVICE_BILL_DOWNLOADURL_QUERY_RESPONSE = "alipay_data_dataservice_bill_downloadurl_query_response";
         public const string OUT_REQUEST_NO = "out_request_no";
         public const string FILETYPE = "fileType";
+        public const string WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
+        public const string NOTIFY_TYPE = "notify_type";
+        public const string NOTIFY_ID = "notify_id";
+        public const string NOTIFY_TIME = "notify_time";
     }
 }

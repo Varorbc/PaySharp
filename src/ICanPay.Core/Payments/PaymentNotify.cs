@@ -10,7 +10,7 @@ namespace ICanPay.Core
     {
         #region 私有字段
 
-        private readonly IGateways gateways;
+        private readonly IGateways _gateways;
 
         #endregion
 
@@ -22,7 +22,7 @@ namespace ICanPay.Core
         /// <param name="gateways">用于验证支付网关返回数据的网关列表</param>
         public PaymentNotify(IGateways gateways)
         {
-            this.gateways = gateways;
+            _gateways = gateways;
         }
 
         #endregion
@@ -59,7 +59,7 @@ namespace ICanPay.Core
         /// </summary>
         public async Task ReceivedAsync()
         {
-            GatewayBase gateway = NotifyProcess.GetGateway(gateways);
+            GatewayBase gateway = NotifyProcess.GetGateway(_gateways);
             if (gateway is NullGateway)
             {
                 OnUnknownGateway(new UnknownGatewayEventArgs(gateway));

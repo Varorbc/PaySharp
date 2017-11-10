@@ -11,7 +11,16 @@ namespace ICanPay.Core
     {
         #region 私有字段
 
-        private readonly ICollection<GatewayBase> list;
+        private readonly ICollection<GatewayBase> _list;
+
+        #endregion
+
+        #region 属性
+
+        /// <summary>
+        /// 网关数量
+        /// </summary>
+        public int Count => _list.Count;
 
         #endregion
 
@@ -22,7 +31,7 @@ namespace ICanPay.Core
         /// </summary>
         public Gateways()
         {
-            list = new List<GatewayBase>();
+            _list = new List<GatewayBase>();
         }
 
         #endregion
@@ -38,7 +47,7 @@ namespace ICanPay.Core
         {
             if (gateway != null)
             {
-                list.Add(gateway);
+                _list.Add(gateway);
                 return true;
             }
 
@@ -52,7 +61,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public GatewayBase Get<T>()
         {
-            var gatewayList = list
+            var gatewayList = _list
                 .Where(a => a is T)
                 .ToList();
 
@@ -67,7 +76,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public GatewayBase Get<T>(GatewayTradeType gatewayTradeType)
         {
-            var gatewayList = list
+            var gatewayList = _list
                 .Where(a => a is T && a.GatewayTradeType == gatewayTradeType)
                 .ToList();
 
@@ -83,7 +92,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public ICollection<GatewayBase> GetList()
         {
-            return list;
+            return _list;
         }
 
         #endregion

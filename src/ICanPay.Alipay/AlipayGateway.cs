@@ -19,7 +19,7 @@ namespace ICanPay.Alipay
         #region 私有字段
 
         private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do?charset=UTF-8";
-        private readonly Merchant merchant;
+        private readonly Merchant _merchant;
 
         #endregion
 
@@ -32,7 +32,7 @@ namespace ICanPay.Alipay
         public AlipayGateway(Merchant merchant)
             : base(merchant)
         {
-            this.merchant = merchant;
+            _merchant = merchant;
         }
 
         #endregion
@@ -41,25 +41,26 @@ namespace ICanPay.Alipay
 
         public override string GatewayUrl { get; set; } = GATEWAYURL;
 
-        public new Merchant Merchant => merchant;
+        public new Merchant Merchant => _merchant;
 
         public new Order Order => (Order)base.Order;
 
         public new Notify Notify => (Notify)base.Notify;
 
-        protected override bool IsWaitPay => Notify.TradeStatus == "WAIT_BUYER_PAY";
+        protected override bool IsWaitPay => Notify.TradeStatus == Constant.WAIT_BUYER_PAY;
 
-        protected override bool IsSuccessPay => Notify.Code == "TRADE_SUCCESS";
+        protected override bool IsSuccessPay => Notify.TradeStatus == Constant.TRADE_SUCCESS;
 
-        protected override string[] NotifyVerifyParameter => new string[] { "notify_type", "notify_id", "notify_time", "sign", "sign_type" };
+        protected override string[] NotifyVerifyParameter => new string[]
+        { Constant.NOTIFY_TYPE, Constant.NOTIFY_ID, Constant.NOTIFY_TIME, Constant.SIGN, Constant.SIGN_TYPE };
 
-    #endregion
+        #endregion
 
-    #region 方法
+        #region 方法
 
-    #region 表单支付
+        #region 表单支付
 
-    public string BuildFormPayment()
+        public string BuildFormPayment()
         {
             InitFormPayment();
 
@@ -153,10 +154,12 @@ namespace ICanPay.Alipay
 
             if (!string.IsNullOrEmpty(Notify.TradeNo))
             {
-                PollQueryTradeState(new Auxiliary
+                PollQueryTradeStateAsync(new Auxiliary
                 {
                     TradeNo = Notify.TradeNo
-                });
+                })
+                .GetAwaiter()
+                .GetResult();
             }
         }
 
@@ -207,6 +210,7 @@ namespace ICanPay.Alipay
 
         public void InitAppletPayment()
         {
+            //与InitAppPayment不需要再写
         }
 
         #endregion
@@ -330,7 +334,7 @@ namespace ICanPay.Alipay
 
         #endregion
 
-        protected override async Task<bool> CheckNotifyDataAsync()
+        protected override async Task<bool> ValidateNotifyAsync()
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>();
             if (await IsSuccessResultAsync())
@@ -434,22 +438,7 @@ namespace ICanPay.Alipay
         /// <returns></returns>
         private async Task<bool> IsSuccessResultAsync()
         {
-            if (ValidateNotifyParameter() && ValidateNotifySign() && await ValidateNotifyIdAsync())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// 检查支付通知，是否支付成功
-        /// </summary>
-        /// <returns></returns>
-        private bool ValidateNotifyParameter()
-        {
-            // 支付状态是否为成功。
-            if (Notify.TradeStatus == Constant.TRADE_SUCCESS)
+            if (IsSuccessPay && ValidateNotifySign() && await ValidateNotifyIdAsync())
             {
                 return true;
             }

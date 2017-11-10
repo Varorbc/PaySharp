@@ -33,5 +33,7 @@
         public const string ERRMSG = "errmsg";
         public const string MCH_ID = "mch_id";
         public const string AUTH_CODE = "auth_code";
+        public const string USERPAYING = "USERPAYING";
+        public const string RESULT_CODE = "result_code";
     }
 }
