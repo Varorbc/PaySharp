@@ -8,7 +8,7 @@ namespace ICanPay.Core.Utils
     /// <summary>
     /// 加密工具类
     /// </summary>
-    public class EncryptUtil
+    public static class EncryptUtil
     {
         #region MD5加密
 
@@ -292,6 +292,23 @@ namespace ICanPay.Core.Utils
             }
             binr.BaseStream.Seek(-1, SeekOrigin.Current);
             return count;
+        }
+
+        #endregion
+
+        #region SHA256加密
+
+        /// <summary>
+        /// SHA256加密
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <returns></returns>
+        public static string SHA256(string data)
+        {
+            byte[] byteData = Encoding.UTF8.GetBytes(data);
+            SHA256Managed sha256 = new SHA256Managed();
+            byte[] result = sha256.ComputeHash(byteData);
+            return BitConverter.ToString(result).Replace("-", "").ToLower();
         }
 
         #endregion

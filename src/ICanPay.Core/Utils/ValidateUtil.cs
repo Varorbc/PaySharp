@@ -7,7 +7,7 @@ namespace ICanPay.Core.Utils
     /// <summary>
     /// 验证工具类
     /// </summary>
-    public class ValidateUtil
+    public static class ValidateUtil
     {
         /// <summary>
         /// 验证

@@ -11,7 +11,7 @@ namespace ICanPay.Core.Utils
     /// <summary>
     /// Http工具类
     /// </summary>
-    public class HttpUtil
+    public static class HttpUtil
     {
         #region 属性
 

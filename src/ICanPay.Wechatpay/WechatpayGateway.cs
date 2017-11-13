@@ -12,7 +12,7 @@ namespace ICanPay.Wechatpay
     /// <summary>
     /// 微信支付网关
     /// </summary>
-    public sealed class WechatpayGataway : GatewayBase,
+    public sealed class WechatpayGateway : GatewayBase,
         IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment, IBarcodePayment,
         IQuery, ICancel, IClose, IBillDownload, IRefund, IRefundQuery
     {
@@ -41,7 +41,7 @@ namespace ICanPay.Wechatpay
         /// 初始化微信支付网关
         /// </summary>
         /// <param name="merchant">商户数据</param>
-        public WechatpayGataway(Merchant merchant)
+        public WechatpayGateway(Merchant merchant)
             : base(merchant)
         {
             _merchant = merchant;
