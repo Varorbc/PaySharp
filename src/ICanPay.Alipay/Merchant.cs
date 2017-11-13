@@ -16,11 +16,6 @@ namespace ICanPay.Alipay
         public string AppId { get; set; }
 
         /// <summary>
-        /// 签名
-        /// </summary>
-        public string Sign { get; set; }
-
-        /// <summary>
         /// 签名类型
         /// </summary>
         public string SignType => "RSA2";

@@ -293,7 +293,7 @@ namespace ICanPay.Alipay
             Merchant.Method = Constant.BILLDOWNLOAD;
             Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
             GatewayData.Add(Merchant);
-            BuildSign();
+            GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
         #endregion
@@ -352,7 +352,7 @@ namespace ICanPay.Alipay
         {
             Merchant.BizContent = Util.SerializeObject(Order);
             GatewayData.Add(Merchant);
-            BuildSign();
+            GatewayData.Add(Constant.SIGN, BuildSign());
 
             ValidateParameter(Merchant);
             ValidateParameter(Order);
@@ -388,7 +388,7 @@ namespace ICanPay.Alipay
             }
             Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
             GatewayData.Add(Merchant);
-            BuildSign();
+            GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
         /// <summary>
@@ -427,10 +427,9 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 生成签名
         /// </summary>
-        private void BuildSign()
+        private string BuildSign()
         {
-            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            return EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
         }
 
         /// <summary>
@@ -452,9 +451,9 @@ namespace ICanPay.Alipay
         /// </summary>
         private bool ValidateNotifySign()
         {
-            Merchant.Sign = EncryptUtil.RSA2(GatewayData.ToUrl(Constant.SIGN, Constant.SIGN_TYPE), Merchant.Privatekey);
+            string sign = EncryptUtil.RSA2(GatewayData.ToUrl(Constant.SIGN, Constant.SIGN_TYPE), Merchant.Privatekey);
             // 验证通知的签名
-            if (Notify.Sign == Merchant.Sign)
+            if (Notify.Sign == sign)
             {
                 return true;
             }

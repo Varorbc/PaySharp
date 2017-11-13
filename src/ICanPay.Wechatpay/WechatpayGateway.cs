@@ -406,8 +406,7 @@ namespace ICanPay.Wechatpay
             Merchant.DeviceInfo = Constant.WEB;
             GatewayData.Add(Merchant);
             GatewayData.Add(Order);
-            Merchant.Sign = BuildSign();
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
         /// <summary>
@@ -421,8 +420,7 @@ namespace ICanPay.Wechatpay
             Merchant.NonceStr = Util.GenerateNonceStr();
             GatewayData.Add(Merchant);
             GatewayData.Add(auxiliary);
-            Merchant.Sign = BuildSign();
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
         /// <summary>
@@ -474,8 +472,7 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.MCH_ID, Merchant.AppId);
             GatewayData.Add(Constant.AUTH_CODE, Merchant.AppId);
             GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
-            Merchant.Sign = BuildSign();
-            GatewayData.Add(Constant.SIGN, Merchant.Sign);
+            GatewayData.Add(Constant.SIGN, BuildSign());
             GatewayUrl = AUTHCODETOOPENIDURL;
 
             Commit();
