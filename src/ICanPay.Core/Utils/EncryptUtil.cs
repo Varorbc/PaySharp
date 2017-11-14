@@ -10,6 +10,15 @@ namespace ICanPay.Core.Utils
     /// </summary>
     public static class EncryptUtil
     {
+        #region 私有字段
+
+        /// <summary>
+        /// 默认编码
+        /// </summary>
+        private static readonly string _defaultCharset = "UTF-8";
+
+        #endregion
+
         #region MD5加密
 
         /// <summary>
@@ -52,7 +61,7 @@ namespace ICanPay.Core.Utils
         /// <returns></returns>
         public static string RSA(string data, string privateKey)
         {
-            return RSA(data, privateKey, "UTF-8", "RSA", false);
+            return RSA(data, privateKey, _defaultCharset, "RSA", false);
         }
 
         /// <summary>
@@ -63,7 +72,7 @@ namespace ICanPay.Core.Utils
         /// <returns></returns>
         public static string RSA2(string data, string privateKey)
         {
-            return RSA(data, privateKey, "UTF-8", "RSA2", false);
+            return RSA(data, privateKey, _defaultCharset, "RSA2", false);
         }
 
         private static string RSA(string data, string privateKeyPem, string charset, string signType, bool keyFromFile)
@@ -115,6 +124,186 @@ namespace ICanPay.Core.Utils
             }
 
             return Convert.ToBase64String(signatureBytes);
+        }
+
+        /// <summary>
+        /// RSA2验签
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <param name="sign">签名</param>
+        /// <param name="publicKeyPem">公钥</param>
+        /// <returns></returns>
+        public static bool RSA2VerifyData(string data, string sign, string publicKeyPem)
+        {
+            return RSAVerifyData(data, sign, publicKeyPem, _defaultCharset, "RSA2", false);
+        }
+
+        private static bool RSAVerifyData(string signContent, string sign, string publicKeyPem, string charset, string signType, bool keyFromFile)
+        {
+            try
+            {
+                string sPublicKeyPEM = publicKeyPem;
+
+                if (keyFromFile)
+                {
+                    sPublicKeyPEM = File.ReadAllText(publicKeyPem);
+                }
+                var rsa = CreateRsaProviderFromPublicKey(sPublicKeyPEM, signType);
+                bool bVerifyResultOriginal = false;
+
+                if ("RSA2".Equals(signType))
+                {
+                    bVerifyResultOriginal = rsa.VerifyData(Encoding.GetEncoding(charset).GetBytes(signContent),
+                       Convert.FromBase64String(sign), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                }
+                else
+                {
+                    bVerifyResultOriginal = rsa.VerifyData(Encoding.GetEncoding(charset).GetBytes(signContent),
+                       Convert.FromBase64String(sign), HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
+                }
+
+                return bVerifyResultOriginal;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+
+        private static RSA CreateRsaProviderFromPublicKey(string publicKeyString, string signType)
+        {
+            byte[] seqOid = { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 };
+            byte[] seq = new byte[15];
+
+            var x509Key = Convert.FromBase64String(publicKeyString);
+            using (MemoryStream mem = new MemoryStream(x509Key))
+            {
+                using (BinaryReader binr = new BinaryReader(mem))
+                {
+                    byte bt = 0;
+                    ushort twobytes = 0;
+
+                    twobytes = binr.ReadUInt16();
+                    if (twobytes == 0x8130)
+                    {
+                        binr.ReadByte();
+                    }
+                    else if (twobytes == 0x8230)
+                    {
+                        binr.ReadInt16();
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+                    seq = binr.ReadBytes(15);
+                    if (!CompareBytearrays(seq, seqOid))
+                    {
+                        return null;
+                    }
+
+                    twobytes = binr.ReadUInt16();
+                    if (twobytes == 0x8103)
+                    {
+                        binr.ReadByte();
+                    }
+                    else if (twobytes == 0x8203)
+                    {
+                        binr.ReadInt16();
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+                    bt = binr.ReadByte();
+                    if (bt != 0x00)
+                    {
+                        return null;
+                    }
+
+                    twobytes = binr.ReadUInt16();
+                    if (twobytes == 0x8130)
+                    {
+                        binr.ReadByte();
+                    }
+                    else if (twobytes == 0x8230)
+                    {
+                        binr.ReadInt16();
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+                    twobytes = binr.ReadUInt16();
+                    byte lowbyte = 0x00;
+                    byte highbyte = 0x00;
+
+                    if (twobytes == 0x8102)
+                    {
+                        lowbyte = binr.ReadByte();
+                    }
+                    else if (twobytes == 0x8202)
+                    {
+                        highbyte = binr.ReadByte();
+                        lowbyte = binr.ReadByte();
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    byte[] modint = { lowbyte, highbyte, 0x00, 0x00 };
+                    int modsize = BitConverter.ToInt32(modint, 0);
+
+                    int firstbyte = binr.PeekChar();
+                    if (firstbyte == 0x00)
+                    {
+                        binr.ReadByte();
+                        modsize -= 1;
+                    }
+
+                    byte[] modulus = binr.ReadBytes(modsize);
+
+                    if (binr.ReadByte() != 0x02)
+                    {
+                        return null;
+                    }
+                    int expbytes = binr.ReadByte();
+                    byte[] exponent = binr.ReadBytes(expbytes);
+
+                    RSA rsa = System.Security.Cryptography.RSA.Create();
+                    rsa.KeySize = signType == "RSA" ? 1024 : 2048;
+                    RSAParameters rsaKeyInfo = new RSAParameters
+                    {
+                        Modulus = modulus,
+                        Exponent = exponent
+                    };
+                    rsa.ImportParameters(rsaKeyInfo);
+
+                    return rsa;
+                }
+            }
+        }
+
+        private static bool CompareBytearrays(byte[] a, byte[] b)
+        {
+            if (a.Length != b.Length)
+            {
+                return false;
+            }
+            int i = 0;
+            foreach (byte c in a)
+            {
+                if (c != b[i])
+                {
+                    return false;
+                }
+                i++;
+            }
+            return true;
         }
 
         private static RSA LoadCertificateFile(string filename, string signType)

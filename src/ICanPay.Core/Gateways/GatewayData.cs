@@ -327,7 +327,7 @@ namespace ICanPay.Core
                     }
                 }
             }
-            catch
+            finally
             {
                 Add(_defaultResult, xml);
             }
@@ -399,7 +399,7 @@ namespace ICanPay.Core
                     }
                 }
             }
-            catch
+            finally
             {
                 Add(_defaultResult, url);
             }
@@ -419,7 +419,7 @@ namespace ICanPay.Core
 
                 foreach (var item in allKeys)
                 {
-                    Add(item, WebUtility.UrlDecode(form[item]));
+                    Add(item, form[item]);
                 }
             }
             catch { }
@@ -477,7 +477,7 @@ namespace ICanPay.Core
                     }
                 }
             }
-            catch
+            finally
             {
                 Add(_defaultResult, json);
             }
@@ -496,7 +496,7 @@ namespace ICanPay.Core
             {
                 var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
                 var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
-                var value = GetValue(key);
+                var value = GetStringValue(key);
 
                 if (value != null)
                 {
@@ -534,7 +534,7 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// 获取默认结果,当From无法转换时,值才存在
+        /// 获取默认结果
         /// </summary>
         /// <returns></returns>
         public string GetDefaultResult()

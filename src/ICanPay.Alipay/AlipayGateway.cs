@@ -55,11 +55,6 @@ namespace ICanPay.Alipay
         protected override string[] NotifyVerifyParameter => new string[]
         { Constant.NOTIFY_TYPE, Constant.NOTIFY_ID, Constant.NOTIFY_TIME, Constant.SIGN, Constant.SIGN_TYPE };
 
-        /// <summary>
-        /// 获得验证支付宝通知的Url
-        /// </summary>
-        private string GetValidateNotifyUrl => $"{GatewayUrl}?service=notify_verify&partner={Merchant.AppId}&notify_id={Notify.NotifyId}";
-
         #endregion
 
         #region 方法
@@ -346,7 +341,7 @@ namespace ICanPay.Alipay
         protected override async Task<bool> ValidateNotifyAsync()
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>();
-            if (await IsSuccessResultAsync())
+            if (IsSuccessResult())
             {
                 return true;
             }
@@ -442,16 +437,11 @@ namespace ICanPay.Alipay
         /// 是否是已成功支付的支付通知
         /// </summary>
         /// <returns></returns>
-        private async Task<bool> IsSuccessResultAsync()
+        private bool IsSuccessResult()
         {
             if (!ValidateNotifySign())
             {
                 throw new GatewayException("签名不一致");
-            }
-
-            if (!await ValidateNotifyIdAsync())
-            {
-                throw new GatewayException("非支付宝发送的通知");
             }
 
             if (IsSuccessPay)
@@ -467,38 +457,8 @@ namespace ICanPay.Alipay
         /// </summary>
         private bool ValidateNotifySign()
         {
-            string sign = EncryptUtil.RSA2(GatewayData.ToUrl(Constant.SIGN, Constant.SIGN_TYPE), Merchant.Privatekey);
-            // 验证通知的签名
-            if (Notify.Sign == sign)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// 验证网关的通知Id是否有效
-        /// </summary>
-        private bool ValidateNotifyId()
-        {
-            string data = HttpUtil.Get(GetValidateNotifyUrl);
-            GatewayData.FromXml(data);
-            // 服务器异步通知的通知Id则会在输出标志成功接收到通知的success字符串后失效。
-            if (GatewayData.GetStringValue(Constant.IS_SUCCESS) == Constant.T)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// 异步验证网关的通知Id是否有效
-        /// </summary>
-        private async Task<bool> ValidateNotifyIdAsync()
-        {
-            return await Task.Run(() => ValidateNotifyId());
+            return EncryptUtil.RSA2VerifyData(GatewayData.ToUrl(Constant.SIGN, Constant.SIGN_TYPE),
+                Notify.Sign, Merchant.AlipayPublicKey);
         }
 
         #endregion

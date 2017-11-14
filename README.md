@@ -162,6 +162,11 @@ ICanPay.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Unionpay.svg
 				private void Notify_PaymentSucceed(object sender, PaymentSucceedEventArgs e)
 				{
 					// 支付成功时时的处理代码
+					/* 建议添加以下校验。
+					1、需要验证该通知数据中的OutTradeNo是否为商户系统中创建的订单号，
+					2、判断Amount是否确实为该订单的实际金额（即商户订单创建时的金额），
+					3、验证AppId是否为该商户本身。
+					*/
 					if (e.GatewayType == typeof(AlipayGateway))
 					{
 						var alipayNotify = (Alipay.Notify)e.Notify;
@@ -198,3 +203,7 @@ https://open.unionpay.com/ajweb/help/api
 # 致谢
 
 [hiihellox10](https://github.com/hiihellox10)
+
+[John0King](https://github.com/John0King)
+
+[stulzq](https://github.com/stulzq)
