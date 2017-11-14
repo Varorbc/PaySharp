@@ -1,4 +1,4 @@
-﻿using System;
+﻿using ICanPay.Core.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,7 +65,7 @@ namespace ICanPay.Core
                 .Where(a => a is T)
                 .ToList();
 
-            return gatewayList.Count > 0 ? gatewayList[0] : throw new Exception("找不到指定网关");
+            return gatewayList.Count > 0 ? gatewayList[0] : throw new GatewayException("找不到指定网关");
         }
 
         /// <summary>

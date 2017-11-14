@@ -8,7 +8,7 @@ using System.Text;
 
 namespace ICanPay.Unionpay
 {
-    public static class Util
+    internal static class Util
     {
         /// <summary>
         /// 获取Pkcs12Store

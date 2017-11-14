@@ -1,4 +1,5 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Exceptions;
 using ICanPay.Core.Utils;
 using System;
 using System.IO;
@@ -53,6 +54,11 @@ namespace ICanPay.Alipay
 
         protected override string[] NotifyVerifyParameter => new string[]
         { Constant.NOTIFY_TYPE, Constant.NOTIFY_ID, Constant.NOTIFY_TIME, Constant.SIGN, Constant.SIGN_TYPE };
+
+        /// <summary>
+        /// 获得验证支付宝通知的Url
+        /// </summary>
+        private string GetValidateNotifyUrl => $"{GatewayUrl}?service=notify_verify&partner={Merchant.AppId}&notify_id={Notify.NotifyId}";
 
         #endregion
 
@@ -188,7 +194,10 @@ namespace ICanPay.Alipay
             }
 
             BuildCancel(auxiliary);
-            OnPaymentFailed(new PaymentFailedEventArgs(this));
+            OnPaymentFailed(new PaymentFailedEventArgs(this)
+            {
+                Message = "支付超时"
+            });
         }
 
         /// <summary>
@@ -435,7 +444,17 @@ namespace ICanPay.Alipay
         /// <returns></returns>
         private async Task<bool> IsSuccessResultAsync()
         {
-            if (IsSuccessPay && ValidateNotifySign() && await ValidateNotifyIdAsync())
+            if (!ValidateNotifySign())
+            {
+                throw new GatewayException("签名不一致");
+            }
+
+            if (!await ValidateNotifyIdAsync())
+            {
+                throw new GatewayException("非支付宝发送的通知");
+            }
+
+            if (IsSuccessPay)
             {
                 return true;
             }
@@ -463,7 +482,7 @@ namespace ICanPay.Alipay
         /// </summary>
         private bool ValidateNotifyId()
         {
-            string data = HttpUtil.Get(GetValidateNotifyUrl());
+            string data = HttpUtil.Get(GetValidateNotifyUrl);
             GatewayData.FromXml(data);
             // 服务器异步通知的通知Id则会在输出标志成功接收到通知的success字符串后失效。
             if (GatewayData.GetStringValue(Constant.IS_SUCCESS) == Constant.T)
@@ -480,14 +499,6 @@ namespace ICanPay.Alipay
         private async Task<bool> ValidateNotifyIdAsync()
         {
             return await Task.Run(() => ValidateNotifyId());
-        }
-
-        /// <summary>
-        /// 获得验证支付宝通知的Url
-        /// </summary>
-        private string GetValidateNotifyUrl()
-        {
-            return $"{GatewayUrl}?service=notify_verify&partner={Merchant.AppId}&notify_id={Notify.NotifyId}";
         }
 
         #endregion

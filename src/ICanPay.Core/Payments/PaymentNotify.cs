@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ICanPay.Core.Exceptions;
+using System;
 using System.Threading.Tasks;
 
 namespace ICanPay.Core
@@ -66,14 +67,25 @@ namespace ICanPay.Core
             }
             else
             {
-                if (await gateway.ValidateNotifyAsync())
+                try
                 {
-                    OnPaymentSucceed(new PaymentSucceedEventArgs(gateway));
-                    gateway.WriteSuccessFlag();
+                    if (await gateway.ValidateNotifyAsync())
+                    {
+                        OnPaymentSucceed(new PaymentSucceedEventArgs(gateway));
+                        gateway.WriteSuccessFlag();
+                    }
+                    else
+                    {
+                        OnPaymentFailed(new PaymentFailedEventArgs(gateway));
+                        gateway.WriteFailureFlag();
+                    }
                 }
-                else
+                catch (GatewayException ex)
                 {
-                    OnPaymentFailed(new PaymentFailedEventArgs(gateway));
+                    OnPaymentFailed(new PaymentFailedEventArgs(gateway)
+                    {
+                        Message = ex.Message
+                    });
                     gateway.WriteFailureFlag();
                 }
             }

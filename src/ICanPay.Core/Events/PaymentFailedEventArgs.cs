@@ -19,5 +19,14 @@ namespace ICanPay.Core
         }
 
         #endregion
+
+        #region 属性
+
+        /// <summary>
+        /// 支付失败信息
+        /// </summary>
+        public string Message { get; set; }
+
+        #endregion
     }
 }

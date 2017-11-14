@@ -1,4 +1,5 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Exceptions;
 using ICanPay.Core.Utils;
 using System;
 using System.IO;
@@ -239,7 +240,10 @@ namespace ICanPay.Wechatpay
             {
                 BuildCancel(auxiliary);
             }
-            OnPaymentFailed(new PaymentFailedEventArgs(this));
+            OnPaymentFailed(new PaymentFailedEventArgs(this)
+            {
+                Message = "支付超时"
+            });
         }
 
         /// <summary>
@@ -504,7 +508,17 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private bool IsSuccessResult()
         {
-            if (Notify.ReturnCode.ToLower() == SUCCESS && Notify.ResultCode.ToLower() == SUCCESS && Notify.Sign == BuildSign())
+            if (Notify.ReturnCode.ToLower() != SUCCESS)
+            {
+                throw new GatewayException("不是成功的返回码");
+            }
+
+            if (Notify.Sign != BuildSign())
+            {
+                throw new GatewayException("签名不一致");
+            }
+
+            if (Notify.ResultCode.ToLower() == SUCCESS)
             {
                 return true;
             }
@@ -535,7 +549,7 @@ namespace ICanPay.Wechatpay
         {
             if (Notify.ReturnCode == FAIL)
             {
-                throw new Exception(Notify.ReturnMsg);
+                throw new GatewayException(Notify.ReturnMsg);
             }
 
             return true;
