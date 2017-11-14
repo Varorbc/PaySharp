@@ -82,8 +82,10 @@ namespace ICanPay.Core
         /// <summary>
         /// 添加参数
         /// </summary>
+        /// <param name="obj">对象</param>
+        /// <param name="stringCase">字符串策略</param>
         /// <returns></returns>
-        public bool Add(object obj)
+        public bool Add(object obj, StringCase stringCase)
         {
             var type = obj.GetType();
             var properties = type.GetProperties();
@@ -104,9 +106,29 @@ namespace ICanPay.Core
                         continue;
                     }
 
-                    var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
-                    var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
+                    string key;
                     object value;
+                    var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
+                    if (renameAttribute.Length > 0)
+                    {
+                        key = ((ReNameAttribute)renameAttribute[0]).Name;
+                    }
+                    else
+                    {
+                        if (stringCase is StringCase.Camel)
+                        {
+                            key = item.Name.ToCamelCase();
+                        }
+                        else if (stringCase is StringCase.Snake)
+                        {
+                            key = item.Name.ToSnakeCase();
+                        }
+                        else
+                        {
+                            key = item.Name;
+                        }
+                    }
+
                     switch (item.MemberType)
                     {
                         case MemberTypes.Field:

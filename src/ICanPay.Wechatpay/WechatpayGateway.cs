@@ -404,8 +404,8 @@ namespace ICanPay.Wechatpay
             Order.Amount *= 100;
             Merchant.NonceStr = Util.GenerateNonceStr();
             Merchant.DeviceInfo = Constant.WEB;
-            GatewayData.Add(Merchant);
-            GatewayData.Add(Order);
+            GatewayData.Add(Merchant, StringCase.Snake);
+            GatewayData.Add(Order, StringCase.Snake);
             GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
@@ -418,8 +418,8 @@ namespace ICanPay.Wechatpay
         {
             auxiliary.Validate(gatewayAuxiliaryType);
             Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Merchant);
-            GatewayData.Add(auxiliary);
+            GatewayData.Add(Merchant, StringCase.Snake);
+            GatewayData.Add(auxiliary, StringCase.Snake);
             GatewayData.Add(Constant.SIGN, BuildSign());
         }
 

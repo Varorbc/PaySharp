@@ -292,7 +292,7 @@ namespace ICanPay.Alipay
         {
             Merchant.Method = Constant.BILLDOWNLOAD;
             Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
-            GatewayData.Add(Merchant);
+            GatewayData.Add(Merchant, StringCase.Snake);
             GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
@@ -351,7 +351,7 @@ namespace ICanPay.Alipay
         private void InitOrderParameter()
         {
             Merchant.BizContent = Util.SerializeObject(Order);
-            GatewayData.Add(Merchant);
+            GatewayData.Add(Merchant, StringCase.Snake);
             GatewayData.Add(Constant.SIGN, BuildSign());
 
             ValidateParameter(Merchant);
@@ -387,7 +387,7 @@ namespace ICanPay.Alipay
                     break;
             }
             Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
-            GatewayData.Add(Merchant);
+            GatewayData.Add(Merchant, StringCase.Snake);
             GatewayData.Add(Constant.SIGN, BuildSign());
         }
 
