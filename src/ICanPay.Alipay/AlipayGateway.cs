@@ -353,9 +353,6 @@ namespace ICanPay.Alipay
             Merchant.BizContent = Util.SerializeObject(Order);
             GatewayData.Add(Merchant, StringCase.Snake);
             GatewayData.Add(Constant.SIGN, BuildSign());
-
-            ValidateParameter(Merchant);
-            ValidateParameter(Order);
         }
 
         /// <summary>

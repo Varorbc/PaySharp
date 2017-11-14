@@ -432,9 +432,6 @@ namespace ICanPay.Wechatpay
             GatewayUrl = UNIFIEDORDERGATEWAYURL;
             InitOrderParameter();
 
-            ValidateParameter(Merchant);
-            ValidateParameter(Order);
-
             Commit();
         }
 

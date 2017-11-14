@@ -46,6 +46,7 @@ namespace ICanPay.Core
             : this(new GatewayData())
         {
             Merchant = merchant;
+            ValidateParameter(Merchant);
         }
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace ICanPay.Core
         /// 验证参数
         /// </summary>
         /// <param name="instance">验证对象</param>
-        protected void ValidateParameter(object instance)
+        private void ValidateParameter(object instance)
         {
             ValidateUtil.Validate(instance, new Dictionary<object, object>
             {
@@ -172,6 +173,7 @@ namespace ICanPay.Core
                 throw new ArgumentNullException(nameof(order));
             }
             Order = order;
+            ValidateParameter(Order);
 
             switch (GatewayTradeType)
             {
@@ -256,6 +258,8 @@ namespace ICanPay.Core
                 throw new ArgumentNullException(nameof(auxiliary));
             }
 
+            ValidateParameter(auxiliary);
+
             if (this is IQuery query)
             {
                 _gatewayAuxiliaryType = GatewayAuxiliaryType.Query;
@@ -279,6 +283,8 @@ namespace ICanPay.Core
             {
                 throw new ArgumentNullException(nameof(auxiliary));
             }
+
+            ValidateParameter(auxiliary);
 
             if (this is ICancel cancel)
             {
@@ -304,6 +310,8 @@ namespace ICanPay.Core
                 throw new ArgumentNullException(nameof(auxiliary));
             }
 
+            ValidateParameter(auxiliary);
+
             if (this is IClose close)
             {
                 _gatewayAuxiliaryType = GatewayAuxiliaryType.Close;
@@ -327,6 +335,8 @@ namespace ICanPay.Core
             {
                 throw new ArgumentNullException(nameof(auxiliary));
             }
+
+            ValidateParameter(auxiliary);
 
             if (this is IRefund refund)
             {
@@ -352,6 +362,8 @@ namespace ICanPay.Core
                 throw new ArgumentNullException(nameof(auxiliary));
             }
 
+            ValidateParameter(auxiliary);
+
             if (this is IRefundQuery refundQuery)
             {
                 _gatewayAuxiliaryType = GatewayAuxiliaryType.RefundQuery;
@@ -375,6 +387,8 @@ namespace ICanPay.Core
             {
                 throw new ArgumentNullException(nameof(auxiliary));
             }
+
+            ValidateParameter(auxiliary);
 
             if (this is IBillDownload billDownload)
             {
