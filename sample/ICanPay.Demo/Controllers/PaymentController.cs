@@ -16,7 +16,7 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index()
         {
-            string content = CreateAlipayOrder();
+            string content = CreateUnionpayOrder();
 
             return Content(content);
         }
@@ -72,7 +72,23 @@ namespace ICanPay.Demo.Controllers
                 AuthCode = "123"
             };
 
-            var gateway = gateways.Get<Wechatpay.WechatpayGataway>(GatewayTradeType.Barcode);
+            var gateway = gateways.Get<Wechatpay.WechatpayGateway>(GatewayTradeType.Barcode);
+
+            return gateway.Payment(order);
+        }
+
+        /// <summary>
+        /// 创建银联支付订单
+        /// </summary>
+        private string CreateUnionpayOrder()
+        {
+            var order = new Unionpay.Order()
+            {
+                Amount = 0.01,
+                OutTradeNo = outTradeNo
+            };
+
+            var gateway = gateways.Get<Unionpay.UnionpayGateway>(GatewayTradeType.Web);
 
             return gateway.Payment(order);
         }

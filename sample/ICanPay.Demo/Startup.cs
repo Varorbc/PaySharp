@@ -53,7 +53,9 @@ namespace ICanPay.Demo
                 {
                     AppId = "777290058110048",
                     CertPwd = "000000",
-                    CertPath = "Certs/apiclient_cert.p12"
+                    CertPath = "Certs/acp_test_sign.pfx",
+                    NotifyUrl = "http://localhost:61337/Notify",
+                    FrontUrl = "http://localhost:61337/Notify"
                 };
 
                 gateways.Add(new AlipayGateway(alipayMerchant)

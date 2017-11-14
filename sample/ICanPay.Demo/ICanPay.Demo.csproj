@@ -18,13 +18,4 @@
     <ProjectReference Include="..\..\src\ICanPay.Wechatpay\ICanPay.Wechatpay.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Certs\acp_test_sign.pfx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Certs\apiclient_cert.p12">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

@@ -46,7 +46,6 @@ namespace ICanPay.Core
             : this(new GatewayData())
         {
             Merchant = merchant;
-            ValidateParameter(Merchant);
         }
 
         /// <summary>
@@ -139,6 +138,37 @@ namespace ICanPay.Core
         #region 私有方法
 
         /// <summary>
+        /// 验证订单
+        /// </summary>
+        /// <param name="order">订单</param>
+        private void ValidateOrder(IOrder order)
+        {
+            if (order is null)
+            {
+                throw new ArgumentNullException(nameof(order));
+            }
+
+            ValidateParameter(order);
+            ValidateParameter(Merchant);
+            Order = order;
+        }
+
+        /// <summary>
+        /// 验证辅助
+        /// </summary>
+        /// <param name="auxiliary">辅助参数</param>
+        private void ValidateAuxiliary(IAuxiliary auxiliary)
+        {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(auxiliary));
+            }
+
+            ValidateParameter(auxiliary);
+            ValidateParameter(Merchant);
+        }
+
+        /// <summary>
         /// 验证参数
         /// </summary>
         /// <param name="instance">验证对象</param>
@@ -168,12 +198,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public string Payment(IOrder order)
         {
-            if (order is null)
-            {
-                throw new ArgumentNullException(nameof(order));
-            }
-            Order = order;
-            ValidateParameter(Order);
+            ValidateOrder(order);
 
             switch (GatewayTradeType)
             {
@@ -253,12 +278,7 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Query(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(auxiliary));
-            }
-
-            ValidateParameter(auxiliary);
+            ValidateAuxiliary(auxiliary);
 
             if (this is IQuery query)
             {
@@ -279,12 +299,7 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Cancel(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(auxiliary));
-            }
-
-            ValidateParameter(auxiliary);
+            ValidateAuxiliary(auxiliary);
 
             if (this is ICancel cancel)
             {
@@ -305,12 +320,7 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Close(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(auxiliary));
-            }
-
-            ValidateParameter(auxiliary);
+            ValidateAuxiliary(auxiliary);
 
             if (this is IClose close)
             {
@@ -331,12 +341,7 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Refund(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(auxiliary));
-            }
-
-            ValidateParameter(auxiliary);
+            ValidateAuxiliary(auxiliary);
 
             if (this is IRefund refund)
             {
@@ -357,12 +362,7 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify RefundQuery(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(auxiliary));
-            }
-
-            ValidateParameter(auxiliary);
+            ValidateAuxiliary(auxiliary);
 
             if (this is IRefundQuery refundQuery)
             {
@@ -383,12 +383,7 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public void BillDownload(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(auxiliary));
-            }
-
-            ValidateParameter(auxiliary);
+            ValidateAuxiliary(auxiliary);
 
             if (this is IBillDownload billDownload)
             {
