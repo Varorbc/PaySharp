@@ -1,4 +1,5 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Exceptions;
 using ICanPay.Core.Utils;
 using System;
 using System.Threading.Tasks;
@@ -44,17 +45,26 @@ namespace ICanPay.Unionpay
 
         public new Order Order => (Order)base.Order;
 
-        protected override bool IsSuccessPay => throw new NotImplementedException();
+        public new Notify Notify => (Notify)base.Notify;
+
+        protected override bool IsSuccessPay => Notify.RespCode == "00" || Notify.RespCode == "A6";
 
         protected override bool IsWaitPay => throw new NotImplementedException();
 
-        protected override string[] NotifyVerifyParameter => throw new NotImplementedException();
+        protected override string[] NotifyVerifyParameter => new string[]
+        { Constant.MERID, Constant.RESPCODE, Constant.RESPMSG, Constant.QUERYID, Constant.SIGNMETHOD };
 
         #endregion
 
-        protected override Task<bool> ValidateNotifyAsync()
+        protected override async Task<bool> ValidateNotifyAsync()
         {
-            throw new NotImplementedException();
+            base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Camel);
+            if (IsSuccessResult())
+            {
+                return true;
+            }
+
+            return false;
         }
 
         #region 表单支付
@@ -71,7 +81,6 @@ namespace ICanPay.Unionpay
             _merchant.TxnType = "01";
             _merchant.TxnSubType = "01";
             _merchant.BizType = "000201";
-            Order.Amount *= 100;
 
             GatewayData.Add(Merchant, StringCase.Camel);
             GatewayData.Add(Order, StringCase.Camel);
@@ -87,6 +96,33 @@ namespace ICanPay.Unionpay
         private string BuildSign()
         {
             return Util.Sign(_merchant.CertKey, GatewayData.ToUrl());
+        }
+
+        /// <summary>
+        /// 是否是已成功支付的支付通知
+        /// </summary>
+        /// <returns></returns>
+        private bool IsSuccessResult()
+        {
+            if (!ValidateNotifySign())
+            {
+                throw new GatewayException("签名不一致");
+            }
+
+            if (IsSuccessPay)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 验证银联通知的签名
+        /// </summary>
+        private bool ValidateNotifySign()
+        {
+            return Util.VerifyData(GatewayData.ToUrl(Constant.SIGNATURE), Notify.Sign, Notify.SignPubKeyCert);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace ICanPay.Unionpay
     public class Merchant : IMerchant
     {
         /// <summary>
-        /// 版本好
+        /// 版本号
         /// </summary>
         public string Version => "5.1.0";
 

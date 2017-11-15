@@ -390,5 +390,23 @@ namespace ICanPay.Unionpay
         }
 
         #endregion
+
+        #region 解密
+
+        /// <summary>
+        /// 解密
+        /// </summary>
+        /// <param name="key">私钥</param>
+        /// <param name="data">数据</param>
+        /// <returns></returns>
+        public static string DecryptData(AsymmetricKeyParameter key, string data)
+        {
+            byte[] dataByte = Convert.FromBase64String(data);
+            IBufferedCipher c = CipherUtilities.GetCipher("RSA/NONE/PKCS1Padding");
+            c.Init(false, key);
+            return Encoding.UTF8.GetString(c.DoFinal(dataByte));
+        }
+
+        #endregion
     }
 }
