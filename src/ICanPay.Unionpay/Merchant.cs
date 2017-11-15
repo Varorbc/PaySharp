@@ -80,24 +80,6 @@ namespace ICanPay.Unionpay
         public string CertPath { get; set; }
 
         /// <summary>
-        /// 加密证书路径
-        /// </summary>
-        [NotAdd]
-        public string EncryptCertPath { get; set; }
-
-        /// <summary>
-        /// 中级证书路径
-        /// </summary>
-        [NotAdd]
-        public string MiddleCertPath { get; set; }
-
-        /// <summary>
-        /// 根证书路径
-        /// </summary>
-        [NotAdd]
-        public string RootCertPath { get; set; }
-
-        /// <summary>
         /// 签名证书密码
         /// </summary>
         [NotAdd]
