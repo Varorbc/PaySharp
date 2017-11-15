@@ -405,7 +405,6 @@ namespace ICanPay.Wechatpay
         private void InitOrderParameter()
         {
             GatewayData.Clear();
-            Order.Amount *= 100;
             Merchant.NonceStr = Util.GenerateNonceStr();
             Merchant.DeviceInfo = Constant.WEB;
             GatewayData.Add(Merchant, StringCase.Snake);

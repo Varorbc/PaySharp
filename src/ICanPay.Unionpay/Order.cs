@@ -19,7 +19,12 @@ namespace ICanPay.Unionpay
         /// </summary>
         [Required]
         [ReName(Name = Constant.TXNAMT)]
-        public double Amount { get; set; }
+        public double Amount
+        {
+            get => _amount;
+            set => _amount = value * 100;
+        }
+        private double _amount;
 
         /// <summary>
         /// 银联不支持此字段，填写无效
