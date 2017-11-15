@@ -38,7 +38,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private void WechatpayBillDownload()
         {
-            var gateway = gateways.Get<Wechatpay.WechatpayGataway>();
+            var gateway = gateways.Get<Wechatpay.WechatpayGateway>();
 
             gateway.BillDownload(new Wechatpay.Auxiliary
             {

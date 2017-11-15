@@ -11,16 +11,16 @@ namespace ICanPay.Core.Utils
     /// <summary>
     /// Http工具类
     /// </summary>
-    public class HttpUtil
+    public static class HttpUtil
     {
         #region 属性
 
-        private static IHttpContextAccessor HttpContextAccessor;
+        private static IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         /// 当前上下文
         /// </summary>
-        public static HttpContext Current => HttpContextAccessor.HttpContext;
+        public static HttpContext Current => _httpContextAccessor.HttpContext;
 
         /// <summary>
         /// 本地IP
@@ -72,7 +72,7 @@ namespace ICanPay.Core.Utils
         /// <param name="httpContextAccessor"></param>
         internal static void Configure(IHttpContextAccessor httpContextAccessor)
         {
-            HttpContextAccessor = httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         #endregion

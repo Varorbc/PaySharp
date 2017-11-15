@@ -23,15 +23,9 @@ namespace ICanPay.Core
         #region 属性
 
         /// <summary>
-        /// 通知数据
+        /// 支付失败信息
         /// </summary>
-        public INotify Notify
-        {
-            get
-            {
-                return gateway.Notify;
-            }
-        }
+        public string Message { get; set; }
 
         #endregion
     }

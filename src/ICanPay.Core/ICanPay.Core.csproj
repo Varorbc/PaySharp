@@ -7,7 +7,7 @@
     <Title>ICanPay.Core</Title>
     <Authors>Varorbc</Authors>
     <Description>支付核心</Description>
-    <Version>1.1.0</Version>
+    <Version>1.1.2</Version>
     <PackageTags>dotnetcore;pay;</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Varorbc/ICanPay</RepositoryUrl>
@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
   </ItemGroup>

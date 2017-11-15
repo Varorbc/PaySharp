@@ -43,7 +43,7 @@ namespace ICanPay.Wechatpay
         /// </summary>
         [StringLength(16, ErrorMessage = "终端IP最大长度为16位")]
         [Required(ErrorMessage = "请设置终端IP")]
-        public string SpbillCreateIp { get; set; }
+        public string SpbillCreateIp { get; internal set; }
 
         /// <summary>
         /// 标价金额,订单总金额，单位为元，详见支付金额

@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Text;
 
 namespace ICanPay.Core.Utils
 {
@@ -42,87 +41,6 @@ namespace ICanPay.Core.Utils
         {
             return (int)(time.ToUniversalTime().Ticks / 10000000 - 62135596800);
         }
-
-        #region 字符串策略
-
-        internal enum SnakeCaseState
-        {
-            Start,
-            Lower,
-            Upper,
-            NewWord
-        }
-
-        /// <summary>
-        /// 将字符串转换为蛇形策略
-        /// </summary>
-        /// <param name="s">字符串</param>
-        /// <returns></returns>
-        public static string ToSnakeCase(this string s)
-        {
-            if (string.IsNullOrEmpty(s))
-            {
-                return s;
-            }
-
-            StringBuilder sb = new StringBuilder();
-            SnakeCaseState state = SnakeCaseState.Start;
-
-            for (int i = 0; i < s.Length; i++)
-            {
-                if (s[i] == ' ')
-                {
-                    if (state != SnakeCaseState.Start)
-                    {
-                        state = SnakeCaseState.NewWord;
-                    }
-                }
-                else if (char.IsUpper(s[i]))
-                {
-                    switch (state)
-                    {
-                        case SnakeCaseState.Upper:
-                            bool hasNext = (i + 1 < s.Length);
-                            if (i > 0 && hasNext)
-                            {
-                                char nextChar = s[i + 1];
-                                if (!char.IsUpper(nextChar) && nextChar != '_')
-                                {
-                                    sb.Append('_');
-                                }
-                            }
-                            break;
-                        case SnakeCaseState.Lower:
-                        case SnakeCaseState.NewWord:
-                            sb.Append('_');
-                            break;
-                    }
-
-                    sb.Append(char.ToLowerInvariant(s[i]));
-
-                    state = SnakeCaseState.Upper;
-                }
-                else if (s[i] == '_')
-                {
-                    sb.Append('_');
-                    state = SnakeCaseState.Start;
-                }
-                else
-                {
-                    if (state == SnakeCaseState.NewWord)
-                    {
-                        sb.Append('_');
-                    }
-
-                    sb.Append(s[i]);
-                    state = SnakeCaseState.Lower;
-                }
-            }
-
-            return sb.ToString();
-        }
-
-        #endregion
 
         #endregion
     }

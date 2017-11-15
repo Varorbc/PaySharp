@@ -1,11 +1,11 @@
 ﻿using ICanPay.Alipay;
 using ICanPay.Core;
+using ICanPay.Unionpay;
 using ICanPay.Wechatpay;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 
 namespace ICanPay.Demo
 {
@@ -48,11 +48,21 @@ namespace ICanPay.Demo
                     NotifyUrl = "http://localhost:61337/Notify"
                 };
 
+                var unionpayMerchant = new Unionpay.Merchant
+                {
+                    AppId = "777290058110048",
+                    CertPwd = "000000",
+                    CertPath = "Certs/acp_test_sign.pfx",
+                    NotifyUrl = "http://localhost:61337/Notify",
+                    FrontUrl = "http://localhost:61337/Notify"
+                };
+
                 gateways.Add(new AlipayGateway(alipayMerchant)
                 {
                     GatewayUrl = "https://openapi.alipaydev.com/gateway.do?charset=UTF-8"
                 });
-                gateways.Add(new WechatpayGataway(wechatpayMerchant));
+                gateways.Add(new WechatpayGateway(wechatpayMerchant));
+                gateways.Add(new UnionpayGateway(unionpayMerchant));
 
                 return gateways;
             });

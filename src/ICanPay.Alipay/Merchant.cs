@@ -16,11 +16,6 @@ namespace ICanPay.Alipay
         public string AppId { get; set; }
 
         /// <summary>
-        /// 签名
-        /// </summary>
-        public string Sign { get; set; }
-
-        /// <summary>
         /// 签名类型
         /// </summary>
         public string SignType => "RSA2";
@@ -28,22 +23,22 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 格式
         /// </summary>
-        public string Format = "JSON";
+        public string Format => "JSON";
 
         /// <summary>
         /// 时间戳
         /// </summary>
-        public string Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        public string Timestamp => DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         /// <summary>
         /// 版本
         /// </summary>
-        public string Version = "1.0";
+        public string Version => "1.0";
 
         /// <summary>
         /// 编码格式
         /// </summary>
-        public string Charset = "UTF-8";
+        public string Charset => "UTF-8";
 
         /// <summary>
         /// 接口名称

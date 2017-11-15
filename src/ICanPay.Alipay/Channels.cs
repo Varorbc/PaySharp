@@ -5,87 +5,87 @@
         /// <summary>
         /// 余额
         /// </summary>
-        public static string Balance = "balance";
+        public static readonly string Balance = "balance";
 
         /// <summary>
         /// 余额宝
         /// </summary>
-        public static string MoneyFund = "moneyFund";
+        public static readonly string MoneyFund = "moneyFund";
 
         /// <summary>
         /// 红包
         /// </summary>
-        public static string Coupon = "coupon";
+        public static readonly string Coupon = "coupon";
 
         /// <summary>
         /// 花呗
         /// </summary>
-        public static string Pcredit = "pcredit";
+        public static readonly string Pcredit = "pcredit";
 
         /// <summary>
         /// 花呗分期
         /// </summary>
-        public static string PcreditpayInstallment = "pcreditpayInstallment";
+        public static readonly string PcreditpayInstallment = "pcreditpayInstallment";
 
         /// <summary>
         /// 信用卡
         /// </summary>
-        public static string CreditCard = "creditCard";
+        public static readonly string CreditCard = "creditCard";
 
         /// <summary>
         /// 信用卡快捷
         /// </summary>
-        public static string CreditCardExpress = "creditCardExpress";
+        public static readonly string CreditCardExpress = "creditCardExpress";
 
         /// <summary>
         /// 信用卡卡通
         /// </summary>
-        public static string CreditCardCartoon = "creditCardCartoon";
+        public static readonly string CreditCardCartoon = "creditCardCartoon";
 
         /// <summary>
         /// 信用支付类型（包含信用卡卡通、信用卡快捷、花呗、花呗分期）
         /// </summary>
-        public static string CreditGroup = "credit_group";
+        public static readonly string CreditGroup = "credit_group";
 
         /// <summary>
         /// 借记卡快捷
         /// </summary>
-        public static string DebitCardExpress = "debitCardExpress";
+        public static readonly string DebitCardExpress = "debitCardExpress";
 
         /// <summary>
         /// 商户预存卡
         /// </summary>
-        public static string Mcard = "mcard";
+        public static readonly string Mcard = "mcard";
 
         /// <summary>
         /// 个人预存卡
         /// </summary>
-        public static string Pcard = "pcard";
+        public static readonly string Pcard = "pcard";
 
         /// <summary>
         /// 优惠（包含实时优惠+商户优惠）
         /// </summary>
-        public static string Promotion = "promotion";
+        public static readonly string Promotion = "promotion";
 
         /// <summary>
         /// 营销券
         /// </summary>
-        public static string Voucher = "voucher";
+        public static readonly string Voucher = "voucher";
 
         /// <summary>
         /// 积分
         /// </summary>
-        public static string Point = "point";
+        public static readonly string Point = "point";
 
         /// <summary>
         /// 商户优惠
         /// </summary>
-        public static string Mdiscount = "mdiscount";
+        public static readonly string Mdiscount = "mdiscount";
 
         /// <summary>
         /// 网银
         /// </summary>
-        public static string BankPay = "bankPay";
+        public static readonly string BankPay = "bankPay";
 
     }
 }

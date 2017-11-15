@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Alipay
 {
-    [JsonObject(NamingStrategyType =typeof(SnakeCaseNamingStrategy))]
+    [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
     public class Order : IOrder
     {
         /// <summary>
@@ -19,7 +19,7 @@ namespace ICanPay.Alipay
         /// 销售产品码，与支付宝签约的产品码名称。 
         /// </summary>
         [StringLength(64, ErrorMessage = "销售产品码最大长度为64位")]
-        public string ProductCode { get; set; }
+        public string ProductCode { get; internal set; }
 
         /// <summary>
         /// 订单总金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]

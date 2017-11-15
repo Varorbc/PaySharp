@@ -37,7 +37,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private Wechatpay.Notify CloseWechatpayOrder(string id)
         {
-            var gateway = gateways.Get<Wechatpay.WechatpayGataway>();
+            var gateway = gateways.Get<Wechatpay.WechatpayGateway>();
 
             return (Wechatpay.Notify)gateway.Query(new Wechatpay.Auxiliary
             {

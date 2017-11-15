@@ -24,8 +24,7 @@ namespace ICanPay.Core
 
         #region 私有字段
 
-        private GatewayData gatewayData;
-        private GatewayAuxiliaryType gatewayAuxiliaryType;
+        private GatewayAuxiliaryType _gatewayAuxiliaryType;
 
         #endregion
 
@@ -55,7 +54,7 @@ namespace ICanPay.Core
         /// <param name="gatewayData">网关数据</param>
         protected GatewayBase(GatewayData gatewayData)
         {
-            this.gatewayData = gatewayData;
+            GatewayData = gatewayData;
         }
 
         #endregion
@@ -90,17 +89,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 网关数据
         /// </summary>
-        public GatewayData GatewayData
-        {
-            get
-            {
-                return gatewayData;
-            }
-            set
-            {
-                gatewayData = value;
-            }
-        }
+        public GatewayData GatewayData { get; set; }
 
         /// <summary>
         /// 是否成功支付
@@ -126,12 +115,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 检验网关返回的通知，确认订单是否支付成功
         /// </summary>
-        protected abstract Task<bool> CheckNotifyDataAsync();
+        protected internal abstract Task<bool> ValidateNotifyAsync();
 
         /// <summary>
         /// 当接收到支付网关通知并验证无误时按照支付网关要求格式输出表示成功接收到网关通知的字符串
         /// </summary>
-        public virtual void WriteSuccessFlag()
+        protected internal virtual void WriteSuccessFlag()
         {
             HttpUtil.Write(SUCCESS);
         }
@@ -139,7 +128,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 当接收到支付网关通知并验证有误时按照支付网关要求格式输出表示失败接收到网关通知的字符串
         /// </summary>
-        public virtual void WriteFailureFlag()
+        protected internal virtual void WriteFailureFlag()
         {
             HttpUtil.Write(FAILURE);
         }
@@ -149,28 +138,46 @@ namespace ICanPay.Core
         #region 私有方法
 
         /// <summary>
-        /// 验证订单是否支付成功
+        /// 验证订单
         /// </summary>
-        internal async Task<bool> ValidateNotifyAsync()
+        /// <param name="order">订单</param>
+        private void ValidateOrder(IOrder order)
         {
-            if (await CheckNotifyDataAsync())
+            if (order is null)
             {
-                return true;
+                throw new ArgumentNullException(nameof(order));
             }
 
-            return false;
+            ValidateParameter(order);
+            ValidateParameter(Merchant);
+            Order = order;
+        }
+
+        /// <summary>
+        /// 验证辅助
+        /// </summary>
+        /// <param name="auxiliary">辅助参数</param>
+        private void ValidateAuxiliary(IAuxiliary auxiliary)
+        {
+            if (auxiliary is null)
+            {
+                throw new ArgumentNullException(nameof(auxiliary));
+            }
+
+            ValidateParameter(auxiliary);
+            ValidateParameter(Merchant);
         }
 
         /// <summary>
         /// 验证参数
         /// </summary>
         /// <param name="instance">验证对象</param>
-        protected void ValidateParameter(object instance)
+        private void ValidateParameter(object instance)
         {
             ValidateUtil.Validate(instance, new Dictionary<object, object>
             {
                 {nameof(Core.GatewayTradeType), GatewayTradeType },
-                {nameof(GatewayAuxiliaryType), gatewayAuxiliaryType }
+                {nameof(GatewayAuxiliaryType), _gatewayAuxiliaryType }
             });
         }
 
@@ -182,16 +189,16 @@ namespace ICanPay.Core
 
         #region 公共方法
 
+        #region 支付
+
         /// <summary>
         /// 支付
         /// </summary>
+        /// <param name="order">订单</param>
+        /// <returns></returns>
         public string Payment(IOrder order)
         {
-            if (order is null)
-            {
-                throw new ArgumentNullException(nameof(IOrder));
-            }
-            Order = order;
+            ValidateOrder(order);
 
             switch (GatewayTradeType)
             {
@@ -261,25 +268,30 @@ namespace ICanPay.Core
             throw new NotSupportedException($"{GetType()} 没有实现 {GatewayTradeType} 接口");
         }
 
+        #endregion
+
+        #region 查询
+
         /// <summary>
         /// 查询
         /// </summary>
         /// <param name="auxiliary">辅助参数</param>
         public INotify Query(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(IAuxiliary));
-            }
+            ValidateAuxiliary(auxiliary);
 
             if (this is IQuery query)
             {
-                gatewayAuxiliaryType = GatewayAuxiliaryType.Query;
+                _gatewayAuxiliaryType = GatewayAuxiliaryType.Query;
                 return query.BuildQuery(auxiliary);
             }
 
             throw new NotSupportedException($"{GetType()} 没有实现 IQuery 接口");
         }
+
+        #endregion
+
+        #region 撤销
 
         /// <summary>
         /// 撤销
@@ -287,19 +299,20 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Cancel(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(IAuxiliary));
-            }
+            ValidateAuxiliary(auxiliary);
 
             if (this is ICancel cancel)
             {
-                gatewayAuxiliaryType = GatewayAuxiliaryType.Cancel;
+                _gatewayAuxiliaryType = GatewayAuxiliaryType.Cancel;
                 return cancel.BuildCancel(auxiliary);
             }
 
             throw new NotSupportedException($"{GetType()} 没有实现 ICancel 接口");
         }
+
+        #endregion
+
+        #region 关闭
 
         /// <summary>
         /// 关闭
@@ -307,19 +320,20 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Close(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(IAuxiliary));
-            }
+            ValidateAuxiliary(auxiliary);
 
             if (this is IClose close)
             {
-                gatewayAuxiliaryType = GatewayAuxiliaryType.Close;
+                _gatewayAuxiliaryType = GatewayAuxiliaryType.Close;
                 return close.BuildClose(auxiliary);
             }
 
             throw new NotSupportedException($"{GetType()} 没有实现 IClose 接口");
         }
+
+        #endregion
+
+        #region 退款
 
         /// <summary>
         /// 退款
@@ -327,19 +341,20 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Refund(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(IAuxiliary));
-            }
+            ValidateAuxiliary(auxiliary);
 
             if (this is IRefund refund)
             {
-                gatewayAuxiliaryType = GatewayAuxiliaryType.Refund;
+                _gatewayAuxiliaryType = GatewayAuxiliaryType.Refund;
                 return refund.BuildRefund(auxiliary);
             }
 
             throw new NotSupportedException($"{GetType()} 没有实现 IRefund 接口");
         }
+
+        #endregion
+
+        #region 退款查询
 
         /// <summary>
         /// 退款查询
@@ -347,19 +362,20 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify RefundQuery(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(IAuxiliary));
-            }
+            ValidateAuxiliary(auxiliary);
 
             if (this is IRefundQuery refundQuery)
             {
-                gatewayAuxiliaryType = GatewayAuxiliaryType.RefundQuery;
+                _gatewayAuxiliaryType = GatewayAuxiliaryType.RefundQuery;
                 return refundQuery.BuildRefundQuery(auxiliary);
             }
 
             throw new NotSupportedException($"{GetType()} 没有实现 IRefundQuery 接口");
         }
+
+        #endregion
+
+        #region 账单下载
 
         /// <summary>
         /// 账单下载
@@ -367,20 +383,19 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public void BillDownload(IAuxiliary auxiliary)
         {
-            if (auxiliary is null)
-            {
-                throw new ArgumentNullException(nameof(IAuxiliary));
-            }
+            ValidateAuxiliary(auxiliary);
 
             if (this is IBillDownload billDownload)
             {
-                gatewayAuxiliaryType = GatewayAuxiliaryType.BillDownload;
+                _gatewayAuxiliaryType = GatewayAuxiliaryType.BillDownload;
                 HttpUtil.Write(billDownload.BuildBillDownload(auxiliary));
                 return;
             }
 
             throw new NotSupportedException($"{GetType()} 没有实现 IBillDownload 接口");
         }
+
+        #endregion
 
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ICanPay.Core.Exceptions;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ICanPay.Core
@@ -10,7 +11,16 @@ namespace ICanPay.Core
     {
         #region 私有字段
 
-        private readonly ICollection<GatewayBase> list;
+        private readonly ICollection<GatewayBase> _list;
+
+        #endregion
+
+        #region 属性
+
+        /// <summary>
+        /// 网关数量
+        /// </summary>
+        public int Count => _list.Count;
 
         #endregion
 
@@ -21,7 +31,7 @@ namespace ICanPay.Core
         /// </summary>
         public Gateways()
         {
-            list = new List<GatewayBase>();
+            _list = new List<GatewayBase>();
         }
 
         #endregion
@@ -37,7 +47,7 @@ namespace ICanPay.Core
         {
             if (gateway != null)
             {
-                list.Add(gateway);
+                _list.Add(gateway);
                 return true;
             }
 
@@ -51,9 +61,11 @@ namespace ICanPay.Core
         /// <returns></returns>
         public GatewayBase Get<T>()
         {
-            var gatewayBase = list.FirstOrDefault(a => a is T);
+            var gatewayList = _list
+                .Where(a => a is T)
+                .ToList();
 
-            return gatewayBase;
+            return gatewayList.Count > 0 ? gatewayList[0] : throw new GatewayException("找不到指定网关");
         }
 
         /// <summary>
@@ -64,10 +76,14 @@ namespace ICanPay.Core
         /// <returns></returns>
         public GatewayBase Get<T>(GatewayTradeType gatewayTradeType)
         {
-            var gatewayBase = Get<T>();
-            gatewayBase.GatewayTradeType = gatewayTradeType;
+            var gatewayList = _list
+                .Where(a => a is T && a.GatewayTradeType == gatewayTradeType)
+                .ToList();
 
-            return gatewayBase;
+            var gateway = gatewayList.Count > 0 ? gatewayList[0] : Get<T>();
+            gateway.GatewayTradeType = gatewayTradeType;
+
+            return gateway;
         }
 
         /// <summary>
@@ -76,7 +92,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public ICollection<GatewayBase> GetList()
         {
-            return list;
+            return _list;
         }
 
         #endregion

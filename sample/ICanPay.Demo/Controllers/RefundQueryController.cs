@@ -39,7 +39,7 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private Wechatpay.Notify RefundQueryWechatpayOrder(string id)
         {
-            var gateway = gateways.Get<Wechatpay.WechatpayGataway>();
+            var gateway = gateways.Get<Wechatpay.WechatpayGateway>();
 
             return (Wechatpay.Notify)gateway.RefundQuery(new Wechatpay.Auxiliary
             {
