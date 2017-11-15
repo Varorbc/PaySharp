@@ -340,7 +340,7 @@ namespace ICanPay.Alipay
 
         protected override async Task<bool> ValidateNotifyAsync()
         {
-            base.Notify = await GatewayData.ToObjectAsync<Notify>();
+            base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
             if (IsSuccessResult())
             {
                 return true;
@@ -421,7 +421,7 @@ namespace ICanPay.Alipay
             string sign = GatewayData.GetStringValue(Constant.SIGN);
             result = GatewayData.GetStringValue(key);
             GatewayData.FromJson(result);
-            base.Notify = GatewayData.ToObject<Notify>();
+            base.Notify = GatewayData.ToObject<Notify>(StringCase.Snake);
             Notify.Sign = sign;
         }
 

@@ -486,7 +486,10 @@ namespace ICanPay.Core
         /// <summary>
         /// 将网关参数转为类型
         /// </summary>
-        public T ToObject<T>()
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="stringCase">字符串策略</param>
+        /// <returns></returns>
+        public T ToObject<T>(StringCase stringCase)
         {
             var type = typeof(T);
             var obj = Activator.CreateInstance(type);
@@ -495,7 +498,28 @@ namespace ICanPay.Core
             foreach (var item in properties)
             {
                 var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
-                var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
+
+                string key;
+                if (renameAttribute.Length > 0)
+                {
+                    key = ((ReNameAttribute)renameAttribute[0]).Name;
+                }
+                else
+                {
+                    if (stringCase is StringCase.Camel)
+                    {
+                        key = item.Name.ToCamelCase();
+                    }
+                    else if (stringCase is StringCase.Snake)
+                    {
+                        key = item.Name.ToSnakeCase();
+                    }
+                    else
+                    {
+                        key = item.Name;
+                    }
+                }
+
                 var value = GetStringValue(key);
 
                 if (value != null)
@@ -510,9 +534,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 异步将网关参数转为类型
         /// </summary>
-        public async Task<T> ToObjectAsync<T>()
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="stringCase">字符串策略</param>
+        /// <returns></returns>
+        public async Task<T> ToObjectAsync<T>(StringCase stringCase)
         {
-            return await Task.Run(() => ToObject<T>());
+            return await Task.Run(() => ToObject<T>(stringCase));
         }
 
         /// <summary>

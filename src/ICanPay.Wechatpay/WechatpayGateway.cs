@@ -389,7 +389,7 @@ namespace ICanPay.Wechatpay
 
         protected override async Task<bool> ValidateNotifyAsync()
         {
-            base.Notify = await GatewayData.ToObjectAsync<Notify>();
+            base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
 
             if (IsSuccessResult())
             {
@@ -458,7 +458,7 @@ namespace ICanPay.Wechatpay
                 throw new Exception($"{_code} {_msg}");
             }
 
-            return GatewayData.ToObject<OAuth>();
+            return GatewayData.ToObject<OAuth>(StringCase.Snake);
         }
 
         /// <summary>
@@ -488,7 +488,7 @@ namespace ICanPay.Wechatpay
         private void ReadReturnResult(string result)
         {
             GatewayData.FromXml(result);
-            base.Notify = GatewayData.ToObject<Notify>();
+            base.Notify = GatewayData.ToObject<Notify>(StringCase.Snake);
             IsSuccessReturn();
         }
 
