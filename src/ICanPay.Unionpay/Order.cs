@@ -107,8 +107,13 @@ namespace ICanPay.Unionpay
         public string TokenPayData { get; set; }
 
         /// <summary>
-        /// /持卡人IP
+        /// 持卡人IP
         /// </summary>
         public string CustomerIp { get; set; }
+
+        /// <summary>
+        /// 终端号
+        /// </summary>
+        public string TermId { get; set; }
     }
 }

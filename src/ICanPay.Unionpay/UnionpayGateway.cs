@@ -11,13 +11,15 @@ namespace ICanPay.Unionpay
     /// </summary>
     public class UnionpayGateway
         : GatewayBase,
-        IFormPayment, IAppPayment
+        IFormPayment, IAppPayment,IScanPayment
     {
 
         #region 私有字段
 
         private const string FRONTGATEWAYURL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
         private const string APPGATEWAYURL = "https://gateway.test.95516.com/gateway/api/appTransReq.do";
+        private const string BACKGATEWAYURL = "https://gateway.test.95516.com/gateway/api/backTransReq.do";
+
         private readonly Merchant _merchant;
 
         #endregion
@@ -98,9 +100,29 @@ namespace ICanPay.Unionpay
 
         public void InitAppPayment()
         {
-            Util.Sign(_merchant.CertKey, "accessType=0&backUrl=http://222.222.222.222:8080/demo/api_01_gateway/BackRcvResponse.aspx&bizType=000201&certId=68759663125&channelType=08&currencyCode=156&encoding=UTF-8&merId=777290058110048&orderId=20171116133157041&signMethod=01&txnAmt=1000&txnSubType=01&txnTime=20171116133157&txnType=01&version=5.1.0");
             InitOrderParameter();
             GatewayUrl = APPGATEWAYURL;
+        }
+
+        #endregion
+
+        #region 扫码支付
+
+        public string BuildScanPayment()
+        {
+            InitScanPayment();
+
+            Commit();
+
+            return Notify.QrCode;
+        }
+
+        public void InitScanPayment()
+        {
+            Merchant.TxnSubType = "07";
+            Merchant.BizType = "000000";
+            InitOrderParameter();
+            GatewayUrl = BACKGATEWAYURL;
         }
 
         #endregion
@@ -139,7 +161,7 @@ namespace ICanPay.Unionpay
         /// <returns></returns>
         private string BuildSign()
         {
-            return Util.Sign(_merchant.CertKey, GatewayData.ToUrl(false));
+            return Util.Sign(Merchant.CertKey, GatewayData.ToUrl(false));
         }
 
         /// <summary>

@@ -245,5 +245,20 @@ namespace ICanPay.Unionpay
         /// 用法：在绑定后支付时客户仅需要上送本字段，无需上送卡号,不支持换行符等不可见字符 用于唯一标识绑定关系
         /// </summary>
         public string BindId { get; set; }
+
+        /// <summary>
+        /// 发卡机构代码
+        /// </summary>
+        public string IssInsNo { get; set; }
+
+        /// <summary>
+        /// 接入机构代码
+        /// </summary>
+        public string AccInsCode { get; set; }
+
+        /// <summary>
+        /// 二维码
+        /// </summary>
+        public string QrCode { get; set; }
     }
 }
