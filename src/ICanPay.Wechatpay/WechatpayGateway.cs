@@ -359,7 +359,7 @@ namespace ICanPay.Wechatpay
 
             Commit();
 
-            string result = GatewayData.GetDefaultResult();
+            string result = GatewayData.GetOriginalResult();
 
             return CreateCsv(result);
         }
@@ -497,7 +497,9 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private string BuildSign()
         {
-            string data = $"{GatewayData.ToUrl(Constant.SIGN)}&key={Merchant.Key}";
+            GatewayData.Remove(Constant.SIGN);
+
+            string data = $"{GatewayData.ToUrl(false)}&key={Merchant.Key}";
             return EncryptUtil.MD5(data);
         }
 
