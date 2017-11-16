@@ -22,6 +22,11 @@ namespace ICanPay.Unionpay
         public string CertId { get; internal set; }
 
         /// <summary>
+        /// 加密证书号
+        /// </summary>
+        public string EncryptCertId { get; internal set; }
+
+        /// <summary>
         /// 证书私钥
         /// </summary>
         [NotAdd]
@@ -120,12 +125,12 @@ namespace ICanPay.Unionpay
         ///94：IC卡脚本通知 
         ///95：查询更新加密公钥证书
         /// </summary>
-        public string TxnType { get; internal set; }
+        public string TxnType { get; internal set; } = "01";
 
         /// <summary>
         /// 交易子类
         /// </summary>
-        public string TxnSubType { get; internal set; }
+        public string TxnSubType { get; internal set; } = "01";
 
         /// <summary>
         /// 产品类型
@@ -140,7 +145,7 @@ namespace ICanPay.Unionpay
         /// 001001：订购
         /// 000202：B2B
         /// </summary>
-        public string BizType { get; internal set; }
+        public string BizType { get; internal set; } = "000201";
 
         /// <summary>
         /// 渠道类型

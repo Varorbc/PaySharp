@@ -179,23 +179,10 @@ namespace ICanPay.Unionpay
             }
 
             string unionpayCnName = "中国银联股份有限公司";
-
-#if DEBUG
-
-            // 验证公钥是否属于银联
-            if (!unionpayCnName.Equals(cn))
-            {
-                return false;
-            }
-
-#else
-
             if (!unionpayCnName.Equals(cn) && !"00040000:SIGN".Equals(cn))
             {
                 return false;
             }
-
-#endif
 
             return true;
         }

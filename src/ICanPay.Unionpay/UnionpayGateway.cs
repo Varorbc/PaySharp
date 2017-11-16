@@ -11,12 +11,13 @@ namespace ICanPay.Unionpay
     /// </summary>
     public class UnionpayGateway
         : GatewayBase,
-        IFormPayment
+        IFormPayment, IAppPayment
     {
 
         #region 私有字段
 
-        private const string GATEWAYURL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
+        private const string FRONTGATEWAYURL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
+        private const string APPGATEWAYURL = "https://gateway.test.95516.com/gateway/api/appTransReq.do";
         private readonly Merchant _merchant;
 
         #endregion
@@ -39,7 +40,7 @@ namespace ICanPay.Unionpay
 
         #region 属性
 
-        public override string GatewayUrl { get; set; } = GATEWAYURL;
+        public override string GatewayUrl { get; set; } = FRONTGATEWAYURL;
 
         public new Merchant Merchant => _merchant;
 
@@ -78,16 +79,59 @@ namespace ICanPay.Unionpay
 
         public void InitFormPayment()
         {
-            _merchant.TxnType = "01";
-            _merchant.TxnSubType = "01";
-            _merchant.BizType = "000201";
+            InitOrderParameter();
+            GatewayUrl = FRONTGATEWAYURL;
+        }
 
+        #endregion
+
+        #region App支付
+
+        public string BuildAppPayment()
+        {
+            InitAppPayment();
+
+            Commit();
+
+            return Notify.Tn;
+        }
+
+        public void InitAppPayment()
+        {
+            Util.Sign(_merchant.CertKey, "accessType=0&backUrl=http://222.222.222.222:8080/demo/api_01_gateway/BackRcvResponse.aspx&bizType=000201&certId=68759663125&channelType=08&currencyCode=156&encoding=UTF-8&merId=777290058110048&orderId=20171116133157041&signMethod=01&txnAmt=1000&txnSubType=01&txnTime=20171116133157&txnType=01&version=5.1.0");
+            InitOrderParameter();
+            GatewayUrl = APPGATEWAYURL;
+        }
+
+        #endregion
+
+        private void InitOrderParameter()
+        {
             GatewayData.Add(Merchant, StringCase.Camel);
             GatewayData.Add(Order, StringCase.Camel);
             GatewayData.Add(Constant.SIGNATURE, BuildSign());
         }
 
-        #endregion
+        private void Commit()
+        {
+            string result = HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrl())
+                .GetAwaiter()
+                .GetResult();
+
+            ReadReturnResult(result);
+        }
+
+        private void ReadReturnResult(string result)
+        {
+            GatewayData.FromUrl(result, false);
+            base.Notify = GatewayData.ToObject<Notify>(StringCase.Camel);
+            if (!IsSuccessPay)
+            {
+                throw new GatewayException(Notify.RespMsg);
+            }
+            ValidateNotifySign();
+        }
 
         /// <summary>
         /// 生成签名
@@ -95,7 +139,7 @@ namespace ICanPay.Unionpay
         /// <returns></returns>
         private string BuildSign()
         {
-            return Util.Sign(_merchant.CertKey, GatewayData.ToUrl());
+            return Util.Sign(_merchant.CertKey, GatewayData.ToUrl(false));
         }
 
         /// <summary>
@@ -104,10 +148,7 @@ namespace ICanPay.Unionpay
         /// <returns></returns>
         private bool IsSuccessResult()
         {
-            if (!ValidateNotifySign())
-            {
-                throw new GatewayException("签名不一致");
-            }
+            ValidateNotifySign();
 
             if (IsSuccessPay)
             {
@@ -122,7 +163,17 @@ namespace ICanPay.Unionpay
         /// </summary>
         private bool ValidateNotifySign()
         {
-            return Util.VerifyData(GatewayData.ToUrl(Constant.SIGNATURE), Notify.Sign, Notify.SignPubKeyCert);
+            GatewayData.Remove(Constant.SIGNATURE);
+
+            bool result = Util.VerifyData(GatewayData.ToUrl(false),
+                Notify.Sign, Notify.SignPubKeyCert);
+
+            if (!result)
+            {
+                throw new GatewayException("签名不一致");
+            }
+
+            return result;
         }
     }
 }

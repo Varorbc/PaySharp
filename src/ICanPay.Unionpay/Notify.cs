@@ -218,5 +218,32 @@ namespace ICanPay.Unionpay
         /// 银联受理订单号
         /// </summary>
         public string Tn { get; set; }
+
+        /// <summary>
+        /// 支付卡标识
+        /// </summary>
+        public string PayCardNo { get; set; }
+
+        /// <summary>
+        /// 支付卡名称
+        /// </summary>
+        public string PayCardIssueName { get; set; }
+
+        /// <summary>
+        /// 清算汇率
+        /// </summary>
+        public string ExchangeRate { get; set; }
+
+        /// <summary>
+        /// 兑换日期
+        /// </summary>
+        public string ExchangeDate { get; set; }
+
+        /// <summary>
+        /// 绑定关系标识号
+        /// 适用于代收类绑定产品，字母不区分大小写，
+        /// 用法：在绑定后支付时客户仅需要上送本字段，无需上送卡号,不支持换行符等不可见字符 用于唯一标识绑定关系
+        /// </summary>
+        public string BindId { get; set; }
     }
 }
