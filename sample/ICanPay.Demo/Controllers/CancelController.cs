@@ -14,7 +14,7 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index(string id)
         {
-            var notify = (Alipay.Notify)CancelAlipayOrder(id);
+            var notify = CancelAlipayOrder(id);
 
             return Json(notify);
         }

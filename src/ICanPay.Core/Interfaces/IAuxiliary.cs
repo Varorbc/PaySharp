@@ -29,7 +29,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 退款金额
         /// </summary>
-        double RefundAmount { get; set; }
+        double? RefundAmount { get; set; }
 
         /// <summary>
         /// 退款原因

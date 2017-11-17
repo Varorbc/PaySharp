@@ -50,7 +50,7 @@ namespace ICanPay.Wechatpay
         /// </summary>
         [ReName(Name = Constant.REFUND_FEE)]
         [Necessary(GatewayAuxiliaryType.Refund)]
-        public double RefundAmount { get; set; }
+        public double? RefundAmount { get; set; }
 
         /// <summary>
         /// 货币种类	

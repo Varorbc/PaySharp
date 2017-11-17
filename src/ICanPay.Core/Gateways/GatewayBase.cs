@@ -278,11 +278,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Query(IAuxiliary auxiliary)
         {
+            _gatewayAuxiliaryType = GatewayAuxiliaryType.Query;
             ValidateAuxiliary(auxiliary);
 
             if (this is IQuery query)
             {
-                _gatewayAuxiliaryType = GatewayAuxiliaryType.Query;
                 return query.BuildQuery(auxiliary);
             }
 
@@ -299,11 +299,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Cancel(IAuxiliary auxiliary)
         {
+            _gatewayAuxiliaryType = GatewayAuxiliaryType.Cancel;
             ValidateAuxiliary(auxiliary);
 
             if (this is ICancel cancel)
             {
-                _gatewayAuxiliaryType = GatewayAuxiliaryType.Cancel;
                 return cancel.BuildCancel(auxiliary);
             }
 
@@ -320,11 +320,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Close(IAuxiliary auxiliary)
         {
+            _gatewayAuxiliaryType = GatewayAuxiliaryType.Close;
             ValidateAuxiliary(auxiliary);
 
             if (this is IClose close)
             {
-                _gatewayAuxiliaryType = GatewayAuxiliaryType.Close;
                 return close.BuildClose(auxiliary);
             }
 
@@ -341,11 +341,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify Refund(IAuxiliary auxiliary)
         {
+            _gatewayAuxiliaryType = GatewayAuxiliaryType.Refund;
             ValidateAuxiliary(auxiliary);
 
             if (this is IRefund refund)
             {
-                _gatewayAuxiliaryType = GatewayAuxiliaryType.Refund;
                 return refund.BuildRefund(auxiliary);
             }
 
@@ -362,11 +362,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public INotify RefundQuery(IAuxiliary auxiliary)
         {
+            _gatewayAuxiliaryType = GatewayAuxiliaryType.RefundQuery;
             ValidateAuxiliary(auxiliary);
 
             if (this is IRefundQuery refundQuery)
             {
-                _gatewayAuxiliaryType = GatewayAuxiliaryType.RefundQuery;
                 return refundQuery.BuildRefundQuery(auxiliary);
             }
 
@@ -383,11 +383,11 @@ namespace ICanPay.Core
         /// <param name="auxiliary">辅助参数</param>
         public void BillDownload(IAuxiliary auxiliary)
         {
+            _gatewayAuxiliaryType = GatewayAuxiliaryType.BillDownload;
             ValidateAuxiliary(auxiliary);
 
             if (this is IBillDownload billDownload)
             {
-                _gatewayAuxiliaryType = GatewayAuxiliaryType.BillDownload;
                 HttpUtil.Write(billDownload.BuildBillDownload(auxiliary));
                 return;
             }

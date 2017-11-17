@@ -14,7 +14,7 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index(string id)
         {
-            var notify = (Alipay.Notify)QueryAlipayOrder(id);
+            var notify = QueryAlipayOrder(id);
 
             return Json(notify);
         }
@@ -40,6 +40,19 @@ namespace ICanPay.Demo.Controllers
             var gateway = gateways.Get<Wechatpay.WechatpayGateway>();
 
             return (Wechatpay.Notify)gateway.Query(new Wechatpay.Auxiliary
+            {
+                OutTradeNo = id
+            });
+        }
+
+        /// <summary>
+        /// 查询银联的订单
+        /// </summary>
+        private Unionpay.Notify QueryUnionpayOrder(string id)
+        {
+            var gateway = gateways.Get<Unionpay.UnionpayGateway>();
+
+            return (Unionpay.Notify)gateway.Query(new Unionpay.Auxiliary
             {
                 OutTradeNo = id
             });
