@@ -5,35 +5,35 @@ ICanPay是一个提供了多个支付网关支付处理的跨平台类库，使�
 
 目前支持的支付网关有：支付宝(Alipay)、微信支付(Wechatpay)、银联支付(Unionpay)
 
-	# 支付宝：
+### 1.支付宝：
 
-		支持的支付方式：
+##### 支持的支付方式：
+
+	移动支付(App)、手机网站支付(Wap)、电脑网站支付(Web)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)
+
+##### 支持的辅助接口：
+
+	查询、退款、退款查询、撤销、关闭、对账单下载
+
+### 2.微信：
+
+##### 支持的支付方式：
 		
-			移动支付(App)、手机网站支付(Wap)、电脑网站支付(Web)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)
+	移动支付(App)、手机网站支付(Wap)、公众号支付(Public)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)
+
+##### 支持的辅助接口：
+		
+	查询、退款、退款查询、撤销、关闭、对账单下载
 			
-		支持的辅助接口：
-		
-			查询、退款、退款查询、撤销、关闭、对账单下载
-		
-	# 微信：
+### 3.银联：
 
-		支持的支付方式：
+##### 支持的支付方式：
 		
-			移动支付(App)、手机网站支付(Wap)、公众号支付(Public)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)
+	移动支付(App)、手机网站支付(Wap)、电脑网站支付(Web)、条码支付(Barcode)、扫码支付(Scan)
 
-		支持的辅助接口：
+##### 支持的辅助接口：
 		
-			查询、退款、退款查询、撤销、关闭、对账单下载
-			
-	# 银联：
-
-		支持的支付方式：
-		
-			移动支付(App)、手机网站支付(Wap)、电脑网站支付(Web)、条码支付(Barcode)、扫码支付(Scan)
-
-		支持的辅助接口：
-		
-			查询、退款、撤销、对账单下载
+	查询、退款、撤销、对账单下载
 
 # Package
 ---
@@ -47,7 +47,7 @@ ICanPay.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Unionpay.svg
 
 # 如何使用
 
-见(Demo)[https://github.com/Varorbc/ICanPay/tree/master/sample/ICanPay.Demo]
+见[Demo](https://github.com/Varorbc/ICanPay/tree/master/sample/ICanPay.Demo)
 
 # Wiki
 ---
