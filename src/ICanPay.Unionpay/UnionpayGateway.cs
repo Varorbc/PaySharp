@@ -11,7 +11,8 @@ namespace ICanPay.Unionpay
     /// </summary>
     public class UnionpayGateway
         : GatewayBase,
-        IFormPayment, IAppPayment,IScanPayment
+        IFormPayment, IAppPayment, IScanPayment, IBarcodePayment,
+        IQuery, ICancel, IRefund
     {
 
         #region 私有字段
@@ -19,6 +20,7 @@ namespace ICanPay.Unionpay
         private const string FRONTGATEWAYURL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
         private const string APPGATEWAYURL = "https://gateway.test.95516.com/gateway/api/appTransReq.do";
         private const string BACKGATEWAYURL = "https://gateway.test.95516.com/gateway/api/backTransReq.do";
+        private const string QUERYGATEWAYURL = "https://gateway.test.95516.com/gateway/api/queryTrans.do";
 
         private readonly Merchant _merchant;
 
@@ -31,7 +33,7 @@ namespace ICanPay.Unionpay
         /// </summary>
         /// <param name="merchant">商户数据</param>
         public UnionpayGateway(Merchant merchant)
-            : base(merchant)
+            : base(merchant, new GatewayData(StringComparer.Ordinal))
         {
             _merchant = merchant;
             _merchant.CertId = Util.GetCertId(merchant.CertPath, merchant.CertPwd);
@@ -126,6 +128,100 @@ namespace ICanPay.Unionpay
         }
 
         #endregion
+
+        #region 条码支付
+
+        public void BuildBarcodePayment()
+        {
+            InitBarcodePayment();
+
+            Commit();
+        }
+
+        public void InitBarcodePayment()
+        {
+            Merchant.TxnSubType = "06";
+            Merchant.BizType = "000000";
+            Merchant.ChannelType = "07";
+            InitOrderParameter();
+            GatewayUrl = BACKGATEWAYURL;
+        }
+
+        #endregion
+
+        #region 查询订单
+
+        public INotify BuildQuery(IAuxiliary auxiliary)
+        {
+            InitQuery(auxiliary);
+
+            Commit();
+
+            return Notify;
+        }
+
+        public void InitQuery(IAuxiliary auxiliary)
+        {
+            Merchant.TxnType = "00";
+            Merchant.BizType = "000000";
+            GatewayUrl = QUERYGATEWAYURL;
+
+            InitAuxiliaryParameter(auxiliary);
+        }
+
+        #endregion
+
+        #region 撤销订单
+
+        public INotify BuildCancel(IAuxiliary auxiliary)
+        {
+            InitCancel(auxiliary);
+
+            Commit();
+
+            return Notify;
+        }
+
+        public void InitCancel(IAuxiliary auxiliary)
+        {
+            Merchant.TxnType = "31";
+            GatewayUrl = BACKGATEWAYURL;
+
+            InitAuxiliaryParameter(auxiliary);
+        }
+
+        #endregion
+
+        #region 订单退款
+
+        public INotify BuildRefund(IAuxiliary auxiliary)
+        {
+            InitRefund(auxiliary);
+
+            Commit();
+
+            return Notify;
+        }
+
+        public void InitRefund(IAuxiliary auxiliary)
+        {
+            Merchant.TxnType = "04";
+            GatewayUrl = BACKGATEWAYURL;
+
+            InitAuxiliaryParameter(auxiliary);
+        }
+
+        #endregion
+
+        private void InitAuxiliaryParameter(IAuxiliary auxiliary)
+        {
+            Merchant.TxnSubType = "00";
+            Merchant.ChannelType = "07";
+
+            GatewayData.Add(Merchant, StringCase.Camel);
+            GatewayData.Add(auxiliary, StringCase.Camel);
+            GatewayData.Add(Constant.SIGNATURE, BuildSign());
+        }
 
         private void InitOrderParameter()
         {

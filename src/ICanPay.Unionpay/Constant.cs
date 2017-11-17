@@ -13,5 +13,6 @@ namespace ICanPay.Unionpay
         public const string RESPCODE = "respCode";
         public const string RESPMSG = "respMsg";
         public const string ORDERDESC = "orderDesc";
+        public const string ORIGQRYID = "origQryId";
     }
 }

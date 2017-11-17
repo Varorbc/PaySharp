@@ -260,5 +260,20 @@ namespace ICanPay.Unionpay
         /// 二维码
         /// </summary>
         public string QrCode { get; set; }
+
+        /// <summary>
+        /// 发卡机构识别模式
+        /// </summary>
+        public string IssuerIdentifyMode { get; set; }
+
+        /// <summary>
+        /// 原交易应答码
+        /// </summary>
+        public string OrigRespCode { get; set; }
+
+        /// <summary>
+        /// 原交易应答信息
+        /// </summary>
+        public string OrigRespMsg { get; set; }
     }
 }

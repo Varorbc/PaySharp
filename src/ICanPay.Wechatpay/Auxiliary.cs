@@ -46,11 +46,22 @@ namespace ICanPay.Wechatpay
         private double _amount;
 
         /// <summary>
-        /// 退款金额
+        /// 退款金额,单位元
         /// </summary>
         [ReName(Name = Constant.REFUND_FEE)]
         [Necessary(GatewayAuxiliaryType.Refund)]
-        public double? RefundAmount { get; set; }
+        public double? RefundAmount
+        {
+            get => _refundAmount;
+            set
+            {
+                if (value.HasValue)
+                {
+                    _refundAmount = value.Value * 100;
+                }
+            }
+        }
+        private double? _refundAmount;
 
         /// <summary>
         /// 货币种类	

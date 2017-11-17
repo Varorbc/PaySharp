@@ -115,5 +115,11 @@ namespace ICanPay.Unionpay
         /// 终端号
         /// </summary>
         public string TermId { get; set; }
+
+        /// <summary>
+        /// 二维码编号
+        /// </summary>
+        [Necessary(GatewayTradeType.Barcode)]
+        public string QrNo { get; set; }
     }
 }

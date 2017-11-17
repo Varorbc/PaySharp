@@ -14,7 +14,7 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index(string id)
         {
-            var notify = QueryAlipayOrder(id);
+            var notify = QueryUnionpayOrder(id);
 
             return Json(notify);
         }
@@ -54,7 +54,8 @@ namespace ICanPay.Demo.Controllers
 
             return (Unionpay.Notify)gateway.Query(new Unionpay.Auxiliary
             {
-                OutTradeNo = id
+                OutTradeNo = id,
+                TxnTime="20171117133822"
             });
         }
     }

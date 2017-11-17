@@ -40,9 +40,21 @@ namespace ICanPay.Core
 
         #region 构造函数
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public GatewayData()
         {
             _values = new SortedDictionary<string, object>();
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="comparer">排序策略</param>
+        public GatewayData(IComparer<string> comparer)
+        {
+            _values = new SortedDictionary<string, object>(comparer);
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace ICanPay.Demo.Controllers
 {
@@ -14,7 +15,7 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index(string id)
         {
-            var notify = RefundAlipayOrder(id);
+            var notify = RefundUnionpayOrder(id);
 
             return Json(notify);
         }
@@ -44,6 +45,22 @@ namespace ICanPay.Demo.Controllers
             return (Wechatpay.Notify)gateway.Refund(new Wechatpay.Auxiliary
             {
                 OutTradeNo = id
+            });
+        }
+
+        /// <summary>
+        /// 银联的订单的退款
+        /// </summary>
+        private Unionpay.Notify RefundUnionpayOrder(string id)
+        {
+            var gateway = gateways.Get<Unionpay.UnionpayGateway>();
+
+            return (Unionpay.Notify)gateway.Refund(new Unionpay.Auxiliary
+            {
+                OutRefundNo = DateTime.Now.ToString("yyyyMMddHHmmss"),
+                TxnTime = "20171117133822",
+                TradeNo = id,
+                RefundAmount = 0.01
             });
         }
     }

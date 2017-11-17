@@ -51,6 +51,17 @@ namespace ICanPay.Core
         /// <summary>
         /// 构造函数
         /// </summary>
+        /// <param name="merchant">商户数据</param>
+        /// <param name="gatewayData">网关数据</param>
+        protected GatewayBase(IMerchant merchant, GatewayData gatewayData)
+        {
+            Merchant = merchant;
+            GatewayData = gatewayData;
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         /// <param name="gatewayData">网关数据</param>
         protected GatewayBase(GatewayData gatewayData)
         {

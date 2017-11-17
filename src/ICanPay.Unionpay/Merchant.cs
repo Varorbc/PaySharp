@@ -150,6 +150,6 @@ namespace ICanPay.Unionpay
         /// <summary>
         /// 渠道类型
         /// </summary>
-        public string ChannelType => "08";
+        public string ChannelType { get; internal set; } = "08";
     }
 }
