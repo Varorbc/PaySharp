@@ -9,7 +9,7 @@ namespace ICanPay.Unionpay
         /// <summary>
         /// 商户订单号，不应含“-”或“_”
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "请设置商户订单号")]
         [ReName(Name = Constant.ORDERID)]
         [StringLength(40, MinimumLength = 8, ErrorMessage = "商户订单号最小长度为8位,最大长度为40位")]
         public string OutTradeNo { get; set; }
@@ -17,7 +17,7 @@ namespace ICanPay.Unionpay
         /// <summary>
         /// 交易金额,单位元
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "请设置交易金额")]
         [ReName(Name = Constant.TXNAMT)]
         public double Amount
         {

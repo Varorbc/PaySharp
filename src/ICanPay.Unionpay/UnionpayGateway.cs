@@ -2,6 +2,7 @@
 using ICanPay.Core.Exceptions;
 using ICanPay.Core.Utils;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ICanPay.Unionpay
@@ -12,7 +13,7 @@ namespace ICanPay.Unionpay
     public class UnionpayGateway
         : GatewayBase,
         IFormPayment, IAppPayment, IScanPayment, IBarcodePayment,
-        IQuery, ICancel, IRefund
+        IQuery, ICancel, IRefund, IBillDownload
     {
 
         #region 私有字段
@@ -21,6 +22,7 @@ namespace ICanPay.Unionpay
         private const string APPGATEWAYURL = "https://gateway.test.95516.com/gateway/api/appTransReq.do";
         private const string BACKGATEWAYURL = "https://gateway.test.95516.com/gateway/api/backTransReq.do";
         private const string QUERYGATEWAYURL = "https://gateway.test.95516.com/gateway/api/queryTrans.do";
+        private const string FILEGATEWAYURL = "https://filedownload.test.95516.com/";
 
         private readonly Merchant _merchant;
 
@@ -209,6 +211,49 @@ namespace ICanPay.Unionpay
             GatewayUrl = BACKGATEWAYURL;
 
             InitAuxiliaryParameter(auxiliary);
+        }
+
+        #endregion
+
+        #region 对账单下载
+
+        public FileStream BuildBillDownload(IAuxiliary auxiliary)
+        {
+            InitBillDownload(auxiliary);
+
+            Commit();
+
+            return CreateZip(Notify.FileContent);
+        }
+
+        public void InitBillDownload(IAuxiliary auxiliary)
+        {
+            Merchant.TxnType = "76";
+            Merchant.TxnSubType = "01";
+            Merchant.ChannelType = "07";
+            Merchant.BizType = "000000";
+
+            GatewayData.Add(Merchant, StringCase.Camel);
+            GatewayData.Add(auxiliary, StringCase.Camel);
+            GatewayData.Remove(Constant.BACKURL);
+            GatewayData.Remove(Constant.FRONTURL);
+            GatewayData.Add(Constant.SIGNATURE, BuildSign());
+            GatewayUrl = FILEGATEWAYURL;
+        }
+
+        /// <summary>
+        /// 创建Zip文件
+        /// </summary>
+        /// <param name="content">内容</param>
+        /// <returns></returns>
+        private FileStream CreateZip(string content)
+        {
+            byte[] buffer = Util.Inflater(content);
+            FileStream fileStream = new FileStream($"{DateTime.Now.ToString(TIMEFORMAT)}.zip", FileMode.Create);
+            fileStream.Write(buffer, 0, buffer.Length);
+            fileStream.Position = 0;
+
+            return fileStream;
         }
 
         #endregion

@@ -14,7 +14,7 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index()
         {
-            WechatpayBillDownload();
+            UnionpayBillDownload();
 
             return Ok();
         }
@@ -44,6 +44,22 @@ namespace ICanPay.Demo.Controllers
             {
                 BillType = "ALL",
                 BillDate = "20171002"
+            });
+        }
+
+        /// <summary>
+        /// 银联对账单下载
+        /// </summary>
+        private void UnionpayBillDownload()
+        {
+            var gateway = gateways.Get<Unionpay.UnionpayGateway>();
+
+            //特殊处理
+            gateway.Merchant.AppId = "700000000000001";
+            gateway.BillDownload(new Unionpay.Auxiliary
+            {
+                BillDate = "0119",
+                TxnTime = "20171117154356"
             });
         }
     }

@@ -1,5 +1,6 @@
 ﻿using ICanPay.Core.Utils;
 using ICanPay.Unionpay.Properties;
+using ICSharpCode.SharpZipLib.Zip.Compression;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Pkix;
@@ -392,6 +393,36 @@ namespace ICanPay.Unionpay
             IBufferedCipher c = CipherUtilities.GetCipher("RSA/NONE/PKCS1Padding");
             c.Init(false, key);
             return Encoding.UTF8.GetString(c.DoFinal(dataByte));
+        }
+
+        #endregion
+
+        #region Inflater解压缩
+
+        /// <summary>
+        /// Inflater解压缩
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <returns></returns>
+        public static byte[] Inflater(string data)
+        {
+            byte[] temp = new byte[1024];
+            MemoryStream memory = new MemoryStream();
+            Inflater inf = new Inflater();
+            inf.SetInput(Convert.FromBase64String(data));
+            while (!inf.IsFinished)
+            {
+                int extracted = inf.Inflate(temp);
+                if (extracted > 0)
+                {
+                    memory.Write(temp, 0, extracted);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return memory.ToArray();
         }
 
         #endregion

@@ -37,6 +37,11 @@ namespace ICanPay.Core
         string RefundReason { get; set; }
 
         /// <summary>
+        /// 账单日期
+        /// </summary>
+        string BillDate { get; set; }
+
+        /// <summary>
         /// 验证
         /// </summary>
         /// <returns></returns>

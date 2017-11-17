@@ -275,5 +275,15 @@ namespace ICanPay.Unionpay
         /// 原交易应答信息
         /// </summary>
         public string OrigRespMsg { get; set; }
+
+        /// <summary>
+        /// 文件名	
+        /// </summary>
+        public string FileName { get; set; }
+
+        /// <summary>
+        /// 批量文件内容
+        /// </summary>
+        public string FileContent { get; set; }
     }
 }

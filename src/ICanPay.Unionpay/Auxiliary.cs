@@ -25,7 +25,7 @@ namespace ICanPay.Unionpay
         /// <summary>
         /// 订单发送时间 格式 年年年年月月日日时时分分秒秒
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "请设置订单发送时间")]
         public string TxnTime { get; set; }
 
         /// <summary>
@@ -60,38 +60,25 @@ namespace ICanPay.Unionpay
         [StringLength(1024, ErrorMessage = "商户自定义保留域最大长度为1024位")]
         public string ReqReserved { get; set; }
 
-        public string RefundNo { get; set; }
+        public string RefundNo { get => null; set => throw new NotImplementedException(); }
+
+        public string RefundReason { get => null; set => throw new NotImplementedException(); }
 
         /// <summary>
-        /// 退款的原因说明
+        /// 文件类型
         /// </summary>
-        [StringLength(256, ErrorMessage = "退款的原因说明最大长度为256位")]
-        public string RefundReason { get; set; }
+        public string FileType => "00";
 
         /// <summary>
-        /// 账单类型，商户通过接口或商户经开放平台授权后其所属服务商通过接口可以获取以下
-        /// 账单类型：trade、signcustomer；trade指商户基于支付宝交易收单的业务账单；
-        /// signcustomer是指基于商户支付宝余额收入及支出等资金变动的帐务账单；
+        /// 清算日期 格式 月月日日
+        /// 为银联和入网机构间的交易结算日期。
+        /// 一般前一日23点至当天23点为一个清算日。
+        /// 也就是23点前的交易，当天23点之后开始结算，23点之后的交易，要第二天23点之后才会结算。
         /// </summary>
-        [StringLength(10, ErrorMessage = "账单类型最大长度为10位")]
-        [Necessary(GatewayAuxiliaryType.BillDownload, ErrorMessage = "请设置账单类型")]
-        public string BillType { get; set; }
-
-        /// <summary>
-        /// 账单时间：日账单格式为yyyy-MM-dd，月账单格式为yyyy-MM。
-        /// </summary>
-        [StringLength(15, ErrorMessage = "账单时间最大长度为15位")]
-        [Necessary(GatewayAuxiliaryType.BillDownload, ErrorMessage = "请设置账单时间")]
+        [Necessary(GatewayAuxiliaryType.BillDownload, ErrorMessage = "请设置清算日期")]
+        [ReName(Name = Constant.SETTLEDATE)]
         public string BillDate { get; set; }
 
-        public bool Validate(GatewayAuxiliaryType gatewayAuxiliaryType)
-        {
-            //if (string.IsNullOrEmpty(OutTradeNo) && string.IsNullOrEmpty(TradeNo))
-            //{
-            //    throw new ArgumentNullException("商户订单号和支付宝订单号不可同时为空");
-            //}
-
-            return true;
-        }
+        public bool Validate(GatewayAuxiliaryType gatewayAuxiliaryType) => true;
     }
 }
