@@ -62,7 +62,7 @@ https://pay.weixin.qq.com/wiki/doc/api/index.html
 
 银联支付文档：
 
-https://open.unionpay.com/ajweb/help/api
+https://open.unionpay.com/ajweb/product
 
 # 致谢
 

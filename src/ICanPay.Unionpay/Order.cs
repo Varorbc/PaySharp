@@ -69,10 +69,10 @@ namespace ICanPay.Unionpay
         public string ReqReserved { get; set; }
 
         /// <summary>
-        /// 交易账号。请求时使用加密公钥对交易账号加密，并做 Base64 编码后上送；
-        /// 应答时如需返回，则使用签名私钥 进行解密。 
-        /// 前台交易可由银联页面采集，也可由商户上送并返显。
-        /// 如需锁定返显卡号，应通过保留域（reserved）上送卡 号锁定标识。
+        /// 交易账号。
+        /// 1、 后台类消费交易时上送全卡号或卡号后4位 
+        /// 2、 跨行收单且收单机构收集银行卡信息时上送、 
+        /// 3、前台类交易可通过配置后返回，卡号可选上送
         /// </summary>
         [StringLength(1024, ErrorMessage = "交易账号最大长度为1024位")]
         public string AccNo { get; set; }
@@ -121,5 +121,78 @@ namespace ICanPay.Unionpay
         /// </summary>
         [Necessary(GatewayTradeType.Barcode)]
         public string QrNo { get; set; }
+
+        /// <summary>
+        /// 1、当账号类型为02-存折时需填写
+        /// 2、在前台类交易时填写默认银行代码，支持直接跳转到网银。
+        /// 银行简码列表参考附录：C.1、C.2， 其中C.2银行列表仅支持借记卡
+        /// </summary>
+        public string IssInsNo { get; set; }
+
+        /// <summary>
+        /// 加密证书ID
+        /// </summary>
+        public string EncryptCertId { get; internal set; }
+
+        /// <summary>
+        /// 有卡交易信息域
+        /// </summary>
+        public string CardTransData { get;  set; }
+
+        /// <summary>
+        /// 预付卡通道
+        /// </summary>
+        public string AccountPayChannel { get; set; }
+
+        /// <summary>
+        /// 账号类型(卡介质)
+        /// 后台类交易且卡号上送；
+        /// 跨行收单且收单机构收集银行卡信息时上送
+        /// 01：银行卡
+        /// 02：存折
+        /// 03：IC卡
+        /// 默认取值：01
+        /// 取值“03”表示以IC终端发起的IC卡交易，IC作为普通银行卡进行支付时，此域填写为“01”
+        /// </summary>
+        public string AccType { get; set; }
+
+        /// <summary>
+        /// 分账域
+        /// </summary>
+        [StringLength(512, ErrorMessage = "分账域最大长度为512位")]
+        public string AccSplitData { get; set; }
+
+        /// <summary>
+        /// 风控信息域
+        /// </summary>
+        [StringLength(2048, ErrorMessage = "风控信息域最大长度为2048位")]
+        public string RiskRateInfo { get; set; }
+
+        /// <summary>
+        /// 控制规则
+        /// </summary>
+        public string CtrlRule { get; set; }
+
+        /// <summary>
+        /// 默认支付方式
+        /// </summary>
+        public string DefaultPayType { get; set; }
+
+        /// <summary>
+        /// 支持支付方式,仅仅pc使用，使用哪种支付方式 
+        /// 由收单机构填写，取值为以下内容的一种或多种，通过逗号（，）分割。取值参考数据字典
+        /// </summary>
+        public string SupPayType { get; set; }
+
+        /// <summary>
+        /// 终端信息域,移动支付业务需要上送
+        /// </summary>
+        public string UserMac { get; set; }
+
+        /// <summary>
+        /// 终端信息
+        /// </summary>
+        [StringLength(300, ErrorMessage = "终端信息最大长度为300位")]
+        public string TermInfo { get; set; }
     }
 }

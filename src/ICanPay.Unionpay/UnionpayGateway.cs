@@ -18,11 +18,23 @@ namespace ICanPay.Unionpay
 
         #region 私有字段
 
+#if DEBUG
+
         private const string FRONTGATEWAYURL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
         private const string APPGATEWAYURL = "https://gateway.test.95516.com/gateway/api/appTransReq.do";
         private const string BACKGATEWAYURL = "https://gateway.test.95516.com/gateway/api/backTransReq.do";
         private const string QUERYGATEWAYURL = "https://gateway.test.95516.com/gateway/api/queryTrans.do";
         private const string FILEGATEWAYURL = "https://filedownload.test.95516.com/";
+
+#else
+
+        private const string FRONTGATEWAYURL = "https://gateway.95516.com/gateway/api/frontTransReq.do";
+        private const string APPGATEWAYURL = "https://gateway.95516.com/gateway/api/appTransReq.do";
+        private const string BACKGATEWAYURL = "https://gateway.95516.com/gateway/api/backTransReq.do";
+        private const string QUERYGATEWAYURL = "https://gateway.95516.com/gateway/api/queryTrans.do";
+        private const string FILEGATEWAYURL = "https://filedownload.95516.com/";
+
+#endif
 
         private readonly Merchant _merchant;
 

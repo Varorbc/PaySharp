@@ -19,27 +19,9 @@ namespace ICanPay.Unionpay
     {
         #region 证书
 
-#if DEBUG
-
-        #region 测试证书
-
-        private static X509Certificate ACPTESTENCCER = null;
-        private static X509Certificate ACPTESTROOTCER = null;
-        private static X509Certificate ACPTESTMIDDLECER = null;
-
-        #endregion
-
-#else
-
-        #region 正式证书
-
-        private static X509Certificate ACPPRODENCCER = null;
-        private static X509Certificate ACPPRODROOTCER =null;
-        private static X509Certificate ACPPRODMIDDLECER =null;
-
-        #endregion
-
-#endif
+        private static X509Certificate ACPENCCER = null;
+        private static X509Certificate ACPROOTCER = null;
+        private static X509Certificate ACPMIDDLECER = null;
 
         #endregion
 
@@ -261,24 +243,16 @@ namespace ICanPay.Unionpay
         {
             try
             {
-                X509Certificate cert;
-#if DEBUG
-                cert = ACPTESTROOTCER;
-#else
-                cert = ACPPRODROOTCER;
-#endif
-                if (cert is null)
+                if (ACPROOTCER is null)
                 {
 #if DEBUG
-                    cert = GetCert(Resources.acp_test_root);
-                    ACPTESTROOTCER = cert;
+                    ACPROOTCER = GetCert(Resources.acp_test_root);
 #else
-                    cert= GetCert(Resources.acp_prod_root);
-                    ACPPRODROOTCER = cert;
+                    ACPROOTCER= GetCert(Resources.acp_prod_root);
 #endif
                 }
 
-                return cert;
+                return ACPROOTCER;
             }
             catch
             {
@@ -290,24 +264,16 @@ namespace ICanPay.Unionpay
         {
             try
             {
-                X509Certificate cert;
-#if DEBUG
-                cert = ACPTESTMIDDLECER;
-#else
-                cert = ACPPRODMIDDLECER;
-#endif
-                if (cert is null)
+                if (ACPMIDDLECER is null)
                 {
 #if DEBUG
-                    cert = GetCert(Resources.acp_test_middle);
-                    ACPTESTMIDDLECER = cert;
+                    ACPMIDDLECER = GetCert(Resources.acp_test_middle);
 #else
-                    cert= GetCert(Resources.acp_prod_middle);
-                    ACPPRODMIDDLECER = cert;
+                    ACPMIDDLECER= GetCert(Resources.acp_prod_middle);
 #endif
                 }
 
-                return cert;
+                return ACPMIDDLECER;
             }
             catch
             {
@@ -319,24 +285,16 @@ namespace ICanPay.Unionpay
         {
             try
             {
-                X509Certificate cert;
-#if DEBUG
-                cert = ACPTESTENCCER;
-#else
-                cert = ACPPRODENCCER;
-#endif
-                if (cert is null)
+                if (ACPENCCER is null)
                 {
 #if DEBUG
-                    cert = GetCert(Resources.acp_test_enc);
-                    ACPTESTENCCER = cert;
+                    ACPENCCER = GetCert(Resources.acp_test_enc);
 #else
-                    cert= GetCert(Resources.acp_prod_enc);
-                    ACPPRODENCCER = cert;
+                    ACPENCCER= GetCert(Resources.acp_prod_enc);
 #endif
                 }
 
-                return cert;
+                return ACPENCCER;
             }
             catch
             {

@@ -285,5 +285,15 @@ namespace ICanPay.Unionpay
         /// 批量文件内容
         /// </summary>
         public string FileContent { get; set; }
+
+        /// <summary>
+        /// 分账域
+        /// </summary>
+        public string AccSplitData { get; set; }
+
+        /// <summary>
+        /// 有卡交易信息域
+        /// </summary>
+        public string CardTransData { get; set; }
     }
 }
