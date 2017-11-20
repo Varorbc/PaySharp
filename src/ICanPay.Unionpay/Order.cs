@@ -130,14 +130,9 @@ namespace ICanPay.Unionpay
         public string IssInsNo { get; set; }
 
         /// <summary>
-        /// 加密证书ID
-        /// </summary>
-        public string EncryptCertId { get; internal set; }
-
-        /// <summary>
         /// 有卡交易信息域
         /// </summary>
-        public string CardTransData { get;  set; }
+        public string CardTransData { get; set; }
 
         /// <summary>
         /// 预付卡通道
@@ -146,15 +141,8 @@ namespace ICanPay.Unionpay
 
         /// <summary>
         /// 账号类型(卡介质)
-        /// 后台类交易且卡号上送；
-        /// 跨行收单且收单机构收集银行卡信息时上送
-        /// 01：银行卡
-        /// 02：存折
-        /// 03：IC卡
-        /// 默认取值：01
-        /// 取值“03”表示以IC终端发起的IC卡交易，IC作为普通银行卡进行支付时，此域填写为“01”
         /// </summary>
-        public string AccType { get; set; }
+        public string AccType { get; } = "01";
 
         /// <summary>
         /// 分账域

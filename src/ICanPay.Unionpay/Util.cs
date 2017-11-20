@@ -2,6 +2,7 @@
 using ICanPay.Unionpay.Properties;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Pkix;
 using Org.BouncyCastle.Security;
@@ -66,6 +67,12 @@ namespace ICanPay.Unionpay
                 .SerialNumber
                 .ToString();
         }
+
+        /// <summary>
+        /// 获取加密证书编号
+        /// </summary>
+        /// <returns></returns>
+        public static string GetEncryptCertId() => GetEncCert().SerialNumber.ToString();
 
         /// <summary>
         /// 获取证书编号
@@ -337,6 +344,22 @@ namespace ICanPay.Unionpay
 
         #endregion
 
+        #region 加密
+
+        /// <summary>
+        /// 加密
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <returns></returns>
+        public static string Encrypt(string data)
+        {
+            IBufferedCipher c = CipherUtilities.GetCipher("RSA/NONE/PKCS1Padding");
+            c.Init(true, new ParametersWithRandom(GetEncCert().GetPublicKey(), new SecureRandom()));
+            return Convert.ToBase64String(c.DoFinal(Encoding.UTF8.GetBytes(data)));
+        }
+
+        #endregion
+
         #region 解密
 
         /// <summary>
@@ -345,7 +368,7 @@ namespace ICanPay.Unionpay
         /// <param name="key">私钥</param>
         /// <param name="data">数据</param>
         /// <returns></returns>
-        public static string DecryptData(AsymmetricKeyParameter key, string data)
+        public static string Decrypt(AsymmetricKeyParameter key, string data)
         {
             byte[] dataByte = Convert.FromBase64String(data);
             IBufferedCipher c = CipherUtilities.GetCipher("RSA/NONE/PKCS1Padding");

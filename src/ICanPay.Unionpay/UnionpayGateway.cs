@@ -52,6 +52,7 @@ namespace ICanPay.Unionpay
             _merchant = merchant;
             _merchant.CertId = Util.GetCertId(merchant.CertPath, merchant.CertPwd);
             _merchant.CertKey = Util.GetCertKey(merchant.CertPath, merchant.CertPwd);
+            //_merchant.EncryptCertId = Util.GetEncryptCertId();
         }
 
         #endregion
