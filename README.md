@@ -46,10 +46,12 @@ ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.s
 ICanPay.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Unionpay.svg)](https://www.nuget.org/packages/ICanPay.Unionpay)
 
 # 如何使用
+---
 
 见[Demo](https://github.com/Varorbc/ICanPay/tree/master/sample/ICanPay.Demo)
 
 # 交流讨论
+---
 
 [![加入QQ群](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=5d2538328d53d0610188d9dc4a62a7b51e50fe56ad1b35ca9e96308507eb09a7)
 
@@ -69,6 +71,7 @@ https://pay.weixin.qq.com/wiki/doc/api/index.html
 https://open.unionpay.com/ajweb/product
 
 # 致谢
+---
 
 [hiihellox10](https://github.com/hiihellox10)
 
