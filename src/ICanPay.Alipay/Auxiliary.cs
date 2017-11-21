@@ -45,7 +45,7 @@ namespace ICanPay.Alipay
         /// </summary>
         [Range(0.01, 100000000, ErrorMessage = "需要退款的金额超出范围")]
         [Necessary(GatewayAuxiliaryType.Refund, ErrorMessage = "请设置退款金额")]
-        public double RefundAmount { get; set; }
+        public double? RefundAmount { get; set; }
 
         /// <summary>
         /// 退款的原因说明

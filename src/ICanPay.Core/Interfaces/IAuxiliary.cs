@@ -29,12 +29,17 @@ namespace ICanPay.Core
         /// <summary>
         /// 退款金额
         /// </summary>
-        double RefundAmount { get; set; }
+        double? RefundAmount { get; set; }
 
         /// <summary>
         /// 退款原因
         /// </summary>
         string RefundReason { get; set; }
+
+        /// <summary>
+        /// 账单日期
+        /// </summary>
+        string BillDate { get; set; }
 
         /// <summary>
         /// 验证

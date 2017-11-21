@@ -48,7 +48,12 @@ namespace ICanPay.Wechatpay
         /// <summary>
         /// 标价金额,订单总金额，单位为元，详见支付金额
         /// </summary>
-        public double Amount { get; set; }
+        public double Amount
+        {
+            get => _amount;
+            set => _amount = value * 100;
+        }
+        private double _amount;
 
         /// <summary>
         /// 订单生成时间，格式为yyyyMMddHHmmss，如2009年12月25日9点10分10秒表示为20091225091010。其他详见时间规则

@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="EncryptCerUpdateQuery.aspx.cs" Inherits="upacp_demo_qrc.demo.api_16_qrc.EncryptCerUpdateQuery" %>

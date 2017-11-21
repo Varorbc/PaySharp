@@ -121,7 +121,12 @@ namespace ICanPay.Wechatpay
         /// 订单金额
         /// 订单总金额，单位为元
         /// </summary>
-        public double TotalFee { get; set; }
+        public double TotalFee
+        {
+            get => _totalFee;
+            set => _totalFee = value * 100;
+        }
+        private double _totalFee;
 
         /// <summary>
         /// 现金支付货币类型

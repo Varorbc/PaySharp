@@ -22,7 +22,7 @@ namespace ICanPay.Core
         #region 私有字段
 
         private readonly SortedDictionary<string, object> _values;
-        private readonly string _defaultResult = "defaultResult";
+        private string _originalResult = null;
 
         #endregion
 
@@ -40,9 +40,21 @@ namespace ICanPay.Core
 
         #region 构造函数
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public GatewayData()
         {
             _values = new SortedDictionary<string, object>();
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="comparer">排序策略</param>
+        public GatewayData(IComparer<string> comparer)
+        {
+            _values = new SortedDictionary<string, object>(comparer);
         }
 
         #endregion
@@ -57,6 +69,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public bool Add(string key, object value)
         {
+            _originalResult = null;
             if (string.IsNullOrEmpty(key))
             {
                 throw new ArgumentNullException("key", "参数名不能为空");
@@ -87,6 +100,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public bool Add(object obj, StringCase stringCase)
         {
+            _originalResult = null;
             var type = obj.GetType();
             var properties = type.GetProperties();
             var fields = type.GetFields();
@@ -329,43 +343,22 @@ namespace ICanPay.Core
             }
             finally
             {
-                Add(_defaultResult, xml);
+                _originalResult = xml;
             }
         }
 
         /// <summary>
         /// 将网关数据转换为Url格式数据
         /// </summary>
-        /// <param name="key">不需要转换的key</param>
+        /// <param name="isUrlEncode">是否需要url编码</param>
         /// <returns></returns>
-        public string ToUrl(params string[] key)
+        public string ToUrl(bool isUrlEncode = true)
         {
             var sb = new StringBuilder();
             foreach (var item in _values)
             {
-                if (!key.Contains(item.Key))
-                {
-                    sb.AppendFormat("{0}={1}&", item.Key, item.Value);
-                }
-            }
-
-            return sb.ToString().TrimEnd('&');
-        }
-
-        /// <summary>
-        /// 将网关数据转换为Url编码格式数据
-        /// </summary>
-        /// <param name="key">不需要转换的key</param>
-        /// <returns></returns>
-        public string ToUrlEncode(params string[] key)
-        {
-            var sb = new StringBuilder();
-            foreach (var item in _values)
-            {
-                if (!key.Contains(item.Key))
-                {
-                    sb.AppendFormat("{0}={1}&", item.Key, WebUtility.UrlEncode(item.Value.ToString()));
-                }
+                string value = item.Value.ToString();
+                sb.AppendFormat("{0}={1}&", item.Key, isUrlEncode ? WebUtility.UrlEncode(value) : value);
             }
 
             return sb.ToString().TrimEnd('&');
@@ -375,8 +368,9 @@ namespace ICanPay.Core
         /// 将Url格式数据转换为网关数据
         /// </summary>
         /// <param name="url">url数据</param>
+        /// <param name="isUrlDecode">是否需要url解码</param>
         /// <returns></returns>
-        public void FromUrl(string url)
+        public void FromUrl(string url, bool isUrlDecode = true)
         {
             try
             {
@@ -395,13 +389,14 @@ namespace ICanPay.Core
 
                     foreach (Match item in mc)
                     {
-                        Add(item.Result("$2"), WebUtility.UrlDecode(item.Result("$3")));
+                        string value = item.Result("$3");
+                        Add(item.Result("$2"), isUrlDecode ? WebUtility.UrlDecode(value) : value);
                     }
                 }
             }
             finally
             {
-                Add(_defaultResult, url);
+                _originalResult = url;
             }
         }
 
@@ -479,14 +474,17 @@ namespace ICanPay.Core
             }
             finally
             {
-                Add(_defaultResult, json);
+                _originalResult = json;
             }
         }
 
         /// <summary>
         /// 将网关参数转为类型
         /// </summary>
-        public T ToObject<T>()
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="stringCase">字符串策略</param>
+        /// <returns></returns>
+        public T ToObject<T>(StringCase stringCase)
         {
             var type = typeof(T);
             var obj = Activator.CreateInstance(type);
@@ -495,7 +493,28 @@ namespace ICanPay.Core
             foreach (var item in properties)
             {
                 var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
-                var key = renameAttribute.Length > 0 ? ((ReNameAttribute)renameAttribute[0]).Name : item.Name.ToSnakeCase();
+
+                string key;
+                if (renameAttribute.Length > 0)
+                {
+                    key = ((ReNameAttribute)renameAttribute[0]).Name;
+                }
+                else
+                {
+                    if (stringCase is StringCase.Camel)
+                    {
+                        key = item.Name.ToCamelCase();
+                    }
+                    else if (stringCase is StringCase.Snake)
+                    {
+                        key = item.Name.ToSnakeCase();
+                    }
+                    else
+                    {
+                        key = item.Name;
+                    }
+                }
+
                 var value = GetStringValue(key);
 
                 if (value != null)
@@ -510,9 +529,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 异步将网关参数转为类型
         /// </summary>
-        public async Task<T> ToObjectAsync<T>()
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="stringCase">字符串策略</param>
+        /// <returns></returns>
+        public async Task<T> ToObjectAsync<T>(StringCase stringCase)
         {
-            return await Task.Run(() => ToObject<T>());
+            return await Task.Run(() => ToObject<T>(stringCase));
         }
 
         /// <summary>
@@ -534,13 +556,10 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// 获取默认结果
+        /// 获取原始数据
         /// </summary>
         /// <returns></returns>
-        public string GetDefaultResult()
-        {
-            return GetStringValue(_defaultResult);
-        }
+        public string GetOriginalResult() => _originalResult;
 
         #endregion
     }

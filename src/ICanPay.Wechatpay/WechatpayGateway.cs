@@ -359,7 +359,7 @@ namespace ICanPay.Wechatpay
 
             Commit();
 
-            string result = GatewayData.GetDefaultResult();
+            string result = GatewayData.GetOriginalResult();
 
             return CreateCsv(result);
         }
@@ -389,7 +389,7 @@ namespace ICanPay.Wechatpay
 
         protected override async Task<bool> ValidateNotifyAsync()
         {
-            base.Notify = await GatewayData.ToObjectAsync<Notify>();
+            base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
 
             if (IsSuccessResult())
             {
@@ -405,7 +405,6 @@ namespace ICanPay.Wechatpay
         private void InitOrderParameter()
         {
             GatewayData.Clear();
-            Order.Amount *= 100;
             Merchant.NonceStr = Util.GenerateNonceStr();
             Merchant.DeviceInfo = Constant.WEB;
             GatewayData.Add(Merchant, StringCase.Snake);
@@ -458,7 +457,7 @@ namespace ICanPay.Wechatpay
                 throw new Exception($"{_code} {_msg}");
             }
 
-            return GatewayData.ToObject<OAuth>();
+            return GatewayData.ToObject<OAuth>(StringCase.Snake);
         }
 
         /// <summary>
@@ -488,7 +487,7 @@ namespace ICanPay.Wechatpay
         private void ReadReturnResult(string result)
         {
             GatewayData.FromXml(result);
-            base.Notify = GatewayData.ToObject<Notify>();
+            base.Notify = GatewayData.ToObject<Notify>(StringCase.Snake);
             IsSuccessReturn();
         }
 
@@ -498,7 +497,9 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private string BuildSign()
         {
-            string data = $"{GatewayData.ToUrl(Constant.SIGN)}&key={Merchant.Key}";
+            GatewayData.Remove(Constant.SIGN);
+
+            string data = $"{GatewayData.ToUrl(false)}&key={Merchant.Key}";
             return EncryptUtil.MD5(data);
         }
 

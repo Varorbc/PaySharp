@@ -340,7 +340,7 @@ namespace ICanPay.Alipay
 
         protected override async Task<bool> ValidateNotifyAsync()
         {
-            base.Notify = await GatewayData.ToObjectAsync<Notify>();
+            base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
             if (IsSuccessResult())
             {
                 return true;
@@ -399,7 +399,7 @@ namespace ICanPay.Alipay
         private void Commit(string type)
         {
             string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrlEncode())
+                .PostAsync(GatewayUrl, GatewayData.ToUrl())
                 .GetAwaiter()
                 .GetResult();
             ReadReturnResult(result, type);
@@ -407,7 +407,7 @@ namespace ICanPay.Alipay
 
         private string GetPaymentQueryString()
         {
-            return GatewayData.ToUrlEncode();
+            return GatewayData.ToUrl();
         }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace ICanPay.Alipay
             string sign = GatewayData.GetStringValue(Constant.SIGN);
             result = GatewayData.GetStringValue(key);
             GatewayData.FromJson(result);
-            base.Notify = GatewayData.ToObject<Notify>();
+            base.Notify = GatewayData.ToObject<Notify>(StringCase.Snake);
             Notify.Sign = sign;
         }
 
@@ -430,7 +430,7 @@ namespace ICanPay.Alipay
         /// </summary>
         private string BuildSign()
         {
-            return EncryptUtil.RSA2(GatewayData.ToUrl(), Merchant.Privatekey);
+            return EncryptUtil.RSA2(GatewayData.ToUrl(false), Merchant.Privatekey);
         }
 
         /// <summary>
@@ -457,7 +457,10 @@ namespace ICanPay.Alipay
         /// </summary>
         private bool ValidateNotifySign()
         {
-            return EncryptUtil.RSA2VerifyData(GatewayData.ToUrl(Constant.SIGN, Constant.SIGN_TYPE),
+            GatewayData.Remove(Constant.SIGN);
+            GatewayData.Remove(Constant.SIGN_TYPE);
+
+            return EncryptUtil.RSA2VerifyData(GatewayData.ToUrl(false),
                 Notify.Sign, Merchant.AlipayPublicKey);
         }
 

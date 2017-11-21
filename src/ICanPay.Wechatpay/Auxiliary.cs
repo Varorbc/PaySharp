@@ -38,14 +38,30 @@ namespace ICanPay.Wechatpay
         /// </summary>
         [ReName(Name = Constant.TOTAL_FEE)]
         [Necessary(GatewayAuxiliaryType.Refund)]
-        public double Amount { get; set; }
+        public double Amount
+        {
+            get => _amount;
+            set => _amount = value * 100;
+        }
+        private double _amount;
 
         /// <summary>
-        /// 退款金额
+        /// 退款金额,单位元
         /// </summary>
         [ReName(Name = Constant.REFUND_FEE)]
         [Necessary(GatewayAuxiliaryType.Refund)]
-        public double RefundAmount { get; set; }
+        public double? RefundAmount
+        {
+            get => _refundAmount;
+            set
+            {
+                if (value.HasValue)
+                {
+                    _refundAmount = value.Value * 100;
+                }
+            }
+        }
+        private double? _refundAmount;
 
         /// <summary>
         /// 货币种类	
