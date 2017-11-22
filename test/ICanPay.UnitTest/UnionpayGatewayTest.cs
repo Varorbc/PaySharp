@@ -19,11 +19,11 @@ namespace ICanPay.UnitTest
         {
             _output = output;
 
-            _merchant = new Unionpay.Merchant
+            _merchant = new Merchant
             {
                 AppId = "777290058110048",
                 CertPwd = "000000",
-                CertPath = "E:\\Csharp2\\ICanPay\\test\\ICanPay.UnitTest\\acp_test_sign.pfx",
+                CertPath = Environment.CurrentDirectory + "\\acp_test_sign.pfx",
                 NotifyUrl = "http://localhost:61337/Notify",
                 FrontUrl = "http://localhost:61337/Notify"
             };
