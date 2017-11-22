@@ -18,8 +18,11 @@ namespace ICanPay.Alipay
     {
 
         #region 私有字段
-
+#if DEBUG
+        private const string GATEWAYURL = "https://openapi.alipaydev.com/gateway.do?charset=UTF-8";
+#else
         private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do?charset=UTF-8";
+#endif
         private readonly Merchant _merchant;
 
         #endregion
@@ -44,7 +47,11 @@ namespace ICanPay.Alipay
 
         public new Merchant Merchant => _merchant;
 
-        public new Order Order => (Order)base.Order;
+        public new Order Order
+        {
+            get => (Order)base.Order;
+            set => base.Order = value;
+        }
 
         public new Notify Notify => (Notify)base.Notify;
 
@@ -162,6 +169,11 @@ namespace ICanPay.Alipay
                 .GetAwaiter()
                 .GetResult();
             }
+
+            OnPaymentFailed(new PaymentFailedEventArgs(this)
+            {
+                Message = Notify.SubMessage
+            });
         }
 
         public void InitBarcodePayment()

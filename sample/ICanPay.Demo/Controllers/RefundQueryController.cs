@@ -29,8 +29,7 @@ namespace ICanPay.Demo.Controllers
             return (Alipay.Notify)gateway.RefundQuery(new Alipay.Auxiliary
             {
                 OutTradeNo = id,
-                TradeNo = "12",
-                OutRefundNo = "123"
+                OutRefundNo = "13"
             });
         }
 

@@ -56,7 +56,11 @@ namespace ICanPay.Wechatpay
 
         public new Merchant Merchant => _merchant;
 
-        public new Order Order => (Order)base.Order;
+        public new Order Order
+        {
+            get => (Order)base.Order;
+            set => base.Order = value;
+        }
 
         public new Notify Notify => (Notify)base.Notify;
 
@@ -210,6 +214,11 @@ namespace ICanPay.Wechatpay
                 .GetAwaiter()
                 .GetResult();
             }
+
+            OnPaymentFailed(new PaymentFailedEventArgs(this)
+            {
+                Message = Notify.ReturnMsg
+            });
         }
 
         public void InitBarcodePayment()
