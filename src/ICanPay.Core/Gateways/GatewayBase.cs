@@ -415,12 +415,12 @@ namespace ICanPay.Core
         #region 事件
 
         /// <summary>
-        /// 网关同步返回的支付通知验证失败时触发,目前仅针对条码支付
+        /// 网关同步返回的支付通知验证失败时触发,仅针对支付宝和微信的条码支付
         /// </summary>
         public event Action<object, PaymentFailedEventArgs> PaymentFailed;
 
         /// <summary>
-        /// 网关同步返回的支付通知验证成功时触发,目前仅针对条码支付
+        /// 网关同步返回的支付通知验证成功时触发,仅针对支付宝和微信的条码支付
         /// </summary>
         public event Action<object, PaymentSucceedEventArgs> PaymentSucceed;
 
