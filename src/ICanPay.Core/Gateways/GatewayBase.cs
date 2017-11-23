@@ -114,6 +114,7 @@ namespace ICanPay.Core
 
         /// <summary>
         /// 需要验证的参数名称数组，用于识别不同的网关类型。
+        /// 商户号(AppId)必须放第一位
         /// </summary>
         protected internal abstract string[] NotifyVerifyParameter { get; }
 

@@ -60,7 +60,10 @@ namespace ICanPay.Alipay
         protected override bool IsSuccessPay => Notify.TradeStatus == Constant.TRADE_SUCCESS;
 
         protected override string[] NotifyVerifyParameter => new string[]
-        { Constant.NOTIFY_TYPE, Constant.NOTIFY_ID, Constant.NOTIFY_TIME, Constant.SIGN, Constant.SIGN_TYPE };
+        {
+            Constant.APP_ID,Constant.NOTIFY_TYPE, Constant.NOTIFY_ID,
+            Constant.NOTIFY_TIME, Constant.SIGN, Constant.SIGN_TYPE
+        };
 
         #endregion
 
@@ -451,6 +454,11 @@ namespace ICanPay.Alipay
         /// <returns></returns>
         private bool IsSuccessResult()
         {
+            if (Notify.AppId != Merchant.AppId)
+            {
+                throw new GatewayException($"该商户网关未添加,AppId:{Notify.AppId}");
+            }
+
             if (!ValidateNotifySign())
             {
                 throw new GatewayException("签名不一致");

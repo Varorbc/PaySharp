@@ -69,7 +69,7 @@ namespace ICanPay.Wechatpay
         protected override bool IsWaitPay => Notify.TradeState.ToLower() == Constant.USERPAYING;
 
         protected override string[] NotifyVerifyParameter => new string[]
-        { Constant.RETURN_CODE, Constant.APPID, Constant.MCH_ID, Constant.NONCE_STR, Constant.RESULT_CODE };
+        { Constant.APPID, Constant.RETURN_CODE, Constant.MCH_ID, Constant.NONCE_STR, Constant.RESULT_CODE };
 
         #endregion
 
@@ -521,6 +521,11 @@ namespace ICanPay.Wechatpay
             if (Notify.ReturnCode.ToLower() != SUCCESS)
             {
                 throw new GatewayException("不是成功的返回码");
+            }
+
+            if (Notify.AppId != Merchant.AppId)
+            {
+                throw new GatewayException($"该商户网关未添加,AppId:{Notify.AppId}");
             }
 
             if (Notify.Sign != BuildSign())
