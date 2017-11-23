@@ -48,7 +48,7 @@ ICanPay.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Unionpay.svg
 # 如何使用
 ---
 
-见[Demo](https://github.com/Varorbc/ICanPay/tree/master/sample/ICanPay.Demo)
+见[Wiki](https://github.com/Varorbc/ICanPay/wiki)
 
 # 交流讨论
 ---
