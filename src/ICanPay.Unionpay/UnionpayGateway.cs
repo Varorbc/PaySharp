@@ -328,11 +328,6 @@ namespace ICanPay.Unionpay
         /// <returns></returns>
         private bool IsSuccessResult()
         {
-            if (Notify.AppId != Merchant.AppId)
-            {
-                throw new GatewayException($"该商户网关未添加,AppId:{Notify.AppId}");
-            }
-
             ValidateNotifySign();
 
             if (IsSuccessPay)

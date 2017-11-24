@@ -454,11 +454,6 @@ namespace ICanPay.Alipay
         /// <returns></returns>
         private bool IsSuccessResult()
         {
-            if (Notify.AppId != Merchant.AppId)
-            {
-                throw new GatewayException($"该商户网关未添加,AppId:{Notify.AppId}");
-            }
-
             if (!ValidateNotifySign())
             {
                 throw new GatewayException("签名不一致");

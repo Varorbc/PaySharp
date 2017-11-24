@@ -523,11 +523,6 @@ namespace ICanPay.Wechatpay
                 throw new GatewayException("不是成功的返回码");
             }
 
-            if (Notify.AppId != Merchant.AppId)
-            {
-                throw new GatewayException($"该商户网关未添加,AppId:{Notify.AppId}");
-            }
-
             if (Notify.Sign != BuildSign())
             {
                 throw new GatewayException("签名不一致");
