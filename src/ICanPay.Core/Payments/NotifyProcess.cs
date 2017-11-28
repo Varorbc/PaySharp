@@ -92,7 +92,11 @@ namespace ICanPay.Core
                 {
                     try
                     {
+#if NETSTANDARD2_0
                         gatewayData.FromForm(HttpUtil.Form);
+#else
+                        gatewayData.FromNameValueCollection(HttpUtil.Form);
+#endif
                     }
                     catch { }
                 }
