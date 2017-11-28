@@ -135,11 +135,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\ICanPay.Alipay\ICanPay.Alipay.csproj">
+    <ProjectReference Include="..\..\src\ICanPay.Alipay\ICanPay.Alipay.csproj">
       <Project>{C1A4A406-8346-4BA8-A587-91F305AD3668}</Project>
       <Name>ICanPay.Alipay</Name>
     </ProjectReference>
-    <ProjectReference Include="..\src\ICanPay.Core\ICanPay.Core.csproj">
+    <ProjectReference Include="..\..\src\ICanPay.Core\ICanPay.Core.csproj">
       <Project>{BDEF0FBA-3B6E-404E-B87A-AB663FED44FC}</Project>
       <Name>ICanPay.Core</Name>
     </ProjectReference>
