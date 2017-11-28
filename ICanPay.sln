@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICanPay.UnitTest", "test\IC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICanPay.Unionpay", "src\ICanPay.Unionpay\ICanPay.Unionpay.csproj", "{D0CBE889-BEAE-4F88-BF23-A4F1ED728620}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICanPay.UnitTest(.Net)", "test\ICanPay.UnitTest(.Net)\ICanPay.UnitTest(.Net).csproj", "{28AA717D-D840-4C92-A2AD-AFBF3794D6EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICanPay.UnitTest(Net)", "test\ICanPay.UnitTest(Net)\ICanPay.UnitTest(Net).csproj", "{28AA717D-D840-4C92-A2AD-AFBF3794D6EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICanPay.Demo(Net)", "sample\ICanPay.Demo(Net)\ICanPay.Demo(Net).csproj", "{65D7A296-D254-4B30-82C8-CF5C1B4C8D7B}"
 EndProject
