@@ -111,11 +111,19 @@ namespace ICanPay.Core.Utils
 
                 if ("RSA2".Equals(signType))
                 {
+#if NETSTANDARD2_0
                     signatureBytes = rsaCsp.SignData(dataBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+#else
+                    signatureBytes = ((RSACryptoServiceProvider)rsaCsp).SignData(dataBytes, "SHA256");
+#endif
                 }
                 else
                 {
+#if NETSTANDARD2_0
                     signatureBytes = rsaCsp.SignData(dataBytes, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
+#else
+                    signatureBytes = ((RSACryptoServiceProvider)rsaCsp).SignData(dataBytes, "SHA1");
+#endif
                 }
             }
             catch (Exception)
@@ -153,13 +161,23 @@ namespace ICanPay.Core.Utils
 
                 if ("RSA2".Equals(signType))
                 {
+#if NETSTANDARD2_0
                     bVerifyResultOriginal = rsa.VerifyData(Encoding.GetEncoding(charset).GetBytes(signContent),
                        Convert.FromBase64String(sign), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+#else
+                    bVerifyResultOriginal = ((RSACryptoServiceProvider)rsa).VerifyData(
+                        Encoding.GetEncoding(charset).GetBytes(signContent), "SHA256", Convert.FromBase64String(sign));
+#endif
                 }
                 else
                 {
+#if NETSTANDARD2_0
                     bVerifyResultOriginal = rsa.VerifyData(Encoding.GetEncoding(charset).GetBytes(signContent),
                        Convert.FromBase64String(sign), HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
+#else
+                    bVerifyResultOriginal = ((RSACryptoServiceProvider)rsa).VerifyData(
+                        Encoding.GetEncoding(charset).GetBytes(signContent), "SHA1", Convert.FromBase64String(sign));
+#endif
                 }
 
                 return bVerifyResultOriginal;
@@ -483,9 +501,9 @@ namespace ICanPay.Core.Utils
             return count;
         }
 
-        #endregion
+#endregion
 
-        #region SHA256加密
+#region SHA256加密
 
         /// <summary>
         /// SHA256加密
@@ -500,6 +518,6 @@ namespace ICanPay.Core.Utils
             return BitConverter.ToString(result).Replace("-", "").ToLower();
         }
 
-        #endregion
+#endregion
     }
 }

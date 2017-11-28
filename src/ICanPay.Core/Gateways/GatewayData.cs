@@ -1,9 +1,12 @@
-﻿using ICanPay.Core.Utils;
+﻿#if NETSTANDARD2_0
 using Microsoft.AspNetCore.Http;
+#endif
+using ICanPay.Core.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -19,14 +22,14 @@ namespace ICanPay.Core
     /// </summary>
     public class GatewayData
     {
-        #region 私有字段
+#region 私有字段
 
         private readonly SortedDictionary<string, object> _values;
         private string _originalResult = null;
 
-        #endregion
+#endregion
 
-        #region 属性
+#region 属性
 
         public object this[string key]
         {
@@ -36,9 +39,9 @@ namespace ICanPay.Core
 
         public int Count => _values.Count;
 
-        #endregion
+#endregion
 
-        #region 构造函数
+#region 构造函数
 
         /// <summary>
         /// 构造函数
@@ -57,9 +60,9 @@ namespace ICanPay.Core
             _values = new SortedDictionary<string, object>(comparer);
         }
 
-        #endregion
+#endregion
 
-        #region 方法
+#region 方法
 
         /// <summary>
         /// 添加参数
@@ -400,6 +403,8 @@ namespace ICanPay.Core
             }
         }
 
+#if NETSTANDARD2_0
+
         /// <summary>
         /// 将表单数据转换为网关数据
         /// </summary>
@@ -418,6 +423,20 @@ namespace ICanPay.Core
                 }
             }
             catch { }
+        }
+#endif
+
+        /// <summary>
+        /// 将键值对转换为网关数据
+        /// </summary>
+        /// <param name="nvc">键值对</param>
+        /// <returns></returns>
+        public void FromNameValueCollection(NameValueCollection nvc)
+        {
+            foreach (var item in nvc.AllKeys)
+            {
+                Add(item, nvc[item]);
+            }
         }
 
         /// <summary>
@@ -561,6 +580,6 @@ namespace ICanPay.Core
         /// <returns></returns>
         public string GetOriginalResult() => _originalResult;
 
-        #endregion
+#endregion
     }
 }
