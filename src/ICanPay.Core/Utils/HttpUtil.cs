@@ -1,9 +1,5 @@
-﻿#if NETSTANDARD2_0
-using Microsoft.AspNetCore.Http;
-#else
-using System.Collections.Specialized;
-using System.Web;
-#endif
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -19,8 +15,6 @@ namespace ICanPay.Core.Utils
     {
         #region 属性
 
-#if NETSTANDARD2_0
-
         private static IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
@@ -28,7 +22,7 @@ namespace ICanPay.Core.Utils
         /// </summary>
         public static HttpContext Current => _httpContextAccessor.HttpContext;
 
-                /// <summary>
+        /// <summary>
         /// 本地IP
         /// </summary>
         public static IPAddress LocalIpAddress => Current.Connection.LocalIpAddress;
@@ -39,9 +33,24 @@ namespace ICanPay.Core.Utils
         public static IPAddress RemoteIpAddress => Current.Connection.RemoteIpAddress;
 
         /// <summary>
+        /// 用户代理
+        /// </summary>
+        public static string UserAgent => Current.Request.Headers["User-Agent"];
+
+        /// <summary>
         /// 请求类型
         /// </summary>
         public static string RequestType => Current.Request.Method;
+
+        /// <summary>
+        /// 内容类型
+        /// </summary>
+        public static string ContentType => Current.Request.ContentType;
+
+        /// <summary>
+        /// 参数
+        /// </summary>
+        public static string QueryString => Current.Request.QueryString.ToString();
 
         /// <summary>
         /// 表单
@@ -52,6 +61,8 @@ namespace ICanPay.Core.Utils
         /// 请求体
         /// </summary>
         public static Stream Body => Current.Request.Body;
+
+        #endregion
 
         #region 构造函数
 
@@ -66,55 +77,7 @@ namespace ICanPay.Core.Utils
 
         #endregion
 
-#else
-
-        public static HttpContext Current => HttpContext.Current;
-
-        /// <summary>
-        /// 本地IP
-        /// </summary>
-        public static string LocalIpAddress => Current.Request.UserHostAddress;
-
-        /// <summary>
-        /// 客户端IP
-        /// </summary>
-        public static string RemoteIpAddress => Current.Request.ServerVariables["REMOTE_ADDR"];
-
-        /// <summary>
-        /// 请求类型
-        /// </summary>
-        public static string RequestType => Current.Request.HttpMethod;
-
-        /// <summary>
-        /// 表单
-        /// </summary>
-        public static NameValueCollection Form => Current.Request.Form;
-
-        /// <summary>
-        /// 请求体
-        /// </summary>
-        public static Stream Body => Current.Request.InputStream;
-
-#endif
-
-        /// <summary>
-        /// 用户代理
-        /// </summary>
-        public static string UserAgent => Current.Request.Headers["User-Agent"];
-
-        /// <summary>
-        /// 内容类型
-        /// </summary>
-        public static string ContentType => Current.Request.ContentType;
-
-        /// <summary>
-        /// 参数
-        /// </summary>
-        public static string QueryString => Current.Request.QueryString.ToString();
-
-#endregion
-
-#region 方法
+        #region 方法
 
         /// <summary>
         /// 跳转到指定链接
@@ -132,12 +95,7 @@ namespace ICanPay.Core.Utils
         public static void Write(string text)
         {
             Current.Response.ContentType = "text/html;charset=utf-8";
-#if NETSTANDARD2_0
             Current.Response.WriteAsync(text).GetAwaiter().GetResult();
-#else
-            Current.Response.Write(text);
-#endif
-
         }
 
         /// <summary>
@@ -156,14 +114,8 @@ namespace ICanPay.Core.Utils
             Current.Response.Headers.Add("Content-Disposition", "attachment;filename=" + WebUtility.UrlEncode(Path.GetFileName(stream.Name)));
             Current.Response.Headers.Add("Content-Length", size.ToString());
 
-#if NETSTANDARD2_0
             Current.Response.Body.WriteAsync(buffer, 0, (int)size).GetAwaiter().GetResult();
             Current.Response.Body.Close();
-#else
-            Current.Response.BinaryWrite(buffer);
-            Current.Response.End();
-            Current.Response.Close();
-#endif
         }
 
         /// <summary>
@@ -177,12 +129,23 @@ namespace ICanPay.Core.Utils
             request.Method = "GET";
             request.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
 
-            using (WebResponse response = request.GetResponse())
+            try
             {
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                using (WebResponse response = request.GetResponse())
                 {
-                    return reader.ReadToEnd().Trim();
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        return reader.ReadToEnd().Trim();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                request.Abort();
             }
         }
 
@@ -216,17 +179,28 @@ namespace ICanPay.Core.Utils
                 request.ClientCertificates.Add(cert);
             }
 
-            using (Stream outStream = request.GetRequestStream())
+            try
             {
-                outStream.Write(dataByte, 0, dataByte.Length);
-            }
-
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            {
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                using (Stream outStream = request.GetRequestStream())
                 {
-                    return reader.ReadToEnd().Trim();
+                    outStream.Write(dataByte, 0, dataByte.Length);
                 }
+
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        return reader.ReadToEnd().Trim();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                request.Abort();
             }
         }
 
@@ -252,23 +226,34 @@ namespace ICanPay.Core.Utils
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            try
             {
-                using (Stream responseStream = response.GetResponseStream())
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    FileStream fileStream = new FileStream(path, FileMode.Create);
-                    byte[] buffer = new byte[1024];
-                    int size = responseStream.Read(buffer, 0, buffer.Length);
-                    while (size > 0)
+                    using (Stream responseStream = response.GetResponseStream())
                     {
-                        fileStream.Write(buffer, 0, size);
-                        size = responseStream.Read(buffer, 0, buffer.Length);
+                        FileStream fileStream = new FileStream(path, FileMode.Create);
+                        byte[] buffer = new byte[1024];
+                        int size = responseStream.Read(buffer, 0, buffer.Length);
+                        while (size > 0)
+                        {
+                            fileStream.Write(buffer, 0, size);
+                            size = responseStream.Read(buffer, 0, buffer.Length);
+                        }
+
+                        fileStream.Position = 0;
+                        return fileStream;
+
                     }
-
-                    fileStream.Position = 0;
-                    return fileStream;
-
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                request.Abort();
             }
         }
 
@@ -283,6 +268,6 @@ namespace ICanPay.Core.Utils
             return await Task.Run(() => Download(url, path));
         }
 
-#endregion
+        #endregion
     }
 }
