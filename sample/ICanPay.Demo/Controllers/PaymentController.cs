@@ -16,15 +16,15 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index()
         {
-            string content = CreateUnionpayOrder();
+            var content = CreateUnionpayOrder();
 
-            return Content(content);
+            return Content(content.ToString());
         }
 
         /// <summary>
         /// 创建支付宝的支付订单
         /// </summary>
-        private string CreateAlipayOrder()
+        private object CreateAlipayOrder()
         {
             var order = new Alipay.Order()
             {
@@ -62,7 +62,7 @@ namespace ICanPay.Demo.Controllers
         /// <summary>
         /// 创建微信的支付订单
         /// </summary>
-        private string CreateWechatpayOrder()
+        private object CreateWechatpayOrder()
         {
             var order = new Wechatpay.Order()
             {
@@ -80,7 +80,7 @@ namespace ICanPay.Demo.Controllers
         /// <summary>
         /// 创建银联支付订单
         /// </summary>
-        private string CreateUnionpayOrder()
+        private object CreateUnionpayOrder()
         {
             var order = new Unionpay.Order()
             {

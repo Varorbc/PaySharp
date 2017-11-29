@@ -182,5 +182,11 @@ namespace ICanPay.Unionpay
         /// </summary>
         [StringLength(300, ErrorMessage = "终端信息最大长度为300位")]
         public string TermInfo { get; set; }
+
+        /// <summary>
+        /// 二维码宽度
+        /// </summary>
+        [Range(0, 1000, ErrorMessage = "二维码宽度最大长度为1000")]
+        public int QrcodeWidth { get; set; }
     }
 }

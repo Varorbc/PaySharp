@@ -93,10 +93,7 @@ namespace ICanPay.UnitTest_Net_
         {
             _order.OutTradeNo = _outTradeNo;
             _alipayGateway.Order = _order;
-            string result = _alipayGateway.BuildScanPayment();
-
-            Assert.IsTrue(result.Contains("http"));
-            Trace.WriteLine(result);
+            var result = _alipayGateway.BuildScanPayment();
         }
 
         [TestMethod]

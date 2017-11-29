@@ -17,15 +17,15 @@ namespace ICanPay.Demo_Net_.Controllers
         [HttpGet]
         public IHttpActionResult Index()
         {
-            string content = CreateAlipayOrder();
+            var content = CreateAlipayOrder();
 
-            return Ok(content);
+            return Ok(content.ToString());
         }
 
         /// <summary>
         /// 创建支付宝的支付订单
         /// </summary>
-        private string CreateAlipayOrder()
+        private object CreateAlipayOrder()
         {
             var order = new Alipay.Order()
             {

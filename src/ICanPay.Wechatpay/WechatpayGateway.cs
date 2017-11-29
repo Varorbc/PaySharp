@@ -2,6 +2,7 @@
 using ICanPay.Core.Exceptions;
 using ICanPay.Core.Utils;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -77,11 +78,13 @@ namespace ICanPay.Wechatpay
 
         #region 扫码支付
 
-        public string BuildScanPayment()
+        public Bitmap BuildScanPayment()
         {
             InitScanPayment();
             UnifiedOrder();
-            return Notify.CodeUrl;
+
+            return string.IsNullOrEmpty(Notify.CodeUrl) ?
+                null : QrCodeUtil.Create(Notify.CodeUrl, Order.QrcodeWidth, Order.QrcodeWidth);
         }
 
         public void InitScanPayment()

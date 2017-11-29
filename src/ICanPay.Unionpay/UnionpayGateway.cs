@@ -2,6 +2,7 @@
 using ICanPay.Core.Exceptions;
 using ICanPay.Core.Utils;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -129,13 +130,14 @@ namespace ICanPay.Unionpay
 
         #region 扫码支付
 
-        public string BuildScanPayment()
+        public Bitmap BuildScanPayment()
         {
             InitScanPayment();
 
             Commit();
 
-            return Notify.QrCode;
+            return string.IsNullOrEmpty(Notify.QrCode) ?
+                null : QrCodeUtil.Create(Notify.QrCode, Order.QrcodeWidth, Order.QrcodeWidth);
         }
 
         public void InitScanPayment()

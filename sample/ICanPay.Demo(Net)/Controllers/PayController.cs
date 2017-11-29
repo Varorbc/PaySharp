@@ -1,5 +1,8 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Utils;
 using System;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Web.Mvc;
 
 namespace ICanPay.Demo_Net_.Controllers
@@ -17,15 +20,25 @@ namespace ICanPay.Demo_Net_.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            string content = CreateAlipayOrder();
+            var content = CreateAlipayOrder();
 
-            return Content(content);
+            return Content(content.ToString());
+        }
+
+        [HttpGet]
+        public ActionResult GetQrCode()
+        {
+            var bitMap = QrCodeUtil.Create("123", 300, 300);
+            MemoryStream ms = new MemoryStream();
+            bitMap.Save(ms, ImageFormat.Jpeg);
+            bitMap.Dispose();
+            return File(ms.ToArray(), "image/jpeg");
         }
 
         /// <summary>
         /// 创建支付宝的支付订单
         /// </summary>
-        private string CreateAlipayOrder()
+        private object CreateAlipayOrder()
         {
             var order = new Alipay.Order()
             {

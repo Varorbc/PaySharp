@@ -2,6 +2,7 @@
 using ICanPay.Core.Exceptions;
 using ICanPay.Core.Utils;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -128,11 +129,12 @@ namespace ICanPay.Alipay
 
         #region 扫码支付
 
-        public string BuildScanPayment()
+        public Bitmap BuildScanPayment()
         {
             PreCreate();
 
-            return Notify.QrCode;
+            return string.IsNullOrEmpty(Notify.QrCode) ?
+                null : QrCodeUtil.Create(Notify.QrCode, Order.QrcodeWidth, Order.QrcodeWidth);
         }
 
         /// <summary>

@@ -118,8 +118,8 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 商户自定义二维码宽度 注：qr_pay_mode=4时该参数生效
         /// </summary>
-        [StringLength(4, ErrorMessage = "商户自定义二维码宽度最大长度为4位")]
-        public string QrcodeWidth { get; set; }
+        [Range(0, 1000, ErrorMessage = "商户自定义二维码宽度最大长度为1000")]
+        public int QrcodeWidth { get; set; }
 
         /// <summary>
         /// 优惠参数 注：仅与支付宝协商后可用

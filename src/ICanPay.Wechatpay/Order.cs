@@ -119,5 +119,11 @@ namespace ICanPay.Wechatpay
         [StringLength(128, ErrorMessage = "授权码最大长度为128位")]
         [Necessary(GatewayTradeType.Barcode, ErrorMessage = "请设置授权码")]
         public string AuthCode { get; set; }
+
+        /// <summary>
+        /// 二维码宽度
+        /// </summary>
+        [Range(0, 1000, ErrorMessage = "二维码宽度最大长度为1000")]
+        public int QrcodeWidth { get; set; }
     }
 }

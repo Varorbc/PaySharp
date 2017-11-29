@@ -1,4 +1,5 @@
-﻿
+﻿using System.Drawing;
+
 namespace ICanPay.Core
 {
     /// <summary>
@@ -9,7 +10,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 生成扫码支付参数
         /// </summary>
-        string BuildScanPayment();
+        Bitmap BuildScanPayment();
 
         /// <summary>
         /// 初始化扫码支付参数

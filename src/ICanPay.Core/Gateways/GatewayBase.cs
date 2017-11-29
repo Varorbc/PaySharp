@@ -208,7 +208,7 @@ namespace ICanPay.Core
         /// </summary>
         /// <param name="order">订单</param>
         /// <returns></returns>
-        public string Payment(IOrder order)
+        public object Payment(IOrder order)
         {
             ValidateOrder(order);
 
