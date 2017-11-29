@@ -1,4 +1,4 @@
-﻿using ICanPay.Core;
+using ICanPay.Core;
 using ICanPay.Core.Utils;
 using System;
 using System.Drawing.Imaging;

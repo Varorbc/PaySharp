@@ -93,6 +93,7 @@ namespace ICanPay.UnitTest_Net_
         {
             _order.OutTradeNo = _outTradeNo;
             _alipayGateway.Order = _order;
+          
             var result = _alipayGateway.BuildScanPayment();
         }
 
