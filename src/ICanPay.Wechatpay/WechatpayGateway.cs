@@ -87,7 +87,7 @@ namespace ICanPay.Wechatpay
         public void InitScanPayment()
         {
             Order.TradeType = Constant.NATIVE;
-            Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.LocalIpAddress;
         }
 
         #endregion
@@ -104,7 +104,7 @@ namespace ICanPay.Wechatpay
         public void InitAppPayment()
         {
             Order.TradeType = Constant.APP;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress;
             UnifiedOrder();
         }
 
@@ -137,7 +137,7 @@ namespace ICanPay.Wechatpay
         public void InitUrlPayment()
         {
             Order.TradeType = Constant.MWEB;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress;
             UnifiedOrder();
         }
 
@@ -157,7 +157,7 @@ namespace ICanPay.Wechatpay
             OAuth oAuth = GetAccessTokenByCode(Order.Code);
             Order.OpenId = oAuth.OpenId;
             Order.TradeType = Constant.JSAPI;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress;
             UnifiedOrder();
         }
 
@@ -190,7 +190,7 @@ namespace ICanPay.Wechatpay
         public void InitAppletPayment()
         {
             Order.TradeType = Constant.JSAPI;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress;
             UnifiedOrder();
         }
 
@@ -223,7 +223,7 @@ namespace ICanPay.Wechatpay
 
         public void InitBarcodePayment()
         {
-            Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.LocalIpAddress;
             UnifiedOrder();
             GatewayUrl = BARCODEGATEWAYURL;
         }

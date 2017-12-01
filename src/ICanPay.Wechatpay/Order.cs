@@ -42,12 +42,12 @@ namespace ICanPay.Wechatpay
         /// 终端IP,	APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP
         /// </summary>
         [StringLength(16, ErrorMessage = "终端IP最大长度为16位")]
-        [Required(ErrorMessage = "请设置终端IP")]
         public string SpbillCreateIp { get; internal set; }
 
         /// <summary>
         /// 标价金额,订单总金额，单位为元，详见支付金额
         /// </summary>
+        [ReName(Name = Constant.TOTAL_FEE)]
         public double Amount
         {
             get => _amount;

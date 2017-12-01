@@ -28,15 +28,35 @@ namespace ICanPay.Core.Utils
         /// </summary>
         public static HttpContext Current => _httpContextAccessor.HttpContext;
 
-                /// <summary>
+        /// <summary>
         /// 本地IP
         /// </summary>
-        public static IPAddress LocalIpAddress => Current.Connection.LocalIpAddress;
+        public static string LocalIpAddress
+        {
+            get
+            {
+#if DEBUG
+                return "127.0.0.1";
+#else
+                return Current.Connection.LocalIpAddress.ToString();
+#endif
+            }
+        }
 
         /// <summary>
         /// 客户端IP
         /// </summary>
-        public static IPAddress RemoteIpAddress => Current.Connection.RemoteIpAddress;
+        public static string RemoteIpAddress
+        {
+            get
+            {
+#if DEBUG
+                return "127.0.0.1";
+#else
+                return Current.Connection.RemoteIpAddress.ToString();
+#endif
+            }
+        }
 
         /// <summary>
         /// 请求类型
@@ -73,12 +93,32 @@ namespace ICanPay.Core.Utils
         /// <summary>
         /// 本地IP
         /// </summary>
-        public static string LocalIpAddress => Current.Request.UserHostAddress;
+        public static string LocalIpAddress
+        {
+            get
+            {
+#if DEBUG
+                return "127.0.0.1";
+#else
+                return  Current.Request.UserHostAddress;
+#endif
+            }
+        }
 
         /// <summary>
         /// 客户端IP
         /// </summary>
-        public static string RemoteIpAddress => Current.Request.ServerVariables["REMOTE_ADDR"];
+        public static string RemoteIpAddress
+        {
+            get
+            {
+#if DEBUG
+                return "127.0.0.1";
+#else
+                return  Current.Request.ServerVariables ["REMOTE_ADDR"]
+#endif
+            }
+        }
 
         /// <summary>
         /// 请求类型
@@ -112,9 +152,9 @@ namespace ICanPay.Core.Utils
         /// </summary>
         public static string QueryString => Current.Request.QueryString.ToString();
 
-#endregion
+        #endregion
 
-#region 方法
+        #region 方法
 
         /// <summary>
         /// 跳转到指定链接
@@ -283,6 +323,6 @@ namespace ICanPay.Core.Utils
             return await Task.Run(() => Download(url, path));
         }
 
-#endregion
+        #endregion
     }
 }

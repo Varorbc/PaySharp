@@ -25,11 +25,7 @@ namespace ICanPay.Core
         protected PaymentEventArgs(GatewayBase gateway)
         {
             _gateway = gateway;
-#if DEBUG
-            _notifyServerHostAddress = "127.0.0.1";
-#else
-            _notifyServerHostAddress = HttpUtil.RemoteIpAddress.ToString();
-#endif
+            _notifyServerHostAddress = HttpUtil.RemoteIpAddress;
         }
 
         #endregion

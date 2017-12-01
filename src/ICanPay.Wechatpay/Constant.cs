@@ -24,7 +24,6 @@
         public const string TRANSACTION_ID = "transaction_id";
         public const string TOTAL_FEE = "total_fee";
         public const string REFUND_FEE = "refund_fee";
-        public const string total_fee = "total_fee";
         public const string CNY = "cny";
         public const string REFUND_DESC = "refund_desc";
         public const string REFUND_ID = "REFUND_ID";
