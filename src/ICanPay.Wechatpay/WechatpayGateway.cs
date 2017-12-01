@@ -206,13 +206,14 @@ namespace ICanPay.Wechatpay
 
             if (!string.IsNullOrEmpty(Notify.TransactionId))
             {
-                PollQueryTradeStateAsync(new Auxiliary
+                AsyncUtil.Run(async () =>
                 {
-                    TradeNo = Notify.TransactionId,
-                    OutTradeNo = Notify.OutTradeNo
-                })
-                .GetAwaiter()
-                .GetResult();
+                    await PollQueryTradeStateAsync(new Auxiliary
+                    {
+                        TradeNo = Notify.TransactionId,
+                        OutTradeNo = Notify.OutTradeNo
+                    });
+                });
             }
 
             OnPaymentFailed(new PaymentFailedEventArgs(this)
@@ -453,10 +454,12 @@ namespace ICanPay.Wechatpay
         /// <param name="code"></param>
         public OAuth GetAccessTokenByCode(string code)
         {
-            string result = HttpUtil
-                .GetAsync(string.Format(ACCESSTOKENURL, Merchant.AppId, Merchant.AppSecret, code))
-                .GetAwaiter()
-                .GetResult();
+            string result = null;
+            AsyncUtil.Run(async () =>
+            {
+                result = await HttpUtil
+                .GetAsync(string.Format(ACCESSTOKENURL, Merchant.AppId, Merchant.AppSecret, code));
+            });
             GatewayData.FromJson(result);
 
             int _code = GatewayData.GetIntValue(Constant.ERRCODE);
@@ -544,10 +547,12 @@ namespace ICanPay.Wechatpay
         {
             var cert = isCert ? new X509Certificate2(Merchant.SslCertPath, Merchant.SslCertPassword) : null;
 
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToXml(), cert)
-                .GetAwaiter()
-                .GetResult();
+            string result = null;
+            AsyncUtil.Run(async () =>
+            {
+                result = await HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToXml(), cert);
+            });
             ReadReturnResult(result);
         }
 

@@ -115,7 +115,7 @@ namespace ICanPay.Core.Utils
 #if DEBUG
                 return "127.0.0.1";
 #else
-                return  Current.Request.ServerVariables ["REMOTE_ADDR"]
+                return  Current.Request.ServerVariables ["REMOTE_ADDR"];
 #endif
             }
         }
@@ -172,8 +172,12 @@ namespace ICanPay.Core.Utils
         public static void Write(string text)
         {
             Current.Response.ContentType = "text/html;charset=utf-8";
+
 #if NETSTANDARD2_0
-            Current.Response.WriteAsync(text).GetAwaiter().GetResult();
+            AsyncUtil.Run(async () =>
+            {
+                await Current.Response.WriteAsync(text);
+            });
 #else
             Current.Response.Write(text);
 #endif
@@ -197,7 +201,10 @@ namespace ICanPay.Core.Utils
             Current.Response.Headers.Add("Content-Length", size.ToString());
 
 #if NETSTANDARD2_0
-            Current.Response.Body.WriteAsync(buffer, 0, (int)size).GetAwaiter().GetResult();
+            AsyncUtil.Run(async () =>
+            {
+                await Current.Response.Body.WriteAsync(buffer, 0, (int)size);
+            });
             Current.Response.Body.Close();
 #else
             Current.Response.BinaryWrite(buffer);

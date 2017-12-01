@@ -1,5 +1,6 @@
 ﻿using ICanPay.Alipay;
 using ICanPay.Core;
+using ICanPay.Core.Exceptions;
 using ICanPay.Core.Utils;
 using System;
 using System.Net;
@@ -77,11 +78,14 @@ namespace ICanPay.UnitTest
         [Fact]
         public void TestBarcodePay()
         {
-            _order.OutTradeNo = _outTradeNo;
-            _alipayGateway.Order = _order;
-            _alipayGateway.PaymentSucceed += _alipayGateway_PaymentSucceed;
-            _alipayGateway.PaymentFailed += _alipayGateway_PaymentFailed;
-            _alipayGateway.BuildBarcodePayment();
+            Assert.Throws<GatewayException>(() =>
+            {
+                _order.OutTradeNo = _outTradeNo;
+                _alipayGateway.Order = _order;
+                _alipayGateway.PaymentSucceed += _alipayGateway_PaymentSucceed;
+                _alipayGateway.PaymentFailed += _alipayGateway_PaymentFailed;
+                _alipayGateway.BuildBarcodePayment();
+            });
         }
 
         private void _alipayGateway_PaymentSucceed(object arg1, PaymentSucceedEventArgs arg2)
@@ -108,13 +112,13 @@ namespace ICanPay.UnitTest
         [Fact]
         public void TestQuery()
         {
-            var notify = (Notify)_alipayGateway.BuildQuery(new Auxiliary
+            Assert.Throws<GatewayException>(() =>
             {
-                OutTradeNo = _outTradeNo
+                _alipayGateway.BuildQuery(new Auxiliary
+                {
+                    OutTradeNo = _outTradeNo
+                });
             });
-
-            Assert.Contains("交易不存在", notify.SubMessage);
-            _output.WriteLine(Util.SerializeObject(notify));
         }
 
         [Fact]
@@ -132,40 +136,40 @@ namespace ICanPay.UnitTest
         [Fact]
         public void TestClose()
         {
-            var notify = (Notify)_alipayGateway.BuildClose(new Auxiliary
+            Assert.Throws<GatewayException>(() =>
             {
-                OutTradeNo = _outTradeNo
+                _alipayGateway.BuildClose(new Auxiliary
+                {
+                    OutTradeNo = _outTradeNo
+                });
             });
-
-            Assert.Contains("交易不存在", notify.SubMessage);
-            _output.WriteLine(Util.SerializeObject(notify));
         }
 
         [Fact]
         public void TestRefund()
         {
-            var notify = (Notify)_alipayGateway.BuildRefund(new Auxiliary
+            Assert.Throws<GatewayException>(() =>
             {
-                OutTradeNo = _outTradeNo,
-                RefundAmount = 0.01,
-                OutRefundNo = _outTradeNo
+                _alipayGateway.BuildRefund(new Auxiliary
+                {
+                    OutTradeNo = _outTradeNo,
+                    RefundAmount = 0.01,
+                    OutRefundNo = _outTradeNo
+                });
             });
-
-            Assert.Contains("交易不存在", notify.SubMessage);
-            _output.WriteLine(Util.SerializeObject(notify));
         }
 
         [Fact]
         public void TestRefundQuery()
         {
-            var notify = (Notify)_alipayGateway.BuildRefundQuery(new Auxiliary
+            Assert.Throws<GatewayException>(() =>
             {
-                OutTradeNo = _outTradeNo,
-                OutRefundNo = "123"
+                _alipayGateway.BuildRefundQuery(new Auxiliary
+                {
+                    OutTradeNo = _outTradeNo,
+                    OutRefundNo = "123"
+                });
             });
-
-            Assert.Contains("交易不存在", notify.SubMessage);
-            _output.WriteLine(Util.SerializeObject(notify));
         }
 
         [Fact]

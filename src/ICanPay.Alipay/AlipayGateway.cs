@@ -94,7 +94,7 @@ namespace ICanPay.Alipay
         {
             InitUrlPayment();
 
-            return $"{GatewayUrl}?{GetPaymentQueryString()}";
+            return $"{GatewayUrl}&{GetPaymentQueryString()}";
         }
 
         public void InitUrlPayment()
@@ -165,12 +165,13 @@ namespace ICanPay.Alipay
 
             if (!string.IsNullOrEmpty(Notify.TradeNo))
             {
-                PollQueryTradeStateAsync(new Auxiliary
+                AsyncUtil.Run(async () =>
                 {
-                    TradeNo = Notify.TradeNo
-                })
-                .GetAwaiter()
-                .GetResult();
+                    await PollQueryTradeStateAsync(new Auxiliary
+                    {
+                        TradeNo = Notify.TradeNo
+                    });
+                });
             }
 
             OnPaymentFailed(new PaymentFailedEventArgs(this)
@@ -413,10 +414,12 @@ namespace ICanPay.Alipay
         /// <param name="type">结果类型</param>
         private void Commit(string type)
         {
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrl())
-                .GetAwaiter()
-                .GetResult();
+            string result = null;
+            AsyncUtil.Run(async () =>
+            {
+                result = await HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrl());
+            });
             ReadReturnResult(result, type);
         }
 
@@ -438,6 +441,22 @@ namespace ICanPay.Alipay
             GatewayData.FromJson(result);
             base.Notify = GatewayData.ToObject<Notify>(StringCase.Snake);
             Notify.Sign = sign;
+
+            IsSuccessReturn();
+        }
+
+        /// <summary>
+        /// 是否是已成功的返回
+        /// </summary>
+        /// <returns></returns>
+        private bool IsSuccessReturn()
+        {
+            if (Notify.Code != "10000")
+            {
+                throw new GatewayException(Notify.SubMessage);
+            }
+
+            return true;
         }
 
         /// <summary>
