@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿#if NETSTANDARD2_0
+using Microsoft.AspNetCore.Http;
+#else
+using System.Collections.Specialized;
+using System.Web;
+#endif
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -15,6 +19,8 @@ namespace ICanPay.Core.Utils
     {
         #region 属性
 
+#if NETSTANDARD2_0
+
         private static IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
@@ -25,32 +31,37 @@ namespace ICanPay.Core.Utils
         /// <summary>
         /// 本地IP
         /// </summary>
-        public static IPAddress LocalIpAddress => Current.Connection.LocalIpAddress;
+        public static string LocalIpAddress
+        {
+            get
+            {
+#if DEBUG
+                return "127.0.0.1";
+#else
+                return Current.Connection.LocalIpAddress.ToString();
+#endif
+            }
+        }
 
         /// <summary>
         /// 客户端IP
         /// </summary>
-        public static IPAddress RemoteIpAddress => Current.Connection.RemoteIpAddress;
-
-        /// <summary>
-        /// 用户代理
-        /// </summary>
-        public static string UserAgent => Current.Request.Headers["User-Agent"];
+        public static string RemoteIpAddress
+        {
+            get
+            {
+#if DEBUG
+                return "127.0.0.1";
+#else
+                return Current.Connection.RemoteIpAddress.ToString();
+#endif
+            }
+        }
 
         /// <summary>
         /// 请求类型
         /// </summary>
         public static string RequestType => Current.Request.Method;
-
-        /// <summary>
-        /// 内容类型
-        /// </summary>
-        public static string ContentType => Current.Request.ContentType;
-
-        /// <summary>
-        /// 参数
-        /// </summary>
-        public static string QueryString => Current.Request.QueryString.ToString();
 
         /// <summary>
         /// 表单
@@ -62,8 +73,6 @@ namespace ICanPay.Core.Utils
         /// </summary>
         public static Stream Body => Current.Request.Body;
 
-        #endregion
-
         #region 构造函数
 
         /// <summary>
@@ -74,6 +83,74 @@ namespace ICanPay.Core.Utils
         {
             _httpContextAccessor = httpContextAccessor;
         }
+
+        #endregion
+
+#else
+
+        public static HttpContext Current => HttpContext.Current;
+
+        /// <summary>
+        /// 本地IP
+        /// </summary>
+        public static string LocalIpAddress
+        {
+            get
+            {
+#if DEBUG
+                return "127.0.0.1";
+#else
+                return  Current.Request.UserHostAddress;
+#endif
+            }
+        }
+
+        /// <summary>
+        /// 客户端IP
+        /// </summary>
+        public static string RemoteIpAddress
+        {
+            get
+            {
+#if DEBUG
+                return "127.0.0.1";
+#else
+                return  Current.Request.ServerVariables ["REMOTE_ADDR"];
+#endif
+            }
+        }
+
+        /// <summary>
+        /// 请求类型
+        /// </summary>
+        public static string RequestType => Current.Request.HttpMethod;
+
+        /// <summary>
+        /// 表单
+        /// </summary>
+        public static NameValueCollection Form => Current.Request.Form;
+
+        /// <summary>
+        /// 请求体
+        /// </summary>
+        public static Stream Body => Current.Request.InputStream;
+
+#endif
+
+        /// <summary>
+        /// 用户代理
+        /// </summary>
+        public static string UserAgent => Current.Request.Headers["User-Agent"];
+
+        /// <summary>
+        /// 内容类型
+        /// </summary>
+        public static string ContentType => Current.Request.ContentType;
+
+        /// <summary>
+        /// 参数
+        /// </summary>
+        public static string QueryString => Current.Request.QueryString.ToString();
 
         #endregion
 
@@ -95,7 +172,16 @@ namespace ICanPay.Core.Utils
         public static void Write(string text)
         {
             Current.Response.ContentType = "text/html;charset=utf-8";
-            Current.Response.WriteAsync(text).GetAwaiter().GetResult();
+
+#if NETSTANDARD2_0
+            AsyncUtil.Run(async () =>
+            {
+                await Current.Response.WriteAsync(text);
+            });
+#else
+            Current.Response.Write(text);
+#endif
+
         }
 
         /// <summary>
@@ -114,8 +200,17 @@ namespace ICanPay.Core.Utils
             Current.Response.Headers.Add("Content-Disposition", "attachment;filename=" + WebUtility.UrlEncode(Path.GetFileName(stream.Name)));
             Current.Response.Headers.Add("Content-Length", size.ToString());
 
-            Current.Response.Body.WriteAsync(buffer, 0, (int)size).GetAwaiter().GetResult();
+#if NETSTANDARD2_0
+            AsyncUtil.Run(async () =>
+            {
+                await Current.Response.Body.WriteAsync(buffer, 0, (int)size);
+            });
             Current.Response.Body.Close();
+#else
+            Current.Response.BinaryWrite(buffer);
+            Current.Response.End();
+            Current.Response.Close();
+#endif
         }
 
         /// <summary>
@@ -129,23 +224,12 @@ namespace ICanPay.Core.Utils
             request.Method = "GET";
             request.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
 
-            try
+            using (WebResponse response = request.GetResponse())
             {
-                using (WebResponse response = request.GetResponse())
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                    {
-                        return reader.ReadToEnd().Trim();
-                    }
+                    return reader.ReadToEnd().Trim();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                request.Abort();
             }
         }
 
@@ -179,28 +263,17 @@ namespace ICanPay.Core.Utils
                 request.ClientCertificates.Add(cert);
             }
 
-            try
+            using (Stream outStream = request.GetRequestStream())
             {
-                using (Stream outStream = request.GetRequestStream())
-                {
-                    outStream.Write(dataByte, 0, dataByte.Length);
-                }
+                outStream.Write(dataByte, 0, dataByte.Length);
+            }
 
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                    {
-                        return reader.ReadToEnd().Trim();
-                    }
+                    return reader.ReadToEnd().Trim();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                request.Abort();
             }
         }
 
@@ -226,34 +299,23 @@ namespace ICanPay.Core.Utils
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
-            try
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream responseStream = response.GetResponseStream())
                 {
-                    using (Stream responseStream = response.GetResponseStream())
+                    FileStream fileStream = new FileStream(path, FileMode.Create);
+                    byte[] buffer = new byte[1024];
+                    int size = responseStream.Read(buffer, 0, buffer.Length);
+                    while (size > 0)
                     {
-                        FileStream fileStream = new FileStream(path, FileMode.Create);
-                        byte[] buffer = new byte[1024];
-                        int size = responseStream.Read(buffer, 0, buffer.Length);
-                        while (size > 0)
-                        {
-                            fileStream.Write(buffer, 0, size);
-                            size = responseStream.Read(buffer, 0, buffer.Length);
-                        }
-
-                        fileStream.Position = 0;
-                        return fileStream;
-
+                        fileStream.Write(buffer, 0, size);
+                        size = responseStream.Read(buffer, 0, buffer.Length);
                     }
+
+                    fileStream.Position = 0;
+                    return fileStream;
+
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                request.Abort();
             }
         }
 

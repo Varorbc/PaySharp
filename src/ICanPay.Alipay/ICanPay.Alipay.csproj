@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Varorbc/ICanPay</PackageProjectUrl>
     <Title>ICanPay.Alipay</Title>
     <Authors>Varorbc</Authors>
     <Description>支付宝支付</Description>
-    <Version>1.1.3</Version>
+    <Version>1.1.7</Version>
     <PackageTags>dotnetcore;pay;alipay;</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Varorbc/ICanPay</RepositoryUrl>

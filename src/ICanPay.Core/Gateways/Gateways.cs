@@ -47,8 +47,16 @@ namespace ICanPay.Core
         {
             if (gateway != null)
             {
-                _list.Add(gateway);
-                return true;
+                if (!Exist(gateway.Merchant.AppId))
+                {
+                    _list.Add(gateway);
+
+                    return true;
+                }
+                else
+                {
+                    throw new GatewayException("该商户数据已存在");
+                }
             }
 
             return false;
@@ -85,6 +93,13 @@ namespace ICanPay.Core
 
             return gateway;
         }
+
+        /// <summary>
+        /// 指定AppId是否存在
+        /// </summary>
+        /// <param name="appId">appId</param>
+        /// <returns></returns>
+        private bool Exist(string appId) => _list.Any(a => a.Merchant.AppId == appId);
 
         /// <summary>
         /// 获取网关列表

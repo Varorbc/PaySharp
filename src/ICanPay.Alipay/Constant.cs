@@ -45,5 +45,6 @@
         public const string NOTIFY_TYPE = "notify_type";
         public const string NOTIFY_ID = "notify_id";
         public const string NOTIFY_TIME = "notify_time";
+        public const string APP_ID = "app_id";
     }
 }

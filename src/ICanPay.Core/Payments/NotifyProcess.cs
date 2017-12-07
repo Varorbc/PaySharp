@@ -1,5 +1,6 @@
 ﻿using ICanPay.Core.Utils;
 using System.IO;
+using System.Linq;
 
 namespace ICanPay.Core
 {
@@ -21,12 +22,16 @@ namespace ICanPay.Core
             var gatewayData = ReadNotifyData();
             GatewayBase gateway = null;
 
-            foreach(var item in gateways.GetList())
+            foreach (var item in gateways.GetList())
             {
-                if(ExistParameter(item.NotifyVerifyParameter, gatewayData))
+                if (ExistParameter(item.NotifyVerifyParameter, gatewayData))
                 {
-                    gateway = item;
-                    break;
+                    if (item.Merchant.AppId == gatewayData
+                        .GetStringValue(item.NotifyVerifyParameter.FirstOrDefault()))
+                    {
+                        gateway = item;
+                        break;
+                    }
                 }
             }
 
@@ -87,7 +92,11 @@ namespace ICanPay.Core
                 {
                     try
                     {
+#if NETSTANDARD2_0
                         gatewayData.FromForm(HttpUtil.Form);
+#else
+                        gatewayData.FromNameValueCollection(HttpUtil.Form);
+#endif
                     }
                     catch { }
                 }

@@ -63,7 +63,11 @@ namespace ICanPay.Unionpay
 
         public new Merchant Merchant => _merchant;
 
-        public new Order Order => (Order)base.Order;
+        public new Order Order
+        {
+            get => (Order)base.Order;
+            set => base.Order = value;
+        }
 
         public new Notify Notify => (Notify)base.Notify;
 
@@ -290,10 +294,12 @@ namespace ICanPay.Unionpay
 
         private void Commit()
         {
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrl())
-                .GetAwaiter()
-                .GetResult();
+            string result = null;
+            AsyncUtil.Run(async () =>
+            {
+                result = await HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrl());
+            });
 
             ReadReturnResult(result);
         }
@@ -306,7 +312,7 @@ namespace ICanPay.Unionpay
             {
                 throw new GatewayException(Notify.RespMsg);
             }
-            ValidateNotifySign();
+            IsSuccessReturn();
         }
 
         /// <summary>
@@ -316,6 +322,22 @@ namespace ICanPay.Unionpay
         private string BuildSign()
         {
             return Util.Sign(Merchant.CertKey, GatewayData.ToUrl(false));
+        }
+
+        /// <summary>
+        /// 是否是已成功的返回
+        /// </summary>
+        /// <returns></returns>
+        private bool IsSuccessReturn()
+        {
+            ValidateNotifySign();
+
+            if (Notify.RespCode != "00")
+            {
+                throw new GatewayException(Notify.RespMsg);
+            }
+
+            return true;
         }
 
         /// <summary>

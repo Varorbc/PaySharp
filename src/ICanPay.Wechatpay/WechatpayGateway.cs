@@ -56,7 +56,11 @@ namespace ICanPay.Wechatpay
 
         public new Merchant Merchant => _merchant;
 
-        public new Order Order => (Order)base.Order;
+        public new Order Order
+        {
+            get => (Order)base.Order;
+            set => base.Order = value;
+        }
 
         public new Notify Notify => (Notify)base.Notify;
 
@@ -65,7 +69,7 @@ namespace ICanPay.Wechatpay
         protected override bool IsWaitPay => Notify.TradeState.ToLower() == Constant.USERPAYING;
 
         protected override string[] NotifyVerifyParameter => new string[]
-        { Constant.RETURN_CODE, Constant.APPID, Constant.MCH_ID, Constant.NONCE_STR, Constant.RESULT_CODE };
+        { Constant.APPID, Constant.RETURN_CODE, Constant.MCH_ID, Constant.NONCE_STR, Constant.RESULT_CODE };
 
         #endregion
 
@@ -83,7 +87,7 @@ namespace ICanPay.Wechatpay
         public void InitScanPayment()
         {
             Order.TradeType = Constant.NATIVE;
-            Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.LocalIpAddress;
         }
 
         #endregion
@@ -100,7 +104,7 @@ namespace ICanPay.Wechatpay
         public void InitAppPayment()
         {
             Order.TradeType = Constant.APP;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress;
             UnifiedOrder();
         }
 
@@ -133,7 +137,7 @@ namespace ICanPay.Wechatpay
         public void InitUrlPayment()
         {
             Order.TradeType = Constant.MWEB;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress;
             UnifiedOrder();
         }
 
@@ -153,7 +157,7 @@ namespace ICanPay.Wechatpay
             OAuth oAuth = GetAccessTokenByCode(Order.Code);
             Order.OpenId = oAuth.OpenId;
             Order.TradeType = Constant.JSAPI;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress;
             UnifiedOrder();
         }
 
@@ -186,7 +190,7 @@ namespace ICanPay.Wechatpay
         public void InitAppletPayment()
         {
             Order.TradeType = Constant.JSAPI;
-            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.RemoteIpAddress;
             UnifiedOrder();
         }
 
@@ -202,19 +206,25 @@ namespace ICanPay.Wechatpay
 
             if (!string.IsNullOrEmpty(Notify.TransactionId))
             {
-                PollQueryTradeStateAsync(new Auxiliary
+                AsyncUtil.Run(async () =>
                 {
-                    TradeNo = Notify.TransactionId,
-                    OutTradeNo = Notify.OutTradeNo
-                })
-                .GetAwaiter()
-                .GetResult();
+                    await PollQueryTradeStateAsync(new Auxiliary
+                    {
+                        TradeNo = Notify.TransactionId,
+                        OutTradeNo = Notify.OutTradeNo
+                    });
+                });
             }
+
+            OnPaymentFailed(new PaymentFailedEventArgs(this)
+            {
+                Message = Notify.ReturnMsg
+            });
         }
 
         public void InitBarcodePayment()
         {
-            Order.SpbillCreateIp = HttpUtil.LocalIpAddress.ToString();
+            Order.SpbillCreateIp = HttpUtil.LocalIpAddress;
             UnifiedOrder();
             GatewayUrl = BARCODEGATEWAYURL;
         }
@@ -444,10 +454,12 @@ namespace ICanPay.Wechatpay
         /// <param name="code"></param>
         public OAuth GetAccessTokenByCode(string code)
         {
-            string result = HttpUtil
-                .GetAsync(string.Format(ACCESSTOKENURL, Merchant.AppId, Merchant.AppSecret, code))
-                .GetAwaiter()
-                .GetResult();
+            string result = null;
+            AsyncUtil.Run(async () =>
+            {
+                result = await HttpUtil
+                .GetAsync(string.Format(ACCESSTOKENURL, Merchant.AppId, Merchant.AppSecret, code));
+            });
             GatewayData.FromJson(result);
 
             int _code = GatewayData.GetIntValue(Constant.ERRCODE);
@@ -535,10 +547,12 @@ namespace ICanPay.Wechatpay
         {
             var cert = isCert ? new X509Certificate2(Merchant.SslCertPath, Merchant.SslCertPassword) : null;
 
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToXml(), cert)
-                .GetAwaiter()
-                .GetResult();
+            string result = null;
+            AsyncUtil.Run(async () =>
+            {
+                result = await HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToXml(), cert);
+            });
             ReadReturnResult(result);
         }
 

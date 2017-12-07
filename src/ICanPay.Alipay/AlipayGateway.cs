@@ -18,8 +18,11 @@ namespace ICanPay.Alipay
     {
 
         #region 私有字段
-
+#if DEBUG
+        private const string GATEWAYURL = "https://openapi.alipaydev.com/gateway.do?charset=UTF-8";
+#else
         private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do?charset=UTF-8";
+#endif
         private readonly Merchant _merchant;
 
         #endregion
@@ -44,7 +47,11 @@ namespace ICanPay.Alipay
 
         public new Merchant Merchant => _merchant;
 
-        public new Order Order => (Order)base.Order;
+        public new Order Order
+        {
+            get => (Order)base.Order;
+            set => base.Order = value;
+        }
 
         public new Notify Notify => (Notify)base.Notify;
 
@@ -53,7 +60,10 @@ namespace ICanPay.Alipay
         protected override bool IsSuccessPay => Notify.TradeStatus == Constant.TRADE_SUCCESS;
 
         protected override string[] NotifyVerifyParameter => new string[]
-        { Constant.NOTIFY_TYPE, Constant.NOTIFY_ID, Constant.NOTIFY_TIME, Constant.SIGN, Constant.SIGN_TYPE };
+        {
+            Constant.APP_ID,Constant.NOTIFY_TYPE, Constant.NOTIFY_ID,
+            Constant.NOTIFY_TIME, Constant.SIGN, Constant.SIGN_TYPE
+        };
 
         #endregion
 
@@ -84,7 +94,7 @@ namespace ICanPay.Alipay
         {
             InitUrlPayment();
 
-            return $"{GatewayUrl}?{GetPaymentQueryString()}";
+            return $"{GatewayUrl}&{GetPaymentQueryString()}";
         }
 
         public void InitUrlPayment()
@@ -155,13 +165,19 @@ namespace ICanPay.Alipay
 
             if (!string.IsNullOrEmpty(Notify.TradeNo))
             {
-                PollQueryTradeStateAsync(new Auxiliary
+                AsyncUtil.Run(async () =>
                 {
-                    TradeNo = Notify.TradeNo
-                })
-                .GetAwaiter()
-                .GetResult();
+                    await PollQueryTradeStateAsync(new Auxiliary
+                    {
+                        TradeNo = Notify.TradeNo
+                    });
+                });
             }
+
+            OnPaymentFailed(new PaymentFailedEventArgs(this)
+            {
+                Message = Notify.SubMessage
+            });
         }
 
         public void InitBarcodePayment()
@@ -398,10 +414,12 @@ namespace ICanPay.Alipay
         /// <param name="type">结果类型</param>
         private void Commit(string type)
         {
-            string result = HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrl())
-                .GetAwaiter()
-                .GetResult();
+            string result = null;
+            AsyncUtil.Run(async () =>
+            {
+                result = await HttpUtil
+                .PostAsync(GatewayUrl, GatewayData.ToUrl());
+            });
             ReadReturnResult(result, type);
         }
 
@@ -423,6 +441,22 @@ namespace ICanPay.Alipay
             GatewayData.FromJson(result);
             base.Notify = GatewayData.ToObject<Notify>(StringCase.Snake);
             Notify.Sign = sign;
+
+            IsSuccessReturn();
+        }
+
+        /// <summary>
+        /// 是否是已成功的返回
+        /// </summary>
+        /// <returns></returns>
+        private bool IsSuccessReturn()
+        {
+            if (Notify.Code != "10000")
+            {
+                throw new GatewayException(Notify.SubMessage);
+            }
+
+            return true;
         }
 
         /// <summary>
