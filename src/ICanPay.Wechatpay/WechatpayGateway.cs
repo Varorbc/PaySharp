@@ -206,14 +206,16 @@ namespace ICanPay.Wechatpay
 
             if (!string.IsNullOrEmpty(Notify.TransactionId))
             {
-                AsyncUtil.Run(async () =>
+                Task.Run(async () =>
                 {
                     await PollQueryTradeStateAsync(new Auxiliary
                     {
                         TradeNo = Notify.TransactionId,
                         OutTradeNo = Notify.OutTradeNo
                     });
-                });
+                })
+                .GetAwaiter()
+                .GetResult();
             }
 
             OnPaymentFailed(new PaymentFailedEventArgs(this)
@@ -455,11 +457,13 @@ namespace ICanPay.Wechatpay
         public OAuth GetAccessTokenByCode(string code)
         {
             string result = null;
-            AsyncUtil.Run(async () =>
+            Task.Run(async () =>
             {
                 result = await HttpUtil
                 .GetAsync(string.Format(ACCESSTOKENURL, Merchant.AppId, Merchant.AppSecret, code));
-            });
+            })
+            .GetAwaiter()
+            .GetResult();
             GatewayData.FromJson(result);
 
             int _code = GatewayData.GetIntValue(Constant.ERRCODE);
@@ -548,11 +552,13 @@ namespace ICanPay.Wechatpay
             var cert = isCert ? new X509Certificate2(Merchant.SslCertPath, Merchant.SslCertPassword) : null;
 
             string result = null;
-            AsyncUtil.Run(async () =>
+            Task.Run(async () =>
             {
                 result = await HttpUtil
                 .PostAsync(GatewayUrl, GatewayData.ToXml(), cert);
-            });
+            })
+            .GetAwaiter()
+            .GetResult();
             ReadReturnResult(result);
         }
 

@@ -174,10 +174,12 @@ namespace ICanPay.Core.Utils
             Current.Response.ContentType = "text/html;charset=utf-8";
 
 #if NETSTANDARD2_0
-            AsyncUtil.Run(async () =>
+            Task.Run(async () =>
             {
                 await Current.Response.WriteAsync(text);
-            });
+            })
+            .GetAwaiter()
+            .GetResult();
 #else
             Current.Response.Write(text);
 #endif
@@ -201,10 +203,12 @@ namespace ICanPay.Core.Utils
             Current.Response.Headers.Add("Content-Length", size.ToString());
 
 #if NETSTANDARD2_0
-            AsyncUtil.Run(async () =>
+            Task.Run(async () =>
             {
                 await Current.Response.Body.WriteAsync(buffer, 0, (int)size);
-            });
+            })
+            .GetAwaiter()
+            .GetResult();
             Current.Response.Body.Close();
 #else
             Current.Response.BinaryWrite(buffer);

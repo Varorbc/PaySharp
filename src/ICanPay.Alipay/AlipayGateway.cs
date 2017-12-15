@@ -165,13 +165,15 @@ namespace ICanPay.Alipay
 
             if (!string.IsNullOrEmpty(Notify.TradeNo))
             {
-                AsyncUtil.Run(async () =>
+                Task.Run(async () =>
                 {
                     await PollQueryTradeStateAsync(new Auxiliary
                     {
                         TradeNo = Notify.TradeNo
                     });
-                });
+                })
+                .GetAwaiter()
+                .GetResult();
             }
 
             OnPaymentFailed(new PaymentFailedEventArgs(this)
@@ -415,11 +417,14 @@ namespace ICanPay.Alipay
         private void Commit(string type)
         {
             string result = null;
-            AsyncUtil.Run(async () =>
+            Task.Run(async () =>
             {
                 result = await HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrl());
-            });
+                 .PostAsync(GatewayUrl, GatewayData.ToUrl());
+            })
+            .GetAwaiter()
+            .GetResult();
+
             ReadReturnResult(result, type);
         }
 

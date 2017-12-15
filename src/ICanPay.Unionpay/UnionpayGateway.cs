@@ -295,11 +295,13 @@ namespace ICanPay.Unionpay
         private void Commit()
         {
             string result = null;
-            AsyncUtil.Run(async () =>
+            Task.Run(async () =>
             {
                 result = await HttpUtil
                 .PostAsync(GatewayUrl, GatewayData.ToUrl());
-            });
+            })
+            .GetAwaiter()
+            .GetResult();
 
             ReadReturnResult(result);
         }
