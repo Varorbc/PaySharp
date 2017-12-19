@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Varorbc/ICanPay</PackageProjectUrl>
     <Title>ICanPay.Unionpay</Title>
@@ -23,8 +23,15 @@
     <OutputPath>..\..\output\release\</OutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <PackageReference Include="SharpZipLib" Version="0.86.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="SharpZipLib" Version="1.0.0-alpha2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.1.3" />
   </ItemGroup>
 
