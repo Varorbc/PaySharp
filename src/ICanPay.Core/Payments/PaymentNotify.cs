@@ -38,7 +38,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 网关异步返回的支付通知验证成功时触发
         /// </summary>
-        public event Action<object, PaymentSucceedEventArgs> PaymentSucceed;
+        public event Func<object, PaymentSucceedEventArgs, bool> PaymentSucceed;
 
         /// <summary>
         /// 网关异步返回的支付通知无法识别时触发
@@ -51,7 +51,7 @@ namespace ICanPay.Core
 
         private void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
 
-        private void OnPaymentSucceed(PaymentSucceedEventArgs e) => PaymentSucceed?.Invoke(this, e);
+        private bool OnPaymentSucceed(PaymentSucceedEventArgs e) => PaymentSucceed?.Invoke(this, e) ?? false;
 
         private void OnUnknownGateway(UnknownGatewayEventArgs e) => UnknownGateway?.Invoke(this, e);
 
@@ -71,8 +71,15 @@ namespace ICanPay.Core
                 {
                     if (await gateway.ValidateNotifyAsync())
                     {
-                        OnPaymentSucceed(new PaymentSucceedEventArgs(gateway));
-                        gateway.WriteSuccessFlag();
+                        bool result = OnPaymentSucceed(new PaymentSucceedEventArgs(gateway));
+                        if (result)
+                        {
+                            gateway.WriteSuccessFlag();
+                        }
+                        else
+                        {
+                            gateway.WriteFailureFlag();
+                        }
                     }
                     else
                     {

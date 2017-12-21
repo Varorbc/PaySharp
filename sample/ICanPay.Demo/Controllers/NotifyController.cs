@@ -25,7 +25,7 @@ namespace ICanPay.Demo.Controllers
             await notify.ReceivedAsync();
         }
 
-        private void Notify_PaymentSucceed(object sender, PaymentSucceedEventArgs e)
+        private bool Notify_PaymentSucceed(object sender, PaymentSucceedEventArgs e)
         {
             // 支付成功时时的处理代码
             /* 建议添加以下校验。
@@ -36,6 +36,9 @@ namespace ICanPay.Demo.Controllers
             {
                 var alipayNotify = (Alipay.Notify)e.Notify;
             }
+
+            //处理成功返回true
+            return true;
         }
 
         private void Notify_PaymentFailed(object sender, PaymentFailedEventArgs e)
