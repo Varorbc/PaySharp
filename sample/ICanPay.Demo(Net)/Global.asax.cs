@@ -26,14 +26,14 @@ namespace ICanPay.Demo_Net_
                 return gateways;
             });
 
-            ICanPayConfig.Register(typeof(Global), GlobalConfiguration.Configuration, a =>
-            {
-                var gateways = new Gateways();
+            //ICanPayConfig.Register(typeof(Global), GlobalConfiguration.Configuration, a =>
+            //{
+            //    var gateways = new Gateways();
 
-                gateways.Add(new AlipayGateway(Config()));
+            //    gateways.Add(new AlipayGateway(Config()));
 
-                return gateways;
-            });
+            //    return gateways;
+            //});
         }
 
         private Merchant Config()

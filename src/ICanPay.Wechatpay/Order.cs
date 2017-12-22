@@ -91,12 +91,13 @@ namespace ICanPay.Wechatpay
         /// openid如何获取，可参考【获取openid】。
         /// 企业号请使用【企业号OAuth2.0接口】获取企业号内成员userid，再调用【企业号userid转openid接口】进行转换
         /// </summary>
+        [ReName(Name = Constant.OPENID)]
         public string OpenId { get; set; }
 
         /// <summary>
         /// 授权临时票据
         /// </summary>
-        [Necessary(GatewayTradeType.Public, ErrorMessage = "请设置用户标识")]
+        [Necessary(new GatewayTradeType[] { GatewayTradeType.Public, GatewayTradeType.Applet }, ErrorMessage = "请设置用户标识")]
         public string Code { get; set; }
 
         /// <summary>

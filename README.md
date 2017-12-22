@@ -41,6 +41,7 @@ ICanPay是一个支持多商户多种支付方式的跨平台网关处理类库�
 Package  | NuGet 
 -------- | :------------ 
 ICanPay.Core		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Core.svg)](https://www.nuget.org/packages/ICanPay.Core)
+ICanPay.Core.Mvc		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Core.Mvc.svg)](https://www.nuget.org/packages/ICanPay.Core.Mvc)
 ICanPay.Alipay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Alipay.svg)](https://www.nuget.org/packages/ICanPay.Alipay)
 ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.svg)](https://www.nuget.org/packages/ICanPay.Wechatpay)
 ICanPay.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Unionpay.svg)](https://www.nuget.org/packages/ICanPay.Unionpay)
