@@ -39,14 +39,9 @@ namespace ICanPay.Core.Utils
         public static string MD5(string data, Encoding encoding)
         {
             var md5 = System.Security.Cryptography.MD5.Create();
-            byte[] dataByte = md5.ComputeHash(encoding.GetBytes(data));
-            var sb = new StringBuilder();
-            for (int i = 0; i < dataByte.Length; i++)
-            {
-                sb.Append(dataByte[i].ToString("X2"));
-            }
-
-            return sb.ToString();
+            var dataByte = md5.ComputeHash(encoding.GetBytes(data));
+            
+            return BitConverter.ToString(data).Replace("-", "");
         }
 
         #endregion
