@@ -59,10 +59,9 @@ namespace ICanPay.Unionpay
         /// <returns></returns>
         public static string GetCertId(string path, string pwd)
         {
-            var store = GetPkcs12Store(path, pwd);
-            return store
-                .Store
-                .GetCertificateChain(store.Aliase)[0]
+            var (Store, Aliase) = GetPkcs12Store(path, pwd);
+            return Store
+                .GetCertificateChain(Aliase)[0]
                 .Certificate
                 .SerialNumber
                 .ToString();
@@ -82,10 +81,9 @@ namespace ICanPay.Unionpay
         /// <returns></returns>
         public static AsymmetricKeyParameter GetCertKey(string path, string pwd)
         {
-            var store = GetPkcs12Store(path, pwd);
-            return store
-                .Store
-                .GetKey(store.Aliase)
+            var (Store, Aliase) = GetPkcs12Store(path, pwd);
+            return Store
+                .GetKey(Aliase)
                 .Key;
         }
 

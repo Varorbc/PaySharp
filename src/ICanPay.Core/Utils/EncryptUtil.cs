@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ICanPay.Core.Exceptions;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -91,7 +92,7 @@ namespace ICanPay.Core.Utils
 
                 if (null == rsaCsp)
                 {
-                    throw new Exception("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset);
+                    throw new GatewayException("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset);
                 }
 
                 if ("RSA2".Equals(signType))
@@ -111,9 +112,9 @@ namespace ICanPay.Core.Utils
 #endif
                 }
             }
-            catch (Exception)
+            catch
             {
-                throw new Exception("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset);
+                throw new GatewayException("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset);
             }
 
             return Convert.ToBase64String(signatureBytes);
@@ -325,10 +326,10 @@ namespace ICanPay.Core.Utils
                 {
                     return DecodeRSAPrivateKey(res, signType);
                 }
-                catch (Exception)
+                catch
                 {
+                    return null;
                 }
-                return null;
             }
         }
 
@@ -339,10 +340,10 @@ namespace ICanPay.Core.Utils
             {
                 return DecodeRSAPrivateKey(data, signType);
             }
-            catch (Exception)
+            catch
             {
+                return null;
             }
-            return null;
         }
 
         private static RSA DecodeRSAPrivateKey(byte[] privkey, string signType)
@@ -427,7 +428,7 @@ namespace ICanPay.Core.Utils
                 RSA.ImportParameters(RSAparams);
                 return RSA;
             }
-            catch (Exception)
+            catch
             {
                 return null;
             }
