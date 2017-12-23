@@ -469,7 +469,7 @@ namespace ICanPay.Alipay
         /// </summary>
         private string BuildSign()
         {
-            return EncryptUtil.RSA2(GatewayData.ToUrl(false), Merchant.Privatekey);
+            return EncryptUtil.RSA(GatewayData.ToUrl(false), Merchant.Privatekey, Merchant.SignType);
         }
 
         /// <summary>
@@ -499,8 +499,8 @@ namespace ICanPay.Alipay
             GatewayData.Remove(Constant.SIGN);
             GatewayData.Remove(Constant.SIGN_TYPE);
 
-            return EncryptUtil.RSA2VerifyData(GatewayData.ToUrl(false),
-                Notify.Sign, Merchant.AlipayPublicKey);
+            return EncryptUtil.RSAVerifyData(GatewayData.ToUrl(false),
+                Notify.Sign, Merchant.AlipayPublicKey, Merchant.SignType);
         }
 
         #endregion

@@ -40,8 +40,8 @@ namespace ICanPay.Core.Utils
         {
             var md5 = System.Security.Cryptography.MD5.Create();
             var dataByte = md5.ComputeHash(encoding.GetBytes(data));
-            
-            return BitConverter.ToString(data).Replace("-", "");
+
+            return BitConverter.ToString(dataByte).Replace("-", "");
         }
 
         #endregion
@@ -53,21 +53,11 @@ namespace ICanPay.Core.Utils
         /// </summary>
         /// <param name="data">数据</param>
         /// <param name="privateKey">私钥</param>
+        /// <param name="signType">签名类型</param>
         /// <returns></returns>
-        public static string RSA(string data, string privateKey)
+        public static string RSA(string data, string privateKey, string signType)
         {
-            return RSA(data, privateKey, _defaultCharset, "RSA", false);
-        }
-
-        /// <summary>
-        /// RSA2加密
-        /// </summary>
-        /// <param name="data">数据</param>
-        /// <param name="privateKey">私钥</param>
-        /// <returns></returns>
-        public static string RSA2(string data, string privateKey)
-        {
-            return RSA(data, privateKey, _defaultCharset, "RSA2", false);
+            return RSA(data, privateKey, _defaultCharset, signType, false);
         }
 
         private static string RSA(string data, string privateKeyPem, string charset, string signType, bool keyFromFile)
@@ -134,11 +124,12 @@ namespace ICanPay.Core.Utils
         /// </summary>
         /// <param name="data">数据</param>
         /// <param name="sign">签名</param>
-        /// <param name="publicKeyPem">公钥</param>
+        /// <param name="publicKey">公钥</param>
+        /// <param name="signType">签名类型</param>
         /// <returns></returns>
-        public static bool RSA2VerifyData(string data, string sign, string publicKeyPem)
+        public static bool RSAVerifyData(string data, string sign, string publicKey, string signType)
         {
-            return RSAVerifyData(data, sign, publicKeyPem, _defaultCharset, "RSA2", false);
+            return RSAVerifyData(data, sign, publicKey, _defaultCharset, signType, false);
         }
 
         private static bool RSAVerifyData(string signContent, string sign, string publicKeyPem, string charset, string signType, bool keyFromFile)
@@ -496,9 +487,9 @@ namespace ICanPay.Core.Utils
             return count;
         }
 
-#endregion
+        #endregion
 
-#region SHA256加密
+        #region SHA256加密
 
         /// <summary>
         /// SHA256加密
@@ -513,6 +504,6 @@ namespace ICanPay.Core.Utils
             return BitConverter.ToString(result).Replace("-", "").ToLower();
         }
 
-#endregion
+        #endregion
     }
 }
