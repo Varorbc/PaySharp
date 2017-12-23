@@ -22,14 +22,14 @@ namespace ICanPay.Core
     /// </summary>
     public class GatewayData
     {
-#region 私有字段
+        #region 私有字段
 
         private readonly SortedDictionary<string, object> _values;
         private string _originalResult = null;
 
-#endregion
+        #endregion
 
-#region 属性
+        #region 属性
 
         public object this[string key]
         {
@@ -39,9 +39,9 @@ namespace ICanPay.Core
 
         public int Count => _values.Count;
 
-#endregion
+        #endregion
 
-#region 构造函数
+        #region 构造函数
 
         /// <summary>
         /// 构造函数
@@ -60,9 +60,9 @@ namespace ICanPay.Core
             _values = new SortedDictionary<string, object>(comparer);
         }
 
-#endregion
+        #endregion
 
-#region 方法
+        #region 方法
 
         /// <summary>
         /// 添加参数
@@ -357,14 +357,9 @@ namespace ICanPay.Core
         /// <returns></returns>
         public string ToUrl(bool isUrlEncode = true)
         {
-            var sb = new StringBuilder();
-            foreach (var item in _values)
-            {
-                string value = item.Value.ToString();
-                sb.AppendFormat("{0}={1}&", item.Key, isUrlEncode ? WebUtility.UrlEncode(value) : value);
-            }
+            string HandleValue(string value) => isUrlEncode ? WebUtility.UrlEncode(value) : value;
 
-            return sb.ToString().TrimEnd('&');
+            return string.Join("&", this._values.Select(x => $"{x.Key}={HandleValue(x.Value.ToString())}"));
         }
 
         /// <summary>
@@ -580,6 +575,6 @@ namespace ICanPay.Core
         /// <returns></returns>
         public string GetOriginalResult() => _originalResult;
 
-#endregion
+        #endregion
     }
 }
