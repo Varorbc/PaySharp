@@ -470,7 +470,7 @@ namespace ICanPay.Wechatpay
             int _msg = GatewayData.GetIntValue(Constant.ERRMSG);
             if (_code == 40029)
             {
-                throw new Exception($"{_code} {_msg}");
+                throw new GatewayException($"{_code} {_msg}");
             }
 
             return GatewayData.ToObject<OAuth>(StringCase.Snake);

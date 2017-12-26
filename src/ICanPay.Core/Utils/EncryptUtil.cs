@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ICanPay.Core.Exceptions;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -39,14 +40,9 @@ namespace ICanPay.Core.Utils
         public static string MD5(string data, Encoding encoding)
         {
             var md5 = System.Security.Cryptography.MD5.Create();
-            byte[] dataByte = md5.ComputeHash(encoding.GetBytes(data));
-            var sb = new StringBuilder();
-            for (int i = 0; i < dataByte.Length; i++)
-            {
-                sb.Append(dataByte[i].ToString("X2"));
-            }
+            var dataByte = md5.ComputeHash(encoding.GetBytes(data));
 
-            return sb.ToString();
+            return BitConverter.ToString(dataByte).Replace("-", "");
         }
 
         #endregion
@@ -58,21 +54,11 @@ namespace ICanPay.Core.Utils
         /// </summary>
         /// <param name="data">数据</param>
         /// <param name="privateKey">私钥</param>
+        /// <param name="signType">签名类型</param>
         /// <returns></returns>
-        public static string RSA(string data, string privateKey)
+        public static string RSA(string data, string privateKey, string signType)
         {
-            return RSA(data, privateKey, _defaultCharset, "RSA", false);
-        }
-
-        /// <summary>
-        /// RSA2加密
-        /// </summary>
-        /// <param name="data">数据</param>
-        /// <param name="privateKey">私钥</param>
-        /// <returns></returns>
-        public static string RSA2(string data, string privateKey)
-        {
-            return RSA(data, privateKey, _defaultCharset, "RSA2", false);
+            return RSA(data, privateKey, _defaultCharset, signType, false);
         }
 
         private static string RSA(string data, string privateKeyPem, string charset, string signType, bool keyFromFile)
@@ -106,7 +92,7 @@ namespace ICanPay.Core.Utils
 
                 if (null == rsaCsp)
                 {
-                    throw new Exception("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset);
+                    throw new GatewayException("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset);
                 }
 
                 if ("RSA2".Equals(signType))
@@ -126,9 +112,9 @@ namespace ICanPay.Core.Utils
 #endif
                 }
             }
-            catch (Exception)
+            catch
             {
-                throw new Exception("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset);
+                throw new GatewayException("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset);
             }
 
             return Convert.ToBase64String(signatureBytes);
@@ -139,11 +125,12 @@ namespace ICanPay.Core.Utils
         /// </summary>
         /// <param name="data">数据</param>
         /// <param name="sign">签名</param>
-        /// <param name="publicKeyPem">公钥</param>
+        /// <param name="publicKey">公钥</param>
+        /// <param name="signType">签名类型</param>
         /// <returns></returns>
-        public static bool RSA2VerifyData(string data, string sign, string publicKeyPem)
+        public static bool RSAVerifyData(string data, string sign, string publicKey, string signType)
         {
-            return RSAVerifyData(data, sign, publicKeyPem, _defaultCharset, "RSA2", false);
+            return RSAVerifyData(data, sign, publicKey, _defaultCharset, signType, false);
         }
 
         private static bool RSAVerifyData(string signContent, string sign, string publicKeyPem, string charset, string signType, bool keyFromFile)
@@ -339,10 +326,10 @@ namespace ICanPay.Core.Utils
                 {
                     return DecodeRSAPrivateKey(res, signType);
                 }
-                catch (Exception)
+                catch
                 {
+                    return null;
                 }
-                return null;
             }
         }
 
@@ -353,10 +340,10 @@ namespace ICanPay.Core.Utils
             {
                 return DecodeRSAPrivateKey(data, signType);
             }
-            catch (Exception)
+            catch
             {
+                return null;
             }
-            return null;
         }
 
         private static RSA DecodeRSAPrivateKey(byte[] privkey, string signType)
@@ -441,7 +428,7 @@ namespace ICanPay.Core.Utils
                 RSA.ImportParameters(RSAparams);
                 return RSA;
             }
-            catch (Exception)
+            catch
             {
                 return null;
             }
@@ -501,9 +488,9 @@ namespace ICanPay.Core.Utils
             return count;
         }
 
-#endregion
+        #endregion
 
-#region SHA256加密
+        #region SHA256加密
 
         /// <summary>
         /// SHA256加密
@@ -518,6 +505,6 @@ namespace ICanPay.Core.Utils
             return BitConverter.ToString(result).Replace("-", "").ToLower();
         }
 
-#endregion
+        #endregion
     }
 }
