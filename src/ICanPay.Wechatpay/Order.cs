@@ -92,13 +92,8 @@ namespace ICanPay.Wechatpay
         /// 企业号请使用【企业号OAuth2.0接口】获取企业号内成员userid，再调用【企业号userid转openid接口】进行转换
         /// </summary>
         [ReName(Name = Constant.OPENID)]
-        public string OpenId { get; set; }
-
-        /// <summary>
-        /// 授权临时票据
-        /// </summary>
         [Necessary(new GatewayTradeType[] { GatewayTradeType.Public, GatewayTradeType.Applet }, ErrorMessage = "请设置用户标识")]
-        public string Code { get; set; }
+        public string OpenId { get; set; }
 
         /// <summary>
         /// 场景信息,该字段用于上报场景信息，目前支持上报实际门店信息。该字段为JSON对象数据，对象格式为{"store_info":{"id": "门店ID","name": "名称","area_code": "编码","address": "地址" }}

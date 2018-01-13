@@ -4,6 +4,8 @@
     {
         public const string APPID = "appid";
         public const string NONCE_STR = "nonce_str";
+        public const string NONCEsTR = "noncestr";
+        public const string NONCESTR = "nonceStr";
         public const string SIGN = "sign";
         public const string SIGN_TYPE = "sign_type";
         public const string OUT_TRADE_NO = "out_trade_no";

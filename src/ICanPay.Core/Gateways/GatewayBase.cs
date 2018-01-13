@@ -226,8 +226,7 @@ namespace ICanPay.Core
                     {
                         if (this is IUrlPayment urlPayment)
                         {
-                            HttpUtil.Redirect(urlPayment.BuildUrlPayment());
-                            return null;
+                            return urlPayment.BuildUrlPayment();
                         }
                     }
                     break;
@@ -235,8 +234,7 @@ namespace ICanPay.Core
                     {
                         if (this is IFormPayment formPayment)
                         {
-                            HttpUtil.Write(formPayment.BuildFormPayment());
-                            return null;
+                            return formPayment.BuildFormPayment();
                         }
                     }
                     break;

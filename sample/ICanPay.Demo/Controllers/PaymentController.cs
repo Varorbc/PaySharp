@@ -18,7 +18,7 @@ namespace ICanPay.Demo.Controllers
         {
             string content = CreateUnionpayOrder();
 
-            return Content(content);
+            return Content(content, "text/html");
         }
 
         /// <summary>
@@ -69,10 +69,10 @@ namespace ICanPay.Demo.Controllers
                 Amount = 0.01,
                 OutTradeNo = outTradeNo,
                 Body = "测测看微信支付",
-                AuthCode = "123"
+                OpenId = "123"
             };
 
-            var gateway = gateways.Get<Wechatpay.WechatpayGateway>(GatewayTradeType.Barcode);
+            var gateway = gateways.Get<Wechatpay.WechatpayGateway>(GatewayTradeType.Public);
 
             return gateway.Payment(order);
         }
