@@ -166,11 +166,11 @@ namespace ICanPay.Wechatpay
         {
             GatewayData.Clear();
             Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Constant.APPID, Merchant.AppId);
+            GatewayData.Add(Constant.APPID_U, Merchant.AppId);
             GatewayData.Add(Constant.TIMESTAMP, DateTime.Now.ToTimeStamp());
             GatewayData.Add(Constant.NONCESTR, Merchant.NonceStr);
             GatewayData.Add(Constant.PACKAGE, $"{Constant.PREPAY_ID}={Notify.PrepayId}");
-            GatewayData.Add(Constant.SIGN_TYPE, "MD5");
+            GatewayData.Add(Constant.SIGNTYPE, "MD5");
             GatewayData.Add(Constant.PAYSIGN, BuildSign());
         }
 
