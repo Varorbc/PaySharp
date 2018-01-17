@@ -576,7 +576,7 @@ namespace ICanPay.Wechatpay
 
         protected override void WriteSuccessFlag()
         {
-            GatewayData.Add(Constant.RETURN_CODE, SUCCESS);
+            GatewayData.Add(Constant.RETURN_CODE, SUCCESS.ToUpper());
             HttpUtil.Write(GatewayData.ToXml());
         }
 
