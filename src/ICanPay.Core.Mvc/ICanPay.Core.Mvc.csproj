@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac.Mvc5" Version="4.0.2" />
+    <PackageReference Include="Autofac.Mvc5" Version="4.0.1" />
     <!--<PackageReference Include="Autofac.WebApi2" Version="4.1.0" />-->
   </ItemGroup>
 
