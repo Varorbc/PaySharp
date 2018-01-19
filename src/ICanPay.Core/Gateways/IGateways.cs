@@ -27,6 +27,14 @@ namespace ICanPay.Core
         GatewayBase Get<T>(GatewayTradeType gatewayTradeType);
 
         /// <summary>
+        /// 通过AppId获取网关
+        /// </summary>
+        /// <typeparam name="T">网关类型</typeparam>
+        /// <param name="appId">AppId</param>
+        /// <returns></returns>
+        GatewayBase Get<T>(string appId);
+
+        /// <summary>
         /// 获取网关列表
         /// </summary>
         /// <returns></returns>
