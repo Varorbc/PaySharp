@@ -61,8 +61,8 @@ namespace ICanPay.Alipay
 
         protected override string[] NotifyVerifyParameter => new string[]
         {
-            Constant.APP_ID,Constant.NOTIFY_TYPE, Constant.NOTIFY_ID,
-            Constant.NOTIFY_TIME, Constant.SIGN, Constant.SIGN_TYPE
+            Constant.APP_ID,Constant.VERSION, Constant.CHARSET,
+            Constant.TRADE_NO, Constant.SIGN, Constant.SIGN_TYPE
         };
 
         #endregion
@@ -483,12 +483,7 @@ namespace ICanPay.Alipay
                 throw new GatewayException("签名不一致");
             }
 
-            if (IsSuccessPay)
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         /// <summary>

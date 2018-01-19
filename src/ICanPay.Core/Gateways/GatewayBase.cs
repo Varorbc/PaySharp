@@ -105,7 +105,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 是否成功支付
         /// </summary>
-        protected abstract bool IsSuccessPay { get; }
+        protected internal abstract bool IsSuccessPay { get; }
 
         /// <summary>
         /// 是否等待支付

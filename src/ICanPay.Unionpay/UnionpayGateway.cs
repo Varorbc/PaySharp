@@ -348,14 +348,7 @@ namespace ICanPay.Unionpay
         /// <returns></returns>
         private bool IsSuccessResult()
         {
-            ValidateNotifySign();
-
-            if (IsSuccessPay)
-            {
-                return true;
-            }
-
-            return false;
+            return ValidateNotifySign();
         }
 
         /// <summary>
