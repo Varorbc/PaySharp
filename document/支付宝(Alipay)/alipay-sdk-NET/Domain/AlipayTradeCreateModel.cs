@@ -23,6 +23,12 @@ namespace Aop.Api.Domain
         public string Body { get; set; }
 
         /// <summary>
+        /// 商户传入业务信息，具体值要和支付宝约定，应用于安全，营销等参数直传场景，格式为json格式
+        /// </summary>
+        [XmlElement("business_params")]
+        public string BusinessParams { get; set; }
+
+        /// <summary>
         /// 买家的支付宝唯一用户号（2088开头的16位纯数字）,和buyer_logon_id不能同时为空
         /// </summary>
         [XmlElement("buyer_id")]
@@ -51,6 +57,12 @@ namespace Aop.Api.Domain
         /// </summary>
         [XmlElement("enable_pay_channels")]
         public string EnablePayChannels { get; set; }
+
+        /// <summary>
+        /// 外部指定买家
+        /// </summary>
+        [XmlElement("ext_user_info")]
+        public ExtUserInfo ExtUserInfo { get; set; }
 
         /// <summary>
         /// 业务扩展参数

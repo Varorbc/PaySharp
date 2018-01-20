@@ -23,6 +23,12 @@ namespace Aop.Api.Domain
         public string Body { get; set; }
 
         /// <summary>
+        /// 商户传入业务信息，具体值要和支付宝约定，应用于安全，营销等参数直传场景，格式为json格式
+        /// </summary>
+        [XmlElement("business_params")]
+        public string BusinessParams { get; set; }
+
+        /// <summary>
         /// 买家支付宝账号
         /// </summary>
         [XmlElement("buyer_logon_id")]
@@ -76,6 +82,12 @@ namespace Aop.Api.Domain
         /// </summary>
         [XmlElement("out_trade_no")]
         public string OutTradeNo { get; set; }
+
+        /// <summary>
+        /// 该笔订单允许的最晚付款时间，逾期将关闭交易，从生成二维码开始计时。取值范围：1m～15d。m-分钟，h-小时，d-天，1c-当天（1c-当天的情况下，无论交易何时创建，都在0点关闭）。 该参数数值不接受小数点， 如 1.5h，可转换为 90m。
+        /// </summary>
+        [XmlElement("qr_code_timeout_express")]
+        public string QrCodeTimeoutExpress { get; set; }
 
         /// <summary>
         /// 描述分账信息，json格式。

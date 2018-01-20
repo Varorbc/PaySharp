@@ -47,6 +47,24 @@ namespace Aop.Api.Response
         public string OutTradeNo { get; set; }
 
         /// <summary>
+        /// 本次退款金额中买家退款金额
+        /// </summary>
+        [XmlElement("present_refund_buyer_amount")]
+        public string PresentRefundBuyerAmount { get; set; }
+
+        /// <summary>
+        /// 本次退款金额中平台优惠退款金额
+        /// </summary>
+        [XmlElement("present_refund_discount_amount")]
+        public string PresentRefundDiscountAmount { get; set; }
+
+        /// <summary>
+        /// 本次退款金额中商家优惠退款金额
+        /// </summary>
+        [XmlElement("present_refund_mdiscount_amount")]
+        public string PresentRefundMdiscountAmount { get; set; }
+
+        /// <summary>
         /// 退款使用的资金渠道
         /// </summary>
         [XmlArray("refund_detail_item_list")]

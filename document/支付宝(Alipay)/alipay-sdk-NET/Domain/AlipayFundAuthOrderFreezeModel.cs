@@ -68,5 +68,11 @@ namespace Aop.Api.Domain
         /// </summary>
         [XmlElement("payee_user_id")]
         public string PayeeUserId { get; set; }
+
+        /// <summary>
+        /// 销售产品码，后续新接入预授权当面付的业务，本字段取值固定为PRE_AUTH。
+        /// </summary>
+        [XmlElement("product_code")]
+        public string ProductCode { get; set; }
     }
 }

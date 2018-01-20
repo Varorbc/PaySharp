@@ -17,7 +17,7 @@ namespace Aop.Api.Domain
         public string AssetId { get; set; }
 
         /// <summary>
-        /// 有效期起
+        /// 资产生效时间
         /// </summary>
         [XmlElement("effect_time")]
         public string EffectTime { get; set; }
@@ -35,7 +35,7 @@ namespace Aop.Api.Domain
         public ForbbidenTime ForbbidenTime { get; set; }
 
         /// <summary>
-        /// 券过期时间
+        /// 资产过期时间
         /// </summary>
         [XmlElement("invalid_time")]
         public string InvalidTime { get; set; }
