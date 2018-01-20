@@ -7,7 +7,7 @@
     <Title>ICanPay.Alipay</Title>
     <Authors>Varorbc</Authors>
     <Description>支付宝支付</Description>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <PackageTags>dotnetcore;pay;alipay;</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Varorbc/ICanPay</RepositoryUrl>
