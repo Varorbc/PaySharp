@@ -1,4 +1,5 @@
 ﻿using ICanPay.Core.Exceptions;
+using ICanPay.Core.Utils;
 using System;
 using System.Threading.Tasks;
 
@@ -64,41 +65,52 @@ namespace ICanPay.Core
             if (gateway is NullGateway)
             {
                 OnUnknownGateway(new UnknownGatewayEventArgs(gateway));
+                return;
             }
-            else
+
+            try
             {
-                try
+                if (await gateway.ValidateNotifyAsync())
                 {
-                    if (await gateway.ValidateNotifyAsync())
+                    if (HttpUtil.RequestType == "GET")
                     {
-                        bool result = OnPaymentSucceed(new PaymentSucceedEventArgs(gateway));
-                        if (result)
-                        {
-                            gateway.WriteSuccessFlag();
-                        }
-                        else
-                        {
-                            gateway.WriteFailureFlag();
-                        }
+                        OnPaymentSucceed(new PaymentSucceedEventArgs(gateway));
+                        return;
                     }
-                    else
+
+                    if (!gateway.IsSuccessPay)
                     {
                         OnPaymentFailed(new PaymentFailedEventArgs(gateway));
                         gateway.WriteFailureFlag();
+                        return;
+                    }
+
+                    bool result = OnPaymentSucceed(new PaymentSucceedEventArgs(gateway));
+                    if (result)
+                    {
+                        gateway.WriteSuccessFlag();
+                    }
+                    else
+                    {
+                        gateway.WriteFailureFlag();
                     }
                 }
-                catch (GatewayException ex)
+                else
                 {
-                    OnPaymentFailed(new PaymentFailedEventArgs(gateway)
-                    {
-                        Message = ex.Message
-                    });
+                    OnPaymentFailed(new PaymentFailedEventArgs(gateway));
                     gateway.WriteFailureFlag();
                 }
+            }
+            catch (GatewayException ex)
+            {
+                OnPaymentFailed(new PaymentFailedEventArgs(gateway)
+                {
+                    Message = ex.Message
+                });
+                gateway.WriteFailureFlag();
             }
         }
 
         #endregion
-
     }
 }

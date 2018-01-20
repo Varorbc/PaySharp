@@ -95,6 +95,23 @@ namespace ICanPay.Core
         }
 
         /// <summary>
+        /// 通过AppId获取网关
+        /// </summary>
+        /// <typeparam name="T">网关类型</typeparam>
+        /// <param name="appId">AppId</param>
+        /// <returns></returns>
+        public GatewayBase Get<T>(string appId)
+        {
+            var gatewayList = _list
+                .Where(a => a is T && a.Merchant.AppId == appId)
+                .ToList();
+
+            var gateway = gatewayList.Count > 0 ? gatewayList[0] : throw new GatewayException("找不到指定网关");
+
+            return gateway;
+        }
+
+        /// <summary>
         /// 指定AppId是否存在
         /// </summary>
         /// <param name="appId">appId</param>

@@ -3,9 +3,13 @@
     public static class Constant
     {
         public const string APPID = "appid";
+        public const string APPiD = "appId";
         public const string NONCE_STR = "nonce_str";
+        public const string NONCEsTR = "noncestr";
+        public const string NONCESTR = "nonceStr";
         public const string SIGN = "sign";
         public const string SIGN_TYPE = "sign_type";
+        public const string SIGNTYPE = "signType";
         public const string OUT_TRADE_NO = "out_trade_no";
         public const string OPENID = "openid";
         public const string RETURN_CODE = "return_code";
@@ -18,7 +22,8 @@
         public const string PARTNERID = "partnerid";
         public const string PACKAGE = "package";
         public const string WEB = "WEB";
-        public const string TIMESTAMP = "timestamp";
+        public const string TIMEsTAMP = "timestamp";
+        public const string TIMESTAMP = "timeStamp";
         public const string PREPAYID = "prepayid";
         public const string PAYSIGN = "paySign";
         public const string TRANSACTION_ID = "transaction_id";

@@ -12,7 +12,7 @@ namespace ICanPay.Core
 
         public override string GatewayUrl { get; set; } = string.Empty;
 
-        protected override bool IsSuccessPay => false;
+        protected internal override bool IsSuccessPay => false;
 
         protected override bool IsWaitPay => false;
 

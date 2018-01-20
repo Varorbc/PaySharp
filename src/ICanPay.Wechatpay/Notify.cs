@@ -7,6 +7,7 @@ namespace ICanPay.Wechatpay
         /// <summary>
         /// 应用ID
         /// </summary>
+        [ReName(Name = Constant.APPID)]
         public string AppId { get; set; }
 
         /// <summary>

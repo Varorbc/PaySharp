@@ -105,7 +105,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 是否成功支付
         /// </summary>
-        protected abstract bool IsSuccessPay { get; }
+        protected internal abstract bool IsSuccessPay { get; }
 
         /// <summary>
         /// 是否等待支付
@@ -226,8 +226,7 @@ namespace ICanPay.Core
                     {
                         if (this is IUrlPayment urlPayment)
                         {
-                            HttpUtil.Redirect(urlPayment.BuildUrlPayment());
-                            return null;
+                            return urlPayment.BuildUrlPayment();
                         }
                     }
                     break;
@@ -235,8 +234,7 @@ namespace ICanPay.Core
                     {
                         if (this is IFormPayment formPayment)
                         {
-                            HttpUtil.Write(formPayment.BuildFormPayment());
-                            return null;
+                            return formPayment.BuildFormPayment();
                         }
                     }
                     break;
