@@ -31,25 +31,25 @@ namespace ICanPay.Wechatpay
         /// 商户支付密钥，参考开户邮件设置
         /// </summary>
         [Required(ErrorMessage = "请设置商户支付密钥")]
-        [NotAdd]
+        [Ignore]
         public string Key { get; set; }
 
         /// <summary>
         /// 应用Secret
         /// </summary>
-        [NotAdd]
+        [Ignore]
         public string AppSecret { get; set; }
 
         /// <summary>
         /// 证书路径,注意应该填写绝对路径
         /// </summary>
-        [NotAdd]
+        [Ignore]
         public string SslCertPath { get; set; }
 
         /// <summary>
         /// 证书密码
         /// </summary>
-        [NotAdd]
+        [Ignore]
         public string SslCertPassword { get; set; }
 
         /// <summary>
