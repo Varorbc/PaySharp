@@ -13,6 +13,8 @@
     <RepositoryUrl>https://github.com/Varorbc/ICanPay</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/Varorbc/ICanPay/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Varorbc</Copyright>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>ICanPay.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
