@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
-namespace ICanPay.Alipay
+namespace ICanPay.Alipay.Domain
 {
     [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
     public class Goods
@@ -30,17 +30,18 @@ namespace ICanPay.Alipay
         public int Quantity { get; set; }
 
         /// <summary>
-        /// 商品单价，单位为元
+        /// 商品单价，单位为分
         /// </summary>
         [Required(ErrorMessage = "请设置商品单价")]
-        [Range(0.01, 100000000, ErrorMessage = "金额超出范围")]
-        public double Price { get; set; }
+        public double Price { get => price; set => price = value / 100; }
+        private double price;
 
         /// <summary>
         /// 商品类目
         /// </summary>
+        [JsonProperty(PropertyName = Constant.GOODS_CATEGORY)]
         [StringLength(24, ErrorMessage = "商品类目最大长度为24位")]
-        public string GoodsCategory { get; set; }
+        public string Category { get; set; }
 
         /// <summary>
         /// 商品描述信息

@@ -24,6 +24,7 @@
         public const string TOTAL_AMOUNT = "total_amount";
         public const string GOODS_ID = "goods_id";
         public const string GOODS_NAME = "goods_name";
+        public const string GOODS_CATEGORY = "goods_category";
         public const string BAR_CODE = "bar_code";
         public const string WAVE_CODE = "wave_code";
         public const string MSG = "msg";

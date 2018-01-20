@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
-namespace ICanPay.Alipay
+namespace ICanPay.Alipay.Domain
 {
     [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
     public class ExtendParam
