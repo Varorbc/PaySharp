@@ -117,7 +117,7 @@ namespace ICanPay.Core
             {
                 foreach (var item in info)
                 {
-                    var notAddattributes = item.GetCustomAttributes(typeof(NotAddAttribute), true);
+                    var notAddattributes = item.GetCustomAttributes(typeof(IgnoreAttribute), true);
                     if (notAddattributes.Length > 0)
                     {
                         continue;

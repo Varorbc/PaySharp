@@ -29,7 +29,7 @@ namespace ICanPay.Unionpay
         /// <summary>
         /// 证书私钥
         /// </summary>
-        [NotAdd]
+        [Ignore]
         internal AsymmetricKeyParameter CertKey { get; set; }
 
         /// <summary>
@@ -80,21 +80,21 @@ namespace ICanPay.Unionpay
         /// <summary>
         /// 签名证书路径
         /// </summary>
-        [NotAdd]
+        [Ignore]
         [Required(ErrorMessage = "请设置签名证书路径")]
         public string CertPath { get; set; }
 
         /// <summary>
         /// 签名证书密码
         /// </summary>
-        [NotAdd]
+        [Ignore]
         [Required(ErrorMessage = "请设置签名证书密码")]
         public string CertPwd { get; set; }
 
         /// <summary>
         /// 验证证书目录
         /// </summary>
-        [NotAdd]
+        [Ignore]
         public string ValidateCertDir { get; set; }
 
         /// <summary>
