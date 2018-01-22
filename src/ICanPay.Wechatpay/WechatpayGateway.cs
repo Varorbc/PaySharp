@@ -202,6 +202,12 @@ namespace ICanPay.Wechatpay
 
             Commit();
 
+            if (Notify.ReturnCode == SUCCESS.ToUpper())
+            {
+                OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                return;
+            }
+
             if (!string.IsNullOrEmpty(Notify.TransactionId))
             {
                 Task.Run(async () =>

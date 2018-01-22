@@ -163,6 +163,12 @@ namespace ICanPay.Alipay
 
             Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
 
+            if(Notify.Code == "10000")
+            {
+                OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                return;
+            }
+
             if (!string.IsNullOrEmpty(Notify.TradeNo))
             {
                 Task.Run(async () =>
