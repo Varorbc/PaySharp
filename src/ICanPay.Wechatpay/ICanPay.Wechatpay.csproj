@@ -7,7 +7,7 @@
     <Title>ICanPay.Wechatpay</Title>
     <Authors>Varorbc</Authors>
     <Description>微信支付</Description>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <PackageTags>dotnetcore;pay;wechatpay;</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Varorbc/ICanPay</RepositoryUrl>
