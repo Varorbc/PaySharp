@@ -20,18 +20,10 @@ namespace ICanPay.Unionpay
 
 #if DEBUG
 
-        private const string FRONTGATEWAYURL = "https://gateway.test.95516.com/gateway/api/frontTransReq.do";
-        private const string APPGATEWAYURL = "https://gateway.test.95516.com/gateway/api/appTransReq.do";
-        private const string BACKGATEWAYURL = "https://gateway.test.95516.com/gateway/api/backTransReq.do";
-        private const string QUERYGATEWAYURL = "https://gateway.test.95516.com/gateway/api/queryTrans.do";
-        private const string FILEGATEWAYURL = "https://filedownload.test.95516.com/";
+        private string FILEGATEWAYURL = "https://filedownload.test.95516.com/";
 
 #else
 
-        private const string FRONTGATEWAYURL = "https://gateway.95516.com/gateway/api/frontTransReq.do";
-        private const string APPGATEWAYURL = "https://gateway.95516.com/gateway/api/appTransReq.do";
-        private const string BACKGATEWAYURL = "https://gateway.95516.com/gateway/api/backTransReq.do";
-        private const string QUERYGATEWAYURL = "https://gateway.95516.com/gateway/api/queryTrans.do";
         private const string FILEGATEWAYURL = "https://filedownload.95516.com/";
 
 #endif
@@ -59,7 +51,17 @@ namespace ICanPay.Unionpay
 
         #region 属性
 
-        public override string GatewayUrl { get; set; } = FRONTGATEWAYURL;
+        public override string GatewayUrl { get; set; } = "https://gateway.95516.com/";
+
+        private string FrontUrl => GatewayUrl + "gateway/api/frontTransReq.do";
+
+        private string AppUrl => GatewayUrl + "gateway/api/appTransReq.do";
+
+        private string BackUrl => GatewayUrl + "gateway/api/backTransReq.do";
+
+        private string QueryUrl => GatewayUrl + "gateway/api/queryTrans.do";
+
+        private string RequestUrl { get; set; }
 
         public new Merchant Merchant => _merchant;
 
@@ -97,13 +99,13 @@ namespace ICanPay.Unionpay
         {
             InitFormPayment();
 
-            return GatewayData.ToForm(GatewayUrl);
+            return GatewayData.ToForm(RequestUrl);
         }
 
         public void InitFormPayment()
         {
             InitOrderParameter();
-            GatewayUrl = FRONTGATEWAYURL;
+            RequestUrl = FrontUrl;
         }
 
         #endregion
@@ -122,7 +124,7 @@ namespace ICanPay.Unionpay
         public void InitAppPayment()
         {
             InitOrderParameter();
-            GatewayUrl = APPGATEWAYURL;
+            RequestUrl = AppUrl;
         }
 
         #endregion
@@ -143,7 +145,7 @@ namespace ICanPay.Unionpay
             Merchant.TxnSubType = "07";
             Merchant.BizType = "000000";
             InitOrderParameter();
-            GatewayUrl = BACKGATEWAYURL;
+            RequestUrl = BackUrl;
         }
 
         #endregion
@@ -163,7 +165,7 @@ namespace ICanPay.Unionpay
             Merchant.BizType = "000000";
             Merchant.ChannelType = "07";
             InitOrderParameter();
-            GatewayUrl = BACKGATEWAYURL;
+            RequestUrl = BackUrl;
         }
 
         #endregion
@@ -183,7 +185,7 @@ namespace ICanPay.Unionpay
         {
             Merchant.TxnType = "00";
             Merchant.BizType = "000000";
-            GatewayUrl = QUERYGATEWAYURL;
+            RequestUrl = QueryUrl;
 
             InitAuxiliaryParameter(auxiliary);
         }
@@ -204,7 +206,7 @@ namespace ICanPay.Unionpay
         public void InitCancel(IAuxiliary auxiliary)
         {
             Merchant.TxnType = "31";
-            GatewayUrl = BACKGATEWAYURL;
+            RequestUrl = BackUrl;
 
             InitAuxiliaryParameter(auxiliary);
         }
@@ -225,7 +227,7 @@ namespace ICanPay.Unionpay
         public void InitRefund(IAuxiliary auxiliary)
         {
             Merchant.TxnType = "04";
-            GatewayUrl = BACKGATEWAYURL;
+            RequestUrl = BackUrl;
 
             InitAuxiliaryParameter(auxiliary);
         }
@@ -255,7 +257,7 @@ namespace ICanPay.Unionpay
             GatewayData.Remove(Constant.BACKURL);
             GatewayData.Remove(Constant.FRONTURL);
             GatewayData.Add(Constant.SIGNATURE, BuildSign());
-            GatewayUrl = FILEGATEWAYURL;
+            RequestUrl = FILEGATEWAYURL;
         }
 
         /// <summary>
@@ -298,7 +300,7 @@ namespace ICanPay.Unionpay
             Task.Run(async () =>
             {
                 result = await HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToUrl());
+                .PostAsync(RequestUrl, GatewayData.ToUrl());
             })
             .GetAwaiter()
             .GetResult();
