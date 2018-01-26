@@ -18,11 +18,7 @@ namespace ICanPay.Alipay
     {
 
         #region 私有字段
-#if DEBUG
-        private const string GATEWAYURL = "https://openapi.alipaydev.com/gateway.do?charset=UTF-8";
-#else
-        private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do?charset=UTF-8";
-#endif
+
         private readonly Merchant _merchant;
 
         #endregion
@@ -43,7 +39,9 @@ namespace ICanPay.Alipay
 
         #region 属性
 
-        public override string GatewayUrl { get; set; } = GATEWAYURL;
+        public override string GatewayUrl { get; set; } = "https://openapi.alipay.com/";
+
+        private string RequestUrl => GatewayUrl + "gateway.do?charset=UTF-8";
 
         public new Merchant Merchant => _merchant;
 
@@ -75,7 +73,7 @@ namespace ICanPay.Alipay
         {
             InitFormPayment();
 
-            return GatewayData.ToForm(GatewayUrl);
+            return GatewayData.ToForm(RequestUrl);
         }
 
         public void InitFormPayment()
@@ -94,7 +92,7 @@ namespace ICanPay.Alipay
         {
             InitUrlPayment();
 
-            return $"{GatewayUrl}&{GetPaymentQueryString()}";
+            return $"{RequestUrl}&{GetPaymentQueryString()}";
         }
 
         public void InitUrlPayment()
@@ -426,7 +424,7 @@ namespace ICanPay.Alipay
             Task.Run(async () =>
             {
                 result = await HttpUtil
-                 .PostAsync(GatewayUrl, GatewayData.ToUrl());
+                 .PostAsync(RequestUrl, GatewayData.ToUrl());
             })
             .GetAwaiter()
             .GetResult();

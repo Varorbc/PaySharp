@@ -106,7 +106,7 @@ namespace ICanPay.Unionpay
         public double Amount
         {
             get => _amount;
-            set => _amount = value * 100;
+            set => _amount = value / 100;
         }
         private double _amount;
 

@@ -57,9 +57,15 @@ namespace ICanPay.Demo
                     FrontUrl = "http://localhost:61377/Notify"
                 };
 
-                gateways.Add(new AlipayGateway(alipayMerchant));
+                gateways.Add(new AlipayGateway(alipayMerchant)
+                {
+                    GatewayUrl = "https://openapi.alipaydev.com/"
+                });
                 gateways.Add(new WechatpayGateway(wechatpayMerchant));
-                gateways.Add(new UnionpayGateway(unionpayMerchant));
+                gateways.Add(new UnionpayGateway(unionpayMerchant)
+                {
+                    GatewayUrl= "https://gateway.test.95516.com/"
+                });
 
                 return gateways;
             });
