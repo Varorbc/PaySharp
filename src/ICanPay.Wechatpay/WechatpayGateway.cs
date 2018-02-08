@@ -144,7 +144,7 @@ namespace ICanPay.Wechatpay
         public string BuildUrlPayment()
         {
             InitUrlPayment();
-            return Notify.MWebUrl;
+            return Notify.MwebUrl;
         }
 
         public void InitUrlPayment()
@@ -450,7 +450,13 @@ namespace ICanPay.Wechatpay
         {
             auxiliary.Validate(gatewayAuxiliaryType);
             Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Merchant, StringCase.Snake);
+            GatewayData.Add(new
+            {
+                Appid = Merchant.AppId,
+                Merchant.MchId,
+                Merchant.NonceStr,
+                Merchant.SignType,
+            }, StringCase.Snake);
             GatewayData.Add(auxiliary, StringCase.Snake);
             GatewayData.Add(Constant.SIGN, BuildSign());
         }
