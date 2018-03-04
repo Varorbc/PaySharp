@@ -28,7 +28,7 @@ namespace ICanPay.Core.Utils
         NewWord
     }
 
-    public static class StringUtil
+    internal static class StringUtil
     {
         /// <summary>
         /// 将字符串转换为蛇形策略

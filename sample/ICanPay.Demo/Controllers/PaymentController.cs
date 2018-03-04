@@ -1,4 +1,7 @@
-﻿using ICanPay.Core;
+﻿using ICanPay.Alipay.Domain;
+using ICanPay.Alipay.Request;
+using ICanPay.Alipay.Response;
+using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -16,7 +19,7 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index()
         {
-            string content = CreateUnionpayOrder();
+            string content = CreateAlipayOrder();
 
             return Content(content, "text/html");
         }
@@ -46,11 +49,20 @@ namespace ICanPay.Demo.Controllers
                 //}
             };
 
-            var gateway = gateways.Get<Alipay.AlipayGateway>(GatewayTradeType.Web);
+            var gateway = gateways.Get<Alipay.AlipayGateway>(GatewayTradeType.Wap);
 
+            var request = new WapPayRequest();
+            request.AddGatewayData(new WapPayModel
+            {
+                Amount = 1,
+                OutTradeNo = outTradeNo,
+                Subject = "测测看支付宝",
+            });
+            var response = gateway.SdkExecute(request);
+            return response.Url;
             //gateway.PaymentFailed += Gateway_BarcodePaymentFailed;
 
-            return gateway.Payment(order);
+            //return gateway.Payment(order);
         }
 
         private void Gateway_BarcodePaymentFailed(object arg1, PaymentFailedEventArgs arg2)
@@ -66,13 +78,13 @@ namespace ICanPay.Demo.Controllers
         {
             var order = new Wechatpay.Order()
             {
+                ProductId = "123",
                 Amount = 0.01,
                 OutTradeNo = outTradeNo,
-                Body = "测测看微信支付",
-                OpenId = "123"
+                Body = "测测看微信支付"
             };
 
-            var gateway = gateways.Get<Wechatpay.WechatpayGateway>(GatewayTradeType.Public);
+            var gateway = gateways.Get<Wechatpay.WechatpayGateway>(GatewayTradeType.Scan);
 
             return gateway.Payment(order);
         }

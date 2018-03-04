@@ -47,5 +47,9 @@
         public const string CHARSET = "charset";
         public const string TRADE_NO = "trade_no";
         public const string APP_ID = "app_id";
+        public const string TRANS_MEMO = "TRANS_MEMO";
+        public const string NEEDBUYERREALNAMED = "needBuyerRealnamed";
+        public const string BIZ_CONTENT = "biz_content";
+        public const string METHOD = "method";
     }
 }

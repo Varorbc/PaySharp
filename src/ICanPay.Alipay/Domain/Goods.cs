@@ -33,7 +33,7 @@ namespace ICanPay.Alipay.Domain
         /// 商品单价，单位为分
         /// </summary>
         [Required(ErrorMessage = "请设置商品单价")]
-        public double Price { get => price; set => price = value / 100; }
+        public double Price { get => price; set => price = value / 100.00; }
         private double price;
 
         /// <summary>

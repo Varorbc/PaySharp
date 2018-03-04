@@ -1,4 +1,6 @@
-﻿using ICanPay.Core.Utils;
+﻿using ICanPay.Core.Request;
+using ICanPay.Core.Response;
+using ICanPay.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -200,6 +202,27 @@ namespace ICanPay.Core
         #endregion
 
         #region 公共方法
+
+        public abstract T SdkExecute<T>(Request<T> request) where T : IResponse;
+
+        public virtual T Execute<T>(Request<T> request) where T : IResponse
+        {
+            return default(T);
+        }
+
+        //protected string Execute(IRequest request)
+        //{
+        //    string result = null;
+        //    Task.Run(async () =>
+        //    {
+        //        result = await HttpUtil
+        //         .PostAsync(GatewayUrl + request.RequestUrl, request.GatewayData.ToUrl());
+        //    })
+        //    .GetAwaiter()
+        //    .GetResult();
+
+        //    return result;
+        //}
 
         #region 支付
 

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using ICanPay.Core.Request;
+using System;
+using System.Threading.Tasks;
 
 namespace ICanPay.Core
 {
@@ -25,6 +27,11 @@ namespace ICanPay.Core
         protected internal override async Task<bool> ValidateNotifyAsync()
         {
             return await Task.Run(() => { return false; });
+        }
+
+        public override T SdkExecute<T>(Request<T> request)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

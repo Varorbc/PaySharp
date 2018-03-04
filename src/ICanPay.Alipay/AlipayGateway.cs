@@ -1,5 +1,6 @@
 ﻿using ICanPay.Core;
 using ICanPay.Core.Exceptions;
+using ICanPay.Core.Request;
 using ICanPay.Core.Utils;
 using System;
 using System.IO;
@@ -39,7 +40,7 @@ namespace ICanPay.Alipay
 
         #region 属性
 
-        public override string GatewayUrl { get; set; } = "https://openapi.alipay.com/";
+        public override string GatewayUrl { get; set; } = "https://openapi.alipay.com";
 
         private string RequestUrl => GatewayUrl + "gateway.do?charset=UTF-8";
 
@@ -504,5 +505,23 @@ namespace ICanPay.Alipay
 
         #endregion
 
+        public override T Execute<T>(Request<T> request)
+        {
+            return base.Execute(request);
+        }
+
+        public override T SdkExecute<T>(Request<T> request)
+        {
+            request.RequestUrl = GatewayUrl + request.RequestUrl;
+            request.GatewayData.Add(Merchant, StringCase.Snake);
+            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
+
+            return (T)Activator.CreateInstance(typeof(T), request);
+        }
+
+        public string BuildSign(GatewayData gatewayData)
+        {
+            return EncryptUtil.RSA(gatewayData.ToUrl(false), Merchant.Privatekey, Merchant.SignType);
+        }
     }
 }

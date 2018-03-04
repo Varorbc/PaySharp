@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Alipay.Domain
@@ -7,6 +8,7 @@ namespace ICanPay.Alipay.Domain
     /// 支付基础模型
     /// 目前仅适用于App,Web,Wap
     /// </summary>
+    [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
     public class BasePayModel
     {
         /// <summary>
@@ -35,7 +37,7 @@ namespace ICanPay.Alipay.Domain
         /// </summary>
         [JsonProperty(PropertyName = Constant.TOTAL_AMOUNT)]
         [Required(ErrorMessage = "请设置订单总金额")]
-        public double Amount { get => amount; set => amount = value / 100; }
+        public double Amount { get => amount; set => amount = value / 100.00; }
         private double amount;
 
         /// <summary>
