@@ -47,7 +47,7 @@ namespace ICanPay.Abstractions
             return this;
         }
 
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        //[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public async Task ProcessAsync(object data)
         {
             // 首先检查,   成功和异常处理必须注册

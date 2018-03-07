@@ -11,6 +11,7 @@ namespace ICanPay.Abstractions
     /// </summary>
     public interface INotifyHubHandler
     {
+        INotifyDataConverter Converter { get; }
         ProcessResult Process(IPaymentNotifyData notifyData);
 
     }

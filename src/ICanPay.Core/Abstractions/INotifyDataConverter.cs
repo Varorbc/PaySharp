@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ICanPay.Core.Abstractions
+namespace ICanPay.Abstractions
 {
     /// <summary>
     /// 通知数据转换器， 他从HttpContext 转换为强类型数据
