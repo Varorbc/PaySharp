@@ -511,7 +511,7 @@ namespace Aop.Api
             //sbHtml.Append("<head><meta http-equiv=\"Content-Type\" content=\"text/html\" charset= \"" + charset + "\" /></head>");
 
             sbHtml.Append("<form id='alipaysubmit' name='alipaysubmit' action='" + this.serverUrl + "?charset=" + this.charset + 
-                 "' method='" + strMethod + "'>");
+                 "' method='" + strMethod + "' style='display:none;'>");
             ;
             foreach (KeyValuePair<string, string> temp in dicPara)
             {

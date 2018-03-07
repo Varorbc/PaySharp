@@ -35,6 +35,12 @@ namespace ICanPay.Demo.Controllers
             if (e.GatewayType == typeof(Alipay.AlipayGateway))
             {
                 var alipayNotify = (Alipay.Notify)e.Notify;
+
+                //同步通知，即浏览器跳转返回
+                if(e.NotifyType == NotifyType.Sync)
+                {
+
+                }
             }
 
             //处理成功返回true

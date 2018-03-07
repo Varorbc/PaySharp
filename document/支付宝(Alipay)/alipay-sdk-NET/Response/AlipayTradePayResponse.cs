@@ -17,6 +17,12 @@ namespace Aop.Api.Response
         public string AsyncPaymentMode { get; set; }
 
         /// <summary>
+        /// 商户传入业务信息，具体值要和支付宝约定  将商户传入信息分发给相应系统，应用于安全，营销等参数直传场景  格式为json格式
+        /// </summary>
+        [XmlElement("business_params")]
+        public string BusinessParams { get; set; }
+
+        /// <summary>
         /// 买家支付宝账号
         /// </summary>
         [XmlElement("buyer_logon_id")]
@@ -35,10 +41,22 @@ namespace Aop.Api.Response
         public string BuyerUserId { get; set; }
 
         /// <summary>
+        /// 买家用户类型。CORPORATE:企业用户；PRIVATE:个人用户。
+        /// </summary>
+        [XmlElement("buyer_user_type")]
+        public string BuyerUserType { get; set; }
+
+        /// <summary>
         /// 支付宝卡余额
         /// </summary>
         [XmlElement("card_balance")]
         public string CardBalance { get; set; }
+
+        /// <summary>
+        /// 平台优惠金额
+        /// </summary>
+        [XmlElement("discount_amount")]
+        public string DiscountAmount { get; set; }
 
         /// <summary>
         /// 本次交易支付所使用的单品券优惠的商品优惠信息
@@ -66,6 +84,12 @@ namespace Aop.Api.Response
         public string InvoiceAmount { get; set; }
 
         /// <summary>
+        /// 商家优惠金额
+        /// </summary>
+        [XmlElement("mdiscount_amount")]
+        public string MdiscountAmount { get; set; }
+
+        /// <summary>
         /// 买家支付宝用户号,该参数已废弃，请不要使用
         /// </summary>
         [XmlElement("open_id")]
@@ -78,7 +102,7 @@ namespace Aop.Api.Response
         public string OutTradeNo { get; set; }
 
         /// <summary>
-        /// 使用积分宝付款的金额
+        /// 使用集分宝付款的金额
         /// </summary>
         [XmlElement("point_amount")]
         public string PointAmount { get; set; }

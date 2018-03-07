@@ -76,6 +76,11 @@ namespace ICanPay.Core
             }
         }
 
+        /// <summary>
+        /// 通知类型
+        /// </summary>
+        public NotifyType NotifyType => HttpUtil.RequestType == "GET" ? NotifyType.Sync : NotifyType.Async;
+
         #endregion
     }
 }

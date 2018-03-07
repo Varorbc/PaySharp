@@ -7,6 +7,7 @@ namespace ICanPay.Wechatpay
         /// <summary>
         /// 应用ID
         /// </summary>
+        [ReName(Name = Constant.APPID)]
         public string AppId { get; set; }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace ICanPay.Wechatpay
         public double TotalFee
         {
             get => _totalFee;
-            set => _totalFee = value * 100;
+            set => _totalFee = value / 100;
         }
         private double _totalFee;
 

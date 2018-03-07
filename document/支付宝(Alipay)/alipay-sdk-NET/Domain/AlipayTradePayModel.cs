@@ -41,7 +41,7 @@ namespace Aop.Api.Domain
         public string Body { get; set; }
 
         /// <summary>
-        /// 商户传入业务信息，具体值需要与支付宝约定
+        /// 商户传入业务信息，具体值要和支付宝约定，应用于安全，营销等参数直传场景，格式为json格式
         /// </summary>
         [XmlElement("business_params")]
         public string BusinessParams { get; set; }

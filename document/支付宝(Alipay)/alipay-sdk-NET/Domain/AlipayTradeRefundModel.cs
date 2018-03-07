@@ -1,5 +1,6 @@
 using System;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace Aop.Api.Domain
 {
@@ -9,6 +10,13 @@ namespace Aop.Api.Domain
     [Serializable]
     public class AlipayTradeRefundModel : AopObject
     {
+        /// <summary>
+        /// 退款包含的商品列表信息，Json格式。  其它说明详见：“商品明细说明”
+        /// </summary>
+        [XmlArray("goods_detail")]
+        [XmlArrayItem("goods_detail")]
+        public List<GoodsDetail> GoodsDetail { get; set; }
+
         /// <summary>
         /// 商户的操作员编号
         /// </summary>

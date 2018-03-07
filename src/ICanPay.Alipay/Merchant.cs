@@ -60,7 +60,7 @@ namespace ICanPay.Alipay
         /// 商户私钥
         /// </summary>
         [Required(ErrorMessage = "请设置商户私钥")]
-        [NotAdd]
+        [Ignore]
         public string Privatekey { get; set; }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace ICanPay.Alipay
         /// 查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥
         /// </summary>
         [Required(ErrorMessage = "请设置支付宝公钥")]
-        [NotAdd]
+        [Ignore]
         public string AlipayPublicKey { get; set; }
 
         private string returnUrl;

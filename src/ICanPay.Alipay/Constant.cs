@@ -24,6 +24,7 @@
         public const string TOTAL_AMOUNT = "total_amount";
         public const string GOODS_ID = "goods_id";
         public const string GOODS_NAME = "goods_name";
+        public const string GOODS_CATEGORY = "goods_category";
         public const string BAR_CODE = "bar_code";
         public const string WAVE_CODE = "wave_code";
         public const string MSG = "msg";
@@ -42,9 +43,13 @@
         public const string OUT_REQUEST_NO = "out_request_no";
         public const string FILETYPE = "fileType";
         public const string WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
-        public const string NOTIFY_TYPE = "notify_type";
-        public const string NOTIFY_ID = "notify_id";
-        public const string NOTIFY_TIME = "notify_time";
+        public const string VERSION = "version";
+        public const string CHARSET = "charset";
+        public const string TRADE_NO = "trade_no";
         public const string APP_ID = "app_id";
+        public const string TRANS_MEMO = "TRANS_MEMO";
+        public const string NEEDBUYERREALNAMED = "needBuyerRealnamed";
+        public const string BIZ_CONTENT = "biz_content";
+        public const string METHOD = "method";
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ICanPay.Core;
 using ICanPay.Core.Exceptions;
+using ICanPay.Core.Request;
 using ICanPay.Core.Utils;
 using System;
 using System.IO;
@@ -18,11 +19,7 @@ namespace ICanPay.Alipay
     {
 
         #region 私有字段
-#if DEBUG
-        private const string GATEWAYURL = "https://openapi.alipaydev.com/gateway.do?charset=UTF-8";
-#else
-        private const string GATEWAYURL = "https://openapi.alipay.com/gateway.do?charset=UTF-8";
-#endif
+
         private readonly Merchant _merchant;
 
         #endregion
@@ -43,7 +40,9 @@ namespace ICanPay.Alipay
 
         #region 属性
 
-        public override string GatewayUrl { get; set; } = GATEWAYURL;
+        public override string GatewayUrl { get; set; } = "https://openapi.alipay.com";
+
+        private string RequestUrl => GatewayUrl + "gateway.do?charset=UTF-8";
 
         public new Merchant Merchant => _merchant;
 
@@ -61,8 +60,8 @@ namespace ICanPay.Alipay
 
         protected override string[] NotifyVerifyParameter => new string[]
         {
-            Constant.APP_ID,Constant.NOTIFY_TYPE, Constant.NOTIFY_ID,
-            Constant.NOTIFY_TIME, Constant.SIGN, Constant.SIGN_TYPE
+            Constant.APP_ID,Constant.VERSION, Constant.CHARSET,
+            Constant.TRADE_NO, Constant.SIGN, Constant.SIGN_TYPE
         };
 
         #endregion
@@ -75,7 +74,7 @@ namespace ICanPay.Alipay
         {
             InitFormPayment();
 
-            return GatewayData.ToForm(GatewayUrl);
+            return GatewayData.ToForm(RequestUrl);
         }
 
         public void InitFormPayment()
@@ -94,7 +93,7 @@ namespace ICanPay.Alipay
         {
             InitUrlPayment();
 
-            return $"{GatewayUrl}&{GetPaymentQueryString()}";
+            return $"{RequestUrl}&{GetPaymentQueryString()}";
         }
 
         public void InitUrlPayment()
@@ -162,6 +161,12 @@ namespace ICanPay.Alipay
             InitBarcodePayment();
 
             Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
+
+            if(Notify.Code == "10000")
+            {
+                OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                return;
+            }
 
             if (!string.IsNullOrEmpty(Notify.TradeNo))
             {
@@ -420,7 +425,7 @@ namespace ICanPay.Alipay
             Task.Run(async () =>
             {
                 result = await HttpUtil
-                 .PostAsync(GatewayUrl, GatewayData.ToUrl());
+                 .PostAsync(RequestUrl, GatewayData.ToUrl());
             })
             .GetAwaiter()
             .GetResult();
@@ -483,12 +488,7 @@ namespace ICanPay.Alipay
                 throw new GatewayException("签名不一致");
             }
 
-            if (IsSuccessPay)
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -505,5 +505,23 @@ namespace ICanPay.Alipay
 
         #endregion
 
+        public override T Execute<T>(Request<T> request)
+        {
+            return base.Execute(request);
+        }
+
+        public override T SdkExecute<T>(Request<T> request)
+        {
+            request.RequestUrl = GatewayUrl + request.RequestUrl;
+            request.GatewayData.Add(Merchant, StringCase.Snake);
+            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
+
+            return (T)Activator.CreateInstance(typeof(T), request);
+        }
+
+        public string BuildSign(GatewayData gatewayData)
+        {
+            return EncryptUtil.RSA(gatewayData.ToUrl(false), Merchant.Privatekey, Merchant.SignType);
+        }
     }
 }

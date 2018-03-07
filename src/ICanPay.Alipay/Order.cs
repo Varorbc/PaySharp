@@ -1,4 +1,5 @@
-﻿using ICanPay.Core;
+﻿using ICanPay.Alipay.Domain;
+using ICanPay.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.ComponentModel.DataAnnotations;

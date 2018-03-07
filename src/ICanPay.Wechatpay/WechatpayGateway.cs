@@ -21,18 +21,7 @@ namespace ICanPay.Wechatpay
         #region 私有字段
 
         private readonly Merchant _merchant;
-        private const string UNIFIEDORDERGATEWAYURL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-        private const string QUERYGATEWAYURL = "https://api.mch.weixin.qq.com/pay/orderquery";
-        private const string CANCELGATEWAYURL = "https://api.mch.weixin.qq.com/secapi/pay/reverse";
-        private const string CLOSEORDERGATEWAYURL = "https://api.mch.weixin.qq.com/pay/closeorder";
-        private const string REFUNDGATEWAYURL = "https://api.mch.weixin.qq.com/secapi/pay/refund";
-        private const string REFUNDQUERYGATEWAYURL = "https://api.mch.weixin.qq.com/pay/refundquery";
-        private const string DOWNLOADBILLGATEWAYURL = "https://api.mch.weixin.qq.com/pay/downloadbill";
-        private const string REPORTGATEWAYURL = "https://api.mch.weixin.qq.com/payitil/report";
-        private const string BATCHQUERYCOMMENTGATEWAYURL = "https://api.mch.weixin.qq.com/billcommentsp/batchquerycomment";
-        private const string BARCODEGATEWAYURL = "https://api.mch.weixin.qq.com/pay/micropay";
         private const string ACCESSTOKENURL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type=authorization_code";
-        private const string AUTHCODETOOPENIDURL = "https://api.mch.weixin.qq.com/tools/authcodetoopenid";
 
         #endregion
 
@@ -52,7 +41,31 @@ namespace ICanPay.Wechatpay
 
         #region 属性
 
-        public override string GatewayUrl { get; set; } = UNIFIEDORDERGATEWAYURL;
+        public override string GatewayUrl { get; set; } = "https://api.mch.weixin.qq.com/";
+
+        private string UnifiedOrderUrl => GatewayUrl + "pay/unifiedorder";
+
+        private string QueryUrl => GatewayUrl + "pay/orderquery";
+
+        private string CancelUrl => GatewayUrl + "secapi/pay/reverse";
+
+        private string CloseUrl => GatewayUrl + "pay/closeorder";
+
+        private string RefundUrl => GatewayUrl + "secapi/pay/refund";
+
+        private string RefundQueryUrl => GatewayUrl + "pay/refundquery";
+
+        private string DownloadBillUrl => GatewayUrl + "pay/downloadbill";
+
+        private string ReportUrl => GatewayUrl + "payitil/report";
+
+        private string BatchQueryCommentUrl => GatewayUrl + "billcommentsp/batchquerycomment";
+
+        private string BarcodeUrl => GatewayUrl + "pay/micropay";
+
+        private string AuthCodeToOpenIdUrl => GatewayUrl + "tools/authcodetoopenid";
+
+        private string RequestUrl { get; set; }
 
         public new Merchant Merchant => _merchant;
 
@@ -64,7 +77,7 @@ namespace ICanPay.Wechatpay
 
         public new Notify Notify => (Notify)base.Notify;
 
-        protected override bool IsSuccessPay => Notify.TradeState.ToLower() == SUCCESS;
+        protected override bool IsSuccessPay => Notify.ResultCode.ToLower() == SUCCESS;
 
         protected override bool IsWaitPay => Notify.TradeState.ToLower() == Constant.USERPAYING;
 
@@ -202,6 +215,12 @@ namespace ICanPay.Wechatpay
 
             Commit();
 
+            if (Notify.ReturnCode.ToLower() == SUCCESS)
+            {
+                OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                return;
+            }
+
             if (!string.IsNullOrEmpty(Notify.TransactionId))
             {
                 Task.Run(async () =>
@@ -226,7 +245,7 @@ namespace ICanPay.Wechatpay
         {
             Order.SpbillCreateIp = HttpUtil.LocalIpAddress;
             UnifiedOrder();
-            GatewayUrl = BARCODEGATEWAYURL;
+            RequestUrl = BarcodeUrl;
         }
 
         /// <summary>
@@ -238,7 +257,7 @@ namespace ICanPay.Wechatpay
             {
                 Thread.Sleep(5000);
                 BuildQuery(auxiliary);
-                if (IsSuccessPay)
+                if (Notify.TradeState.ToLower() == SUCCESS)
                 {
                     OnPaymentSucceed(new PaymentSucceedEventArgs(this));
                     return;
@@ -270,7 +289,7 @@ namespace ICanPay.Wechatpay
 
         public void InitQuery(IAuxiliary auxiliary)
         {
-            GatewayUrl = QUERYGATEWAYURL;
+            RequestUrl = QueryUrl;
             InitAuxiliaryParameter(GatewayAuxiliaryType.Query, auxiliary);
         }
 
@@ -289,7 +308,7 @@ namespace ICanPay.Wechatpay
 
         public void InitCancel(IAuxiliary auxiliary)
         {
-            GatewayUrl = CANCELGATEWAYURL;
+            RequestUrl = CancelUrl;
             InitAuxiliaryParameter(GatewayAuxiliaryType.Cancel, auxiliary);
         }
 
@@ -317,7 +336,7 @@ namespace ICanPay.Wechatpay
 
         public void InitClose(IAuxiliary auxiliary)
         {
-            GatewayUrl = CLOSEORDERGATEWAYURL;
+            RequestUrl = CloseUrl;
             InitAuxiliaryParameter(GatewayAuxiliaryType.Close, auxiliary);
         }
 
@@ -336,7 +355,7 @@ namespace ICanPay.Wechatpay
 
         public void InitRefund(IAuxiliary auxiliary)
         {
-            GatewayUrl = REFUNDGATEWAYURL;
+            RequestUrl = RefundUrl;
             InitAuxiliaryParameter(GatewayAuxiliaryType.Refund, auxiliary);
         }
 
@@ -355,7 +374,7 @@ namespace ICanPay.Wechatpay
 
         public void InitRefundQuery(IAuxiliary auxiliary)
         {
-            GatewayUrl = REFUNDQUERYGATEWAYURL;
+            RequestUrl = RefundQueryUrl;
             InitAuxiliaryParameter(GatewayAuxiliaryType.RefundQuery, auxiliary);
         }
 
@@ -376,7 +395,7 @@ namespace ICanPay.Wechatpay
 
         public void InitBillDownload(IAuxiliary auxiliary)
         {
-            GatewayUrl = DOWNLOADBILLGATEWAYURL;
+            RequestUrl = DownloadBillUrl;
             InitAuxiliaryParameter(GatewayAuxiliaryType.BillDownload, auxiliary);
         }
 
@@ -442,7 +461,7 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private void UnifiedOrder()
         {
-            GatewayUrl = UNIFIEDORDERGATEWAYURL;
+            RequestUrl = UnifiedOrderUrl;
             InitOrderParameter();
 
             Commit();
@@ -487,7 +506,7 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.AUTH_CODE, Merchant.AppId);
             GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
             GatewayData.Add(Constant.SIGN, BuildSign());
-            GatewayUrl = AUTHCODETOOPENIDURL;
+            RequestUrl = AuthCodeToOpenIdUrl;
 
             Commit();
 
@@ -553,7 +572,7 @@ namespace ICanPay.Wechatpay
             Task.Run(async () =>
             {
                 result = await HttpUtil
-                .PostAsync(GatewayUrl, GatewayData.ToXml(), cert);
+                .PostAsync(RequestUrl, GatewayData.ToXml(), cert);
             })
             .GetAwaiter()
             .GetResult();

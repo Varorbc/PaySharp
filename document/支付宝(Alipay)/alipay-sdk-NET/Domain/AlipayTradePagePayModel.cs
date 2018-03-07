@@ -23,6 +23,12 @@ namespace Aop.Api.Domain
         public string Body { get; set; }
 
         /// <summary>
+        /// 商户传入业务信息，具体值要和支付宝约定，应用于安全，营销等参数直传场景，格式为json格式
+        /// </summary>
+        [XmlElement("business_params")]
+        public string BusinessParams { get; set; }
+
+        /// <summary>
         /// 禁用渠道,用户不可用指定渠道支付  注，与enable_pay_channels互斥
         /// </summary>
         [XmlElement("disable_pay_channels")]
@@ -33,6 +39,12 @@ namespace Aop.Api.Domain
         /// </summary>
         [XmlElement("enable_pay_channels")]
         public string EnablePayChannels { get; set; }
+
+        /// <summary>
+        /// 外部指定买家
+        /// </summary>
+        [XmlElement("ext_user_info")]
+        public ExtUserInfo ExtUserInfo { get; set; }
 
         /// <summary>
         /// 业务扩展参数
