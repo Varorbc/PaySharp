@@ -308,7 +308,7 @@ namespace ICanPay.Core.Utils
                 using (Stream responseStream = response.GetResponseStream())
                 {
                     FileStream fileStream = new FileStream(path, FileMode.Create);
-                    byte[] buffer = new byte[1024];
+                    byte[] buffer = new byte[response.ContentLength];
                     int size = responseStream.Read(buffer, 0, buffer.Length);
                     while (size > 0)
                     {
