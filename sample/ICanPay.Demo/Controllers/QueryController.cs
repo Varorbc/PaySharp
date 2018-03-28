@@ -1,4 +1,6 @@
-﻿using ICanPay.Core;
+﻿using ICanPay.Alipay.Domain;
+using ICanPay.Alipay.Request;
+using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ICanPay.Demo.Controllers
@@ -14,7 +16,7 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index(string id)
         {
-            var notify = QueryUnionpayOrder(id);
+            var notify = QueryAlipayOrder(id);
 
             return Json(notify);
         }
@@ -25,6 +27,13 @@ namespace ICanPay.Demo.Controllers
         private Alipay.Notify QueryAlipayOrder(string id)
         {
             var gateway = gateways.Get<Alipay.AlipayGateway>();
+
+            var queryRequest = new QueryRequest();
+            queryRequest.AddGatewayData(new QueryModel
+            {
+                OutTradeNo = id
+            });
+            var response = gateway.Execute(queryRequest);
 
             return (Alipay.Notify)gateway.Query(new Alipay.Auxiliary
             {
