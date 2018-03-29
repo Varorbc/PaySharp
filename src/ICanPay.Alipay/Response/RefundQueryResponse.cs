@@ -1,0 +1,28 @@
+﻿using Newtonsoft.Json;
+
+namespace ICanPay.Alipay.Response
+{
+    public class RefundQueryResponse : BaseResponse
+    {
+        /// <summary>
+        /// 本笔退款对应的退款请求号
+        /// </summary>
+        [JsonProperty(Constant.OUT_REQUEST_NO)]
+        public string OutRefundNo { get; set; }
+
+        /// <summary>
+        /// 发起退款时，传入的退款原因
+        /// </summary>
+        public string RefundReason { get; set; }
+
+        /// <summary>
+        /// 该笔退款所对应的交易的订单金额
+        /// </summary>
+        public double TotalAmount { get; set; }
+
+        /// <summary>
+        /// 退款金额
+        /// </summary>
+        public double RefundAmount { get; set; }
+    }
+}

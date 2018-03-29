@@ -1,4 +1,6 @@
-﻿using ICanPay.Core;
+﻿using ICanPay.Alipay.Domain;
+using ICanPay.Alipay.Request;
+using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -15,7 +17,7 @@ namespace ICanPay.Demo.Controllers
 
         public IActionResult Index(string id)
         {
-            var notify = CancelUnionpayOrder(id);
+            var notify = CancelAlipayOrder(id);
 
             return Json(notify);
         }
@@ -26,6 +28,13 @@ namespace ICanPay.Demo.Controllers
         private Alipay.Notify CancelAlipayOrder(string id)
         {
             var gateway = gateways.Get<Alipay.AlipayGateway>();
+
+            var cancelRequest = new CancelRequest();
+            cancelRequest.AddGatewayData(new CancelModel
+            {
+                OutTradeNo = id
+            });
+            var response = gateway.Execute(cancelRequest);
 
             return (Alipay.Notify)gateway.Cancel(new Alipay.Auxiliary
             {

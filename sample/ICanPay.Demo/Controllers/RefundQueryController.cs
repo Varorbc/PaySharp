@@ -1,4 +1,6 @@
-﻿using ICanPay.Core;
+﻿using ICanPay.Alipay.Domain;
+using ICanPay.Alipay.Request;
+using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ICanPay.Demo.Controllers
@@ -25,6 +27,14 @@ namespace ICanPay.Demo.Controllers
         private Alipay.Notify RefundQueryAlipayOrder(string id)
         {
             var gateway = gateways.Get<Alipay.AlipayGateway>();
+
+            var refundQueryRequest = new RefundQueryRequest();
+            refundQueryRequest.AddGatewayData(new RefundQueryModel
+            {
+                OutTradeNo = id,
+                OutRefundNo = "13"
+            });
+            var response = gateway.Execute(refundQueryRequest);
 
             return (Alipay.Notify)gateway.RefundQuery(new Alipay.Auxiliary
             {
