@@ -5,19 +5,11 @@ using ICanPay.Core.Utils;
 
 namespace ICanPay.Alipay.Request
 {
-    public class WapPayRequest : Request<WapPayResponse>
+    public class WapPayRequest : BaseRequest
     {
         public WapPayRequest()
+            : base(Constant.WAP)
         {
-            RequestUrl = "/gateway.do";
-            GatewayData.Add(Constant.METHOD, Constant.WAP);
-        }
-
-        public override void AddGatewayData(object obj)
-        {
-            base.AddGatewayData(obj);
-
-            GatewayData.Add(Constant.BIZ_CONTENT, Util.SerializeObject(obj));
         }
     }
 }
