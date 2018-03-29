@@ -14,8 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ICanPay.Alipay\ICanPay.Alipay.csproj" />
-    <ProjectReference Include="..\..\src\ICanPay.Unionpay\ICanPay.Unionpay.csproj" />
-    <ProjectReference Include="..\..\src\ICanPay.Wechatpay\ICanPay.Wechatpay.csproj" />
   </ItemGroup>
 
 </Project>
