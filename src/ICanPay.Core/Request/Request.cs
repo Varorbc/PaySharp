@@ -3,7 +3,7 @@ using ICanPay.Core.Utils;
 
 namespace ICanPay.Core.Request
 {
-    public abstract class Request<T> where T : IResponse
+    public abstract class Request<TModel, TResponse> where TResponse : IResponse
     {
         protected Request()
         {
@@ -29,15 +29,15 @@ namespace ICanPay.Core.Request
         /// 网关数据
         /// </summary>
         /// <returns></returns>
-        public GatewayData GatewayData { get; set; }
+        public GatewayData GatewayData { get; protected set; }
 
         /// <summary>
         /// 添加网关数据
         /// </summary>
-        /// <param name="obj">对象</param>
-        public virtual void AddGatewayData(object obj)
+        /// <param name="model">模型</param>
+        public virtual void AddGatewayData(TModel model)
         {
-            ValidateUtil.Validate(obj, null);
+            ValidateUtil.Validate(model, null);
         }
     }
 }

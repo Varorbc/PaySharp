@@ -269,7 +269,7 @@ namespace ICanPay.Alipay
 
         #endregion
 
-        public override T Execute<T>(Request<T> request)
+        public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
             request.GatewayData.Add(Merchant, StringCase.Snake);
             request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
@@ -290,16 +290,16 @@ namespace ICanPay.Alipay
             GatewayData.Add(Constant.SIGN, sign);
             GatewayData.Add(BODY, body);
 
-            return GatewayData.ToObject<T>(StringCase.Snake);
+            return GatewayData.ToObject<TResponse>(StringCase.Snake);
         }
 
-        public override T SdkExecute<T>(Request<T> request)
+        public override TResponse SdkExecute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
             request.RequestUrl = GatewayUrl + request.RequestUrl;
             request.GatewayData.Add(Merchant, StringCase.Snake);
             request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
 
-            return (T)Activator.CreateInstance(typeof(T), request);
+            return (TResponse)Activator.CreateInstance(typeof(TResponse), request);
         }
 
         public string BuildSign(GatewayData gatewayData)

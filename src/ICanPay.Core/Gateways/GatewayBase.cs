@@ -204,9 +204,9 @@ namespace ICanPay.Core
 
         #region 公共方法
 
-        public abstract T SdkExecute<T>(Request<T> request) where T : IResponse;
+        public abstract TResponse SdkExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse;
 
-        public abstract T Execute<T>(Request<T> request) where T : IResponse;
+        public abstract TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse;
 
         #region 支付
 

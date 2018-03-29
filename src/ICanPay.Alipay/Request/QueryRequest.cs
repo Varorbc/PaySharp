@@ -1,8 +1,9 @@
-﻿using ICanPay.Alipay.Response;
+﻿using ICanPay.Alipay.Domain;
+using ICanPay.Alipay.Response;
 
 namespace ICanPay.Alipay.Request
 {
-    public class QueryRequest : BaseRequest<QueryResponse>
+    public class QueryRequest : BaseRequest<QueryModel, QueryResponse>
     {
         public QueryRequest()
             : base("alipay.trade.query")

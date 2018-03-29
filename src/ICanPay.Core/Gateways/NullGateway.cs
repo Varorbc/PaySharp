@@ -29,12 +29,12 @@ namespace ICanPay.Core
             return await Task.Run(() => { return false; });
         }
 
-        public override T SdkExecute<T>(Request<T> request)
+        public override TResponse SdkExecute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
             throw new NotImplementedException();
         }
 
-        public override T Execute<T>(Request<T> request)
+        public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
             throw new NotImplementedException();
         }

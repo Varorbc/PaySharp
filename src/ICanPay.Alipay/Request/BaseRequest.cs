@@ -4,7 +4,7 @@ using ICanPay.Core.Utils;
 
 namespace ICanPay.Alipay.Request
 {
-    public class BaseRequest<T> : Request<T> where T : IResponse
+    public class BaseRequest<TModel, TResponse> : Request<TModel, TResponse> where TResponse : IResponse
     {
         public BaseRequest(string method)
         {
@@ -12,11 +12,11 @@ namespace ICanPay.Alipay.Request
             GatewayData.Add(Constant.METHOD, method);
         }
 
-        public override void AddGatewayData(object obj)
+        public override void AddGatewayData(TModel model)
         {
-            base.AddGatewayData(obj);
+            base.AddGatewayData(model);
 
-            GatewayData.Add(Constant.BIZ_CONTENT, Util.SerializeObject(obj));
+            GatewayData.Add(Constant.BIZ_CONTENT, Util.SerializeObject(model));
         }
     }
 }
