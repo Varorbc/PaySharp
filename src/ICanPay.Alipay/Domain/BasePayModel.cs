@@ -35,9 +35,8 @@ namespace ICanPay.Alipay.Domain
         /// <summary>
         /// 订单总金额，单位为元
         /// </summary>
-        [JsonProperty(PropertyName = Constant.TOTAL_AMOUNT)]
         [Required(ErrorMessage = "请设置订单总金额")]
-        public double Amount { get; set; }
+        public double TotalAmount { get; set; }
 
         /// <summary>
         /// 订单标题

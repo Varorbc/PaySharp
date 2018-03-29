@@ -13,9 +13,7 @@ namespace ICanPay.Alipay
     /// 支付宝网关
     /// </summary>
     public sealed class AlipayGateway
-        : GatewayBase,
-        IFormPayment, IUrlPayment, IAppPayment, IScanPayment, IBarcodePayment, IAppletPayment,
-        IQuery, ICancel, IClose, IBillDownload, IRefund, IRefundQuery
+        : GatewayBase, IBarcodePayment, IBillDownload
     {
 
         #region 私有字段
@@ -67,92 +65,6 @@ namespace ICanPay.Alipay
         #endregion
 
         #region 方法
-
-        #region 表单支付
-
-        public string BuildFormPayment()
-        {
-            InitFormPayment();
-
-            return GatewayData.ToForm(RequestUrl);
-        }
-
-        public void InitFormPayment()
-        {
-            Merchant.Method = Constant.WEB;
-            Order.ProductCode = Constant.FAST_INSTANT_TRADE_PAY;
-
-            InitOrderParameter();
-        }
-
-        #endregion
-
-        #region Url支付
-
-        public string BuildUrlPayment()
-        {
-            InitUrlPayment();
-
-            return $"{RequestUrl}&{GetPaymentQueryString()}";
-        }
-
-        public void InitUrlPayment()
-        {
-            Merchant.Method = Constant.WAP;
-            Order.ProductCode = Constant.QUICK_WAP_WAY;
-
-            InitOrderParameter();
-        }
-
-        #endregion
-
-        #region App支付
-
-        public string BuildAppPayment()
-        {
-            InitAppPayment();
-
-            return GetPaymentQueryString();
-        }
-
-        public void InitAppPayment()
-        {
-            Merchant.Method = Constant.APP;
-            Order.ProductCode = Constant.QUICK_MSECURITY_PAY;
-
-            InitOrderParameter();
-        }
-
-        #endregion
-
-        #region 扫码支付
-
-        public string BuildScanPayment()
-        {
-            PreCreate();
-
-            return Notify.QrCode;
-        }
-
-        /// <summary>
-        /// 预创建订单
-        /// </summary>
-        /// <returns></returns>
-        private void PreCreate()
-        {
-            InitScanPayment();
-
-            Commit(Constant.ALIPAY_TRADE_PRECREATE_RESPONSE);
-        }
-
-        public void InitScanPayment()
-        {
-            Merchant.Method = Constant.SCAN;
-
-            InitOrderParameter();
-        }
-
-        #endregion
 
         #region 条码支付
 
@@ -228,80 +140,6 @@ namespace ICanPay.Alipay
 
         #endregion
 
-        #region 小程序支付
-
-        public string BuildAppletPayment()
-        {
-            return BuildAppPayment();
-        }
-
-        public void InitAppletPayment()
-        {
-            //与InitAppPayment不需要再写
-        }
-
-        #endregion
-
-        #region 查询订单
-
-        public void InitQuery(IAuxiliary auxiliary)
-        {
-            InitAuxiliaryParameter(GatewayAuxiliaryType.Query, auxiliary);
-        }
-
-        /// <summary>
-        /// 查询订单
-        /// </summary>
-        public INotify BuildQuery(IAuxiliary auxiliary)
-        {
-            InitQuery(auxiliary);
-
-            Commit(Constant.ALIPAY_TRADE_QUERY_RESPONSE);
-
-            return Notify;
-        }
-
-        #endregion
-
-        #region 撤销订单
-
-        public void InitCancel(IAuxiliary auxiliary)
-        {
-            InitAuxiliaryParameter(GatewayAuxiliaryType.Cancel, auxiliary);
-        }
-
-        /// <summary>
-        /// 撤销订单
-        /// </summary>
-        public INotify BuildCancel(IAuxiliary auxiliary)
-        {
-            InitCancel(auxiliary);
-
-            Commit(Constant.ALIPAY_TRADE_CANCEL_RESPONSE);
-
-            return Notify;
-        }
-
-        #endregion
-
-        #region 关闭订单
-
-        public INotify BuildClose(IAuxiliary auxiliary)
-        {
-            InitClose(auxiliary);
-
-            Commit(Constant.ALIPAY_TRADE_CLOSE_RESPONSE);
-
-            return Notify;
-        }
-
-        public void InitClose(IAuxiliary auxiliary)
-        {
-            InitAuxiliaryParameter(GatewayAuxiliaryType.Close, auxiliary);
-        }
-
-        #endregion
-
         #region 对账单下载
 
         public FileStream BuildBillDownload(IAuxiliary auxiliary)
@@ -321,42 +159,6 @@ namespace ICanPay.Alipay
             Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
             GatewayData.Add(Merchant, StringCase.Snake);
             GatewayData.Add(Constant.SIGN, BuildSign());
-        }
-
-        #endregion
-
-        #region 订单退款
-
-        public INotify BuildRefund(IAuxiliary auxiliary)
-        {
-            InitRefund(auxiliary);
-
-            Commit(Constant.ALIPAY_TRADE_REFUND_RESPONSE);
-
-            return Notify;
-        }
-
-        public void InitRefund(IAuxiliary auxiliary)
-        {
-            InitAuxiliaryParameter(GatewayAuxiliaryType.Refund, auxiliary);
-        }
-
-        #endregion
-
-        #region 查询退款订单
-
-        public INotify BuildRefundQuery(IAuxiliary auxiliary)
-        {
-            InitRefundQuery(auxiliary);
-
-            Commit(Constant.ALIPAY_TRADE_FASTPAY_REFUND_QUERY_RESPONSE);
-
-            return Notify;
-        }
-
-        public void InitRefundQuery(IAuxiliary auxiliary)
-        {
-            InitAuxiliaryParameter(GatewayAuxiliaryType.RefundQuery, auxiliary);
         }
 
         #endregion
@@ -383,39 +185,6 @@ namespace ICanPay.Alipay
         }
 
         /// <summary>
-        /// 初始化辅助接口的参数
-        /// </summary>
-        /// <param name="gatewayAuxiliaryType">辅助类型</param>
-        /// <param name="auxiliary">辅助参数</param>
-        private void InitAuxiliaryParameter(GatewayAuxiliaryType gatewayAuxiliaryType, IAuxiliary auxiliary)
-        {
-            auxiliary.Validate(gatewayAuxiliaryType);
-            switch (gatewayAuxiliaryType)
-            {
-                case GatewayAuxiliaryType.Query:
-                    Merchant.Method = Constant.QUERY;
-                    break;
-                case GatewayAuxiliaryType.Close:
-                    Merchant.Method = Constant.CLOSE;
-                    break;
-                case GatewayAuxiliaryType.Cancel:
-                    Merchant.Method = Constant.CANCEL;
-                    break;
-                case GatewayAuxiliaryType.Refund:
-                    Merchant.Method = Constant.REFUND;
-                    break;
-                case GatewayAuxiliaryType.RefundQuery:
-                    Merchant.Method = Constant.REFUNDQUERY;
-                    break;
-                default:
-                    break;
-            }
-            Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
-            GatewayData.Add(Merchant, StringCase.Snake);
-            GatewayData.Add(Constant.SIGN, BuildSign());
-        }
-
-        /// <summary>
         /// 提交请求
         /// </summary>
         /// <param name="type">结果类型</param>
@@ -431,11 +200,6 @@ namespace ICanPay.Alipay
             .GetResult();
 
             ReadReturnResult(result, type);
-        }
-
-        private string GetPaymentQueryString()
-        {
-            return GatewayData.ToUrl();
         }
 
         /// <summary>
