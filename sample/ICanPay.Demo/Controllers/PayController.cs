@@ -1,18 +1,17 @@
 ﻿using ICanPay.Alipay.Domain;
 using ICanPay.Alipay.Request;
-using ICanPay.Alipay.Response;
 using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace ICanPay.Demo.Controllers
 {
-    public class PaymentController : Controller
+    public class PayController : Controller
     {
         private readonly IGateways gateways;
         private readonly string outTradeNo = DateTime.Now.ToString("yyyyMMddhhmmss");
 
-        public PaymentController(IGateways gateways)
+        public PayController(IGateways gateways)
         {
             this.gateways = gateways;
         }
@@ -21,7 +20,7 @@ namespace ICanPay.Demo.Controllers
         {
             string content = CreateAlipayOrder();
 
-            return Content(content,"text/html");
+            return Content(content, "text/html");
         }
 
         /// <summary>
@@ -29,47 +28,27 @@ namespace ICanPay.Demo.Controllers
         /// </summary>
         private string CreateAlipayOrder()
         {
-            var order = new Alipay.Order()
-            {
-                Amount = 0.01,
-                OutTradeNo = outTradeNo,
-                Subject = "测测看支付宝",
-                //AuthCode = "12323",
-                //Scene = Alipay.Constant.BAR_CODE
-                //Body = "1234",
-                //ExtendParams = new ExtendParam()
-                //{
-                //    HbFqNum = "3"
-                //},
-                //GoodsDetail = new Goods[] {
-                //    new Goods()
-                //    {
-                //        Id = "12"
-                //    }
-                //}
-            };
+            var gateway = gateways.Get<Alipay.AlipayGateway>();
 
-            var gateway = gateways.Get<Alipay.AlipayGateway>(GatewayTradeType.Wap);
-
-            var request = new WebPayRequest();
-            request.AddGatewayData(new WebPayModel
+            var webPayRequest = new WebPayRequest();
+            webPayRequest.AddGatewayData(new WebPayModel
             {
-                Amount = 1,
+                TotalAmount = 1,
                 OutTradeNo = outTradeNo,
                 Subject = "测测看支付宝",
             });
-            var response = gateway.SdkExecute(request);
-            return response.Html;
-            //gateway.PaymentFailed += Gateway_BarcodePaymentFailed;
+            var webPayResponse = gateway.SdkExecute(webPayRequest);
 
-            //return gateway.Payment(order);
+            var barcodePayRequest = new BarcodePayRequest();
+            barcodePayRequest.PaySucceed += BarcodePayRequest_PaySucceed;
+
+            return webPayResponse.Html;
         }
 
-        private void Gateway_BarcodePaymentFailed(object arg1, PayFailedEventArgs arg2)
+        private void BarcodePayRequest_PaySucceed(object arg1, PaySucceedEventArgs arg2)
         {
             throw new NotImplementedException();
         }
-
 
         /// <summary>
         /// 创建微信的支付订单
