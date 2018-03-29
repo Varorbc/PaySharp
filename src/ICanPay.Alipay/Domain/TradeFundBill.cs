@@ -1,5 +1,9 @@
-﻿namespace ICanPay.Alipay.Domain
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+
+namespace ICanPay.Alipay.Domain
 {
+    [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
     public class TradeFundBill
     {
         /// <summary>

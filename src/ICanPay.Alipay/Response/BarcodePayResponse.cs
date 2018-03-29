@@ -4,17 +4,12 @@ using System.Collections.Generic;
 
 namespace ICanPay.Alipay.Response
 {
-    public class QueryResponse : BaseResponse
+    public class BarcodePayResponse : BaseResponse
     {
         /// <summary>
         /// 买家支付宝账号
         /// </summary>
         public string BuyerLogonId { get; set; }
-
-        /// <summary>
-        /// 交易状态
-        /// </summary>
-        public string TradeStatus { get; set; }
 
         /// <summary>
         /// 订单金额
@@ -57,6 +52,11 @@ namespace ICanPay.Alipay.Response
         public double TransPayRate { get; set; }
 
         /// <summary>
+        /// 实收金额
+        /// </summary>
+        public double ReceiptAmount { get; set; }
+
+        /// <summary>
         /// 付款金额
         /// </summary>
         public double BuyerPayAmount { get; set; }
@@ -72,29 +72,19 @@ namespace ICanPay.Alipay.Response
         public double InvoiceAmount { get; set; }
 
         /// <summary>
-        /// 本次交易打款给卖家的时间
+        /// 交易付款时间
         /// </summary>
-        public DateTime SendPayDate { get; set; }
-
-        /// <summary>
-        /// 实收金额
-        /// </summary>
-        public double ReceiptAmount { get; set; }
-
-        /// <summary>
-        /// 商户门店编号
-        /// </summary>
-        public string StoreId { get; set; }
-
-        /// <summary>
-        /// 商户机具终端编号
-        /// </summary>
-        public string TerminalId { get; set; }
+        public DateTime GmtPayment { get; set; }
 
         /// <summary>
         /// 交易支付使用的资金渠道
         /// </summary>
         public List<TradeFundBill> FundBillList { get; set; }
+
+        /// <summary>
+        /// 支付宝卡余额
+        /// </summary>
+        public double CardBalance { get; set; }
 
         /// <summary>
         /// 发生支付交易的商户门店名称
@@ -107,9 +97,26 @@ namespace ICanPay.Alipay.Response
         public string BuyerUserId { get; set; }
 
         /// <summary>
+        /// 本交易支付时使用的所有优惠券信息
+        /// </summary>
+        public string DiscountGoodsDetail { get; set; }
+
+        /// <summary>
+        /// 本交易支付时使用的所有优惠券信息
+        /// </summary>
+        public List<VoucherDetail> VoucherDetailList { get; set; }
+
+        /// <summary>
         /// 预授权支付模式，该参数仅在信用预授权支付场景下返回。信用预授权支付：CREDIT_PREAUTH_PAY
         /// </summary>
         public string AuthTradePayMode { get; set; }
+
+        /// <summary>
+        /// 商户传入业务信息，具体值要和支付宝约定 
+        /// 将商户传入信息分发给相应系统，应用于安全，营销等参数直传场景
+        /// 格式为json格式
+        /// </summary>
+        public string BusinessParams { get; set; }
 
         /// <summary>
         /// 买家用户类型

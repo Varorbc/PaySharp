@@ -37,7 +37,7 @@ namespace ICanPay.Alipay.Response
         /// 退款使用的资金渠道
         /// </summary>
         [JsonProperty(PropertyName = "refund_detail_item_list")]
-        public List<TradeFundBill> TradeFundBills { get; set; }
+        public List<TradeFundBill> FundBillList { get; set; }
 
         /// <summary>
         /// 发生支付交易的商户门店名称

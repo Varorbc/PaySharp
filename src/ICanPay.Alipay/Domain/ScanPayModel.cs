@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Alipay.Domain
 {
+    [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
     public class ScanPayModel
     {
         /// <summary>
