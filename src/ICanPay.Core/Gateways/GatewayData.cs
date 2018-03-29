@@ -37,6 +37,11 @@ namespace ICanPay.Core
             set => _values[key] = value;
         }
 
+        public KeyValuePair<string, object> this[int index]
+        {
+            get => _values.ElementAt(index);
+        }
+
         public int Count => _values.Count;
 
         #endregion
@@ -357,7 +362,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public string ToUrl(bool isUrlEncode = true)
         {
-            return string.Join("&", 
+            return string.Join("&",
                 _values
                 .Select(a => $"{a.Key}={(isUrlEncode ? WebUtility.UrlEncode(a.Value.ToString()) : a.Value.ToString())}"));
         }

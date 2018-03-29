@@ -1,5 +1,6 @@
 ﻿using ICanPay.Core;
 using ICanPay.Core.Exceptions;
+using ICanPay.Core.Request;
 using ICanPay.Core.Utils;
 using System;
 using System.IO;
@@ -369,6 +370,16 @@ namespace ICanPay.Unionpay
             }
 
             return result;
+        }
+
+        public override T SdkExecute<T>(Request<T> request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override T Execute<T>(Request<T> request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

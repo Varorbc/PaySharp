@@ -36,5 +36,10 @@ namespace ICanPay.Alipay.Response
         /// 签名
         /// </summary>
         public string Sign { get; set; }
+
+        /// <summary>
+        /// 原始值
+        /// </summary>
+        public string Body { get; set; }
     }
 }

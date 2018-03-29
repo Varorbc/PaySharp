@@ -34,6 +34,11 @@ namespace ICanPay.Core
             throw new NotImplementedException();
         }
 
+        public override T Execute<T>(Request<T> request)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
     }

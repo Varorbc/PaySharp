@@ -21,7 +21,7 @@ namespace ICanPay.Demo.Controllers
         {
             string content = CreateAlipayOrder();
 
-            return Content(content, "text/html");
+            return Content(content,"text/html");
         }
 
         /// <summary>
@@ -51,15 +51,15 @@ namespace ICanPay.Demo.Controllers
 
             var gateway = gateways.Get<Alipay.AlipayGateway>(GatewayTradeType.Wap);
 
-            var request = new WapPayRequest();
-            request.AddGatewayData(new WapPayModel
+            var request = new WebPayRequest();
+            request.AddGatewayData(new WebPayModel
             {
                 Amount = 1,
                 OutTradeNo = outTradeNo,
                 Subject = "测测看支付宝",
             });
             var response = gateway.SdkExecute(request);
-            return response.Url;
+            return response.Html;
             //gateway.PaymentFailed += Gateway_BarcodePaymentFailed;
 
             //return gateway.Payment(order);

@@ -162,7 +162,7 @@ namespace ICanPay.Alipay
 
             Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
 
-            if(Notify.Code == "10000")
+            if (Notify.Code == "10000")
             {
                 OnPaymentSucceed(new PaymentSucceedEventArgs(this));
                 return;
@@ -507,7 +507,26 @@ namespace ICanPay.Alipay
 
         public override T Execute<T>(Request<T> request)
         {
-            return base.Execute(request);
+            request.GatewayData.Add(Merchant, StringCase.Snake);
+            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
+
+            string body = null;
+            Task.Run(async () =>
+            {
+                body = await HttpUtil
+                 .PostAsync(GatewayUrl + request.RequestUrl, request.GatewayData.ToUrl());
+            })
+            .GetAwaiter()
+            .GetResult();
+
+            GatewayData.FromJson(body);
+            string sign = GatewayData.GetStringValue(Constant.SIGN);
+            GatewayData.Remove(Constant.SIGN);
+            GatewayData.FromJson(GatewayData[0].Value.ToString());
+            GatewayData.Add(Constant.SIGN, sign);
+            GatewayData.Add(BODY, body);
+
+            return GatewayData.ToObject<T>(StringCase.Snake);
         }
 
         public override T SdkExecute<T>(Request<T> request)

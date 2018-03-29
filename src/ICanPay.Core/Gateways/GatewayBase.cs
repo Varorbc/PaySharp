@@ -21,6 +21,7 @@ namespace ICanPay.Core
         public const string FAIL = "FAIL";
         public const string TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
         public const string TIMEFORMAT = "yyyyMMddHHmmss";
+        public const string BODY = "body";
 
         #endregion
 
@@ -205,24 +206,7 @@ namespace ICanPay.Core
 
         public abstract T SdkExecute<T>(Request<T> request) where T : IResponse;
 
-        public virtual T Execute<T>(Request<T> request) where T : IResponse
-        {
-            return default(T);
-        }
-
-        //protected string Execute(IRequest request)
-        //{
-        //    string result = null;
-        //    Task.Run(async () =>
-        //    {
-        //        result = await HttpUtil
-        //         .PostAsync(GatewayUrl + request.RequestUrl, request.GatewayData.ToUrl());
-        //    })
-        //    .GetAwaiter()
-        //    .GetResult();
-
-        //    return result;
-        //}
+        public abstract T Execute<T>(Request<T> request) where T : IResponse;
 
         #region 支付
 
