@@ -14,7 +14,7 @@ namespace ICanPay.Wechatpay
     /// <summary>
     /// 微信支付网关
     /// </summary>
-    public sealed class WechatpayGateway : GatewayBase,
+    public sealed class WechatpayGateway : BaseGateway,
         IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment, IBarcodePayment,
         IQuery, ICancel, IClose, IBillDownload, IRefund, IRefundQuery
     {

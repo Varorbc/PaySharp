@@ -17,10 +17,10 @@ namespace ICanPay.Core
         /// </summary>
         /// <param name="gateways">网关列表</param>
         /// <returns></returns>
-        public static GatewayBase GetGateway(IGateways gateways)
+        public static BaseGateway GetGateway(IGateways gateways)
         {
             var gatewayData = ReadNotifyData();
-            GatewayBase gateway = null;
+            BaseGateway gateway = null;
 
             foreach (var item in gateways.GetList())
             {

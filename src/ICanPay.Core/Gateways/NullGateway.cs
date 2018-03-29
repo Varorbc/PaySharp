@@ -7,7 +7,7 @@ namespace ICanPay.Core
     /// <summary>
     /// 未知网关
     /// </summary>
-    public class NullGateway : GatewayBase
+    public class NullGateway : BaseGateway
     {
 
         #region 属性

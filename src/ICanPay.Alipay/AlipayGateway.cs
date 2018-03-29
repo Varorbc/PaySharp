@@ -14,7 +14,7 @@ namespace ICanPay.Alipay
     /// <summary>
     /// 支付宝网关
     /// </summary>
-    public sealed class AlipayGateway : GatewayBase
+    public sealed class AlipayGateway : BaseGateway
     {
 
         #region 私有字段

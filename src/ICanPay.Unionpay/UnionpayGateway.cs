@@ -12,7 +12,7 @@ namespace ICanPay.Unionpay
     /// 银联支付网关
     /// </summary>
     public class UnionpayGateway
-        : GatewayBase,
+        : BaseGateway,
         IFormPayment, IAppPayment, IScanPayment, IBarcodePayment,
         IQuery, ICancel, IRefund, IBillDownload
     {

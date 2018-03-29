@@ -13,7 +13,7 @@ namespace ICanPay.Core
         /// 初始化未知网关事件数据
         /// </summary>
         /// <param name="gateway">支付网关</param>
-        public UnknownGatewayEventArgs(GatewayBase gateway)
+        public UnknownGatewayEventArgs(BaseGateway gateway)
             : base(gateway)
         {
         }

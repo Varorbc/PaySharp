@@ -11,7 +11,7 @@ namespace ICanPay.Core
 
         #region 私有字段
 
-        protected GatewayBase _gateway;
+        protected BaseGateway _gateway;
         private readonly string _notifyServerHostAddress;
 
         #endregion
@@ -22,7 +22,7 @@ namespace ICanPay.Core
         /// 初始化支付事件数据的基类
         /// </summary>
         /// <param name="gateway">支付网关</param>
-        protected PayEventArgs(GatewayBase gateway)
+        protected PayEventArgs(BaseGateway gateway)
         {
             _gateway = gateway;
             _notifyServerHostAddress = HttpUtil.RemoteIpAddress;

@@ -61,7 +61,7 @@ namespace ICanPay.Core
         /// </summary>
         public async Task ReceivedAsync()
         {
-            GatewayBase gateway = NotifyProcess.GetGateway(_gateways);
+            var gateway = NotifyProcess.GetGateway(_gateways);
             if (gateway is NullGateway)
             {
                 OnUnknownGateway(new UnknownGatewayEventArgs(gateway));
