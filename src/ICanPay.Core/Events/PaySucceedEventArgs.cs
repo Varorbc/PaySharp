@@ -4,7 +4,7 @@ namespace ICanPay.Core
     /// <summary>
     /// 支付成功网关事件数据
     /// </summary>
-    public class PaymentSucceedEventArgs : PaymentEventArgs
+    public class PaySucceedEventArgs : PayEventArgs
     {
 
         #region 构造函数
@@ -13,7 +13,7 @@ namespace ICanPay.Core
         /// 初始化支付成功网关事件数据
         /// </summary>
         /// <param name="gateway">支付网关</param>
-        public PaymentSucceedEventArgs(GatewayBase gateway)
+        public PaySucceedEventArgs(GatewayBase gateway)
             : base(gateway)
         {
         }

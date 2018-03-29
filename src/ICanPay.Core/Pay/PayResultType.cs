@@ -4,7 +4,7 @@ namespace ICanPay.Core
     /// <summary>
     /// 网关通知的支付结果类型
     /// </summary>
-    public enum PaymentResultType
+    public enum PayResultType
     {
 
         /// <summary>

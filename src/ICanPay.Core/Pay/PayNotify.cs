@@ -8,7 +8,7 @@ namespace ICanPay.Core
     /// <summary>
     /// 网关返回的支付通知数据的接受
     /// </summary>
-    public class PaymentNotify
+    public class PayNotify
     {
         #region 私有字段
 
@@ -22,7 +22,7 @@ namespace ICanPay.Core
         /// 初始化支付通知
         /// </summary>
         /// <param name="gateways">用于验证支付网关返回数据的网关列表</param>
-        public PaymentNotify(IGateways gateways)
+        public PayNotify(IGateways gateways)
         {
             _gateways = gateways;
         }
@@ -34,12 +34,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 网关异步返回的支付通知验证失败时触发
         /// </summary>
-        public event Action<object, PaymentFailedEventArgs> PaymentFailed;
+        public event Action<object, PayFailedEventArgs> PayFailed;
 
         /// <summary>
         /// 网关异步返回的支付通知验证成功时触发
         /// </summary>
-        public event Func<object, PaymentSucceedEventArgs, bool> PaymentSucceed;
+        public event Func<object, PaySucceedEventArgs, bool> PaySucceed;
 
         /// <summary>
         /// 网关异步返回的支付通知无法识别时触发
@@ -50,9 +50,9 @@ namespace ICanPay.Core
 
         #region 方法
 
-        private void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
+        private void OnPayFailed(PayFailedEventArgs e) => PayFailed?.Invoke(this, e);
 
-        private bool OnPaymentSucceed(PaymentSucceedEventArgs e) => PaymentSucceed?.Invoke(this, e) ?? false;
+        private bool OnPaySucceed(PaySucceedEventArgs e) => PaySucceed?.Invoke(this, e) ?? false;
 
         private void OnUnknownGateway(UnknownGatewayEventArgs e) => UnknownGateway?.Invoke(this, e);
 
@@ -74,18 +74,18 @@ namespace ICanPay.Core
                 {
                     if (HttpUtil.RequestType == "GET")
                     {
-                        OnPaymentSucceed(new PaymentSucceedEventArgs(gateway));
+                        OnPaySucceed(new PaySucceedEventArgs(gateway));
                         return;
                     }
 
                     if (!gateway.IsSuccessPay)
                     {
-                        OnPaymentFailed(new PaymentFailedEventArgs(gateway));
+                        OnPayFailed(new PayFailedEventArgs(gateway));
                         gateway.WriteFailureFlag();
                         return;
                     }
 
-                    bool result = OnPaymentSucceed(new PaymentSucceedEventArgs(gateway));
+                    bool result = OnPaySucceed(new PaySucceedEventArgs(gateway));
                     if (result)
                     {
                         gateway.WriteSuccessFlag();
@@ -97,13 +97,13 @@ namespace ICanPay.Core
                 }
                 else
                 {
-                    OnPaymentFailed(new PaymentFailedEventArgs(gateway));
+                    OnPayFailed(new PayFailedEventArgs(gateway));
                     gateway.WriteFailureFlag();
                 }
             }
             catch (GatewayException ex)
             {
-                OnPaymentFailed(new PaymentFailedEventArgs(gateway)
+                OnPayFailed(new PayFailedEventArgs(gateway)
                 {
                     Message = ex.Message
                 });

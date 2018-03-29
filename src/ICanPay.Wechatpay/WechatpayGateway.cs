@@ -218,7 +218,7 @@ namespace ICanPay.Wechatpay
 
             if (Notify.ReturnCode.ToLower() == SUCCESS)
             {
-                OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                OnPaymentSucceed(new PaySucceedEventArgs(this));
                 return;
             }
 
@@ -236,7 +236,7 @@ namespace ICanPay.Wechatpay
                 .GetResult();
             }
 
-            OnPaymentFailed(new PaymentFailedEventArgs(this)
+            OnPaymentFailed(new PayFailedEventArgs(this)
             {
                 Message = Notify.ReturnMsg
             });
@@ -260,7 +260,7 @@ namespace ICanPay.Wechatpay
                 BuildQuery(auxiliary);
                 if (Notify.TradeState.ToLower() == SUCCESS)
                 {
-                    OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                    OnPaymentSucceed(new PaySucceedEventArgs(this));
                     return;
                 }
             }
@@ -270,7 +270,7 @@ namespace ICanPay.Wechatpay
             {
                 BuildCancel(auxiliary);
             }
-            OnPaymentFailed(new PaymentFailedEventArgs(this)
+            OnPaymentFailed(new PayFailedEventArgs(this)
             {
                 Message = "支付超时"
             });

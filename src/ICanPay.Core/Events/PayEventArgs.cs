@@ -6,7 +6,7 @@ namespace ICanPay.Core
     /// <summary>
     /// 支付事件数据的基类
     /// </summary>
-    public abstract class PaymentEventArgs : EventArgs
+    public abstract class PayEventArgs : EventArgs
     {
 
         #region 私有字段
@@ -22,7 +22,7 @@ namespace ICanPay.Core
         /// 初始化支付事件数据的基类
         /// </summary>
         /// <param name="gateway">支付网关</param>
-        protected PaymentEventArgs(GatewayBase gateway)
+        protected PayEventArgs(GatewayBase gateway)
         {
             _gateway = gateway;
             _notifyServerHostAddress = HttpUtil.RemoteIpAddress;

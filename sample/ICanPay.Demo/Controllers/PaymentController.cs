@@ -65,7 +65,7 @@ namespace ICanPay.Demo.Controllers
             //return gateway.Payment(order);
         }
 
-        private void Gateway_BarcodePaymentFailed(object arg1, PaymentFailedEventArgs arg2)
+        private void Gateway_BarcodePaymentFailed(object arg1, PayFailedEventArgs arg2)
         {
             throw new NotImplementedException();
         }

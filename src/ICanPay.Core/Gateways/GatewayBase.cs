@@ -196,9 +196,9 @@ namespace ICanPay.Core
             });
         }
 
-        protected void OnPaymentFailed(PaymentFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
+        protected void OnPaymentFailed(PayFailedEventArgs e) => PaymentFailed?.Invoke(this, e);
 
-        protected void OnPaymentSucceed(PaymentSucceedEventArgs e) => PaymentSucceed?.Invoke(this, e);
+        protected void OnPaymentSucceed(PaySucceedEventArgs e) => PaymentSucceed?.Invoke(this, e);
 
         #endregion
 
@@ -423,12 +423,12 @@ namespace ICanPay.Core
         /// <summary>
         /// 网关同步返回的支付通知验证失败时触发,仅针对支付宝和微信的条码支付
         /// </summary>
-        public event Action<object, PaymentFailedEventArgs> PaymentFailed;
+        public event Action<object, PayFailedEventArgs> PaymentFailed;
 
         /// <summary>
         /// 网关同步返回的支付通知验证成功时触发,仅针对支付宝和微信的条码支付
         /// </summary>
-        public event Action<object, PaymentSucceedEventArgs> PaymentSucceed;
+        public event Action<object, PaySucceedEventArgs> PaymentSucceed;
 
         #endregion
     }
