@@ -9,14 +9,14 @@ namespace ICanPay.Alipay.Request
         public BaseRequest(string method)
         {
             RequestUrl = "/gateway.do?charset=UTF-8";
-            GatewayData.Add(Constant.METHOD, method);
+            GatewayData.Add("method", method);
         }
 
         public override void AddGatewayData(TModel model)
         {
             base.AddGatewayData(model);
 
-            GatewayData.Add(Constant.BIZ_CONTENT, Util.SerializeObject(model));
+            GatewayData.Add("biz_content", Util.SerializeObject(model));
         }
     }
 }

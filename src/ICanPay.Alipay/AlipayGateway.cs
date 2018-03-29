@@ -1,9 +1,11 @@
-﻿using ICanPay.Core;
+﻿using ICanPay.Alipay.Domain;
+using ICanPay.Alipay.Request;
+using ICanPay.Core;
 using ICanPay.Core.Exceptions;
 using ICanPay.Core.Request;
+using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,8 +14,7 @@ namespace ICanPay.Alipay
     /// <summary>
     /// 支付宝网关
     /// </summary>
-    public sealed class AlipayGateway
-        : GatewayBase, IBarcodePayment, IBillDownload
+    public sealed class AlipayGateway : GatewayBase
     {
 
         #region 私有字段
@@ -40,15 +41,7 @@ namespace ICanPay.Alipay
 
         public override string GatewayUrl { get; set; } = "https://openapi.alipay.com";
 
-        private string RequestUrl => GatewayUrl + "gateway.do?charset=UTF-8";
-
         public new Merchant Merchant => _merchant;
-
-        public new Order Order
-        {
-            get => (Order)base.Order;
-            set => base.Order = value;
-        }
 
         public new Notify Notify => (Notify)base.Notify;
 
@@ -68,97 +61,97 @@ namespace ICanPay.Alipay
 
         #region 条码支付
 
-        public void BuildBarcodePayment()
+        private void BarcodeExcute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
         {
-            InitBarcodePayment();
+            var barcodePayRequest = request as BarcodePayRequest;
+            var barcodePayResponse = NetExecute(barcodePayRequest);
 
-            Commit(Constant.ALIPAY_TRADE_PAY_RESPONSE);
-
-            if (Notify.Code == "10000")
+            if (barcodePayResponse.Code == "10000")
             {
-                OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                barcodePayRequest.OnPaySucceed(new PaySucceedEventArgs(this));
                 return;
             }
 
-            if (!string.IsNullOrEmpty(Notify.TradeNo))
+            if (!string.IsNullOrEmpty(barcodePayResponse.TradeNo))
             {
+                bool status = false;
                 Task.Run(async () =>
                 {
-                    await PollQueryTradeStateAsync(new Auxiliary
-                    {
-                        TradeNo = Notify.TradeNo
-                    });
+                    status = await PollQueryTradeStateAsync(
+                        barcodePayResponse.TradeNo,
+                        barcodePayRequest.PollTime,
+                        barcodePayRequest.PollCount);
                 })
                 .GetAwaiter()
                 .GetResult();
-            }
 
-            OnPaymentFailed(new PaymentFailedEventArgs(this)
-            {
-                Message = Notify.SubMessage
-            });
-        }
-
-        public void InitBarcodePayment()
-        {
-            Merchant.Method = Constant.BARCODE;
-            Order.ProductCode = Constant.FACE_TO_FACE_PAYMENT;
-
-            InitOrderParameter();
-        }
-
-        /// <summary>
-        /// 每隔5秒轮询判断用户是否支付,总共轮询5次
-        /// </summary>
-        private void PollQueryTradeState(IAuxiliary auxiliary)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                Thread.Sleep(5000);
-                BuildQuery(auxiliary);
-                if (IsSuccessPay)
+                if (status)
                 {
-                    OnPaymentSucceed(new PaymentSucceedEventArgs(this));
+                    barcodePayRequest.OnPaySucceed(new PaySucceedEventArgs(this));
+                    return;
+                }
+                else
+                {
+                    barcodePayRequest.OnPayFailed(new PayFailedEventArgs(this)
+                    {
+                        Message = "支付超时"
+                    });
                     return;
                 }
             }
 
-            BuildCancel(auxiliary);
-            OnPaymentFailed(new PaymentFailedEventArgs(this)
+            barcodePayRequest.OnPayFailed(new PayFailedEventArgs(this)
             {
-                Message = "支付超时"
+                Message = barcodePayResponse.SubMessage
             });
         }
 
         /// <summary>
-        /// 异步每隔5秒轮询判断用户是否支付,总共轮询5次
+        /// 轮询查询用户是否支付
         /// </summary>
-        private async Task PollQueryTradeStateAsync(IAuxiliary auxiliary)
+        /// <param name="tradeNo">支付宝订单号</param>
+        /// <param name="pollTime">轮询间隔</param>
+        /// <param name="pollCount">轮询次数</param>
+        /// <returns></returns>
+        private bool PollQueryTradeState(string tradeNo, int pollTime, int pollCount)
         {
-            await Task.Run(() => PollQueryTradeState(auxiliary));
+            for (int i = 0; i < pollCount; i++)
+            {
+                Thread.Sleep(pollTime);
+                var queryRequest = new QueryRequest();
+                queryRequest.AddGatewayData(new QueryModel
+                {
+                    TradeNo = tradeNo
+                });
+                var queryResponse = NetExecute(queryRequest);
+                //TODO:检测签名
+                if (queryResponse.TradeStatus == Constant.TRADE_SUCCESS)
+                {
+                    return true;
+                }
+            }
+
+            //支付超时，取消订单
+            var cancelRequest = new CancelRequest();
+            cancelRequest.AddGatewayData(new CancelModel
+            {
+                TradeNo = tradeNo
+            });
+            NetExecute(cancelRequest);
+
+            return false;
         }
 
-        #endregion
-
-        #region 对账单下载
-
-        public FileStream BuildBillDownload(IAuxiliary auxiliary)
+        /// <summary>
+        /// 轮询查询用户是否支付
+        /// </summary>
+        /// <param name="tradeNo">支付宝订单号</param>
+        /// <param name="pollTime">轮询间隔</param>
+        /// <param name="pollCount">轮询次数</param>
+        /// <returns></returns>
+        private async Task<bool> PollQueryTradeStateAsync(string tradeNo, int pollTime, int pollCount)
         {
-            InitBillDownload(auxiliary);
-
-            Commit(Constant.ALIPAY_DATA_DATASERVICE_BILL_DOWNLOADURL_QUERY_RESPONSE);
-
-            GatewayData.FromUrl(Notify.BillDownloadUrl);
-
-            return HttpUtil.Download(Notify.BillDownloadUrl, $"{DateTime.Now.ToString(TIMEFORMAT)}.{GatewayData.GetStringValue(Constant.FILETYPE)}");
-        }
-
-        public void InitBillDownload(IAuxiliary auxiliary)
-        {
-            Merchant.Method = Constant.BILLDOWNLOAD;
-            Merchant.BizContent = Util.SerializeObject((Auxiliary)auxiliary);
-            GatewayData.Add(Merchant, StringCase.Snake);
-            GatewayData.Add(Constant.SIGN, BuildSign());
+            return await Task.Run(() => PollQueryTradeState(tradeNo, pollTime, pollCount));
         }
 
         #endregion
@@ -174,71 +167,9 @@ namespace ICanPay.Alipay
             return false;
         }
 
-        /// <summary>
-        /// 初始化订单参数
-        /// </summary>
-        private void InitOrderParameter()
+        private string BuildSign(GatewayData gatewayData)
         {
-            Merchant.BizContent = Util.SerializeObject(Order);
-            GatewayData.Add(Merchant, StringCase.Snake);
-            GatewayData.Add(Constant.SIGN, BuildSign());
-        }
-
-        /// <summary>
-        /// 提交请求
-        /// </summary>
-        /// <param name="type">结果类型</param>
-        private void Commit(string type)
-        {
-            string result = null;
-            Task.Run(async () =>
-            {
-                result = await HttpUtil
-                 .PostAsync(RequestUrl, GatewayData.ToUrl());
-            })
-            .GetAwaiter()
-            .GetResult();
-
-            ReadReturnResult(result, type);
-        }
-
-        /// <summary>
-        /// 读取返回结果
-        /// </summary>
-        /// <param name="result">结果</param>
-        /// <param name="key">结果的对象名</param>
-        private void ReadReturnResult(string result, string key)
-        {
-            GatewayData.FromJson(result);
-            string sign = GatewayData.GetStringValue(Constant.SIGN);
-            result = GatewayData.GetStringValue(key);
-            GatewayData.FromJson(result);
-            base.Notify = GatewayData.ToObject<Notify>(StringCase.Snake);
-            Notify.Sign = sign;
-
-            IsSuccessReturn();
-        }
-
-        /// <summary>
-        /// 是否是已成功的返回
-        /// </summary>
-        /// <returns></returns>
-        private bool IsSuccessReturn()
-        {
-            if (Notify.Code != "10000")
-            {
-                throw new GatewayException(Notify.SubMessage);
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// 生成签名
-        /// </summary>
-        private string BuildSign()
-        {
-            return EncryptUtil.RSA(GatewayData.ToUrl(false), Merchant.Privatekey, Merchant.SignType);
+            return EncryptUtil.RSA(gatewayData.ToUrl(false), Merchant.Privatekey, Merchant.SignType);
         }
 
         /// <summary>
@@ -267,9 +198,24 @@ namespace ICanPay.Alipay
                 Notify.Sign, Merchant.AlipayPublicKey, Merchant.SignType);
         }
 
-        #endregion
-
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
+        {
+            if (request is WapPayRequest || request is WebPayRequest || request is AppPayRequest)
+            {
+                return SdkExecute(request);
+            }
+            else if (request is BarcodePayRequest)
+            {
+                BarcodeExcute(request);
+                return default(TResponse);
+            }
+            else
+            {
+                return NetExecute(request);
+            }
+        }
+
+        public TResponse NetExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
         {
             request.GatewayData.Add(Merchant, StringCase.Snake);
             request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
@@ -293,7 +239,7 @@ namespace ICanPay.Alipay
             return GatewayData.ToObject<TResponse>(StringCase.Snake);
         }
 
-        public override TResponse SdkExecute<TModel, TResponse>(Request<TModel, TResponse> request)
+        public TResponse SdkExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
         {
             request.RequestUrl = GatewayUrl + request.RequestUrl;
             request.GatewayData.Add(Merchant, StringCase.Snake);
@@ -302,9 +248,6 @@ namespace ICanPay.Alipay
             return (TResponse)Activator.CreateInstance(typeof(TResponse), request);
         }
 
-        public string BuildSign(GatewayData gatewayData)
-        {
-            return EncryptUtil.RSA(gatewayData.ToUrl(false), Merchant.Privatekey, Merchant.SignType);
-        }
+        #endregion
     }
 }
