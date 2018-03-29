@@ -29,7 +29,7 @@ namespace ICanPay.Core.Request
         /// 网关数据
         /// </summary>
         /// <returns></returns>
-        public GatewayData GatewayData { get; protected set; }
+        public GatewayData GatewayData { get; }
 
         /// <summary>
         /// 添加网关数据
