@@ -1,9 +1,11 @@
-﻿namespace ICanPay.Alipay.Request
+﻿using ICanPay.Alipay.Response;
+
+namespace ICanPay.Alipay.Request
 {
-    public class AppPayRequest : BaseRequest
+    public class AppPayRequest : BaseRequest<AppPayResponse>
     {
         public AppPayRequest()
-            : base(Constant.APP)
+            : base("alipay.trade.app.pay")
         {
         }
     }

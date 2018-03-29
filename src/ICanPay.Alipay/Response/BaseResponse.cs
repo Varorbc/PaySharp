@@ -42,5 +42,15 @@ namespace ICanPay.Alipay.Response
         /// 原始值
         /// </summary>
         public string Body { get; set; }
+
+        /// <summary>
+        /// 支付宝交易号
+        /// </summary>
+        public string TradeNo { get; set; }
+
+        /// <summary>
+        /// 商户订单号
+        /// </summary>
+        public string OutTradeNo { get; set; }
     }
 }

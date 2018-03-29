@@ -1,14 +1,11 @@
 ﻿using ICanPay.Alipay.Response;
-using ICanPay.Core;
-using ICanPay.Core.Request;
-using ICanPay.Core.Utils;
 
 namespace ICanPay.Alipay.Request
 {
-    public class WapPayRequest : BaseRequest
+    public class WapPayRequest : BaseRequest<WapPayResponse>
     {
         public WapPayRequest()
-            : base(Constant.WAP)
+            : base("alipay.trade.wap.pay")
         {
         }
     }

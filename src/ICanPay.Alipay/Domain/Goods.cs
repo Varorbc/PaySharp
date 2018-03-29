@@ -16,6 +16,12 @@ namespace ICanPay.Alipay.Domain
         public string Id { get; set; }
 
         /// <summary>
+        /// 支付宝定义的统一商品编号
+        /// </summary>
+        [StringLength(32, ErrorMessage = "商品的编号最大长度为32位")]
+        public string AlipayGoodsId { get; set; }
+
+        /// <summary>
         /// 商品名称
         /// </summary>
         [JsonProperty(PropertyName = Constant.GOODS_NAME)]
@@ -30,11 +36,10 @@ namespace ICanPay.Alipay.Domain
         public int Quantity { get; set; }
 
         /// <summary>
-        /// 商品单价，单位为分
+        /// 商品单价，单位为元
         /// </summary>
         [Required(ErrorMessage = "请设置商品单价")]
-        public double Price { get => price; set => price = value / 100.00; }
-        private double price;
+        public double Price { get; set; }
 
         /// <summary>
         /// 商品类目

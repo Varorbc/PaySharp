@@ -1,10 +1,10 @@
-﻿using ICanPay.Alipay.Response;
-using ICanPay.Core.Request;
+﻿using ICanPay.Core.Request;
+using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
 
 namespace ICanPay.Alipay.Request
 {
-    public class BaseRequest : Request<QueryResponse>
+    public class BaseRequest<T> : Request<T> where T : IResponse
     {
         public BaseRequest(string method)
         {
