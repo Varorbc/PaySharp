@@ -1,11 +1,10 @@
 ﻿using ICanPay.Alipay.Domain;
-using ICanPay.Core.Response;
 using System;
 using System.Collections.Generic;
 
 namespace ICanPay.Alipay.Response
 {
-    public class QueryResponse : BaseResponse, IResponse
+    public class QueryResponse : BaseResponse
     {
         /// <summary>
         /// 支付宝交易号
