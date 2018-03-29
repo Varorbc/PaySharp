@@ -97,11 +97,6 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 网关回发通知URL
         /// </summary>
-        [Necessary(new GatewayTradeType[] {
-            GatewayTradeType.App,
-            GatewayTradeType.Scan,
-            GatewayTradeType.Wap,
-            GatewayTradeType.Web }, ErrorMessage = "请输入网关回发通知URL")]
         public string NotifyUrl { get; set; }
 
         #endregion
