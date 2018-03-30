@@ -103,7 +103,7 @@
                 </div>
 
                 <div id="tabs-purchase-3">
-                    <form class="api-form" asp-controller="Alipay" asp-action="PreCreate" method="post" target="_blank">
+                    <form class="api-form" asp-controller="Alipay" asp-action="Scan" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
@@ -175,7 +175,7 @@
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
-                            <label>trade_no：</label>
+                            <label>支付宝订单号：</label>
                             <input type="text" name="trade_no">
                         </p>
                         <p>

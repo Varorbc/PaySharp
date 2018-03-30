@@ -54,23 +54,21 @@ namespace ICanPay.Demo.Controllers
         //    return Redirect(response.Body);
         //}
 
-        //[HttpPost]
-        //public async Task<IActionResult> PreCreate(string out_trade_no, string subject, string total_amount, string body, string notify_url)
-        //{
-        //    var model = new AlipayTradePrecreateModel()
-        //    {
-        //        Body = body,
-        //        Subject = subject,
-        //        TotalAmount = total_amount,
-        //        OutTradeNo = out_trade_no,
-        //    };
-        //    var req = new AlipayTradePrecreateRequest();
-        //    req.SetBizModel(model);
-        //    req.SetNotifyUrl(notify_url);
+        [HttpPost]
+        public IActionResult Scan(string out_trade_no, string subject, double total_amount, string body)
+        {
+            var request = new ScanPayRequest();
+            request.AddGatewayData(new ScanPayModel()
+            {
+                Body = body,
+                TotalAmount = total_amount,
+                Subject = subject,
+                OutTradeNo = out_trade_no,
+            });
 
-        //    var response = await _client.ExecuteAsync(req);
-        //    return Ok(response.Body);
-        //}
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
 
         //[HttpPost]
         //public async Task<IActionResult> Pay(string out_trade_no, string scene, string auth_code, string subject, string total_amount, string body, string notify_url)
@@ -93,21 +91,19 @@ namespace ICanPay.Demo.Controllers
         //}
 
 
-        //[HttpPost]
-        //public async Task<IActionResult> Query(string out_trade_no, string trade_no)
-        //{
-        //    var model = new AlipayTradeQueryModel()
-        //    {
-        //        OutTradeNo = out_trade_no,
-        //        TradeNo = trade_no
-        //    };
+        [HttpPost]
+        public IActionResult Query(string out_trade_no, string trade_no)
+        {
+            var request = new QueryRequest();
+            request.AddGatewayData(new QueryModel()
+            {
+                TradeNo = trade_no,
+                OutTradeNo = out_trade_no,
+            });
 
-        //    var req = new AlipayTradeQueryRequest();
-        //    req.SetBizModel(model);
-
-        //    var response = await _client.ExecuteAsync(req);
-        //    return Ok(response.Body);
-        //}
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
 
         //[HttpPost]
         //public async Task<IActionResult> Refund(string out_trade_no, string trade_no, string refund_amount, string refund_reason, string out_request_no)
