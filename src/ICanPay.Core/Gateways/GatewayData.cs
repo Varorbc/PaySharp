@@ -108,6 +108,8 @@ namespace ICanPay.Core
         /// <returns></returns>
         public bool Add(object obj, StringCase stringCase)
         {
+            ValidateUtil.Validate(obj, null);
+
             _originalResult = null;
             var type = obj.GetType();
             var properties = type.GetProperties();

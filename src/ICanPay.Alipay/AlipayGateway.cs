@@ -170,7 +170,14 @@ namespace ICanPay.Alipay
 
         protected override bool CheckSign(string data, string sign)
         {
-            return EncryptUtil.RSAVerifyData(data, sign, Merchant.AlipayPublicKey, Merchant.SignType);
+            bool result = EncryptUtil.RSAVerifyData(data, sign, Merchant.AlipayPublicKey, Merchant.SignType);
+            if (!result)
+            {
+                data = data.Replace("/", "\\/");
+                result = EncryptUtil.RSAVerifyData(data, sign, Merchant.AlipayPublicKey, Merchant.SignType);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -218,6 +225,7 @@ namespace ICanPay.Alipay
 
         public TResponse NetExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
         {
+            //TODO:returnUrl requestUrl没有使用
             request.GatewayData.Add(Merchant, StringCase.Snake);
             request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
 
@@ -230,22 +238,23 @@ namespace ICanPay.Alipay
             .GetAwaiter()
             .GetResult();
 
-            GatewayData.FromJson(body);
-            string sign = GatewayData.GetStringValue(Constant.SIGN);
-            GatewayData.Remove(Constant.SIGN);
-            string data = GatewayData[0].Value.ToString();
+            var gatewayData = new GatewayData();
+            gatewayData.FromJson(body);
+            string sign = gatewayData.GetStringValue(Constant.SIGN);
+            gatewayData.Remove(Constant.SIGN);
+            string data = gatewayData[0].Value.ToString();
 
             if (!CheckSign(data, sign))
             {
                 throw new GatewayException("签名验证失败");
             }
 
-            GatewayData.FromJson(data);
-            GatewayData.Add(Constant.SIGN, sign);
-            GatewayData.Add(BODY, body);
+            gatewayData.FromJson(data);
+            gatewayData.Add(Constant.SIGN, sign);
+            gatewayData.Add(BODY, body);
 
-            //TODO:待优化
-            return GatewayData.ToObject<TResponse>(StringCase.Snake);
+            //TODO:待优化,条码支付，对象转换失败
+            return gatewayData.ToObject<TResponse>(StringCase.Snake);
         }
 
         public TResponse SdkExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse

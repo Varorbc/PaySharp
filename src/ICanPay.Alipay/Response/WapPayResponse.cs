@@ -7,7 +7,7 @@ namespace ICanPay.Alipay.Response
     {
         public WapPayResponse(WapPayRequest request)
         {
-            Url = $"{request.RequestUrl}?{request.GatewayData.ToUrl()}";
+            Url = $"{request.RequestUrl}&{request.GatewayData.ToUrl()}";
         }
 
         /// <summary>

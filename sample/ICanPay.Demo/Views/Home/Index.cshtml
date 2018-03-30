@@ -132,17 +132,13 @@
                 </div>
 
                 <div id="tabs-purchase-4">
-                    <form class="api-form" asp-controller="Alipay" asp-action="Pay" method="post" target="_blank">
+                    <form class="api-form" asp-controller="Alipay" asp-action="BarcodePay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>scene：</label>
-                            <input type="text" name="scene" value="bar_code">
-                        </p>
-                        <p>
-                            <label>auth_code：</label>
+                            <label>授权码：</label>
                             <input type="text" name="auth_code" value="">
                         </p>
                         <p>
@@ -196,19 +192,19 @@
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
-                            <label>trade_no：</label>
+                            <label>支付宝订单号：</label>
                             <input type="text" name="trade_no">
                         </p>
                         <p>
-                            <label>out_request_no：</label>
+                            <label>退款号：</label>
                             <input type="text" name="out_request_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>refund_amount：</label>
+                            <label>退款金额：</label>
                             <input type="text" name="refund_amount">
                         </p>
                         <p>
-                            <label>refund_reason：</label>
+                            <label>退款原因：</label>
                             <input type="text" name="refund_reason">
                         </p>
                         <p>
@@ -229,11 +225,11 @@
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
-                            <label>trade_no：</label>
+                            <label>支付宝订单号：</label>
                             <input type="text" name="trade_no">
                         </p>
                         <p>
-                            <label>out_request_no：</label>
+                            <label>退款号：</label>
                             <input type="text" name="out_request_no">
                         </p>
                         <p>
@@ -254,7 +250,7 @@
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
-                            <label>trade_no：</label>
+                            <label>支付宝订单号：</label>
                             <input type="text" name="trade_no">
                         </p>
                         <p>
@@ -323,14 +319,14 @@
                 </div>
 
                 <div id="tabs-purchase-11">
-                    <form class="api-form" asp-controller="Alipay" asp-action="BillDownloadurlQuery" method="post" target="_blank">
+                    <form class="api-form" asp-controller="Alipay" asp-action="BillDownload" method="post" target="_blank">
                         <p>
-                            <label>bill_date：</label>
-                            <input type="text" name="bill_date">
+                            <label>账单日期：</label>
+                            <input type="text" name="bill_date" title="日账单格式为yyyy-MM-dd，月账单格式为yyyy-MM">
                         </p>
                         <p>
-                            <label>bill_type：</label>
-                            <input type="text" name="bill_type">
+                            <label>账单类型：</label>
+                            <input type="text" name="bill_type" value="trade" title="trade指商户基于支付宝交易收单的业务账单；signcustomer是指基于商户支付宝余额收入及支出等资金变动的帐务账单；">
                         </p>
                         <p>
                             <label>&nbsp;</label>

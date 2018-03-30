@@ -300,6 +300,11 @@ namespace ICanPay.Core.Utils
         /// <returns></returns>
         public static byte[] Download(string url)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                return default(byte[]);
+            }
+
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())

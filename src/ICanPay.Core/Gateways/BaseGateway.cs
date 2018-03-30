@@ -85,7 +85,7 @@ namespace ICanPay.Core
         /// <summary>
         /// 网关数据
         /// </summary>
-        public GatewayData GatewayData { get; set; }
+        protected internal GatewayData GatewayData { get; set; }
 
         /// <summary>
         /// 是否成功支付
