@@ -297,9 +297,8 @@ namespace ICanPay.Core.Utils
         /// 下载
         /// </summary>
         /// <param name="url">url</param>
-        /// <param name="path">下载路径</param>
         /// <returns></returns>
-        public static FileStream Download(string url, string path)
+        public static byte[] Download(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
@@ -307,18 +306,19 @@ namespace ICanPay.Core.Utils
             {
                 using (Stream responseStream = response.GetResponseStream())
                 {
-                    FileStream fileStream = new FileStream(path, FileMode.Create);
-                    byte[] buffer = new byte[1024];
-                    int size = responseStream.Read(buffer, 0, buffer.Length);
+                    int count = (int)response.ContentLength;
+                    byte[] buffer = new byte[count];
+                    int offset = 0;
+                    int size = responseStream.Read(buffer, 0, count);
+
                     while (size > 0)
                     {
-                        fileStream.Write(buffer, 0, size);
-                        size = responseStream.Read(buffer, 0, buffer.Length);
+                        offset += size;
+                        count -= size;
+                        size = responseStream.Read(buffer, offset, count);
                     }
 
-                    fileStream.Position = 0;
-                    return fileStream;
-
+                    return buffer;
                 }
             }
         }
@@ -327,11 +327,10 @@ namespace ICanPay.Core.Utils
         /// 异步下载
         /// </summary>
         /// <param name="url">url</param>
-        /// <param name="path">下载路径</param>
         /// <returns></returns>
-        public static async Task<FileStream> DownloadAsync(string url, string path)
+        public static async Task<byte[]> DownloadAsync(string url)
         {
-            return await Task.Run(() => Download(url, path));
+            return await Task.Run(() => Download(url));
         }
 
         #endregion

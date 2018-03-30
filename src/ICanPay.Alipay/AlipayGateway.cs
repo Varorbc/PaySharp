@@ -16,7 +16,6 @@ namespace ICanPay.Alipay
     /// </summary>
     public sealed class AlipayGateway : BaseGateway
     {
-
         #region 私有字段
 
         private readonly Merchant _merchant;
