@@ -9,20 +9,11 @@ namespace ICanPay.Core
     /// </summary>
     public class NullGateway : BaseGateway
     {
+        public override string GatewayUrl { get; set; }
 
-        #region 属性
+        protected internal override bool IsSuccessPay { get; }
 
-        public override string GatewayUrl { get; set; } = string.Empty;
-
-        protected internal override bool IsSuccessPay => false;
-
-        protected override bool IsWaitPay => false;
-
-        protected internal override string[] NotifyVerifyParameter => new string[0];
-
-        #endregion
-
-        #region 方法
+        protected internal override string[] NotifyVerifyParameter { get; }
 
         protected internal override async Task<bool> ValidateNotifyAsync()
         {
@@ -34,7 +25,14 @@ namespace ICanPay.Core
             throw new NotImplementedException();
         }
 
-        #endregion
+        protected override string BuildSign(GatewayData gatewayData)
+        {
+            throw new NotImplementedException();
+        }
 
+        protected override bool CheckSign(string data, string sign)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

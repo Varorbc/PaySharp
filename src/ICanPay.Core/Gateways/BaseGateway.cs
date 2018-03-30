@@ -93,11 +93,6 @@ namespace ICanPay.Core
         protected internal abstract bool IsSuccessPay { get; }
 
         /// <summary>
-        /// 是否等待支付
-        /// </summary>
-        protected abstract bool IsWaitPay { get; }
-
-        /// <summary>
         /// 需要验证的参数名称数组，用于识别不同的网关类型。
         /// 商户号(AppId)必须放第一位
         /// </summary>
@@ -130,7 +125,29 @@ namespace ICanPay.Core
             HttpUtil.Write(FAILURE);
         }
 
+        /// <summary>
+        /// 执行请求
+        /// </summary>
+        /// <typeparam name="TModel">数据模型</typeparam>
+        /// <typeparam name="TResponse">返回模型</typeparam>
+        /// <param name="request">请求</param>
+        /// <returns></returns>
         public abstract TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse;
+
+        /// <summary>
+        /// 生成签名
+        /// </summary>
+        /// <param name="gatewayData">网关数据</param>
+        /// <returns></returns>
+        protected abstract string BuildSign(GatewayData gatewayData);
+
+        /// <summary>
+        /// 检验签名
+        /// </summary>
+        /// <param name="data">待验证数据</param>
+        /// <param name="sign">签名</param>
+        /// <returns></returns>
+        protected abstract bool CheckSign(string data, string sign);
 
         #endregion
 

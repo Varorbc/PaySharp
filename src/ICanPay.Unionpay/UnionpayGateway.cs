@@ -43,6 +43,7 @@ namespace ICanPay.Unionpay
             : base(merchant, new GatewayData(StringComparer.Ordinal))
         {
             _merchant = merchant;
+            //TODO:测试同时读取是否有问题
             _merchant.CertId = Util.GetCertId(merchant.CertPath, merchant.CertPwd);
             _merchant.CertKey = Util.GetCertKey(merchant.CertPath, merchant.CertPwd);
             //_merchant.EncryptCertId = Util.GetEncryptCertId();

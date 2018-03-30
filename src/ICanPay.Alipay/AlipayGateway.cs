@@ -44,8 +44,6 @@ namespace ICanPay.Alipay
 
         public new Notify Notify => (Notify)base.Notify;
 
-        protected override bool IsWaitPay => Notify.TradeStatus == Constant.WAIT_BUYER_PAY;
-
         protected override bool IsSuccessPay => Notify.TradeStatus == Constant.TRADE_SUCCESS;
 
         protected override string[] NotifyVerifyParameter => new string[]
@@ -123,7 +121,6 @@ namespace ICanPay.Alipay
                     TradeNo = tradeNo
                 });
                 var queryResponse = NetExecute(queryRequest);
-                //TODO:检测签名
                 if (queryResponse.TradeStatus == Constant.TRADE_SUCCESS)
                 {
                     return true;
@@ -166,9 +163,14 @@ namespace ICanPay.Alipay
             return false;
         }
 
-        private string BuildSign(GatewayData gatewayData)
+        protected override string BuildSign(GatewayData gatewayData)
         {
             return EncryptUtil.RSA(gatewayData.ToUrl(false), Merchant.Privatekey, Merchant.SignType);
+        }
+
+        protected override bool CheckSign(string data, string sign)
+        {
+            return EncryptUtil.RSAVerifyData(data, sign, Merchant.AlipayPublicKey, Merchant.SignType);
         }
 
         /// <summary>
@@ -231,10 +233,18 @@ namespace ICanPay.Alipay
             GatewayData.FromJson(body);
             string sign = GatewayData.GetStringValue(Constant.SIGN);
             GatewayData.Remove(Constant.SIGN);
-            GatewayData.FromJson(GatewayData[0].Value.ToString());
+            string data = GatewayData[0].Value.ToString();
+
+            if (!CheckSign(data, sign))
+            {
+                throw new GatewayException("签名验证失败");
+            }
+
+            GatewayData.FromJson(data);
             GatewayData.Add(Constant.SIGN, sign);
             GatewayData.Add(BODY, body);
 
+            //TODO:待优化
             return GatewayData.ToObject<TResponse>(StringCase.Snake);
         }
 

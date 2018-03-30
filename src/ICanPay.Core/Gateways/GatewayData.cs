@@ -484,10 +484,16 @@ namespace ICanPay.Core
                 if (!string.IsNullOrEmpty(json))
                 {
                     var jObject = JObject.Parse(json);
-                    var list = jObject.Children().OfType<JProperty>();
-                    foreach (var item in list)
+                    foreach (var item in jObject)
                     {
-                        Add(item.Name, item.Value.ToString());
+                        if (item.Value.Type == JTokenType.Object)
+                        {
+                            Add(item.Key, item.Value.ToString(Newtonsoft.Json.Formatting.None));
+                        }
+                        else
+                        {
+                            Add(item.Key, item.Value.ToString());
+                        }
                     }
                 }
             }
