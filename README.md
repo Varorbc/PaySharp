@@ -78,7 +78,7 @@ https://open.unionpay.com/ajweb/product
 # 支持/打赏
 
 <p align="center">
-    <img src="http://p687qfgw0.bkt.clouddn.com/pay.png">
+    <img src="https://github.com/Varorbc/ICanPay/blob/2.0.0-alpha/reward.jpg">
     <p align="center">打赏扫这里，请留下尊姓大名</p>
 </p>
 
