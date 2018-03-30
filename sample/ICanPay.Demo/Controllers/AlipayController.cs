@@ -4,6 +4,7 @@ using ICanPay.Alipay.Request;
 using ICanPay.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ICanPay.Demo.Controllers
@@ -18,19 +19,19 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult PagePay(string out_trade_no, string subject, string total_amount, string body, string product_code, string notify_url, string return_url)
+        public IActionResult WebPay(string out_trade_no, string subject, double total_amount, string body)
         {
             var request = new WebPayRequest();
             request.AddGatewayData(new WebPayModel()
             {
                 Body = body,
-                TotalAmount = 0.01,
+                TotalAmount = total_amount,
                 Subject = subject,
                 OutTradeNo = out_trade_no,
             });
 
             var response = _baseGateway.Execute(request);
-            return Content(response.Html, "text/html");
+            return Content(response.Html, "text/html", Encoding.UTF8);
         }
 
         //[HttpPost]

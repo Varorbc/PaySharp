@@ -45,34 +45,22 @@
                 </ul>
 
                 <div id="tabs-purchase-1">
-                    <form class="api-form" asp-controller="Alipay" asp-action="PagePay" method="post" target="_blank">
+                    <form class="api-form" asp-controller="Alipay" asp-action="WebPay" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>subject：</label>
+                            <label>订单标题：</label>
                             <input type="text" name="subject" value="支付宝电脑网站支付测试">
                         </p>
                         <p>
-                            <label>total_amount：</label>
+                            <label>总金额：</label>
                             <input type="text" name="total_amount" value="0.01" title="单位为元，精确至小数点后2位。">
                         </p>
                         <p>
-                            <label>body：</label>
+                            <label>订单描述：</label>
                             <input type="text" name="body">
-                        </p>
-                        <p>
-                            <label>product_code：</label>
-                            <input type="text" name="product_code" value="FAST_INSTANT_TRADE_PAY">
-                        </p>
-                        <p>
-                            <label>notify_url：</label>
-                            <input type="text" name="notify_url" value="http://www.baidu.com/notify/alipay/pagepay">
-                        </p>
-                        <p>
-                            <label>return_url：</label>
-                            <input type="text" name="return_url" value="http://www.baidu.com/alipay/pagepayreturn">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -88,32 +76,20 @@
                 <div id="tabs-purchase-2">
                     <form class="api-form" asp-controller="Alipay" asp-action="WapPay" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>subject：</label>
+                            <label>订单标题：</label>
                             <input type="text" name="subject" value="支付宝手机网站支付测试">
                         </p>
                         <p>
-                            <label>total_amount：</label>
+                            <label>总金额：</label>
                             <input type="text" name="total_amount" value="0.01" title="单位为元，精确至小数点后2位。">
                         </p>
                         <p>
-                            <label>body：</label>
+                            <label>订单描述：</label>
                             <input type="text" name="body">
-                        </p>
-                        <p>
-                            <label>product_code：</label>
-                            <input type="text" name="product_code" value="QUICK_WAP_WAY">
-                        </p>
-                        <p>
-                            <label>notify_url：</label>
-                            <input type="text" name="notify_url" value="http://www.baidu.com/notify/alipay/wappay">
-                        </p>
-                        <p>
-                            <label>return_url：</label>
-                            <input type="text" name="return_url" value="http://www.baidu.com/alipay/wappayreturn">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -129,24 +105,20 @@
                 <div id="tabs-purchase-3">
                     <form class="api-form" asp-controller="Alipay" asp-action="PreCreate" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>subject：</label>
+                            <label>订单标题：</label>
                             <input type="text" name="subject" value="支付宝扫码支付测试">
                         </p>
                         <p>
-                            <label>total_amount：</label>
+                            <label>总金额：</label>
                             <input type="text" name="total_amount" value="0.01" title="单位为元，精确至小数点后2位。">
                         </p>
                         <p>
-                            <label>body：</label>
+                            <label>订单描述：</label>
                             <input type="text" name="body">
-                        </p>
-                        <p>
-                            <label>notify_url：</label>
-                            <input type="text" name="notify_url" value="http://www.baidu.com/notify/alipay/precreate">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -162,7 +134,7 @@
                 <div id="tabs-purchase-4">
                     <form class="api-form" asp-controller="Alipay" asp-action="Pay" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
@@ -174,20 +146,16 @@
                             <input type="text" name="auth_code" value="">
                         </p>
                         <p>
-                            <label>subject：</label>
+                            <label>订单标题：</label>
                             <input type="text" name="subject" value="支付宝条码支付测试">
                         </p>
                         <p>
-                            <label>total_amount：</label>
+                            <label>总金额：</label>
                             <input type="text" name="total_amount" value="0.01" title="单位为元，精确至小数点后2位。">
                         </p>
                         <p>
-                            <label>body：</label>
+                            <label>订单描述：</label>
                             <input type="text" name="body">
-                        </p>
-                        <p>
-                            <label>notify_url：</label>
-                            <input type="text" name="notify_url" value="http://www.baidu.com/notify/alipay/pay">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -203,7 +171,7 @@
                 <div id="tabs-purchase-5">
                     <form class="api-form" asp-controller="Alipay" asp-action="Query" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -224,7 +192,7 @@
                 <div id="tabs-purchase-6">
                     <form class="api-form" asp-controller="Alipay" asp-action="Refund" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -257,7 +225,7 @@
                 <div id="tabs-purchase-7">
                     <form class="api-form" asp-controller="Alipay" asp-action="RefundQuery" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -282,7 +250,7 @@
                 <div id="tabs-purchase-8">
                     <form class="api-form" asp-controller="Alipay" asp-action="Close" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -398,11 +366,11 @@
                 <div id="tabs-purchase-1">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="UnifiedOrder" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>body：</label>
+                            <label>订单描述：</label>
                             <input type="text" name="body" value="微信扫码支付测试">
                         </p>
                         <p>
@@ -434,11 +402,11 @@
                 <div id="tabs-purchase-2">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="UnifiedOrder" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>body：</label>
+                            <label>订单描述：</label>
                             <input type="text" name="body" value="微信公众号支付支付测试">
                         </p>
                         <p>
@@ -474,11 +442,11 @@
                 <div id="tabs-purchase-3">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="AppOrder" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>body：</label>
+                            <label>订单描述：</label>
                             <input type="text" name="body" value="微信APP支付支付测试">
                         </p>
                         <p>
@@ -514,7 +482,7 @@
                             <input type="text" name="transaction_id">
                         </p>
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -530,7 +498,7 @@
                 <div id="tabs-purchase-5">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="CloseOrder" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -554,7 +522,7 @@
                             <input type="text" name="transaction_id">
                         </p>
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -598,7 +566,7 @@
                             <input type="text" name="transaction_id">
                         </p>
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -794,11 +762,11 @@
                 <div id="tabs-purchase-1">
                     <form class="api-form" asp-controller="QPay" asp-action="UnifiedOrder" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>body：</label>
+                            <label>订单描述：</label>
                             <input type="text" name="body" value="QQ钱包扫码支付测试">
                         </p>
                         <p>
@@ -834,7 +802,7 @@
                             <input type="text" name="transaction_id">
                         </p>
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -850,7 +818,7 @@
                 <div id="tabs-purchase-3">
                     <form class="api-form" asp-controller="QPay" asp-action="CloseOrder" method="post" target="_blank">
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -874,7 +842,7 @@
                             <input type="text" name="transaction_id">
                         </p>
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
@@ -914,7 +882,7 @@
                             <input type="text" name="transaction_id">
                         </p>
                         <p>
-                            <label>out_trade_no：</label>
+                            <label>订单号：</label>
                             <input type="text" name="out_trade_no">
                         </p>
                         <p>
