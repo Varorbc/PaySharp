@@ -55,10 +55,134 @@ namespace ICanPay.Alipay
 
         #endregion
 
-        #region 方法
+        #region 公共方法
+
+        protected override async Task<bool> ValidateNotifyAsync()
+        {
+            base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
+            if (IsSuccessResult())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        protected override string BuildSign(GatewayData gatewayData)
+        {
+            return EncryptUtil.RSA(gatewayData.ToUrl(false), Merchant.Privatekey, Merchant.SignType);
+        }
+
+        protected override bool CheckSign(string data, string sign)
+        {
+            bool result = EncryptUtil.RSAVerifyData(data, sign, Merchant.AlipayPublicKey, Merchant.SignType);
+            if (!result)
+            {
+                data = data.Replace("/", "\\/");
+                result = EncryptUtil.RSAVerifyData(data, sign, Merchant.AlipayPublicKey, Merchant.SignType);
+            }
+
+            return result;
+        }
+
+        public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
+        {
+            if (request is WapPayRequest || request is WebPayRequest || request is AppPayRequest)
+            {
+                return SdkExecute(request);
+            }
+            else if (request is BarcodePayRequest)
+            {
+                BarcodeExcute(request);
+                return default(TResponse);
+            }
+            else
+            {
+                return NetExecute(request);
+            }
+        }
+
+        #endregion
+
+        #region 私有方法
+
+        /// <summary>
+        /// 添加商户信息
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="request"></param>
+        private void AddMerchant<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
+        {
+            request.RequestUrl = GatewayUrl + request.RequestUrl;
+            if (!string.IsNullOrEmpty(request.NotifyUrl))
+            {
+                request.GatewayData.Add("notify_url", request.NotifyUrl);
+            }
+            if (!string.IsNullOrEmpty(request.ReturnUrl))
+            {
+                request.GatewayData.Add("return_url", request.ReturnUrl);
+            }
+            request.GatewayData.Add(Merchant, StringCase.Snake);
+            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
+        }
+
+        /// <summary>
+        /// 网络执行
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private TResponse NetExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
+        {
+            AddMerchant(request);
+
+            string body = null;
+            Task.Run(async () =>
+            {
+                body = await HttpUtil
+                 .PostAsync(GatewayUrl + request.RequestUrl, request.GatewayData.ToUrl());
+            })
+            .GetAwaiter()
+            .GetResult();
+
+            var jObject = JObject.Parse(body);
+            var jToken = jObject.First.First;
+            string sign = jObject.Value<string>("sign");
+            if (!CheckSign(jToken.ToString(), sign))
+            {
+                throw new GatewayException("签名验证失败");
+            }
+
+            var baseResponse = (BaseResponse)jToken.ToObject(typeof(TResponse));
+            baseResponse.Body = body;
+            baseResponse.Sign = sign;
+            return (TResponse)(object)baseResponse;
+        }
+
+        /// <summary>
+        /// 本地执行
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private TResponse SdkExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
+        {
+            AddMerchant(request);
+
+            return (TResponse)Activator.CreateInstance(typeof(TResponse), request);
+        }
 
         #region 条码支付
 
+        /// <summary>
+        /// 条码执行
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="request"></param>
         private void BarcodeExcute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
         {
             var barcodePayRequest = request as BarcodePayRequest;
@@ -85,6 +209,7 @@ namespace ICanPay.Alipay
 
                 if (status)
                 {
+                    //TODO:优化
                     barcodePayRequest.OnPaySucceed(new PaySucceedEventArgs(this));
                     return;
                 }
@@ -153,49 +278,6 @@ namespace ICanPay.Alipay
 
         #endregion
 
-        protected override async Task<bool> ValidateNotifyAsync()
-        {
-            base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
-            if (IsSuccessResult())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        protected override string BuildSign(GatewayData gatewayData)
-        {
-            return EncryptUtil.RSA(gatewayData.ToUrl(false), Merchant.Privatekey, Merchant.SignType);
-        }
-
-        protected override bool CheckSign(string data, string sign)
-        {
-            bool result = EncryptUtil.RSAVerifyData(data, sign, Merchant.AlipayPublicKey, Merchant.SignType);
-            if (!result)
-            {
-                data = data.Replace("/", "\\/");
-                result = EncryptUtil.RSAVerifyData(data, sign, Merchant.AlipayPublicKey, Merchant.SignType);
-            }
-
-            return result;
-        }
-
-        private void AddMerchant<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
-        {
-            request.RequestUrl = GatewayUrl + request.RequestUrl;
-            if (!string.IsNullOrEmpty(request.NotifyUrl))
-            {
-                request.GatewayData.Add("notify_url", request.NotifyUrl);
-            }
-            if (!string.IsNullOrEmpty(request.ReturnUrl))
-            {
-                request.GatewayData.Add("return_url", request.ReturnUrl);
-            }
-            request.GatewayData.Add(Merchant, StringCase.Snake);
-            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
-        }
-
         /// <summary>
         /// 是否是已成功支付的支付通知
         /// </summary>
@@ -220,57 +302,6 @@ namespace ICanPay.Alipay
 
             return EncryptUtil.RSAVerifyData(GatewayData.ToUrl(false),
                 Notify.Sign, Merchant.AlipayPublicKey, Merchant.SignType);
-        }
-
-        public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
-        {
-            if (request is WapPayRequest || request is WebPayRequest || request is AppPayRequest)
-            {
-                return SdkExecute(request);
-            }
-            else if (request is BarcodePayRequest)
-            {
-                BarcodeExcute(request);
-                return default(TResponse);
-            }
-            else
-            {
-                return NetExecute(request);
-            }
-        }
-
-        public TResponse NetExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
-        {
-            AddMerchant(request);
-
-            string body = null;
-            Task.Run(async () =>
-            {
-                body = await HttpUtil
-                 .PostAsync(GatewayUrl + request.RequestUrl, request.GatewayData.ToUrl());
-            })
-            .GetAwaiter()
-            .GetResult();
-
-            var jObject = JObject.Parse(body);
-            var jToken = jObject.First.First;
-            string sign = jObject.Value<string>("sign");
-            if (!CheckSign(jToken.ToString(), sign))
-            {
-                throw new GatewayException("签名验证失败");
-            }
-
-            var baseResponse = (BaseResponse)jToken.ToObject(typeof(TResponse));
-            baseResponse.Body = body;
-            baseResponse.Sign = sign;
-            return (TResponse)(object)baseResponse;
-        }
-
-        public TResponse SdkExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
-        {
-            AddMerchant(request);
-
-            return (TResponse)Activator.CreateInstance(typeof(TResponse), request);
         }
 
         #endregion
