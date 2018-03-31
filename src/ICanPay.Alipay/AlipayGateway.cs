@@ -42,8 +42,6 @@ namespace ICanPay.Alipay
 
         public override string GatewayUrl { get; set; } = "https://openapi.alipay.com";
 
-        public new Merchant Merchant => _merchant;
-
         public new Notify Notify => (Notify)base.Notify;
 
         protected override bool IsSuccessPay => Notify.TradeStatus == Constant.TRADE_SUCCESS;
@@ -70,16 +68,16 @@ namespace ICanPay.Alipay
 
         protected override string BuildSign(GatewayData gatewayData)
         {
-            return EncryptUtil.RSA(gatewayData.ToUrl(false), Merchant.Privatekey, Merchant.SignType);
+            return EncryptUtil.RSA(gatewayData.ToUrl(false), _merchant.Privatekey, _merchant.SignType);
         }
 
         protected override bool CheckSign(string data, string sign)
         {
-            bool result = EncryptUtil.RSAVerifyData(data, sign, Merchant.AlipayPublicKey, Merchant.SignType);
+            bool result = EncryptUtil.RSAVerifyData(data, sign, _merchant.AlipayPublicKey, _merchant.SignType);
             if (!result)
             {
                 data = data.Replace("/", "\\/");
-                result = EncryptUtil.RSAVerifyData(data, sign, Merchant.AlipayPublicKey, Merchant.SignType);
+                result = EncryptUtil.RSAVerifyData(data, sign, _merchant.AlipayPublicKey, _merchant.SignType);
             }
 
             return result;
@@ -123,7 +121,7 @@ namespace ICanPay.Alipay
             {
                 request.GatewayData.Add("return_url", request.ReturnUrl);
             }
-            request.GatewayData.Add(Merchant, StringCase.Snake);
+            request.GatewayData.Add(_merchant, StringCase.Snake);
             request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
         }
 
@@ -301,7 +299,7 @@ namespace ICanPay.Alipay
             GatewayData.Remove("sign_type");
 
             return EncryptUtil.RSAVerifyData(GatewayData.ToUrl(false),
-                Notify.Sign, Merchant.AlipayPublicKey, Merchant.SignType);
+                Notify.Sign, _merchant.AlipayPublicKey, _merchant.SignType);
         }
 
         #endregion
