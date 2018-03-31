@@ -48,8 +48,7 @@ namespace ICanPay.Alipay
 
         protected override string[] NotifyVerifyParameter => new string[]
         {
-            Constant.APP_ID,Constant.VERSION, Constant.CHARSET,
-            Constant.TRADE_NO, Constant.SIGN, Constant.SIGN_TYPE
+            "app_id","version", "charset","trade_no", "sign","sign_type"
         };
 
         #endregion
@@ -199,8 +198,8 @@ namespace ICanPay.Alipay
         /// </summary>
         private bool ValidateNotifySign()
         {
-            GatewayData.Remove(Constant.SIGN);
-            GatewayData.Remove(Constant.SIGN_TYPE);
+            GatewayData.Remove("sign");
+            GatewayData.Remove("sign_type");
 
             return EncryptUtil.RSAVerifyData(GatewayData.ToUrl(false),
                 Notify.Sign, Merchant.AlipayPublicKey, Merchant.SignType);
@@ -225,8 +224,15 @@ namespace ICanPay.Alipay
 
         public TResponse NetExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
         {
-            //TODO:returnUrl requestUrl没有使用
             request.GatewayData.Add(Merchant, StringCase.Snake);
+            if (!string.IsNullOrEmpty(request.NotifyUrl))
+            {
+                request.GatewayData.Add("notify_url", request.NotifyUrl);
+            }
+            if (!string.IsNullOrEmpty(request.ReturnUrl))
+            {
+                request.GatewayData.Add("return_url", request.ReturnUrl);
+            }
             request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
 
             string body = null;

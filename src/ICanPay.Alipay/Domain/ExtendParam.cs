@@ -32,14 +32,14 @@ namespace ICanPay.Alipay.Domain
         /// 是否发起实名校验 T：发起 F：不发起
         /// </summary>
         [StringLength(1, ErrorMessage = "是否发起实名校验最大长度为1位")]
-        [ReName(Name = Constant.NEEDBUYERREALNAMED)]
+        [JsonProperty(PropertyName = "needBuyerRealnamed")]
         public string NeedBuyerRealnamed { get; set; }
 
         /// <summary>
         /// 账务备注 注：该字段显示在离线账单的账务备注中
         /// </summary>
         [StringLength(128, ErrorMessage = "账务备注最大长度为128位")]
-        [ReName(Name = Constant.TRANS_MEMO)]
+        [JsonProperty(PropertyName = "TRANS_MEMO")]
         public string TransMemo { get; set; }
     }
 }

@@ -300,31 +300,9 @@ namespace ICanPay.Core.Utils
         /// <returns></returns>
         public static byte[] Download(string url)
         {
-            if (string.IsNullOrEmpty(url))
+            using (WebClient webClient = new WebClient())
             {
-                return default(byte[]);
-            }
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            {
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    int count = (int)response.ContentLength;
-                    byte[] buffer = new byte[count];
-                    int offset = 0;
-                    int size = responseStream.Read(buffer, 0, count);
-
-                    while (size > 0)
-                    {
-                        offset += size;
-                        count -= size;
-                        size = responseStream.Read(buffer, offset, count);
-                    }
-
-                    return buffer;
-                }
+                return webClient.DownloadData(url);
             }
         }
 
@@ -335,7 +313,10 @@ namespace ICanPay.Core.Utils
         /// <returns></returns>
         public static async Task<byte[]> DownloadAsync(string url)
         {
-            return await Task.Run(() => Download(url));
+            using (WebClient webClient = new WebClient())
+            {
+                return await webClient.DownloadDataTaskAsync(url);
+            }
         }
 
         #endregion

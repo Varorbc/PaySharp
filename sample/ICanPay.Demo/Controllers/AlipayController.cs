@@ -188,9 +188,8 @@ namespace ICanPay.Demo.Controllers
                 BillType = bill_type
             });
 
-            //TODO:参数错误
             var response = _baseGateway.Execute(request);
-            return File(response.BillFile, "application/x-xls");
+            return File(response.BillFile, "application/zip");
         }
     }
 }
