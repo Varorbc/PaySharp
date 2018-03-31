@@ -6,6 +6,7 @@ using ICanPay.Core.Exceptions;
 using ICanPay.Core.Request;
 using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading;
@@ -140,7 +141,7 @@ namespace ICanPay.Alipay
             Task.Run(async () =>
             {
                 body = await HttpUtil
-                 .PostAsync(GatewayUrl + request.RequestUrl, request.GatewayData.ToUrl());
+                 .PostAsync(request.RequestUrl, request.GatewayData.ToUrl());
             })
             .GetAwaiter()
             .GetResult();
@@ -148,7 +149,7 @@ namespace ICanPay.Alipay
             var jObject = JObject.Parse(body);
             var jToken = jObject.First.First;
             string sign = jObject.Value<string>("sign");
-            if (!CheckSign(jToken.ToString(), sign))
+            if (!CheckSign(jToken.ToString(Formatting.None), sign))
             {
                 throw new GatewayException("签名验证失败");
             }
@@ -188,16 +189,16 @@ namespace ICanPay.Alipay
 
             if (barcodePayResponse.Code == "10000")
             {
-                barcodePayRequest.OnPaySucceed(new PaySucceedEventArgs(this));
+                barcodePayRequest.OnPaySucceed(barcodePayResponse, null);
                 return;
             }
 
             if (!string.IsNullOrEmpty(barcodePayResponse.TradeNo))
             {
-                bool status = false;
+                var queryResponse = new QueryResponse();
                 Task.Run(async () =>
                 {
-                    status = await PollQueryTradeStateAsync(
+                    queryResponse = await PollQueryTradeStateAsync(
                         barcodePayResponse.TradeNo,
                         barcodePayRequest.PollTime,
                         barcodePayRequest.PollCount);
@@ -205,26 +206,19 @@ namespace ICanPay.Alipay
                 .GetAwaiter()
                 .GetResult();
 
-                if (status)
+                if (queryResponse != null)
                 {
-                    //TODO:优化
-                    barcodePayRequest.OnPaySucceed(new PaySucceedEventArgs(this));
+                    barcodePayRequest.OnPaySucceed(queryResponse, null);
                     return;
                 }
                 else
                 {
-                    barcodePayRequest.OnPayFailed(new PayFailedEventArgs(this)
-                    {
-                        Message = "支付超时"
-                    });
+                    barcodePayRequest.OnPayFailed(null, "支付超时");
                     return;
                 }
             }
 
-            barcodePayRequest.OnPayFailed(new PayFailedEventArgs(this)
-            {
-                Message = barcodePayResponse.SubMessage
-            });
+            barcodePayRequest.OnPayFailed(barcodePayResponse, barcodePayResponse.SubMessage);
         }
 
         /// <summary>
@@ -234,7 +228,7 @@ namespace ICanPay.Alipay
         /// <param name="pollTime">轮询间隔</param>
         /// <param name="pollCount">轮询次数</param>
         /// <returns></returns>
-        private bool PollQueryTradeState(string tradeNo, int pollTime, int pollCount)
+        private QueryResponse PollQueryTradeState(string tradeNo, int pollTime, int pollCount)
         {
             for (int i = 0; i < pollCount; i++)
             {
@@ -247,7 +241,7 @@ namespace ICanPay.Alipay
                 var queryResponse = NetExecute(queryRequest);
                 if (queryResponse.TradeStatus == Constant.TRADE_SUCCESS)
                 {
-                    return true;
+                    return queryResponse;
                 }
             }
 
@@ -259,7 +253,7 @@ namespace ICanPay.Alipay
             });
             NetExecute(cancelRequest);
 
-            return false;
+            return null;
         }
 
         /// <summary>
@@ -269,7 +263,7 @@ namespace ICanPay.Alipay
         /// <param name="pollTime">轮询间隔</param>
         /// <param name="pollCount">轮询次数</param>
         /// <returns></returns>
-        private async Task<bool> PollQueryTradeStateAsync(string tradeNo, int pollTime, int pollCount)
+        private async Task<QueryResponse> PollQueryTradeStateAsync(string tradeNo, int pollTime, int pollCount)
         {
             return await Task.Run(() => PollQueryTradeState(tradeNo, pollTime, pollCount));
         }

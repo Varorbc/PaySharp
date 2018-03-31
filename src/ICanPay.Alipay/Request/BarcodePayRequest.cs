@@ -1,6 +1,6 @@
 ﻿using ICanPay.Alipay.Domain;
 using ICanPay.Alipay.Response;
-using ICanPay.Core;
+using ICanPay.Core.Response;
 using System;
 
 namespace ICanPay.Alipay.Request
@@ -25,23 +25,25 @@ namespace ICanPay.Alipay.Request
         /// <summary>
         /// 支付失败事件
         /// </summary>
-        /// <param name="e"></param>
-        internal void OnPayFailed(PayFailedEventArgs e) => PayFailed?.Invoke(this, e);
+        /// <param name="response">返回结果</param>
+        /// <param name="message">提示信息</param>
+        internal void OnPayFailed(IResponse response, string message) => PayFailed?.Invoke(response, message);
 
         /// <summary>
         /// 支付成功事件
         /// </summary>
-        /// <param name="e"></param>
-        internal void OnPaySucceed(PaySucceedEventArgs e) => PaySucceed?.Invoke(this, e);
+        /// <param name="response">返回结果</param>
+        /// <param name="message">提示信息</param>
+        internal void OnPaySucceed(IResponse response, string message) => PaySucceed?.Invoke(response, message);
 
         /// <summary>
         /// 网关同步返回的支付通知验证失败时触发
         /// </summary>
-        public event Action<object, PayFailedEventArgs> PayFailed;
+        public event Action<IResponse,string> PayFailed;
 
         /// <summary>
         /// 网关同步返回的支付通知验证成功时触发
         /// </summary>
-        public event Action<object, PaySucceedEventArgs> PaySucceed;
+        public event Action<IResponse, string> PaySucceed;
     }
 }

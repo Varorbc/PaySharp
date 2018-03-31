@@ -2,6 +2,7 @@
 using ICanPay.Alipay.Domain;
 using ICanPay.Alipay.Request;
 using ICanPay.Core;
+using ICanPay.Core.Response;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Text;
@@ -51,7 +52,23 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Scan(string out_trade_no, string subject, double total_amount, string body)
+        public IActionResult AppPay(string out_trade_no, string subject, double total_amount, string body)
+        {
+            var request = new AppPayRequest();
+            request.AddGatewayData(new AppPayModel()
+            {
+                Body = body,
+                TotalAmount = total_amount,
+                Subject = subject,
+                OutTradeNo = out_trade_no
+            });
+
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
+
+        [HttpPost]
+        public IActionResult ScanPay(string out_trade_no, string subject, double total_amount, string body)
         {
             var request = new ScanPayRequest();
             request.AddGatewayData(new ScanPayModel()
@@ -79,12 +96,33 @@ namespace ICanPay.Demo.Controllers
                 OutTradeNo = out_trade_no,
                 AuthCode = auth_code
             });
+            request.PaySucceed += BarcodePay_PaySucceed;
+            request.PayFailed += BarcodePay_PayFaild;
 
             var response = _baseGateway.Execute(request);
 
             return Json(response);
         }
 
+        /// <summary>
+        /// 支付成功事件
+        /// </summary>
+        /// <param name="response">返回结果</param>
+        /// <param name="message">提示信息</param>
+        private void BarcodePay_PaySucceed(IResponse response, string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 支付失败事件
+        /// </summary>
+        /// <param name="response">返回结果,可能是BarcodePayResponse/QueryResponse</param>
+        /// <param name="message">提示信息</param>
+        private void BarcodePay_PayFaild(IResponse response, string message)
+        {
+            throw new NotImplementedException();
+        }
 
         [HttpPost]
         public IActionResult Query(string out_trade_no, string trade_no)

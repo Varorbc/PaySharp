@@ -33,6 +33,8 @@
                 <ul>
                     <li><a href="#tabs-purchase-1">电脑网站支付</a></li>
                     <li><a href="#tabs-purchase-2">手机网站支付</a></li>
+                    <li><a href="#tabs-purchase-12">手机APP支付</a></li>
+                    <li><a href="#tabs-purchase-13">小程序支付</a></li>
                     <li><a href="#tabs-purchase-3">扫码支付</a></li>
                     <li><a href="#tabs-purchase-4">条码支付</a></li>
                     <li><a href="#tabs-purchase-5">交易查询</a></li>
@@ -102,8 +104,66 @@
                     </p>
                 </div>
 
+                <div id="tabs-purchase-12">
+                    <form class="api-form" asp-controller="Alipay" asp-action="AppPay" method="post" target="_blank">
+                        <p>
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                        </p>
+                        <p>
+                            <label>订单标题：</label>
+                            <input type="text" name="subject" value="支付宝手机APP支付测试">
+                        </p>
+                        <p>
+                            <label>总金额：</label>
+                            <input type="text" name="total_amount" value="0.01" title="单位为元，精确至小数点后2位。">
+                        </p>
+                        <p>
+                            <label>订单描述：</label>
+                            <input type="text" name="body">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://docs.open.alipay.com/204/105465/" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
+                <div id="tabs-purchase-13">
+                    <form class="api-form" asp-controller="Alipay" asp-action="AppPay" method="post" target="_blank">
+                        <p>
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                        </p>
+                        <p>
+                            <label>订单标题：</label>
+                            <input type="text" name="subject" value="支付宝小程序支付测试">
+                        </p>
+                        <p>
+                            <label>总金额：</label>
+                            <input type="text" name="total_amount" value="0.01" title="单位为元，精确至小数点后2位。">
+                        </p>
+                        <p>
+                            <label>订单描述：</label>
+                            <input type="text" name="body">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://docs.open.alipay.com/204/105465/" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
                 <div id="tabs-purchase-3">
-                    <form class="api-form" asp-controller="Alipay" asp-action="Scan" method="post" target="_blank">
+                    <form class="api-form" asp-controller="Alipay" asp-action="ScanPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
