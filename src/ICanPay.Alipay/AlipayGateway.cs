@@ -1,10 +1,12 @@
 ﻿using ICanPay.Alipay.Domain;
 using ICanPay.Alipay.Request;
+using ICanPay.Alipay.Response;
 using ICanPay.Core;
 using ICanPay.Core.Exceptions;
 using ICanPay.Core.Request;
 using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -179,6 +181,21 @@ namespace ICanPay.Alipay
             return result;
         }
 
+        private void AddMerchant<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
+        {
+            request.RequestUrl = GatewayUrl + request.RequestUrl;
+            if (!string.IsNullOrEmpty(request.NotifyUrl))
+            {
+                request.GatewayData.Add("notify_url", request.NotifyUrl);
+            }
+            if (!string.IsNullOrEmpty(request.ReturnUrl))
+            {
+                request.GatewayData.Add("return_url", request.ReturnUrl);
+            }
+            request.GatewayData.Add(Merchant, StringCase.Snake);
+            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
+        }
+
         /// <summary>
         /// 是否是已成功支付的支付通知
         /// </summary>
@@ -224,16 +241,7 @@ namespace ICanPay.Alipay
 
         public TResponse NetExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
         {
-            request.GatewayData.Add(Merchant, StringCase.Snake);
-            if (!string.IsNullOrEmpty(request.NotifyUrl))
-            {
-                request.GatewayData.Add("notify_url", request.NotifyUrl);
-            }
-            if (!string.IsNullOrEmpty(request.ReturnUrl))
-            {
-                request.GatewayData.Add("return_url", request.ReturnUrl);
-            }
-            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
+            AddMerchant(request);
 
             string body = null;
             Task.Run(async () =>
@@ -244,30 +252,23 @@ namespace ICanPay.Alipay
             .GetAwaiter()
             .GetResult();
 
-            var gatewayData = new GatewayData();
-            gatewayData.FromJson(body);
-            string sign = gatewayData.GetStringValue(Constant.SIGN);
-            gatewayData.Remove(Constant.SIGN);
-            string data = gatewayData[0].Value.ToString();
-
-            if (!CheckSign(data, sign))
+            var jObject = JObject.Parse(body);
+            var jToken = jObject.First.First;
+            string sign = jObject.Value<string>("sign");
+            if (!CheckSign(jToken.ToString(), sign))
             {
                 throw new GatewayException("签名验证失败");
             }
 
-            gatewayData.FromJson(data);
-            gatewayData.Add(Constant.SIGN, sign);
-            gatewayData.Add(BODY, body);
-
-            //TODO:待优化,条码支付，对象转换失败
-            return gatewayData.ToObject<TResponse>(StringCase.Snake);
+            var baseResponse = (BaseResponse)jToken.ToObject(typeof(TResponse));
+            baseResponse.Body = body;
+            baseResponse.Sign = sign;
+            return (TResponse)(object)baseResponse;
         }
 
         public TResponse SdkExecute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
         {
-            request.RequestUrl = GatewayUrl + request.RequestUrl;
-            request.GatewayData.Add(Merchant, StringCase.Snake);
-            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
+            AddMerchant(request);
 
             return (TResponse)Activator.CreateInstance(typeof(TResponse), request);
         }
