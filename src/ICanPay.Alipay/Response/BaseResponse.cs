@@ -41,6 +41,6 @@ namespace ICanPay.Alipay.Response
         /// <summary>
         /// 原始值
         /// </summary>
-        public string Body { get; set; }
+        public string Raw { get; set; }
     }
 }

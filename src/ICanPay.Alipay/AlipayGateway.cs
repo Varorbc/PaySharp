@@ -137,16 +137,16 @@ namespace ICanPay.Alipay
         {
             AddMerchant(request);
 
-            string body = null;
+            string result = null;
             Task.Run(async () =>
             {
-                body = await HttpUtil
+                result = await HttpUtil
                  .PostAsync(request.RequestUrl, request.GatewayData.ToUrl());
             })
             .GetAwaiter()
             .GetResult();
 
-            var jObject = JObject.Parse(body);
+            var jObject = JObject.Parse(result);
             var jToken = jObject.First.First;
             string sign = jObject.Value<string>("sign");
             if (!CheckSign(jToken.ToString(Formatting.None), sign))
@@ -155,7 +155,7 @@ namespace ICanPay.Alipay
             }
 
             var baseResponse = (BaseResponse)jToken.ToObject(typeof(TResponse));
-            baseResponse.Body = body;
+            baseResponse.Raw = result;
             baseResponse.Sign = sign;
             return (TResponse)(object)baseResponse;
         }
