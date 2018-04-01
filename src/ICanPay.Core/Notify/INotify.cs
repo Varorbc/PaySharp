@@ -3,7 +3,7 @@
     /// <summary>
     /// 通知接口
     /// </summary>
-    public interface  INotify
+    public interface INotify
     {
     }
 }

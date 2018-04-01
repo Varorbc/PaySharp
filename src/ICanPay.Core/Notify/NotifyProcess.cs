@@ -19,6 +19,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public static BaseGateway GetGateway(IGateways gateways)
         {
+            //TODO:优化
             var gatewayData = ReadNotifyData();
             BaseGateway gateway = null;
 
