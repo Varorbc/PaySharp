@@ -14,15 +14,11 @@ namespace ICanPay.Wechatpay
     /// <summary>
     /// 微信支付网关
     /// </summary>
-    public sealed class WechatpayGateway : BaseGateway,
-        IScanPayment, IAppPayment, IUrlPayment, IPublicPayment, IAppletPayment, IBarcodePayment,
-        IQuery, ICancel, IClose, IBillDownload, IRefund, IRefundQuery
+    public sealed class WechatpayGateway : BaseGateway
     {
-
         #region 私有字段
 
         private readonly Merchant _merchant;
-        private const string ACCESSTOKENURL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type=authorization_code";
 
         #endregion
 
@@ -44,52 +40,22 @@ namespace ICanPay.Wechatpay
 
         public override string GatewayUrl { get; set; } = "https://api.mch.weixin.qq.com/";
 
-        private string UnifiedOrderUrl => GatewayUrl + "pay/unifiedorder";
-
-        private string QueryUrl => GatewayUrl + "pay/orderquery";
-
-        private string CancelUrl => GatewayUrl + "secapi/pay/reverse";
-
-        private string CloseUrl => GatewayUrl + "pay/closeorder";
-
-        private string RefundUrl => GatewayUrl + "secapi/pay/refund";
-
-        private string RefundQueryUrl => GatewayUrl + "pay/refundquery";
-
-        private string DownloadBillUrl => GatewayUrl + "pay/downloadbill";
-
-        private string ReportUrl => GatewayUrl + "payitil/report";
-
-        private string BatchQueryCommentUrl => GatewayUrl + "billcommentsp/batchquerycomment";
-
-        private string BarcodeUrl => GatewayUrl + "pay/micropay";
-
-        private string AuthCodeToOpenIdUrl => GatewayUrl + "tools/authcodetoopenid";
-
-        private string RequestUrl { get; set; }
-
         public new Merchant Merchant => _merchant;
-
-        public new Order Order
-        {
-            get => (Order)base.Order;
-            set => base.Order = value;
-        }
 
         public new Notify Notify => (Notify)base.Notify;
 
         protected override bool IsSuccessPay => Notify.ResultCode.ToLower() == SUCCESS;
 
-        protected override bool IsWaitPay => Notify.TradeState.ToLower() == Constant.USERPAYING;
-
         protected override string[] NotifyVerifyParameter => new string[]
-        { Constant.APPID, Constant.RETURN_CODE, Constant.MCH_ID, Constant.NONCE_STR, Constant.RESULT_CODE };
+        {
+            "appid", "return_code", "mch_id", "nonce_str", "result_code"
+        };
 
         #endregion
 
         #region 方法
 
-        #region 扫码支付
+        /*#region 扫码支付
 
         public string BuildScanPayment()
         {
@@ -389,7 +355,7 @@ namespace ICanPay.Wechatpay
 
             Commit();
 
-            string result = GatewayData.GetOriginalResult();
+            string result = GatewayData.Raw;
 
             return CreateCsv(result);
         }
@@ -415,7 +381,7 @@ namespace ICanPay.Wechatpay
             return fileStream;
         }
 
-        #endregion
+        #endregion*/
 
         protected override async Task<bool> ValidateNotifyAsync()
         {
@@ -429,7 +395,7 @@ namespace ICanPay.Wechatpay
             return false;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// 初始化订单参数
         /// </summary>
         private void InitOrderParameter()
@@ -523,7 +489,7 @@ namespace ICanPay.Wechatpay
             GatewayData.FromXml(result);
             base.Notify = GatewayData.ToObject<Notify>(StringCase.Snake);
             IsSuccessReturn();
-        }
+        }*/
 
         /// <summary>
         /// 获得签名
@@ -561,7 +527,7 @@ namespace ICanPay.Wechatpay
             return false;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// 提交请求
         /// </summary>
         /// <param name="isCert">是否添加证书</param>
@@ -592,7 +558,7 @@ namespace ICanPay.Wechatpay
             }
 
             return true;
-        }
+        }*/
 
         protected override void WriteSuccessFlag()
         {
@@ -606,12 +572,17 @@ namespace ICanPay.Wechatpay
             HttpUtil.Write(GatewayData.ToXml());
         }
 
-        public override T SdkExecute<T>(Request<T> request)
+        public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
             throw new NotImplementedException();
         }
 
-        public override T Execute<T>(Request<T> request)
+        protected override string BuildSign(GatewayData gatewayData)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool CheckSign(string data, string sign)
         {
             throw new NotImplementedException();
         }
