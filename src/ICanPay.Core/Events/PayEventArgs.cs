@@ -8,7 +8,6 @@ namespace ICanPay.Core
     /// </summary>
     public abstract class PayEventArgs : EventArgs
     {
-
         #region 私有字段
 
         protected BaseGateway _gateway;

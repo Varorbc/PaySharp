@@ -1,12 +1,10 @@
-﻿
-namespace ICanPay.Core
+﻿namespace ICanPay.Core
 {
     /// <summary>
     /// 支付失败网关事件数据
     /// </summary>
     public class PayFailedEventArgs : PayEventArgs
     {
-
         #region 构造函数
 
         /// <summary>

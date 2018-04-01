@@ -5,7 +5,6 @@
     /// </summary>
     public interface IMerchant
     {
-
         /// <summary>
         /// 应用ID
         /// </summary>

@@ -1,12 +1,10 @@
-﻿
-namespace ICanPay.Core
+﻿namespace ICanPay.Core
 {
     /// <summary>
     /// 支付成功网关事件数据
     /// </summary>
     public class PaySucceedEventArgs : PayEventArgs
     {
-
         #region 构造函数
 
         /// <summary>

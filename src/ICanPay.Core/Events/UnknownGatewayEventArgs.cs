@@ -1,12 +1,10 @@
-﻿
-namespace ICanPay.Core
+﻿namespace ICanPay.Core
 {
     /// <summary>
     /// 未知网关事件数据
     /// </summary>
     public class UnknownGatewayEventArgs : PayEventArgs
     {
-
         #region 构造函数
 
         /// <summary>
@@ -19,6 +17,5 @@ namespace ICanPay.Core
         }
 
         #endregion
-
     }
 }

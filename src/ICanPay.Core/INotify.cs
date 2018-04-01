@@ -1,5 +1,4 @@
-﻿
-namespace ICanPay.Core
+﻿namespace ICanPay.Core
 {
     /// <summary>
     /// 通知接口
