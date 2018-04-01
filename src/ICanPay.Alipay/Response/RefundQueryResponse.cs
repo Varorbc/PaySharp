@@ -5,6 +5,16 @@ namespace ICanPay.Alipay.Response
     public class RefundQueryResponse : BaseResponse
     {
         /// <summary>
+        /// 支付宝交易号
+        /// </summary>
+        public string TradeNo { get; set; }
+
+        /// <summary>
+        /// 商户订单号
+        /// </summary>
+        public string OutTradeNo { get; set; }
+
+        /// <summary>
         /// 本笔退款对应的退款请求号
         /// </summary>
         [JsonProperty(Constant.OUT_REQUEST_NO)]

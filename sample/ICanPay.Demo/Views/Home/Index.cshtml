@@ -40,6 +40,7 @@
                     <li><a href="#tabs-purchase-5">交易查询</a></li>
                     <li><a href="#tabs-purchase-6">交易退款</a></li>
                     <li><a href="#tabs-purchase-7">退款查询</a></li>
+                    <li><a href="#tabs-purchase-14">交易撤销</a></li>
                     <li><a href="#tabs-purchase-8">交易关闭</a></li>
                     <li><a href="#tabs-purchase-9">单笔转账</a></li>
                     <li><a href="#tabs-purchase-10">转账查询</a></li>
@@ -300,6 +301,27 @@
                     <hr />
                     <p class="faq">
                         <a href="https://docs.open.alipay.com/api_1/alipay.trade.fastpay.refund.query" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
+                <div id="tabs-purchase-14">
+                    <form class="api-form" asp-controller="Alipay" asp-action="Cancel" method="post" target="_blank">
+                        <p>
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no">
+                        </p>
+                        <p>
+                            <label>支付宝订单号：</label>
+                            <input type="text" name="trade_no">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://docs.open.alipay.com/api_1/alipay.trade.cancel/" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
 

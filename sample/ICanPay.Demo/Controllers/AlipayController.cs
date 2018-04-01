@@ -171,6 +171,20 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
+        public IActionResult Cancel(string out_trade_no, string trade_no)
+        {
+            var request = new CancelRequest();
+            request.AddGatewayData(new CancelModel()
+            {
+                TradeNo = trade_no,
+                OutTradeNo = out_trade_no
+            });
+
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
+
+        [HttpPost]
         public IActionResult Close(string out_trade_no, string trade_no)
         {
             var request = new CloseRequest();

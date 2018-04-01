@@ -7,6 +7,16 @@ namespace ICanPay.Alipay.Response
     public class BarcodePayResponse : BaseResponse
     {
         /// <summary>
+        /// 支付宝交易号
+        /// </summary>
+        public string TradeNo { get; set; }
+
+        /// <summary>
+        /// 商户订单号
+        /// </summary>
+        public string OutTradeNo { get; set; }
+
+        /// <summary>
         /// 买家支付宝账号
         /// </summary>
         public string BuyerLogonId { get; set; }
