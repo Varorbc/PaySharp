@@ -1,4 +1,5 @@
 ﻿using ICanPay.Core.Utils;
+using System.Threading.Tasks;
 
 namespace ICanPay.Alipay.Response
 {
@@ -10,20 +11,31 @@ namespace ICanPay.Alipay.Response
         public string BillDownloadUrl { get; set; }
 
         /// <summary>
-        /// 账单文件
+        /// 获取账单文件
         /// </summary>
-        public byte[] BillFile
+        public byte[] GetBillFile()
         {
-            get
+            if (_billFile == null)
             {
-                if (_billFile == null)
-                {
-                    _billFile = HttpUtil.Download(BillDownloadUrl);
-                }
-
-                return _billFile;
+                _billFile = HttpUtil.Download(BillDownloadUrl);
             }
+
+            return _billFile;
         }
+
+        /// <summary>
+        /// 获取账单文件
+        /// </summary>
+        public async Task<byte[]> GetBillFileAsync()
+        {
+            if (_billFile == null)
+            {
+                _billFile = await HttpUtil.DownloadAsync(BillDownloadUrl);
+            }
+
+            return _billFile;
+        }
+
         private byte[] _billFile;
     }
 }

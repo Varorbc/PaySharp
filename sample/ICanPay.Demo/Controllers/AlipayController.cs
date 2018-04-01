@@ -217,7 +217,7 @@ namespace ICanPay.Demo.Controllers
         //}
 
         [HttpPost]
-        public IActionResult BillDownload(string bill_date, string bill_type)
+        public async Task<IActionResult> BillDownload(string bill_date, string bill_type)
         {
             var request = new BillDownloadRequest();
             request.AddGatewayData(new BillDownloadModel()
@@ -227,7 +227,7 @@ namespace ICanPay.Demo.Controllers
             });
 
             var response = _baseGateway.Execute(request);
-            return File(response.BillFile, "application/zip");
+            return File(await response.GetBillFileAsync(), "application/zip");
         }
     }
 }
