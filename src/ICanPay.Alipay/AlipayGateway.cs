@@ -45,7 +45,7 @@ namespace ICanPay.Alipay
 
         public new Notify Notify => (Notify)base.Notify;
 
-        protected override bool IsSuccessPay => Notify.TradeStatus == Constant.TRADE_SUCCESS;
+        protected override bool IsSuccessPay => Notify.TradeStatus == "TRADE_SUCCESS";
 
         protected override string[] NotifyVerifyParameter => new string[]
         {
@@ -239,7 +239,7 @@ namespace ICanPay.Alipay
                     TradeNo = tradeNo
                 });
                 var queryResponse = NetExecute(queryRequest);
-                if (queryResponse.TradeStatus == Constant.TRADE_SUCCESS)
+                if (IsSuccessPay)
                 {
                     return queryResponse;
                 }
