@@ -9,8 +9,17 @@ namespace ICanPay.Core
     /// </summary>
     internal static class NotifyProcess
     {
+        /// <summary>
+        /// 是否是Xml格式数据
+        /// </summary>
+        /// <returns></returns>
+        private static bool IsXmlData => HttpUtil.ContentType == "text/xml" || HttpUtil.ContentType == "application/xml";
 
-        #region 方法
+        /// <summary>
+        /// 是否是GET请求
+        /// </summary>
+        /// <returns></returns>
+        private static bool IsGetRequest => HttpUtil.RequestType == "GET";
 
         /// <summary>
         /// 获取网关
@@ -19,7 +28,6 @@ namespace ICanPay.Core
         /// <returns></returns>
         public static BaseGateway GetGateway(IGateways gateways)
         {
-            //TODO:优化
             var gatewayData = ReadNotifyData();
             BaseGateway gateway = null;
 
@@ -106,20 +114,5 @@ namespace ICanPay.Core
 
             return gatewayData;
         }
-
-        /// <summary>
-        /// 是否是Xml格式数据
-        /// </summary>
-        /// <returns></returns>
-        private static bool IsXmlData => HttpUtil.ContentType == "text/xml" || HttpUtil.ContentType == "application/xml";
-
-        /// <summary>
-        /// 是否是GET请求
-        /// </summary>
-        /// <returns></returns>
-        private static bool IsGetRequest => HttpUtil.RequestType == "GET";
-
-        #endregion
-
     }
 }

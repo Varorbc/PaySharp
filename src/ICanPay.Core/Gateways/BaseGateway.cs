@@ -29,7 +29,6 @@ namespace ICanPay.Core
         /// 构造函数
         /// </summary>
         protected BaseGateway()
-            : this(new GatewayData())
         {
         }
 
@@ -38,29 +37,8 @@ namespace ICanPay.Core
         /// </summary>
         /// <param name="merchant">商户数据</param>
         protected BaseGateway(IMerchant merchant)
-            : this(new GatewayData())
         {
             Merchant = merchant;
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="merchant">商户数据</param>
-        /// <param name="gatewayData">网关数据</param>
-        protected BaseGateway(IMerchant merchant, GatewayData gatewayData)
-        {
-            Merchant = merchant;
-            GatewayData = gatewayData;
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="gatewayData">网关数据</param>
-        protected BaseGateway(GatewayData gatewayData)
-        {
-            GatewayData = gatewayData;
         }
 
         #endregion
@@ -101,8 +79,6 @@ namespace ICanPay.Core
         #endregion
 
         #region 方法
-
-        #region 抽象方法
 
         /// <summary>
         /// 检验网关返回的通知，确认订单是否支付成功
@@ -148,8 +124,6 @@ namespace ICanPay.Core
         /// <param name="sign">签名</param>
         /// <returns></returns>
         protected abstract bool CheckSign(string data, string sign);
-
-        #endregion
 
         #endregion
     }

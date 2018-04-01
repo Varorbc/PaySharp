@@ -43,6 +43,11 @@ namespace ICanPay.Core
 
         public int Count => _values.Count;
 
+        /// <summary>
+        /// 原始值
+        /// </summary>
+        public string Raw { get; set; }
+
         #endregion
 
         #region 构造函数
@@ -76,6 +81,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public bool Add(string key, object value)
         {
+            Raw = null;
             if (string.IsNullOrEmpty(key))
             {
                 throw new ArgumentNullException("key", "参数名不能为空");
@@ -108,6 +114,7 @@ namespace ICanPay.Core
         {
             ValidateUtil.Validate(obj, null);
 
+            Raw = null;
             var type = obj.GetType();
             var properties = type.GetProperties();
             var fields = type.GetFields();
@@ -332,19 +339,25 @@ namespace ICanPay.Core
         /// <returns></returns>
         public void FromXml(string xml)
         {
-
-            Clear();
-            if (!string.IsNullOrEmpty(xml))
+            try
             {
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(xml);
-                var xmlNode = xmlDoc.FirstChild;
-                var nodes = xmlNode.ChildNodes;
-                foreach (var item in nodes)
+                Clear();
+                if (!string.IsNullOrEmpty(xml))
                 {
-                    var xe = (XmlElement)item;
-                    Add(xe.Name, xe.InnerText);
+                    var xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(xml);
+                    var xmlNode = xmlDoc.FirstChild;
+                    var nodes = xmlNode.ChildNodes;
+                    foreach (var item in nodes)
+                    {
+                        var xe = (XmlElement)item;
+                        Add(xe.Name, xe.InnerText);
+                    }
                 }
+            }
+            finally
+            {
+                Raw = xml;
             }
         }
 
@@ -368,24 +381,31 @@ namespace ICanPay.Core
         /// <returns></returns>
         public void FromUrl(string url, bool isUrlDecode = true)
         {
-            Clear();
-            if (!string.IsNullOrEmpty(url))
+            try
             {
-                int index = url.IndexOf('?');
-
-                if (index == 0)
+                Clear();
+                if (!string.IsNullOrEmpty(url))
                 {
-                    url = url.Substring(index + 1);
-                }
+                    int index = url.IndexOf('?');
 
-                var regex = new Regex(@"(^|&)?(\w+)=([^&]+)(&|$)?", RegexOptions.Compiled);
-                var mc = regex.Matches(url);
+                    if (index == 0)
+                    {
+                        url = url.Substring(index + 1);
+                    }
 
-                foreach (Match item in mc)
-                {
-                    string value = item.Result("$3");
-                    Add(item.Result("$2"), isUrlDecode ? WebUtility.UrlDecode(value) : value);
+                    var regex = new Regex(@"(^|&)?(\w+)=([^&]+)(&|$)?", RegexOptions.Compiled);
+                    var mc = regex.Matches(url);
+
+                    foreach (Match item in mc)
+                    {
+                        string value = item.Result("$3");
+                        Add(item.Result("$2"), isUrlDecode ? WebUtility.UrlDecode(value) : value);
+                    }
                 }
+            }
+            finally
+            {
+                Raw = url;
             }
         }
 
@@ -464,21 +484,28 @@ namespace ICanPay.Core
         /// <returns></returns>
         public void FromJson(string json)
         {
-            Clear();
-            if (!string.IsNullOrEmpty(json))
+            try
             {
-                var jObject = JObject.Parse(json);
-                foreach (var item in jObject)
+                Clear();
+                if (!string.IsNullOrEmpty(json))
                 {
-                    if (item.Value.Type == JTokenType.Object)
+                    var jObject = JObject.Parse(json);
+                    foreach (var item in jObject)
                     {
-                        Add(item.Key, item.Value.ToString(Newtonsoft.Json.Formatting.None));
-                    }
-                    else
-                    {
-                        Add(item.Key, item.Value.ToString());
+                        if (item.Value.Type == JTokenType.Object)
+                        {
+                            Add(item.Key, item.Value.ToString(Newtonsoft.Json.Formatting.None));
+                        }
+                        else
+                        {
+                            Add(item.Key, item.Value.ToString());
+                        }
                     }
                 }
+            }
+            finally
+            {
+                Raw = json;
             }
         }
 
