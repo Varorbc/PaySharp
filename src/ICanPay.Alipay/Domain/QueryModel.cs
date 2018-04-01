@@ -25,7 +25,7 @@ namespace ICanPay.Alipay.Domain
         {
             if (string.IsNullOrEmpty(OutTradeNo) && string.IsNullOrEmpty(TradeNo))
             {
-                yield return new ValidationResult("商户订单号,和支付宝交易号不能同时为空");
+                yield return new ValidationResult("商户订单号和支付宝交易号不能同时为空");
             }
 
             yield return ValidationResult.Success;

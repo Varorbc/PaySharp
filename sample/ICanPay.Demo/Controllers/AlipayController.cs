@@ -198,37 +198,36 @@ namespace ICanPay.Demo.Controllers
             return Json(response);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Trans(string out_biz_no, string payee_account, string payee_type, string amount, string remark)
-        //{
-        //    var model = new AlipayFundTransToaccountTransferModel()
-        //    {
-        //        OutBizNo = out_biz_no,
-        //        PayeeType = payee_type,
-        //        PayeeAccount = payee_account,
-        //        Amount = amount,
-        //        Remark = remark
-        //    };
-        //    var req = new AlipayFundTransToaccountTransferRequest();
-        //    req.SetBizModel(model);
-        //    var response = await _client.ExecuteAsync(req);
-        //    return Ok(response.Body);
-        //}
+        [HttpPost]
+        public IActionResult Transfer(string out_trade_no, string payee_account, string payee_type, double amount, string remark)
+        {
+            var request = new TransferRequest();
+            request.AddGatewayData(new TransferModel()
+            {
+                OutTradeNo = out_trade_no,
+                PayeeAccount = payee_account,
+                Amount = amount,
+                Remark = remark,
+                PayeeType = payee_type
+            });
 
-        //[HttpPost]
-        //public async Task<IActionResult> TransQuery(string out_biz_no, string order_id)
-        //{
-        //    var model = new AlipayFundTransOrderQueryModel()
-        //    {
-        //        OutBizNo = out_biz_no,
-        //        OrderId = order_id,
-        //    };
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
 
-        //    var req = new AlipayFundTransOrderQueryRequest();
-        //    req.SetBizModel(model);
-        //    var response = await _client.ExecuteAsync(req);
-        //    return Ok(response.Body);
-        //}
+        [HttpPost]
+        public IActionResult TransferQuery(string out_trade_no, string trade_no)
+        {
+            var request = new TransferQueryRequest();
+            request.AddGatewayData(new TransferQueryModel()
+            {
+                TradeNo = trade_no,
+                OutTradeNo = out_trade_no
+            });
+
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
 
         [HttpPost]
         public async Task<IActionResult> BillDownload(string bill_date, string bill_type)

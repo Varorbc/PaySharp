@@ -347,25 +347,25 @@
                 </div>
 
                 <div id="tabs-purchase-9">
-                    <form class="api-form" asp-controller="Alipay" asp-action="Trans" method="post" target="_blank">
+                    <form class="api-form" asp-controller="Alipay" asp-action="Transfer" method="post" target="_blank">
                         <p>
-                            <label>out_biz_no：</label>
-                            <input type="text" name="out_biz_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>payee_type：</label>
-                            <input type="text" name="payee_type" value="ALIPAY_LOGONID">
+                            <label>收款方账户类型：</label>
+                            <input type="text" name="payee_type" value="ALIPAY_LOGONID" title="1、ALIPAY_USERID：支付宝账号对应的支付宝唯一用户号。以2088开头的16位纯数字组成。 2、ALIPAY_LOGONID：支付宝登录号，支持邮箱和手机号格式。">
                         </p>
                         <p>
-                            <label>payee_account：</label>
-                            <input type="text" name="payee_account">
+                            <label>收款方账户：</label>
+                            <input type="text" name="payee_account" value="lmgnst2438@sandbox.com">
                         </p>
                         <p>
-                            <label>amount：</label>
+                            <label>转账金额：</label>
                             <input type="text" name="amount">
                         </p>
                         <p>
-                            <label>remark：</label>
+                            <label>备注：</label>
                             <input type="text" name="remark">
                         </p>
                         <p>
@@ -380,14 +380,14 @@
                 </div>
 
                 <div id="tabs-purchase-10">
-                    <form class="api-form" asp-controller="Alipay" asp-action="TransQuery" method="post" target="_blank">
+                    <form class="api-form" asp-controller="Alipay" asp-action="TransferQuery" method="post" target="_blank">
                         <p>
-                            <label>out_biz_no：</label>
-                            <input type="text" name="out_biz_no">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no">
                         </p>
                         <p>
-                            <label>order_id：</label>
-                            <input type="text" name="order_id">
+                            <label>支付宝订单号：</label>
+                            <input type="text" name="trade_no">
                         </p>
                         <p>
                             <label>&nbsp;</label>
