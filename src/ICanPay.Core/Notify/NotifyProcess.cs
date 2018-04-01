@@ -84,10 +84,11 @@ namespace ICanPay.Core
             {
                 if (IsXmlData)
                 {
-                    var reader = new StreamReader(HttpUtil.Body);
-                    string xmlData = reader.ReadToEnd();
-                    reader.Dispose();
-                    gatewayData.FromXml(xmlData);
+                    using (var reader = new StreamReader(HttpUtil.Body))
+                    {
+                        string xmlData = reader.ReadToEnd();
+                        gatewayData.FromXml(xmlData);
+                    }
                 }
                 else
                 {
