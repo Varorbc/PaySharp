@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Wechatpay.Domain
 {
-    public class PublicPayModel : BasePayModel
+    public class WapPayModel : BasePayModel
     {
-        public PublicPayModel()
-            : base("JSAPI")
+        public WapPayModel()
+            : base("MWEB")
         {
         }
 
@@ -27,13 +27,13 @@ namespace ICanPay.Wechatpay.Domain
         /// 用户标识，此参数为微信用户在商户对应appid下的唯一标识。
         /// </summary>
         [ReName(Name = Constant.OPENID)]
-        [Required(ErrorMessage = "请设置用户标识")]
         public string OpenId { get; set; }
 
         /// <summary>
-        /// 场景信息,该字段用于上报场景信息，目前支持上报实际门店信息。该字段为JSON对象数据，对象格式为{"store_info":{"id": "门店ID","name": "名称","area_code": "编码","address": "地址" }}
+        /// 场景信息,该字段用于上报支付的场景信息,针对H5支付有以下三种场景,请根据对应场景上报
         /// </summary>
         [StringLength(256, ErrorMessage = "场景信息最大长度为256位")]
+        [Required(ErrorMessage ="请设置场景信息")]
         public string SceneInfo { get; set; }
     }
 }

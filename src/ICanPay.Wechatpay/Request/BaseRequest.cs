@@ -6,6 +6,11 @@ namespace ICanPay.Wechatpay.Request
 {
     public class BaseRequest<TModel, TResponse> : Request<TModel, TResponse> where TResponse : IResponse
     {
+        public BaseRequest()
+        {
+            RequestUrl = "/pay/unifiedorder";
+        }
+
         public override void AddGatewayData(TModel model)
         {
             base.AddGatewayData(model);

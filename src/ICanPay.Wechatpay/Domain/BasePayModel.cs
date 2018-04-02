@@ -96,11 +96,5 @@ namespace ICanPay.Wechatpay.Domain
         /// </summary>
         [StringLength(32, ErrorMessage = "指定支付方式最大长度为32位")]
         public string LimitPay { get; set; }
-
-        /// <summary>
-        /// 场景信息,该字段用于上报场景信息，目前支持上报实际门店信息。该字段为JSON对象数据，对象格式为{"store_info":{"id": "门店ID","name": "名称","area_code": "编码","address": "地址" }}
-        /// </summary>
-        [StringLength(256, ErrorMessage = "场景信息最大长度为256位")]
-        public string SceneInfo { get; set; }
     }
 }

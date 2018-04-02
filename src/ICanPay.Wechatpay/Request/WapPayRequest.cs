@@ -3,7 +3,7 @@ using ICanPay.Wechatpay.Response;
 
 namespace ICanPay.Wechatpay.Request
 {
-    public class PublicPayRequest : BaseRequest<PublicPayModel, PublicPayResponse>
+    public class WapPayRequest : BaseRequest<WapPayModel, WapPayResponse>
     {
     }
 }

@@ -52,39 +52,41 @@ namespace ICanPay.Demo.Controllers
             return Json(response);
         }
 
-        /*[HttpPost]
-        public IActionResult WebPay(string out_trade_no, string subject, double total_amount, string body)
+        [HttpPost]
+        public IActionResult AppletPay(string out_trade_no, int total_amount, string body, string open_id, string spbill_create_ip)
         {
-            var request = new WebPayRequest();
-            request.AddGatewayData(new WebPayModel()
+            var request = new AppletPayRequest();
+            request.AddGatewayData(new AppletPayModel()
             {
                 Body = body,
+                OutTradeNo = out_trade_no,
+                SpbillCreateIp = spbill_create_ip,
                 TotalAmount = total_amount,
-                Subject = subject,
-                OutTradeNo = out_trade_no
+                OpenId = open_id
             });
 
             var response = _baseGateway.Execute(request);
-            return Content(response.Html, "text/html", Encoding.UTF8);
+            return Json(response);
         }
 
         [HttpPost]
-        public IActionResult WapPay(string out_trade_no, string subject, double total_amount, string body)
+        public IActionResult WapPay(string out_trade_no, int total_amount, string body, string spbill_create_ip, string scene_info)
         {
             var request = new WapPayRequest();
             request.AddGatewayData(new WapPayModel()
             {
                 Body = body,
                 TotalAmount = total_amount,
-                Subject = subject,
-                OutTradeNo = out_trade_no
+                OutTradeNo = out_trade_no,
+                SpbillCreateIp = spbill_create_ip,
+                SceneInfo = scene_info
             });
 
             var response = _baseGateway.Execute(request);
-            return Redirect(response.Url);
+            return Json(response);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public IActionResult ScanPay(string out_trade_no, string subject, double total_amount, string body)
         {
             var request = new ScanPayRequest();
