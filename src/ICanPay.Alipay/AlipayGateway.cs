@@ -114,6 +114,7 @@ namespace ICanPay.Alipay
         private void AddMerchant<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
         {
             request.RequestUrl = GatewayUrl + request.RequestUrl;
+            request.GatewayData.Add(_merchant, StringCase.Snake);
             if (!string.IsNullOrEmpty(request.NotifyUrl))
             {
                 request.GatewayData.Add("notify_url", request.NotifyUrl);
@@ -122,7 +123,6 @@ namespace ICanPay.Alipay
             {
                 request.GatewayData.Add("return_url", request.ReturnUrl);
             }
-            request.GatewayData.Add(_merchant, StringCase.Snake);
             request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
         }
 
@@ -177,7 +177,7 @@ namespace ICanPay.Alipay
         #region 条码支付
 
         /// <summary>
-        /// 条码执行
+        /// 条码执行 TODO:仿照微信公众号
         /// </summary>
         /// <typeparam name="TModel"></typeparam>
         /// <typeparam name="TResponse"></typeparam>
