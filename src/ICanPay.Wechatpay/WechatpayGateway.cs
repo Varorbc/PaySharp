@@ -1,12 +1,10 @@
 ﻿using ICanPay.Core;
 using ICanPay.Core.Exceptions;
 using ICanPay.Core.Request;
+using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
+using ICanPay.Wechatpay.Response;
 using System;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ICanPay.Wechatpay
@@ -38,7 +36,7 @@ namespace ICanPay.Wechatpay
 
         #region 属性
 
-        public override string GatewayUrl { get; set; } = "https://api.mch.weixin.qq.com/";
+        public override string GatewayUrl { get; set; } = "https://api.mch.weixin.qq.com";
 
         public new Merchant Merchant => _merchant;
 
@@ -574,12 +572,53 @@ namespace ICanPay.Wechatpay
 
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
-            throw new NotImplementedException();
+            AddMerchant(request);
+
+            string result = null;
+            Task.Run(async () =>
+            {
+                result = await HttpUtil
+                 .PostAsync(request.RequestUrl, request.GatewayData.ToXml());
+            })
+            .GetAwaiter()
+            .GetResult();
+
+            var gatewayData = new GatewayData();
+            gatewayData.FromXml(result);
+
+            var baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Snake);
+            if (baseResponse.ReturnCode == SUCCESS)
+            {
+                string sign = gatewayData.GetStringValue(Constant.SIGN);
+
+                if (!CheckSign(BuildSign(gatewayData), sign))
+                {
+                    throw new GatewayException("签名验证失败");
+                }
+
+                baseResponse.Execute(_merchant);
+            }
+
+            return (TResponse)(object)baseResponse;
+        }
+
+        private void AddMerchant<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
+        {
+            request.RequestUrl = GatewayUrl + request.RequestUrl;
+            request.GatewayData.Add(_merchant, StringCase.Snake);
+            if (!string.IsNullOrEmpty(request.NotifyUrl))
+            {
+                request.GatewayData.Add("notify_url", request.NotifyUrl);
+            }
+            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
         }
 
         protected override string BuildSign(GatewayData gatewayData)
         {
-            throw new NotImplementedException();
+            gatewayData.Remove(Constant.SIGN);
+
+            string data = $"{gatewayData.ToUrl(false)}&key={Merchant.Key}";
+            return EncryptUtil.MD5(data);
         }
 
         protected override bool CheckSign(string data, string sign)
