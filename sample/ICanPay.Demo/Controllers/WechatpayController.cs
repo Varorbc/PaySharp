@@ -20,16 +20,32 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult PublicPay(string out_trade_no, int total_amount, string body,string open_id)
+        public IActionResult PublicPay(string out_trade_no, int total_amount, string body, string open_id, string spbill_create_ip)
         {
             var request = new PublicPayRequest();
             request.AddGatewayData(new PublicPayModel()
             {
                 Body = body,
                 OutTradeNo = out_trade_no,
-                SpbillCreateIp = "127.0.0.1",
+                SpbillCreateIp = spbill_create_ip,
                 TotalAmount = total_amount,
                 OpenId = open_id
+            });
+
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
+
+        [HttpPost]
+        public IActionResult AppPay(string out_trade_no, int total_amount, string body, string spbill_create_ip)
+        {
+            var request = new AppPayRequest();
+            request.AddGatewayData(new AppPayModel()
+            {
+                Body = body,
+                TotalAmount = total_amount,
+                OutTradeNo = out_trade_no,
+                SpbillCreateIp = spbill_create_ip
             });
 
             var response = _baseGateway.Execute(request);
@@ -66,22 +82,6 @@ namespace ICanPay.Demo.Controllers
 
             var response = _baseGateway.Execute(request);
             return Redirect(response.Url);
-        }
-
-        [HttpPost]
-        public IActionResult AppPay(string out_trade_no, string subject, double total_amount, string body)
-        {
-            var request = new AppPayRequest();
-            request.AddGatewayData(new AppPayModel()
-            {
-                Body = body,
-                TotalAmount = total_amount,
-                Subject = subject,
-                OutTradeNo = out_trade_no
-            });
-
-            var response = _baseGateway.Execute(request);
-            return Json(response);
         }
 
         [HttpPost]
