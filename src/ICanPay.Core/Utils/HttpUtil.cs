@@ -35,11 +35,10 @@ namespace ICanPay.Core.Utils
         {
             get
             {
-#if DEBUG
-                return "127.0.0.1";
-#else
-                return Current.Connection.LocalIpAddress.ToString();
-#endif
+                var ipAddress = Current.Connection.LocalIpAddress;
+                return IPAddress.IsLoopback(ipAddress) ?
+                    IPAddress.Loopback.ToString() :
+                    ipAddress.MapToIPv4().ToString();
             }
         }
 
@@ -50,11 +49,10 @@ namespace ICanPay.Core.Utils
         {
             get
             {
-#if DEBUG
-                return "127.0.0.1";
-#else
-                return Current.Connection.RemoteIpAddress.ToString();
-#endif
+                var ipAddress = Current.Connection.RemoteIpAddress;
+                return IPAddress.IsLoopback(ipAddress) ?
+                    IPAddress.Loopback.ToString() :
+                    ipAddress.MapToIPv4().ToString();
             }
         }
 

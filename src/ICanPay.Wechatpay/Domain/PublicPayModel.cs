@@ -1,4 +1,5 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Utils;
 using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Wechatpay.Domain
@@ -15,7 +16,7 @@ namespace ICanPay.Wechatpay.Domain
         /// </summary>
         [Required(ErrorMessage = "请设置用户IP")]
         [StringLength(16, ErrorMessage = "用户IP最大长度为16位")]
-        public string SpbillCreateIp { get; set; }
+        public string SpbillCreateIp { get; set; } = HttpUtil.RemoteIpAddress;
 
         /// <summary>
         /// 商品ID

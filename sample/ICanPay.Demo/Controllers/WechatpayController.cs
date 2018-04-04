@@ -20,14 +20,13 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult PublicPay(string out_trade_no, int total_amount, string body, string open_id, string spbill_create_ip)
+        public IActionResult PublicPay(string out_trade_no, int total_amount, string body, string open_id)
         {
             var request = new PublicPayRequest();
             request.AddGatewayData(new PublicPayModel()
             {
                 Body = body,
                 OutTradeNo = out_trade_no,
-                SpbillCreateIp = spbill_create_ip,
                 TotalAmount = total_amount,
                 OpenId = open_id
             });
@@ -37,15 +36,14 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult AppPay(string out_trade_no, int total_amount, string body, string spbill_create_ip)
+        public IActionResult AppPay(string out_trade_no, int total_amount, string body)
         {
             var request = new AppPayRequest();
             request.AddGatewayData(new AppPayModel()
             {
                 Body = body,
                 TotalAmount = total_amount,
-                OutTradeNo = out_trade_no,
-                SpbillCreateIp = spbill_create_ip
+                OutTradeNo = out_trade_no
             });
 
             var response = _baseGateway.Execute(request);
@@ -53,14 +51,13 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult AppletPay(string out_trade_no, int total_amount, string body, string open_id, string spbill_create_ip)
+        public IActionResult AppletPay(string out_trade_no, int total_amount, string body, string open_id)
         {
             var request = new AppletPayRequest();
             request.AddGatewayData(new AppletPayModel()
             {
                 Body = body,
                 OutTradeNo = out_trade_no,
-                SpbillCreateIp = spbill_create_ip,
                 TotalAmount = total_amount,
                 OpenId = open_id
             });
@@ -70,7 +67,7 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult WapPay(string out_trade_no, int total_amount, string body, string spbill_create_ip, string scene_info)
+        public IActionResult WapPay(string out_trade_no, int total_amount, string body, string scene_info)
         {
             var request = new WapPayRequest();
             request.AddGatewayData(new WapPayModel()
@@ -78,7 +75,6 @@ namespace ICanPay.Demo.Controllers
                 Body = body,
                 TotalAmount = total_amount,
                 OutTradeNo = out_trade_no,
-                SpbillCreateIp = spbill_create_ip,
                 SceneInfo = scene_info
             });
 
