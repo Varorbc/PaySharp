@@ -15,7 +15,7 @@ namespace ICanPay.Alipay.Response
         /// </summary>
         public byte[] GetBillFile()
         {
-            if (_billFile == null)
+            if (_billFile == null && !string.IsNullOrEmpty(BillDownloadUrl))
             {
                 _billFile = HttpUtil.Download(BillDownloadUrl);
             }
@@ -28,7 +28,7 @@ namespace ICanPay.Alipay.Response
         /// </summary>
         public async Task<byte[]> GetBillFileAsync()
         {
-            if (_billFile == null)
+            if (_billFile == null && !string.IsNullOrEmpty(BillDownloadUrl))
             {
                 _billFile = await HttpUtil.DownloadAsync(BillDownloadUrl);
             }
