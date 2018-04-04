@@ -485,6 +485,7 @@ namespace ICanPay.Wechatpay
             gatewayData.FromXml(result);
 
             var baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Snake);
+            baseResponse.Raw = result;
             if (baseResponse.ReturnCode == SUCCESS)
             {
                 string sign = gatewayData.GetStringValue(Constant.SIGN);

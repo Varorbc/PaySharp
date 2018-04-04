@@ -56,6 +56,11 @@ namespace ICanPay.Wechatpay.Response
         /// </summary>
         public string ReturnMsg { get; set; }
 
+        /// <summary>
+        /// 原始值
+        /// </summary>
+        public string Raw { get; set; }
+
         internal abstract void Execute(Merchant merchant);
     }
 }
