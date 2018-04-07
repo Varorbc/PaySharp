@@ -22,7 +22,7 @@ namespace ICanPay.Wechatpay.Domain
         /// <summary>
         /// 随机字符串，长度要求在32位以内
         /// </summary>
-        public string NonceStr { get; set; } = Util.GenerateNonceStr();
+        public string NonceStr { get; } = Util.GenerateNonceStr();
 
         /// <summary>
         /// 设备号
