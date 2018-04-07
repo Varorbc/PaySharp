@@ -60,8 +60,9 @@ namespace ICanPay.Wechatpay.Domain
         /// <summary>
         /// 标价币种,符合ISO 4217标准的三位字母代码，默认人民币：CNY，详细列表请参见货币类型
         /// </summary>
+        [ReName(Name = "fee_type")]
         [StringLength(16, ErrorMessage = "标价币种最大长度为16位")]
-        public string FeeType { get; set; } = "CNY";
+        public string AmountType { get; set; } = "CNY";
 
         /// <summary>
         /// 标价金额,订单总金额，单位为分，详见支付金额

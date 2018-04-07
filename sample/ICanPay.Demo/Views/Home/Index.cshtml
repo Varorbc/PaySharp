@@ -587,9 +587,9 @@
                 </div>
 
                 <div id="tabs-purchase-4">
-                    <form class="api-form" asp-controller="WeChatPay" asp-action="OrderQuery" method="post" target="_blank">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="Query" method="post" target="_blank">
                         <p>
-                            <label>transaction_id：</label>
+                            <label>微信订单号：</label>
                             <input type="text" name="transaction_id">
                         </p>
                         <p>
@@ -607,7 +607,7 @@
                     </p>
                 </div>
                 <div id="tabs-purchase-5">
-                    <form class="api-form" asp-controller="WeChatPay" asp-action="CloseOrder" method="post" target="_blank">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="Close" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
                             <input type="text" name="out_trade_no">
@@ -625,11 +625,11 @@
                 <div id="tabs-purchase-6">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="Refund" method="post" target="_blank">
                         <p>
-                            <label>out_refund_no：</label>
+                            <label>退款号：</label>
                             <input type="text" name="out_refund_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>transaction_id：</label>
+                            <label>微信订单号：</label>
                             <input type="text" name="transaction_id">
                         </p>
                         <p>
@@ -641,16 +641,12 @@
                             <input type="text" name="total_fee" value="1" title="单位为分。">
                         </p>
                         <p>
-                            <label>refund_fee：</label>
+                            <label>退款金额：</label>
                             <input type="text" name="refund_fee" value="1" title="单位为分。">
                         </p>
                         <p>
-                            <label>refund_desc：</label>
+                            <label>退款描述：</label>
                             <input type="text" name="refund_desc">
-                        </p>
-                        <p>
-                            <label>notify_url：</label>
-                            <input type="text" name="notify_url" value="http://www.baidu.com/notify/wechatpay/refund">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -665,15 +661,15 @@
                 <div id="tabs-purchase-7">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="RefundQuery" method="post" target="_blank">
                         <p>
-                            <label>refund_id：</label>
+                            <label>微信退款订单号：</label>
                             <input type="text" name="refund_id">
                         </p>
                         <p>
-                            <label>out_refund_no：</label>
+                            <label>退款订单号：</label>
                             <input type="text" name="out_refund_no">
                         </p>
                         <p>
-                            <label>transaction_id：</label>
+                            <label>微信订单号：</label>
                             <input type="text" name="transaction_id">
                         </p>
                         <p>
@@ -691,18 +687,14 @@
                     </p>
                 </div>
                 <div id="tabs-purchase-8">
-                    <form class="api-form" asp-controller="WeChatPay" asp-action="DownloadBill" method="post" target="_blank">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="BillDownload" method="post" target="_blank">
                         <p>
-                            <label>bill_date：</label>
-                            <input type="text" name="bill_date">
+                            <label>下载对账单的日期：</label>
+                            <input type="text" name="bill_date" title="格式：yyyyMM">
                         </p>
                         <p>
-                            <label>bill_type：</label>
-                            <input type="text" name="bill_type">
-                        </p>
-                        <p>
-                            <label>tar_type：</label>
-                            <input type="text" name="tar_type">
+                            <label>账单类型：</label>
+                            <input type="text" name="bill_type" value="ALL" title="ALL，返回当日所有订单信息，默认值;SUCCESS，返回当日成功支付的订单;REFUND，返回当日退款订单;RECHARGE_REFUND，返回当日充值退款订单">
                         </p>
                         <p>
                             <label>&nbsp;</label>
