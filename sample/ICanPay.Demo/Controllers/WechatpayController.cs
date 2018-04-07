@@ -82,62 +82,60 @@ namespace ICanPay.Demo.Controllers
             return Json(response);
         }
 
-        //[HttpPost]
-        //public IActionResult ScanPay(string out_trade_no, string subject, double total_amount, string body)
-        //{
-        //    var request = new ScanPayRequest();
-        //    request.AddGatewayData(new ScanPayModel()
-        //    {
-        //        Body = body,
-        //        TotalAmount = total_amount,
-        //        Subject = subject,
-        //        OutTradeNo = out_trade_no
-        //    });
+        [HttpPost]
+        public IActionResult ScanPay(string out_trade_no, string body, int total_amount)
+        {
+            var request = new ScanPayRequest();
+            request.AddGatewayData(new ScanPayModel()
+            {
+                Body = body,
+                TotalAmount = total_amount,
+                OutTradeNo = out_trade_no
+            });
 
-        //    var response = _baseGateway.Execute(request);
+            var response = _baseGateway.Execute(request);
 
-        //    return Json(response);
-        //}
+            return Json(response);
+        }
 
-        //[HttpPost]
-        //public IActionResult BarcodePay(string out_trade_no, string auth_code, string subject, double total_amount, string body)
-        //{
-        //    var request = new BarcodePayRequest();
-        //    request.AddGatewayData(new BarcodePayModel()
-        //    {
-        //        Body = body,
-        //        TotalAmount = total_amount,
-        //        Subject = subject,
-        //        OutTradeNo = out_trade_no,
-        //        AuthCode = auth_code
-        //    });
-        //    request.PaySucceed += BarcodePay_PaySucceed;
-        //    request.PayFailed += BarcodePay_PayFaild;
+        [HttpPost]
+        public IActionResult BarcodePay(string out_trade_no, string auth_code, int total_amount, string body)
+        {
+            var request = new BarcodePayRequest();
+            request.AddGatewayData(new BarcodePayModel()
+            {
+                Body = body,
+                TotalAmount = total_amount,
+                OutTradeNo = out_trade_no,
+                AuthCode = auth_code
+            });
+            request.PaySucceed += BarcodePay_PaySucceed;
+            request.PayFailed += BarcodePay_PayFaild;
 
-        //    var response = _baseGateway.Execute(request);
+            var response = _baseGateway.Execute(request);
 
-        //    return Json(response);
-        //}
+            return Json(response);
+        }
 
-        ///// <summary>
-        ///// 支付成功事件
-        ///// </summary>
-        ///// <param name="response">返回结果</param>
-        ///// <param name="message">提示信息</param>
-        //private void BarcodePay_PaySucceed(IResponse response, string message)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        /// <summary>
+        /// 支付成功事件
+        /// </summary>
+        /// <param name="response">返回结果</param>
+        /// <param name="message">提示信息</param>
+        private void BarcodePay_PaySucceed(IResponse response, string message)
+        {
+            throw new NotImplementedException();
+        }
 
-        ///// <summary>
-        ///// 支付失败事件
-        ///// </summary>
-        ///// <param name="response">返回结果,可能是BarcodePayResponse/QueryResponse</param>
-        ///// <param name="message">提示信息</param>
-        //private void BarcodePay_PayFaild(IResponse response, string message)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        /// <summary>
+        /// 支付失败事件
+        /// </summary>
+        /// <param name="response">返回结果,可能是BarcodePayResponse/QueryResponse</param>
+        /// <param name="message">提示信息</param>
+        private void BarcodePay_PayFaild(IResponse response, string message)
+        {
+            throw new NotImplementedException();
+        }
 
         [HttpPost]
         public IActionResult Query(string out_trade_no, string trade_no)
@@ -153,22 +151,23 @@ namespace ICanPay.Demo.Controllers
             return Json(response);
         }
 
-        //[HttpPost]
-        //public IActionResult Refund(string out_trade_no, string trade_no, double refund_amount, string refund_reason, string out_request_no)
-        //{
-        //    var request = new RefundRequest();
-        //    request.AddGatewayData(new RefundModel()
-        //    {
-        //        TradeNo = trade_no,
-        //        OutTradeNo = out_trade_no,
-        //        RefundAmount = refund_amount,
-        //        RefundReason = refund_reason,
-        //        OutRefundNo = out_request_no
-        //    });
+        [HttpPost]
+        public IActionResult Refund(string out_trade_no, string trade_no, int total_amount, int refund_amount, string refund_desc, string out_refund_no)
+        {
+            var request = new RefundRequest();
+            request.AddGatewayData(new RefundModel()
+            {
+                TradeNo = trade_no,
+                RefundAmount = refund_amount,
+                RefundDesc = refund_desc,
+                OutRefundNo = out_refund_no,
+                TotalAmount = total_amount,
+                OutTradeNo = out_trade_no
+            });
 
-        //    var response = _baseGateway.Execute(request);
-        //    return Json(response);
-        //}
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
 
         [HttpPost]
         public IActionResult RefundQuery(string out_trade_no, string trade_no, string out_request_no)
@@ -184,20 +183,6 @@ namespace ICanPay.Demo.Controllers
             var response = _baseGateway.Execute(request);
             return Json(response);
         }
-
-        //[HttpPost]
-        //public IActionResult Cancel(string out_trade_no, string trade_no)
-        //{
-        //    var request = new CancelRequest();
-        //    request.AddGatewayData(new CancelModel()
-        //    {
-        //        TradeNo = trade_no,
-        //        OutTradeNo = out_trade_no
-        //    });
-
-        //    var response = _baseGateway.Execute(request);
-        //    return Json(response);
-        //}
 
         [HttpPost]
         public IActionResult Close(string out_trade_no)
@@ -251,6 +236,20 @@ namespace ICanPay.Demo.Controllers
             {
                 BillDate = bill_date,
                 BillType = bill_type
+            });
+
+            var response = _baseGateway.Execute(request);
+            return File(await response.GetBillFileAsync(), "application/gzip");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FundFlowDownload(string bill_date, string account_type)
+        {
+            var request = new FundFlowDownloadRequest();
+            request.AddGatewayData(new FundFlowDownloadModel()
+            {
+                BillDate = bill_date,
+                AccountType = account_type
             });
 
             var response = _baseGateway.Execute(request);

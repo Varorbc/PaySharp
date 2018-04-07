@@ -1,4 +1,5 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Request;
 using ICanPay.Core.Utils;
 using System;
 
@@ -21,7 +22,7 @@ namespace ICanPay.Wechatpay.Response
         /// </summary>
         public string OrderInfo { get; set; }
 
-        internal override void Execute(Merchant merchant)
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
             var gatewayData = new GatewayData();
             gatewayData.Add("appId", merchant.AppId);

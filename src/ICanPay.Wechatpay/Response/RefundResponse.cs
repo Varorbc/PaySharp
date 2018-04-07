@@ -1,7 +1,9 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Request;
 
 namespace ICanPay.Wechatpay.Response
 {
+    //TODO: xml转换器
     public class RefundResponse : BaseResponse
     {
         /// <summary>
@@ -91,7 +93,7 @@ namespace ICanPay.Wechatpay.Response
         [ReName(Name = "coupon_refund_count")]
         public int CouponRefundCount { get; set; }
 
-        internal override void Execute(Merchant merchant)
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
         }
     }

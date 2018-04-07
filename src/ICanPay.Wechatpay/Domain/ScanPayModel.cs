@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ICanPay.Wechatpay.Domain
 {
-    public class WapPayModel : BasePayModel
+    public class ScanPayModel : BasePayModel
     {
-        public WapPayModel()
+        public ScanPayModel()
         {
-            TradeType = "MWEB";
+            TradeType = "NATIVE";
         }
 
         /// <summary>
@@ -17,11 +17,11 @@ namespace ICanPay.Wechatpay.Domain
         public string TradeType { get; private set; }
 
         /// <summary>
-        /// 用户IP
+        /// 机器IP
         /// </summary>
-        [Required(ErrorMessage = "请设置用户IP")]
-        [StringLength(16, ErrorMessage = "用户IP最大长度为16位")]
-        public string SpbillCreateIp { get; set; } = HttpUtil.RemoteIpAddress;
+        [Required(ErrorMessage = "请设置机器IP")]
+        [StringLength(16, ErrorMessage = "机器IP最大长度为16位")]
+        public string SpbillCreateIp { get; set; } = HttpUtil.LocalIpAddress;
 
         /// <summary>
         /// 商品ID
@@ -36,10 +36,9 @@ namespace ICanPay.Wechatpay.Domain
         public string OpenId { get; set; }
 
         /// <summary>
-        /// 场景信息,该字段用于上报支付的场景信息,针对H5支付有以下三种场景,请根据对应场景上报
+        /// 场景信息,该字段用于上报场景信息，目前支持上报实际门店信息。该字段为JSON对象数据，对象格式为{"store_info":{"id": "门店ID","name": "名称","area_code": "编码","address": "地址" }}
         /// </summary>
         [StringLength(256, ErrorMessage = "场景信息最大长度为256位")]
-        [Required(ErrorMessage = "请设置场景信息")]
         public string SceneInfo { get; set; }
     }
 }

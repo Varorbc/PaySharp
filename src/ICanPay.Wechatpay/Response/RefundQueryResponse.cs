@@ -1,4 +1,5 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Request;
 
 namespace ICanPay.Wechatpay.Response
 {
@@ -54,7 +55,7 @@ namespace ICanPay.Wechatpay.Response
         /// </summary>
         public int RefundCount { get; set; }
 
-        internal override void Execute(Merchant merchant)
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
         }
     }

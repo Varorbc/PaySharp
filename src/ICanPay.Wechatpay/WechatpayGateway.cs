@@ -53,232 +53,6 @@ namespace ICanPay.Wechatpay
 
         #region 方法
 
-        /*#region 扫码支付
-
-        public string BuildScanPayment()
-        {
-            InitScanPayment();
-            UnifiedOrder();
-            return Notify.CodeUrl;
-        }
-
-        public void InitScanPayment()
-        {
-            Order.TradeType = Constant.NATIVE;
-            Order.SpbillCreateIp = HttpUtil.LocalIpAddress;
-        }
-
-        #endregion
-
-        #region 条码支付
-
-        public void BuildBarcodePayment()
-        {
-            InitBarcodePayment();
-
-            Commit();
-
-            if (Notify.ReturnCode.ToLower() == SUCCESS)
-            {
-                OnPaymentSucceed(new PaySucceedEventArgs(this));
-                return;
-            }
-
-            if (!string.IsNullOrEmpty(Notify.TransactionId))
-            {
-                Task.Run(async () =>
-                {
-                    await PollQueryTradeStateAsync(new Auxiliary
-                    {
-                        TradeNo = Notify.TransactionId,
-                        OutTradeNo = Notify.OutTradeNo
-                    });
-                })
-                .GetAwaiter()
-                .GetResult();
-            }
-
-            OnPaymentFailed(new PayFailedEventArgs(this)
-            {
-                Message = Notify.ReturnMsg
-            });
-        }
-
-        public void InitBarcodePayment()
-        {
-            Order.SpbillCreateIp = HttpUtil.LocalIpAddress;
-            UnifiedOrder();
-            RequestUrl = BarcodeUrl;
-        }
-
-        /// <summary>
-        /// 每隔5秒轮询判断用户是否支付,总共轮询5次
-        /// </summary>
-        private void PollQueryTradeState(IAuxiliary auxiliary)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                Thread.Sleep(5000);
-                BuildQuery(auxiliary);
-                if (Notify.TradeState.ToLower() == SUCCESS)
-                {
-                    OnPaymentSucceed(new PaySucceedEventArgs(this));
-                    return;
-                }
-            }
-
-            BuildCancel(auxiliary);
-            if (Notify.Recall == "Y")
-            {
-                BuildCancel(auxiliary);
-            }
-            OnPaymentFailed(new PayFailedEventArgs(this)
-            {
-                Message = "支付超时"
-            });
-        }
-
-        /// <summary>
-        /// 异步每隔5秒轮询判断用户是否支付,总共轮询5次
-        /// </summary>
-        private async Task PollQueryTradeStateAsync(IAuxiliary auxiliary)
-        {
-            await Task.Run(() => PollQueryTradeState(auxiliary));
-        }
-
-        #endregion
-
-        #region 查询订单
-
-        public void InitQuery(IAuxiliary auxiliary)
-        {
-            RequestUrl = QueryUrl;
-            InitAuxiliaryParameter(GatewayAuxiliaryType.Query, auxiliary);
-        }
-
-        public INotify BuildQuery(IAuxiliary auxiliary)
-        {
-            InitQuery(auxiliary);
-
-            Commit();
-
-            return Notify;
-        }
-
-        #endregion
-
-        #region 撤销订单
-
-        public void InitCancel(IAuxiliary auxiliary)
-        {
-            RequestUrl = CancelUrl;
-            InitAuxiliaryParameter(GatewayAuxiliaryType.Cancel, auxiliary);
-        }
-
-        public INotify BuildCancel(IAuxiliary auxiliary)
-        {
-            InitCancel(auxiliary);
-
-            Commit(true);
-
-            return Notify;
-        }
-
-        #endregion
-
-        #region 关闭订单
-
-        public INotify BuildClose(IAuxiliary auxiliary)
-        {
-            InitClose(auxiliary);
-
-            Commit();
-
-            return Notify;
-        }
-
-        public void InitClose(IAuxiliary auxiliary)
-        {
-            RequestUrl = CloseUrl;
-            InitAuxiliaryParameter(GatewayAuxiliaryType.Close, auxiliary);
-        }
-
-        #endregion
-
-        #region 订单退款
-
-        public INotify BuildRefund(IAuxiliary auxiliary)
-        {
-            InitRefund(auxiliary);
-
-            Commit(true);
-
-            return Notify;
-        }
-
-        public void InitRefund(IAuxiliary auxiliary)
-        {
-            RequestUrl = RefundUrl;
-            InitAuxiliaryParameter(GatewayAuxiliaryType.Refund, auxiliary);
-        }
-
-        #endregion
-
-        #region 查询退款
-
-        public INotify BuildRefundQuery(IAuxiliary auxiliary)
-        {
-            InitRefundQuery(auxiliary);
-
-            Commit();
-
-            return Notify;
-        }
-
-        public void InitRefundQuery(IAuxiliary auxiliary)
-        {
-            RequestUrl = RefundQueryUrl;
-            InitAuxiliaryParameter(GatewayAuxiliaryType.RefundQuery, auxiliary);
-        }
-
-        #endregion
-
-        #region 对账单下载
-
-        public FileStream BuildBillDownload(IAuxiliary auxiliary)
-        {
-            InitBillDownload(auxiliary);
-
-            Commit();
-
-            string result = GatewayData.Raw;
-
-            return CreateCsv(result);
-        }
-
-        public void InitBillDownload(IAuxiliary auxiliary)
-        {
-            RequestUrl = DownloadBillUrl;
-            InitAuxiliaryParameter(GatewayAuxiliaryType.BillDownload, auxiliary);
-        }
-
-        /// <summary>
-        /// 创建Csv文件
-        /// </summary>
-        /// <param name="content">内容</param>
-        /// <returns></returns>
-        private FileStream CreateCsv(string content)
-        {
-            byte[] buffer = Encoding.UTF8.GetBytes(content);
-            FileStream fileStream = new FileStream($"{DateTime.Now.ToString(TIMEFORMAT)}.csv", FileMode.Create);
-            fileStream.Write(buffer, 0, buffer.Length);
-            fileStream.Position = 0;
-
-            return fileStream;
-        }
-
-        #endregion*/
-
         protected override async Task<bool> ValidateNotifyAsync()
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
@@ -292,45 +66,6 @@ namespace ICanPay.Wechatpay
         }
 
         /*/// <summary>
-        /// 初始化订单参数
-        /// </summary>
-        private void InitOrderParameter()
-        {
-            GatewayData.Clear();
-            Merchant.NonceStr = Util.GenerateNonceStr();
-            Merchant.DeviceInfo = Constant.WEB;
-            GatewayData.Add(Merchant, StringCase.Snake);
-            GatewayData.Add(Order, StringCase.Snake);
-            GatewayData.Add(Constant.SIGN, BuildSign());
-        }
-
-        /// <summary>
-        /// 初始化辅助参数
-        /// </summary>
-        /// <param name="gatewayAuxiliaryType">辅助类型</param>
-        /// <param name="auxiliary">辅助参数</param>
-        private void InitAuxiliaryParameter(GatewayAuxiliaryType gatewayAuxiliaryType, IAuxiliary auxiliary)
-        {
-            auxiliary.Validate(gatewayAuxiliaryType);
-            Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Merchant, StringCase.Snake);
-            GatewayData.Add(auxiliary, StringCase.Snake);
-            GatewayData.Add(Constant.SIGN, BuildSign());
-        }
-
-        /// <summary>
-        /// 统一下单
-        /// </summary>
-        /// <returns></returns>
-        private void UnifiedOrder()
-        {
-            RequestUrl = UnifiedOrderUrl;
-            InitOrderParameter();
-
-            Commit();
-        }
-
-        /// <summary>
         /// 通过code获取AccessToken
         /// </summary>
         /// <param name="code"></param>
@@ -374,17 +109,6 @@ namespace ICanPay.Wechatpay
             Commit();
 
             return Notify.OpenId;
-        }
-
-        /// <summary>
-        /// 读取返回结果
-        /// </summary>
-        /// <param name="result"></param>
-        private void ReadReturnResult(string result)
-        {
-            GatewayData.FromXml(result);
-            base.Notify = GatewayData.ToObject<Notify>(StringCase.Snake);
-            IsSuccessReturn();
         }*/
 
         /// <summary>
@@ -440,20 +164,6 @@ namespace ICanPay.Wechatpay
             .GetAwaiter()
             .GetResult();
             ReadReturnResult(result);
-        }
-
-        /// <summary>
-        /// 是否是已成功的返回
-        /// </summary>
-        /// <returns></returns>
-        private bool IsSuccessReturn()
-        {
-            if (Notify.ReturnCode == FAIL)
-            {
-                throw new GatewayException(Notify.ReturnMsg);
-            }
-
-            return true;
         }*/
 
         protected override void WriteSuccessFlag()
@@ -495,7 +205,7 @@ namespace ICanPay.Wechatpay
                     throw new GatewayException("签名验证失败");
                 }
 
-                baseResponse.Execute(_merchant);
+                baseResponse.Execute(_merchant, request);
             }
 
             return (TResponse)(object)baseResponse;

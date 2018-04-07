@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace ICanPay.Wechatpay.Response
 {
-    public class BillDownloadResponse : BaseResponse
+    public class FundFlowDownloadResponse : BaseResponse
     {
         /// <summary>
         /// 获取账单文件

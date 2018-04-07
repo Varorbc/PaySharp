@@ -6,9 +6,14 @@ namespace ICanPay.Wechatpay.Domain
     public class AppPayModel : BasePayModel
     {
         public AppPayModel()
-            : base("APP")
         {
+            TradeType = "APP";
         }
+
+        /// <summary>
+        /// 交易类型
+        /// </summary>
+        public string TradeType { get; private set; }
 
         /// <summary>
         /// 用户IP

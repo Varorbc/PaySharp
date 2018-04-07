@@ -175,9 +175,9 @@ namespace ICanPay.Alipay
         }
 
         #region 条码支付
-
+        //TODO:仿照微信公众号
         /// <summary>
-        /// 条码执行 TODO:仿照微信公众号
+        /// 条码执行
         /// </summary>
         /// <typeparam name="TModel"></typeparam>
         /// <typeparam name="TResponse"></typeparam>
@@ -213,7 +213,7 @@ namespace ICanPay.Alipay
                 }
                 else
                 {
-                    barcodePayRequest.OnPayFailed(null, "支付超时");
+                    barcodePayRequest.OnPayFailed(barcodePayResponse, "支付超时");
                     return;
                 }
             }

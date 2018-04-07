@@ -7,9 +7,14 @@ namespace ICanPay.Wechatpay.Domain
     public class PublicPayModel : BasePayModel
     {
         public PublicPayModel()
-            : base("JSAPI")
         {
+            TradeType = "JSAPI";
         }
+
+        /// <summary>
+        /// 交易类型
+        /// </summary>
+        public string TradeType { get; private set; }
 
         /// <summary>
         /// 用户IP

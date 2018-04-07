@@ -1,4 +1,5 @@
 ﻿using ICanPay.Core;
+using ICanPay.Core.Request;
 using ICanPay.Core.Response;
 
 namespace ICanPay.Wechatpay.Response
@@ -61,6 +62,6 @@ namespace ICanPay.Wechatpay.Response
         /// </summary>
         public string Raw { get; set; }
 
-        internal abstract void Execute(Merchant merchant);
+        internal abstract void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request) where TResponse : IResponse;
     }
 }

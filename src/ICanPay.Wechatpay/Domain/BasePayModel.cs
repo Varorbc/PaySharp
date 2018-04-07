@@ -11,15 +11,6 @@ namespace ICanPay.Wechatpay.Domain
     public class BasePayModel
     {
         /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="tradeType">交易类型</param>
-        public BasePayModel(string tradeType)
-        {
-            TradeType = tradeType;
-        }
-
-        /// <summary>
         /// 随机字符串，长度要求在32位以内
         /// </summary>
         public string NonceStr { get; } = Util.GenerateNonceStr();
@@ -86,11 +77,6 @@ namespace ICanPay.Wechatpay.Domain
         /// </summary>
         [StringLength(32, ErrorMessage = "订单优惠标记最大长度为32位")]
         public string GoodsTag { get; set; }
-
-        /// <summary>
-        /// 交易类型
-        /// </summary>
-        public string TradeType { get; set; }
 
         /// <summary>
         /// 指定支付方式,上传此参数no_credit--可限制用户不能使用信用卡支付

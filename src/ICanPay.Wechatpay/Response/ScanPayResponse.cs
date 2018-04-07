@@ -2,7 +2,7 @@
 
 namespace ICanPay.Wechatpay.Response
 {
-    public class WapPayResponse : BaseResponse
+    public class ScanPayResponse : BaseResponse
     {
         /// <summary>
         /// 交易类型
@@ -15,10 +15,9 @@ namespace ICanPay.Wechatpay.Response
         public string PrepayId { get; set; }
 
         /// <summary>
-        /// 支付跳转链接
-        /// mweb_url为拉起微信支付收银台的中间页面，可通过访问该url来拉起微信客户端，完成支付,mweb_url的有效期为5分钟。
+        /// 二维码链接
         /// </summary>
-        public string MwebUrl { get; set; }
+        public string CodeUrl { get; set; }
 
         internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
