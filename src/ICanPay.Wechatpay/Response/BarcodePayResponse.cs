@@ -100,8 +100,11 @@ namespace ICanPay.Wechatpay.Response
         /// </summary>
         public string PromotionDetail { get; set; }
 
+        private Merchant _merchant;
+
         internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
+            _merchant = merchant;
             var barcodePayRequest = request as BarcodePayRequest;
 
             if (ReturnCode == "SUCCESS")
@@ -155,7 +158,7 @@ namespace ICanPay.Wechatpay.Response
                 {
                     OutTradeNo = outTradeNo
                 });
-                var queryResponse = NetExecute(queryRequest);
+                var queryResponse = SubmitProcess.Execute(_merchant, queryRequest);
                 if (queryResponse.TradeState == "SUCCESS")
                 {
                     return queryResponse;
@@ -168,7 +171,7 @@ namespace ICanPay.Wechatpay.Response
             {
                 OutTradeNo = outTradeNo
             });
-            NetExecute(cancelRequest);
+            SubmitProcess.Execute(_merchant, cancelRequest);
 
             return null;
         }

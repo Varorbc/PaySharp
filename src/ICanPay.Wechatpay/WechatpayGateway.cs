@@ -1,10 +1,7 @@
 ﻿using ICanPay.Core;
 using ICanPay.Core.Exceptions;
 using ICanPay.Core.Request;
-using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
-using ICanPay.Wechatpay.Response;
-using System;
 using System.Threading.Tasks;
 
 namespace ICanPay.Wechatpay
@@ -180,59 +177,19 @@ namespace ICanPay.Wechatpay
 
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
-            AddMerchant(request);
-
-            string result = null;
-            Task.Run(async () =>
-            {
-                result = await HttpUtil
-                 .PostAsync(request.RequestUrl, request.GatewayData.ToXml());
-            })
-            .GetAwaiter()
-            .GetResult();
-
-            var gatewayData = new GatewayData();
-            gatewayData.FromXml(result);
-
-            var baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Snake);
-            baseResponse.Raw = result;
-            if (baseResponse.ReturnCode == SUCCESS)
-            {
-                string sign = gatewayData.GetStringValue(Constant.SIGN);
-
-                if (!CheckSign(BuildSign(gatewayData), sign))
-                {
-                    throw new GatewayException("签名验证失败");
-                }
-
-                baseResponse.Execute(_merchant, request);
-            }
-
-            return (TResponse)(object)baseResponse;
-        }
-
-        private void AddMerchant<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse
-        {
             request.RequestUrl = GatewayUrl + request.RequestUrl;
-            request.GatewayData.Add(_merchant, StringCase.Snake);
-            if (!string.IsNullOrEmpty(request.NotifyUrl))
-            {
-                request.GatewayData.Add("notify_url", request.NotifyUrl);
-            }
-            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData));
+
+            return SubmitProcess.Execute(Merchant, request);
         }
 
         protected override string BuildSign(GatewayData gatewayData)
         {
-            gatewayData.Remove(Constant.SIGN);
-
-            string data = $"{gatewayData.ToUrl(false)}&key={Merchant.Key}";
-            return EncryptUtil.MD5(data);
+            return SubmitProcess.BuildSign(gatewayData, Merchant.Key);
         }
 
         protected override bool CheckSign(string data, string sign)
         {
-            throw new NotImplementedException();
+            return SubmitProcess.CheckSign(data, sign);
         }
 
         #endregion
