@@ -116,7 +116,7 @@ namespace ICanPay.Wechatpay
         {
             GatewayData.Remove(Constant.SIGN);
 
-            string data = $"{GatewayData.ToUrl(false)}&key={Merchant.Key}";
+            string data = $"{GatewayData.ToUrl(false)}&key={_merchant.Key}";
             return EncryptUtil.MD5(data);
         }
 
@@ -179,12 +179,12 @@ namespace ICanPay.Wechatpay
         {
             request.RequestUrl = GatewayUrl + request.RequestUrl;
 
-            return SubmitProcess.Execute(Merchant, request);
+            return SubmitProcess.Execute(_merchant, request);
         }
 
         protected override string BuildSign(GatewayData gatewayData)
         {
-            return SubmitProcess.BuildSign(gatewayData, Merchant.Key);
+            return SubmitProcess.BuildSign(gatewayData, _merchant.Key);
         }
 
         protected override bool CheckSign(string data, string sign)
