@@ -434,6 +434,7 @@
                     <li><a href="#tabs-purchase-16">H5支付</a></li>
                     <li><a href="#tabs-purchase-4">查询订单</a></li>
                     <li><a href="#tabs-purchase-5">关闭订单</a></li>
+                    <li><a href="#tabs-purchase-18">撤销订单</a></li>
                     <li><a href="#tabs-purchase-6">申请退款</a></li>
                     <li><a href="#tabs-purchase-7">查询退款</a></li>
                     <li><a href="#tabs-purchase-8">下载对账单</a></li>
@@ -646,6 +647,24 @@
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_3" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
+                <div id="tabs-purchase-18">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="Cancel" method="post" target="_blank">
+                        <p>
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=9_11&index=3" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
                 <div id="tabs-purchase-6">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="Refund" method="post" target="_blank">
                         <p>

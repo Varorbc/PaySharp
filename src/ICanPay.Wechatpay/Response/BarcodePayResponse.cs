@@ -166,8 +166,8 @@ namespace ICanPay.Wechatpay.Response
             }
 
             //支付超时，取消订单
-            var cancelRequest = new CloseRequest();
-            cancelRequest.AddGatewayData(new CloseModel
+            var cancelRequest = new CancelRequest();
+            cancelRequest.AddGatewayData(new CancelModel
             {
                 OutTradeNo = outTradeNo
             });

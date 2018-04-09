@@ -197,6 +197,19 @@ namespace ICanPay.Demo.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public IActionResult Cancel(string out_trade_no)
+        {
+            var request = new CancelRequest();
+            request.AddGatewayData(new CancelModel()
+            {
+                OutTradeNo = out_trade_no
+            });
+
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
+
         //[HttpPost]
         //public IActionResult Transfer(string out_trade_no, string payee_account, string payee_type, double amount, string remark)
         //{
