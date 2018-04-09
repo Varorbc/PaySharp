@@ -1,4 +1,5 @@
 ﻿using ICanPay.Alipay.Domain;
+using ICanPay.Core.Request;
 using System;
 using System.Collections.Generic;
 
@@ -137,5 +138,9 @@ namespace ICanPay.Alipay.Response
         /// 平台优惠金额
         /// </summary>
         public double DiscountAmount { get; set; }
+
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
+        {
+        }
     }
 }

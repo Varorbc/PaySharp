@@ -1,11 +1,12 @@
-﻿using ICanPay.Core.Response;
+﻿using ICanPay.Core.Request;
+using ICanPay.Core.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace ICanPay.Alipay.Response
 {
     [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-    public class BaseResponse : IResponse
+    public abstract class BaseResponse : IResponse
     {
         /// <summary>
         /// 网关返回码,详见文档
@@ -42,5 +43,7 @@ namespace ICanPay.Alipay.Response
         /// 原始值
         /// </summary>
         public string Raw { get; set; }
+
+        internal abstract void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request) where TResponse : IResponse;
     }
 }

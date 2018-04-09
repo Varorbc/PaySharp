@@ -1,4 +1,6 @@
-﻿namespace ICanPay.Alipay.Response
+﻿using ICanPay.Core.Request;
+
+namespace ICanPay.Alipay.Response
 {
     public class CloseResponse : BaseResponse
     {
@@ -11,5 +13,9 @@
         /// 商户订单号
         /// </summary>
         public string OutTradeNo { get; set; }
+
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
+        {
+        }
     }
 }

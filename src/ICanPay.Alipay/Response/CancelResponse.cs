@@ -1,4 +1,6 @@
-﻿namespace ICanPay.Alipay.Response
+﻿using ICanPay.Core.Request;
+
+namespace ICanPay.Alipay.Response
 {
     public class CancelResponse : BaseResponse
     {
@@ -23,5 +25,9 @@
         /// refund：产生了退款
         /// </summary>
         public string Action { get; set; }
+
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
+        {
+        }
     }
 }

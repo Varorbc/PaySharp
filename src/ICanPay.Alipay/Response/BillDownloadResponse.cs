@@ -1,4 +1,5 @@
-﻿using ICanPay.Core.Utils;
+﻿using ICanPay.Core.Request;
+using ICanPay.Core.Utils;
 using System.Threading.Tasks;
 
 namespace ICanPay.Alipay.Response
@@ -9,6 +10,8 @@ namespace ICanPay.Alipay.Response
         /// 账单下载地址链接，获取连接后30秒后未下载，链接地址失效。
         /// </summary>
         public string BillDownloadUrl { get; set; }
+
+        private byte[] _billFile;
 
         /// <summary>
         /// 获取账单文件
@@ -36,6 +39,8 @@ namespace ICanPay.Alipay.Response
             return _billFile;
         }
 
-        private byte[] _billFile;
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
+        {
+        }
     }
 }

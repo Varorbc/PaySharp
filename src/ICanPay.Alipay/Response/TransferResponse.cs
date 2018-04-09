@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ICanPay.Core.Request;
+using Newtonsoft.Json;
 using System;
 
 namespace ICanPay.Alipay.Response
@@ -23,5 +24,9 @@ namespace ICanPay.Alipay.Response
         /// 支付时间：格式为yyyy-MM-dd HH:mm:ss，仅转账成功返回。
         /// </summary>
         public DateTime? PayDate { get; set; }
+
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
+        {
+        }
     }
 }

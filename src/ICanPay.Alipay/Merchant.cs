@@ -6,7 +6,6 @@ namespace ICanPay.Alipay
 {
     public class Merchant : IMerchant
     {
-
         #region 属性
 
         /// <summary>

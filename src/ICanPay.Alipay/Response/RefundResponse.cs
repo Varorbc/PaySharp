@@ -1,4 +1,5 @@
 ﻿using ICanPay.Alipay.Domain;
+using ICanPay.Core.Request;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -76,5 +77,9 @@ namespace ICanPay.Alipay.Response
         /// </summary>
         [JsonProperty(PropertyName = "present_refund_mdiscount_amount")]
         public double RefundMdiscountAmount { get; set; }
+
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
+        {
+        }
     }
 }

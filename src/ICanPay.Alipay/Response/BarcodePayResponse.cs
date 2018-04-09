@@ -1,6 +1,10 @@
 ﻿using ICanPay.Alipay.Domain;
+using ICanPay.Alipay.Request;
+using ICanPay.Core.Request;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ICanPay.Alipay.Response
 {
@@ -144,5 +148,92 @@ namespace ICanPay.Alipay.Response
         /// 平台优惠金额
         /// </summary>
         public double DiscountAmount { get; set; }
+
+        private Merchant _merchant;
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
+        {
+            _merchant = merchant;
+            var barcodePayRequest = request as BarcodePayRequest;
+
+            if (Code == "10000")
+            {
+                barcodePayRequest.OnPaySucceed(this, null);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(TradeNo))
+            {
+                var queryResponse = new QueryResponse();
+                Task.Run(async () =>
+                {
+                    queryResponse = await PollQueryTradeStateAsync(
+                        TradeNo,
+                        barcodePayRequest.PollTime,
+                        barcodePayRequest.PollCount);
+                })
+                .GetAwaiter()
+                .GetResult();
+
+                if (queryResponse != null)
+                {
+                    barcodePayRequest.OnPaySucceed(queryResponse, null);
+                    return;
+                }
+                else
+                {
+                    barcodePayRequest.OnPayFailed(this, "支付超时");
+                    return;
+                }
+            }
+
+            barcodePayRequest.OnPayFailed(this, SubMessage);
+        }
+
+        /// <summary>
+        /// 轮询查询用户是否支付
+        /// </summary>
+        /// <param name="tradeNo">支付宝订单号</param>
+        /// <param name="pollTime">轮询间隔</param>
+        /// <param name="pollCount">轮询次数</param>
+        /// <returns></returns>
+        private QueryResponse PollQueryTradeState(string tradeNo, int pollTime, int pollCount)
+        {
+            for (int i = 0; i < pollCount; i++)
+            {
+                Thread.Sleep(pollTime);
+                var queryRequest = new QueryRequest();
+                queryRequest.AddGatewayData(new QueryModel
+                {
+                    TradeNo = tradeNo
+                });
+                var queryResponse = SubmitProcess.Execute(_merchant, queryRequest);
+                if (queryResponse.TradeStatus == "TRADE_SUCCESS")
+                {
+                    return queryResponse;
+                }
+            }
+
+            //支付超时，取消订单
+            var cancelRequest = new CancelRequest();
+            cancelRequest.AddGatewayData(new CancelModel
+            {
+                TradeNo = tradeNo
+            });
+            SubmitProcess.Execute(_merchant, cancelRequest);
+
+            return null;
+        }
+
+        /// <summary>
+        /// 轮询查询用户是否支付
+        /// </summary>
+        /// <param name="tradeNo">支付宝订单号</param>
+        /// <param name="pollTime">轮询间隔</param>
+        /// <param name="pollCount">轮询次数</param>
+        /// <returns></returns>
+        private async Task<QueryResponse> PollQueryTradeStateAsync(string tradeNo, int pollTime, int pollCount)
+        {
+            return await Task.Run(() => PollQueryTradeState(tradeNo, pollTime, pollCount));
+        }
     }
 }

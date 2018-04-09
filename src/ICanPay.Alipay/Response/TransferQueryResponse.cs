@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ICanPay.Core.Request;
+using Newtonsoft.Json;
 using System;
 
 namespace ICanPay.Alipay.Response
@@ -56,5 +57,9 @@ namespace ICanPay.Alipay.Response
         /// 查询成功不返回。 对于退票订单，不返回该参数。
         /// </summary>
         public string ErrorCode { get; set; }
+
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
+        {
+        }
     }
 }

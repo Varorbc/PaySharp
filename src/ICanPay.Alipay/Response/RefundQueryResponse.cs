@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ICanPay.Core.Request;
+using Newtonsoft.Json;
 
 namespace ICanPay.Alipay.Response
 {
@@ -34,5 +35,9 @@ namespace ICanPay.Alipay.Response
         /// 退款金额
         /// </summary>
         public double RefundAmount { get; set; }
+
+        internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
+        {
+        }
     }
 }
