@@ -177,9 +177,7 @@ namespace ICanPay.Wechatpay
 
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
-            request.RequestUrl = GatewayUrl + request.RequestUrl;
-
-            return SubmitProcess.Execute(_merchant, request);
+            return SubmitProcess.Execute(_merchant, request, GatewayUrl);
         }
 
         #endregion

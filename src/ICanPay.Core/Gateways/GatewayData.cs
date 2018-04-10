@@ -87,11 +87,6 @@ namespace ICanPay.Core
                 throw new ArgumentNullException("key", "参数名不能为空");
             }
 
-            if (value is null || string.IsNullOrEmpty(value.ToString()))
-            {
-                throw new ArgumentNullException("value", "参数值不能为空");
-            }
-
             if (Exists(key))
             {
                 _values[key] = value;

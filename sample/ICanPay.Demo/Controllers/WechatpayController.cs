@@ -4,8 +4,6 @@ using ICanPay.Wechatpay;
 using ICanPay.Wechatpay.Domain;
 using ICanPay.Wechatpay.Request;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ICanPay.Demo.Controllers
@@ -124,7 +122,6 @@ namespace ICanPay.Demo.Controllers
         /// <param name="message">提示信息</param>
         private void BarcodePay_PaySucceed(IResponse response, string message)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -134,7 +131,6 @@ namespace ICanPay.Demo.Controllers
         /// <param name="message">提示信息</param>
         private void BarcodePay_PayFaild(IResponse response, string message)
         {
-            throw new NotImplementedException();
         }
 
         [HttpPost]

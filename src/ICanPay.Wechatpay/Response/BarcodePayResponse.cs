@@ -107,19 +107,19 @@ namespace ICanPay.Wechatpay.Response
             _merchant = merchant;
             var barcodePayRequest = request as BarcodePayRequest;
 
-            if (ReturnCode == "SUCCESS")
+            if (ResultCode == "SUCCESS")
             {
                 barcodePayRequest.OnPaySucceed(this, null);
                 return;
             }
 
-            if (!string.IsNullOrEmpty(TradeNo))
+            if (ErrCode == "USERPAYING")
             {
                 var queryResponse = new QueryResponse();
                 Task.Run(async () =>
                 {
                     queryResponse = await PollQueryTradeStateAsync(
-                        OutTradeNo,
+                        barcodePayRequest.Model.OutTradeNo,
                         barcodePayRequest.PollTime,
                         barcodePayRequest.PollCount);
                 })
@@ -138,7 +138,7 @@ namespace ICanPay.Wechatpay.Response
                 }
             }
 
-            barcodePayRequest.OnPayFailed(this, ReturnMsg);
+            barcodePayRequest.OnPayFailed(this, ErrCodeDes);
         }
 
         /// <summary>
@@ -152,7 +152,6 @@ namespace ICanPay.Wechatpay.Response
         {
             for (int i = 0; i < pollCount; i++)
             {
-                Thread.Sleep(pollTime);
                 var queryRequest = new QueryRequest();
                 queryRequest.AddGatewayData(new QueryModel
                 {
@@ -163,6 +162,8 @@ namespace ICanPay.Wechatpay.Response
                 {
                     return queryResponse;
                 }
+
+                Thread.Sleep(pollTime);
             }
 
             //支付超时，取消订单

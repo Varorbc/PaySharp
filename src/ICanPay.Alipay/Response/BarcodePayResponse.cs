@@ -200,7 +200,6 @@ namespace ICanPay.Alipay.Response
         {
             for (int i = 0; i < pollCount; i++)
             {
-                Thread.Sleep(pollTime);
                 var queryRequest = new QueryRequest();
                 queryRequest.AddGatewayData(new QueryModel
                 {
@@ -211,6 +210,8 @@ namespace ICanPay.Alipay.Response
                 {
                     return queryResponse;
                 }
+
+                Thread.Sleep(pollTime);
             }
 
             //支付超时，取消订单

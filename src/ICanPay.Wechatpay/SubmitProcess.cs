@@ -3,6 +3,7 @@ using ICanPay.Core.Exceptions;
 using ICanPay.Core.Request;
 using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
+using ICanPay.Wechatpay.Request;
 using ICanPay.Wechatpay.Response;
 using System.Threading.Tasks;
 
@@ -10,9 +11,11 @@ namespace ICanPay.Wechatpay
 {
     internal static class SubmitProcess
     {
-        internal static TResponse Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request) where TResponse : IResponse
+        private static string _gatewayUrl;
+
+        internal static TResponse Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request, string gatewayUrl = null) where TResponse : IResponse
         {
-            AddMerchant(merchant, request);
+            AddMerchant(merchant, request, gatewayUrl);
 
             string result = null;
             Task.Run(async () =>
@@ -43,13 +46,27 @@ namespace ICanPay.Wechatpay
             return (TResponse)(object)baseResponse;
         }
 
-        private static void AddMerchant<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request) where TResponse : IResponse
+        private static void AddMerchant<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request, string gatewayUrl) where TResponse : IResponse
         {
+            if (!string.IsNullOrEmpty(gatewayUrl))
+            {
+                _gatewayUrl = gatewayUrl;
+            }
+
+            request.RequestUrl = _gatewayUrl + request.RequestUrl;
             request.GatewayData.Add(merchant, StringCase.Snake);
             if (!string.IsNullOrEmpty(request.NotifyUrl))
             {
                 request.GatewayData.Add("notify_url", request.NotifyUrl);
             }
+
+            if (!(request is WapPayRequest || request is AppletPayRequest ||
+                request is PublicPayRequest || request is AppPayRequest ||
+                request is ScanPayRequest))
+            {
+                request.GatewayData.Remove("notify_url");
+            }
+
             request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData, merchant.Key));
         }
 

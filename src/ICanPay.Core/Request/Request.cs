@@ -32,11 +32,18 @@ namespace ICanPay.Core.Request
         public GatewayData GatewayData { get; }
 
         /// <summary>
+        /// 模型
+        /// </summary>
+        /// <returns></returns>
+        public TModel Model { get; private set; }
+
+        /// <summary>
         /// 添加网关数据
         /// </summary>
         /// <param name="model">模型</param>
         public virtual void AddGatewayData(TModel model)
         {
+            Model = model;
             ValidateUtil.Validate(model, null);
         }
     }

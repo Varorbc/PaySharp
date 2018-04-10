@@ -13,9 +13,11 @@ namespace ICanPay.Alipay
 {
     internal static class SubmitProcess
     {
-        internal static TResponse Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request) where TResponse : IResponse
+        private static string _gatewayUrl;
+
+        internal static TResponse Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request, string gatewayUrl = null) where TResponse : IResponse
         {
-            AddMerchant(merchant, request);
+            AddMerchant(merchant, request, gatewayUrl);
 
             string result = null;
             Task.Run(async () =>
@@ -41,15 +43,21 @@ namespace ICanPay.Alipay
             return (TResponse)(object)baseResponse;
         }
 
-        internal static TResponse SdkExecute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request) where TResponse : IResponse
+        internal static TResponse SdkExecute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request, string gatewayUrl) where TResponse : IResponse
         {
-            AddMerchant(merchant, request);
+            AddMerchant(merchant, request, gatewayUrl);
 
             return (TResponse)Activator.CreateInstance(typeof(TResponse), request);
         }
 
-        private static void AddMerchant<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request) where TResponse : IResponse
+        private static void AddMerchant<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request, string gatewayUrl) where TResponse : IResponse
         {
+            if (!string.IsNullOrEmpty(gatewayUrl))
+            {
+                _gatewayUrl = gatewayUrl;
+            }
+
+            request.RequestUrl = _gatewayUrl + request.RequestUrl;
             request.GatewayData.Add(merchant, StringCase.Snake);
             if (!string.IsNullOrEmpty(request.NotifyUrl))
             {

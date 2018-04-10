@@ -67,14 +67,12 @@ namespace ICanPay.Alipay
 
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
-            request.RequestUrl = GatewayUrl + request.RequestUrl;
-
             if (request is WapPayRequest || request is WebPayRequest || request is AppPayRequest)
             {
-                return SubmitProcess.SdkExecute(_merchant, request);
+                return SubmitProcess.SdkExecute(_merchant, request, GatewayUrl);
             }
 
-            return SubmitProcess.Execute(_merchant, request);
+            return SubmitProcess.Execute(_merchant, request, GatewayUrl);
         }
 
         #endregion

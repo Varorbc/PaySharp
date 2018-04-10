@@ -4,7 +4,6 @@ using ICanPay.Alipay.Request;
 using ICanPay.Core;
 using ICanPay.Core.Response;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -111,7 +110,6 @@ namespace ICanPay.Demo.Controllers
         /// <param name="message">提示信息</param>
         private void BarcodePay_PaySucceed(IResponse response, string message)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -121,7 +119,6 @@ namespace ICanPay.Demo.Controllers
         /// <param name="message">提示信息</param>
         private void BarcodePay_PayFaild(IResponse response, string message)
         {
-            throw new NotImplementedException();
         }
 
         [HttpPost]
