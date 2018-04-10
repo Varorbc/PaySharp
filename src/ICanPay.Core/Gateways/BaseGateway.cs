@@ -110,21 +110,6 @@ namespace ICanPay.Core
         /// <returns></returns>
         public abstract TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request) where TResponse : IResponse;
 
-        /// <summary>
-        /// 生成签名
-        /// </summary>
-        /// <param name="gatewayData">网关数据</param>
-        /// <returns></returns>
-        protected abstract string BuildSign(GatewayData gatewayData);
-
-        /// <summary>
-        /// 检验签名
-        /// </summary>
-        /// <param name="data">待验证数据</param>
-        /// <param name="sign">签名</param>
-        /// <returns></returns>
-        protected abstract bool CheckSign(string data, string sign);
-
         #endregion
     }
 }

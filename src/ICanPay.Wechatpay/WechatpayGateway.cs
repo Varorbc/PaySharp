@@ -182,16 +182,6 @@ namespace ICanPay.Wechatpay
             return SubmitProcess.Execute(_merchant, request);
         }
 
-        protected override string BuildSign(GatewayData gatewayData)
-        {
-            return SubmitProcess.BuildSign(gatewayData, _merchant.Key);
-        }
-
-        protected override bool CheckSign(string data, string sign)
-        {
-            return SubmitProcess.CheckSign(data, sign);
-        }
-
         #endregion
     }
 }

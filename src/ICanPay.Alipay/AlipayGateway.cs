@@ -65,16 +65,6 @@ namespace ICanPay.Alipay
             throw new GatewayException("签名不一致");
         }
 
-        protected override string BuildSign(GatewayData gatewayData)
-        {
-            return SubmitProcess.BuildSign(gatewayData, _merchant.Privatekey, _merchant.SignType);
-        }
-
-        protected override bool CheckSign(string data, string sign)
-        {
-            return SubmitProcess.CheckSign(data, sign, _merchant.AlipayPublicKey, _merchant.SignType);
-        }
-
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
             request.RequestUrl = GatewayUrl + request.RequestUrl;

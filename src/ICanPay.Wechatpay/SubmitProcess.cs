@@ -4,7 +4,6 @@ using ICanPay.Core.Request;
 using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
 using ICanPay.Wechatpay.Response;
-using System;
 using System.Threading.Tasks;
 
 namespace ICanPay.Wechatpay
@@ -29,11 +28,11 @@ namespace ICanPay.Wechatpay
 
             var baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Snake);
             baseResponse.Raw = result;
-            if (baseResponse.ReturnCode == "success")
+            if (baseResponse.ReturnCode == "SUCCESS")
             {
                 string sign = gatewayData.GetStringValue(Constant.SIGN);
 
-                if (!CheckSign(BuildSign(gatewayData, merchant.Key), sign))
+                if (!CheckSign(gatewayData, merchant.Key, sign))
                 {
                     throw new GatewayException("签名验证失败");
                 }
@@ -62,9 +61,9 @@ namespace ICanPay.Wechatpay
             return EncryptUtil.MD5(data);
         }
 
-        internal static bool CheckSign(string data, string sign)
+        internal static bool CheckSign(GatewayData gatewayData, string key, string sign)
         {
-            throw new NotImplementedException();
+            return BuildSign(gatewayData, key) == sign;
         }
     }
 }
