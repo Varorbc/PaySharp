@@ -24,15 +24,5 @@ namespace ICanPay.Core
         {
             throw new NotImplementedException();
         }
-
-        protected override string BuildSign(GatewayData gatewayData)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override bool CheckSign(string data, string sign)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
