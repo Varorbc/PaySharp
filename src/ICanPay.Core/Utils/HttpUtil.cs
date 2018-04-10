@@ -38,7 +38,7 @@ namespace ICanPay.Core.Utils
 #if DEBUG
                 return "127.0.0.1";
 #else
-                return Current.Connection.LocalIpAddress.ToString();
+                return Current.Connection.LocalIpAddress.MapToIPv4().ToString();
 #endif
             }
         }
@@ -53,7 +53,7 @@ namespace ICanPay.Core.Utils
 #if DEBUG
                 return "127.0.0.1";
 #else
-                return Current.Connection.RemoteIpAddress.ToString();
+                return Current.Connection.RemoteIpAddress.MapToIPv4().ToString();
 #endif
             }
         }
