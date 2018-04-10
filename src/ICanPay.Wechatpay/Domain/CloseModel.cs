@@ -13,7 +13,7 @@ namespace ICanPay.Wechatpay.Domain
         public string OutTradeNo { get; set; }
 
         /// <summary>
-        /// 随机字符串，长度要求在32位以内
+        /// 随机字符串
         /// </summary>
         public string NonceStr { get; } = Util.GenerateNonceStr();
     }

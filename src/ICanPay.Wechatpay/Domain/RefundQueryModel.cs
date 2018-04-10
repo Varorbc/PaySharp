@@ -40,7 +40,7 @@ namespace ICanPay.Wechatpay.Domain
         public int Offset { get; set; } = 10;
 
         /// <summary>
-        /// 随机字符串，长度要求在32位以内
+        /// 随机字符串
         /// </summary>
         public string NonceStr { get; } = Util.GenerateNonceStr();
 
