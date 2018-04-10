@@ -210,36 +210,67 @@ namespace ICanPay.Demo.Controllers
             return Json(response);
         }
 
-        //[HttpPost]
-        //public IActionResult Transfer(string out_trade_no, string payee_account, string payee_type, double amount, string remark)
-        //{
-        //    var request = new TransferRequest();
-        //    request.AddGatewayData(new TransferModel()
-        //    {
-        //        OutTradeNo = out_trade_no,
-        //        PayeeAccount = payee_account,
-        //        Amount = amount,
-        //        Remark = remark,
-        //        PayeeType = payee_type
-        //    });
+        [HttpPost]
+        public IActionResult Transfer(string out_trade_no, string openid,string check_name, string true_name, int amount, string desc)
+        {
+            var request = new TransferRequest();
+            request.AddGatewayData(new TransferModel()
+            {
+                OutTradeNo = out_trade_no,
+                OpenId = openid,
+                Amount = amount,
+                Desc = desc,
+                CheckName = check_name,
+                TrueName = true_name
+            });
 
-        //    var response = _baseGateway.Execute(request);
-        //    return Json(response);
-        //}
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
 
-        //[HttpPost]
-        //public IActionResult TransferQuery(string out_trade_no, string trade_no)
-        //{
-        //    var request = new TransferQueryRequest();
-        //    request.AddGatewayData(new TransferQueryModel()
-        //    {
-        //        TradeNo = trade_no,
-        //        OutTradeNo = out_trade_no
-        //    });
+        [HttpPost]
+        public IActionResult TransferQuery(string out_trade_no)
+        {
+            var request = new TransferQueryRequest();
+            request.AddGatewayData(new TransferQueryModel()
+            {
+                OutTradeNo = out_trade_no
+            });
 
-        //    var response = _baseGateway.Execute(request);
-        //    return Json(response);
-        //}
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
+
+        [HttpPost]
+        public IActionResult TransferToBank(string out_trade_no, string bank_no, string true_name, string bank_code, int amount, string desc)
+        {
+            var request = new TransferToBankRequest();
+            request.AddGatewayData(new TransferToBankModel()
+            {
+                OutTradeNo = out_trade_no,
+                BankNo = bank_no,
+                Amount = amount,
+                Desc = desc,
+                BankCode = bank_code,
+                TrueName = true_name
+            });
+
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
+
+        [HttpPost]
+        public IActionResult TransferToBankQuery(string out_trade_no)
+        {
+            var request = new TransferToBankQueryRequest();
+            request.AddGatewayData(new TransferToBankQueryModel()
+            {
+                OutTradeNo = out_trade_no
+            });
+
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
 
         [HttpPost]
         public async Task<IActionResult> BillDownload(string bill_date, string bill_type)

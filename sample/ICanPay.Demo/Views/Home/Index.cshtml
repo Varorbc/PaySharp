@@ -440,8 +440,7 @@
                     <li><a href="#tabs-purchase-8">下载对账单</a></li>
                     <li><a href="#tabs-purchase-14">下载资金账单</a></li>
                     <li><a href="#tabs-purchase-9">企业付款到零钱</a></li>
-                    <li><a href="#tabs-purchase-10">查询付款</a></li>
-                    <li><a href="#tabs-purchase-11">获取RSA加密公钥</a></li>
+                    <li><a href="#tabs-purchase-10">查询企业付款零钱</a></li>
                     <li><a href="#tabs-purchase-12">企业付款到银行卡</a></li>
                     <li><a href="#tabs-purchase-13">查询企业付款银行卡</a></li>
                 </ul>
@@ -631,6 +630,7 @@
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_2" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-5">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="Close" method="post" target="_blank">
                         <p>
@@ -701,6 +701,7 @@
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_4" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-7">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="RefundQuery" method="post" target="_blank">
                         <p>
@@ -729,6 +730,7 @@
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_5" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-8">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="BillDownload" method="post" target="_blank">
                         <p>
@@ -749,35 +751,32 @@
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_6" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-9">
-                    <form class="api-form" asp-controller="WeChatPay" asp-action="Transfers" method="post" target="_blank">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="Transfer" method="post" target="_blank">
                         <p>
-                            <label>partner_trade_no：</label>
-                            <input type="text" name="partner_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>openid：</label>
+                            <label>用户openid：</label>
                             <input type="text" name="openid">
                         </p>
                         <p>
-                            <label>check_name：</label>
-                            <input type="text" name="check_name" value="NO_CHECK">
+                            <label>校验用户姓名选项：</label>
+                            <input type="text" name="check_name" value="NO_CHECK" title="NO_CHECK：不校验真实姓名 FORCE_CHECK：强校验真实姓名">
                         </p>
                         <p>
-                            <label>re_user_name：</label>
-                            <input type="text" name="re_user_name">
+                            <label>收款用户姓名：</label>
+                            <input type="text" name="true_name">
                         </p>
                         <p>
-                            <label>amount：</label>
+                            <label>付款金额：</label>
                             <input type="text" name="amount" value="100">
                         </p>
                         <p>
-                            <label>desc：</label>
+                            <label>付款说明：</label>
                             <input type="text" name="desc" value="企业付款测试">
-                        </p>
-                        <p>
-                            <label>spbill_create_ip：</label>
-                            <input type="text" name="spbill_create_ip" value="127.0.0.1">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -789,11 +788,12 @@
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_2" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-10">
-                    <form class="api-form" asp-controller="WeChatPay" asp-action="GetTransferInfo" method="post" target="_blank">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="TransferQuery" method="post" target="_blank">
                         <p>
-                            <label>partner_trade_no：</label>
-                            <input type="text" name="partner_trade_no">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -805,42 +805,31 @@
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_3" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
-                <div id="tabs-purchase-11">
-                    <form class="api-form" asp-controller="WeChatPay" asp-action="GetPublicKey" method="post" target="_blank">
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=24_7&index=4" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
+
                 <div id="tabs-purchase-12">
-                    <form class="api-form" asp-controller="WeChatPay" asp-action="PayBank" method="post" target="_blank">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="TransferToBank" method="post" target="_blank">
                         <p>
-                            <label>partner_trade_no：</label>
-                            <input type="text" name="partner_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>bank_no：</label>
+                            <label>收款方银行卡号	：</label>
                             <input type="text" name="bank_no">
                         </p>
                         <p>
-                            <label>true_name：</label>
+                            <label>收款方用户名：</label>
                             <input type="text" name="true_name">
                         </p>
                         <p>
-                            <label>bank_code：</label>
-                            <input type="text" name="bank_code">
+                            <label>收款方开户行：</label>
+                            <input type="text" name="bank_code" title="银行卡所在开户行编号,详见银行编号列表">
                         </p>
                         <p>
-                            <label>amount：</label>
+                            <label>付款金额：</label>
                             <input type="text" name="amount" value="100">
                         </p>
                         <p>
-                            <label>desc：</label>
+                            <label>付款说明：</label>
                             <input type="text" name="desc" value="企业付款到银行卡测试">
                         </p>
                         <p>
@@ -853,11 +842,12 @@
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=24_2" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-13">
-                    <form class="api-form" asp-controller="WeChatPay" asp-action="QueryBank" method="post" target="_blank">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="TransferToBankQuery" method="post" target="_blank">
                         <p>
-                            <label>partner_trade_no：</label>
-                            <input type="text" name="partner_trade_no">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -869,6 +859,7 @@
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=24_3" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-14">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="FundFlowDownload" method="post" target="_blank">
                         <p>
