@@ -1,6 +1,7 @@
 ﻿using ICanPay.Alipay;
-using ICanPay.Core;
-using ICanPay.Core.Exceptions;
+using ICanPay.Alipay.Domain;
+using ICanPay.Alipay.Request;
+using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
 using System;
 using System.Net;
@@ -14,8 +15,8 @@ namespace ICanPay.UnitTest
         private readonly ITestOutputHelper _output;
         private readonly AlipayGateway _alipayGateway;
         private readonly Merchant _merchant;
-        private readonly Order _order;
         private string _outTradeNo => DateTime.Now.ToString("yyyyMMddhhmmss");
+        private string _outRefundNo => DateTime.Now.ToString("yyyyMMddhhmmss");
 
         public AlipayGatewayTest(ITestOutputHelper output)
         {
@@ -30,158 +31,211 @@ namespace ICanPay.UnitTest
                 Privatekey = "MIIEpAIBAAKCAQEAyC43UbsE5XZ2Pmqg1YgzeCqAMk4HOH8fYHslseeSgKxyDjybjqM0yjGIJry1FRmVvLnY7v8jURgwr7d/pDCSRdoHa6zaxuSzg0OlieNmujae34YZ54PmFxULZW0BHSdzmx3OIYK2GarRECkds531ZzpbLdRXqsxQf5G26JZLIFxmNuh/VjBjJ6Hic1WOFT+FCYyi8om+LkPn3jELeA7LPLXzFqzzxx0vo4yiAePrsX5WucWxf+Y8rZoDhRIy/cPtQECXi9SiAWOJe/82JqjVjfpowf3QN7UJHsA82RBloAS4lvvDGJA7a+8DDlqpqPer8cS41Dv5r39iqtJUybDqoQIDAQABAoIBAHi39kBhiihe8hvd7bQX+QIEj17G02/sqZ1jZm4M+rqCRB31ytGP9qvghvzlXEanMTeo0/v8/O1Qqzusa1s2t19MhqEWkrDTBraoOtIWwsKVYeXmVwTY9A8Db+XwgHV2by8iIEbxLqP38S/Pu8uv/GgONyJCJcQohnsIAsfsqs2OGggz+PplZaXJfUkPomWkRdHM9ZWWDLrCIlmRSHLmhHEtFJaXD083kqo437qra58Amw/n+2gH57utbAQ9V3YQFjD8zW511prC+mB6N/WUlaLstkxswGJ16obEJfQ0r8wYHx14ep6UKGyi3YXlMHcteI8gz+uFx4RuVV9EotdXagECgYEA7AEz9oPFYlW1H15OkDGy8yBnpJwIBu2CQLxINsxhrLIAZ2Bgxqcsv+D9CpnYCBDisbXoGoyMK6XaSypBMRKe2y8yRv4c+w00rcKHtGfRjzSJ5NQO0Tv+q8vKY+cd6BuJ6OUQw82ICLANIfHJZNxtvtTCmmqBwSJDpcQJQXmKXTECgYEA2SQCSBWZZONkvhdJ15K+4IHP2HRbYWi+C1OvKzUiK5bdJm77zia4yJEJo5Y/sY3mV3OK0Bgb7IAaxL3i0oH+WNTwbNoGpMlYHKuj4x1453ITyjOwPNj6g27FG1YSIDzhB6ZC4dBlkehi/7gIlIiQt1wkIZ+ltOqgI5IqIdXoSHECgYB3zCiHYt4oC1+UW7e/hCrVNUbHDRkaAygSGkEB5/9QvU5tK0QUsrmJcPihj/RUK9YW5UK7b0qbwWWsr/dFpLEUi8GWvdkSKuLprQxbrDN44O96Q5Z96Vld9WV4DtJkhs4bdWNsMQFzf4I7D9PuKeJfcvqRjaztz6nNFFSqcrqkkQKBgQCJKlUCohpG/9notp9fvQQ0n+viyQXcj6TVVOSnf6X5MRC8MYmBHTbHA8+59bSAfanO/l7muwQQro+6TlUVMyaviLvjlwpxV/sACXC6jCiO06IqreIbXdlJ41RBw2op0Ss5gM5pBRLUS58V+HP7GBWKrnrofofXtAq6zZ8txok4EQKBgQCXrTeGMs7ECfehLz64qZtPkiQbNwupg938Z40Qru/G1GR9u0kmN7ibTyYauI6NNVHGEZa373EBEkacfN+kkkLQMs1tj5Zrlw+iITm+ad/irpXQZS/NHCcrg6h82vu0LcgiKnHKlmW6K5ne0w4LqmsmRCm7JdJjt9WlapAs0ticiw=="
             };
 
-            _order = new Order()
+            _alipayGateway = new AlipayGateway(_merchant)
             {
-                Amount = 0.01,
-                Subject = "支付宝测试"
+                GatewayUrl = "https://openapi.alipaydev.com"
             };
-
-            _alipayGateway = new AlipayGateway(_merchant);
         }
 
         [Fact]
         public void TestWebPay()
         {
-            _order.OutTradeNo = _outTradeNo;
-            _alipayGateway.Order = _order;
-            _alipayGateway.InitFormPayment();
-
-            Assert.Throws<WebException>(() =>
+            var request = new WebPayRequest();
+            request.AddGatewayData(new WebPayModel()
             {
-                HttpUtil.Post(_alipayGateway.GatewayUrl, _alipayGateway.GatewayData.ToUrl());
+                TotalAmount = 1,
+                Subject = "支付宝电脑网站支付测试",
+                OutTradeNo = _outTradeNo
             });
+
+            var response = _alipayGateway.Execute(request);
+
+            Assert.NotNull(response.Html);
         }
 
         [Fact]
         public void TestWapPay()
         {
-            _order.OutTradeNo = _outTradeNo;
-            _alipayGateway.Order = _order;
-            string url = _alipayGateway.BuildUrlPayment();
+            var request = new WapPayRequest();
+            request.AddGatewayData(new WapPayModel()
+            {
+                TotalAmount = 1,
+                Subject = "支付宝手机网站支付测试",
+                OutTradeNo = _outTradeNo
+            });
+
+            var response = _alipayGateway.Execute(request);
 
             Assert.Throws<WebException>(() =>
             {
-                HttpUtil.Get(url);
+                HttpUtil.Get(response.Url);
             });
         }
 
         [Fact]
         public void TestAppPay()
         {
-            _order.OutTradeNo = _outTradeNo;
-            _alipayGateway.Order = _order;
-            string result = _alipayGateway.BuildAppPayment();
+            var request = new AppPayRequest();
+            request.AddGatewayData(new AppPayModel()
+            {
+                TotalAmount = 1,
+                Subject = "支付宝手机APP支付测试",
+                OutTradeNo = _outTradeNo
+            });
 
-            _output.WriteLine(result);
+            var response = _alipayGateway.Execute(request);
+            Assert.NotNull(response.OrderInfo);
         }
 
         [Fact]
         public void TestBarcodePay()
         {
-            Assert.Throws<GatewayException>(() =>
+            var request = new BarcodePayRequest();
+            request.AddGatewayData(new BarcodePayModel()
             {
-                _order.OutTradeNo = _outTradeNo;
-                _alipayGateway.Order = _order;
-                _alipayGateway.PaymentSucceed += _alipayGateway_PaymentSucceed;
-                _alipayGateway.PaymentFailed += _alipayGateway_PaymentFailed;
-                _alipayGateway.BuildBarcodePayment();
+                TotalAmount = 1,
+                Subject = "支付宝条码支付测试",
+                OutTradeNo = _outTradeNo,
+                AuthCode = "123"
             });
+            request.PaySucceed += BarcodePay_PaySucceed;
+            request.PayFailed += BarcodePay_PayFaild;
+
+            var response = _alipayGateway.Execute(request);
+            Assert.NotNull(response);
         }
 
-        private void _alipayGateway_PaymentSucceed(object arg1, PaymentSucceedEventArgs arg2)
+        private void BarcodePay_PaySucceed(IResponse response, string message)
         {
-            _output.WriteLine("支付成功");
         }
 
-        private void _alipayGateway_PaymentFailed(object arg1, PaymentFailedEventArgs arg2)
+        private void BarcodePay_PayFaild(IResponse response, string message)
         {
-            _output.WriteLine(arg2.Message);
         }
 
         [Fact]
         public void TestScanPay()
         {
-            _order.OutTradeNo = _outTradeNo;
-            _alipayGateway.Order = _order;
-            string result = _alipayGateway.BuildScanPayment();
+            var request = new ScanPayRequest();
+            request.AddGatewayData(new ScanPayModel()
+            {
+                TotalAmount = 1,
+                Subject = "支付宝扫码支付测试",
+                OutTradeNo = _outTradeNo
+            });
 
-            Assert.Contains("http", result);
-            _output.WriteLine(result);
+            var response = _alipayGateway.Execute(request);
+            Assert.NotNull(response.QrCode);
         }
 
         [Fact]
         public void TestQuery()
         {
-            Assert.Throws<GatewayException>(() =>
+            var request = new QueryRequest();
+            request.AddGatewayData(new QueryModel()
             {
-                _alipayGateway.BuildQuery(new Auxiliary
-                {
-                    OutTradeNo = _outTradeNo
-                });
+                OutTradeNo = _outTradeNo
             });
+
+            var response = _alipayGateway.Execute(request);
+            Assert.NotNull(response);
         }
 
         [Fact]
         public void TestCancel()
         {
-            var notify = (Notify)_alipayGateway.BuildCancel(new Auxiliary
+            var request = new CancelRequest();
+            request.AddGatewayData(new CancelModel()
             {
                 OutTradeNo = _outTradeNo
             });
 
-            Assert.Contains("10000", notify.Code);
-            _output.WriteLine(Util.SerializeObject(notify));
+            var response = _alipayGateway.Execute(request);
+            Assert.NotNull(response);
         }
 
         [Fact]
         public void TestClose()
         {
-            Assert.Throws<GatewayException>(() =>
+            var request = new CloseRequest();
+            request.AddGatewayData(new CloseModel()
             {
-                _alipayGateway.BuildClose(new Auxiliary
-                {
-                    OutTradeNo = _outTradeNo
-                });
+                OutTradeNo = _outTradeNo
             });
+
+            var response = _alipayGateway.Execute(request);
+            Assert.NotNull(response);
         }
 
         [Fact]
         public void TestRefund()
         {
-            Assert.Throws<GatewayException>(() =>
+            var request = new RefundRequest();
+            request.AddGatewayData(new RefundModel()
             {
-                _alipayGateway.BuildRefund(new Auxiliary
-                {
-                    OutTradeNo = _outTradeNo,
-                    RefundAmount = 0.01,
-                    OutRefundNo = _outTradeNo
-                });
+                OutTradeNo = _outTradeNo,
+                RefundAmount = 1,
+                OutRefundNo = _outRefundNo
             });
+
+            var response = _alipayGateway.Execute(request);
+            Assert.NotNull(response);
         }
 
         [Fact]
         public void TestRefundQuery()
         {
-            Assert.Throws<GatewayException>(() =>
+            var request = new RefundQueryRequest();
+            request.AddGatewayData(new RefundQueryModel()
             {
-                _alipayGateway.BuildRefundQuery(new Auxiliary
-                {
-                    OutTradeNo = _outTradeNo,
-                    OutRefundNo = "123"
-                });
+                OutTradeNo = _outTradeNo
             });
+
+            var response = _alipayGateway.Execute(request);
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void TestTransfer()
+        {
+            var request = new TransferRequest();
+            request.AddGatewayData(new TransferModel()
+            {
+                OutTradeNo = _outTradeNo,
+                PayeeAccount = "123",
+                Amount = 1,
+                PayeeType = "ALIPAY_LOGONID"
+            });
+
+            var response = _alipayGateway.Execute(request);
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void TestTransferQuery()
+        {
+            var request = new TransferQueryRequest();
+            request.AddGatewayData(new TransferQueryModel()
+            {
+                OutTradeNo = _outTradeNo
+            });
+
+            var response = _alipayGateway.Execute(request);
+            Assert.NotNull(response);
         }
 
         [Fact]
         public void TestBillDownload()
         {
-            var fileStream = _alipayGateway.BuildBillDownload(new Auxiliary
+            var request = new BillDownloadRequest();
+            request.AddGatewayData(new BillDownloadModel()
             {
-                BillType = "trade",
-                BillDate = "2017-10-31"
+                BillDate = "201703",
+                BillType = "trade"
             });
 
-            Assert.True(fileStream.Length > 0);
+            var response = _alipayGateway.Execute(request);
+            Assert.True(response.GetBillFile().Length > 0);
         }
     }
 }
