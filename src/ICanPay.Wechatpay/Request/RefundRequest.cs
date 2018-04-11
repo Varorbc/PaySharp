@@ -8,6 +8,7 @@ namespace ICanPay.Wechatpay.Request
         public RefundRequest()
         {
             RequestUrl = "/secapi/pay/refund";
+            IsUseCert = true;
         }
     }
 }

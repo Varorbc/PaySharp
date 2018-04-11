@@ -8,6 +8,7 @@ namespace ICanPay.Wechatpay.Request
         public FundFlowDownloadRequest()
         {
             RequestUrl = "/pay/downloadfundflow";
+            IsUseCert = true;
         }
     }
 }

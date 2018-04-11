@@ -17,5 +17,10 @@ namespace ICanPay.Wechatpay.Request
 
             GatewayData.Add(model, StringCase.Snake);
         }
+
+        /// <summary>
+        /// 是否需要使用证书
+        /// </summary>
+        internal bool IsUseCert { get; set; }
     }
 }

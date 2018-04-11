@@ -8,6 +8,7 @@ namespace ICanPay.Wechatpay.Request
         public TransferToBankQueryRequest()
         {
             RequestUrl = "/mmpaysptrans/query_bank";
+            IsUseCert = true;
         }
     }
 }

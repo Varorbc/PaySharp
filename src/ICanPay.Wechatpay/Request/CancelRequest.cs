@@ -8,6 +8,7 @@ namespace ICanPay.Wechatpay.Request
         public CancelRequest()
         {
             RequestUrl = "/secapi/pay/reverse";
+            IsUseCert = true;
         }
     }
 }

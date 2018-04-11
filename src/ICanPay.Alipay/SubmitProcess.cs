@@ -57,7 +57,10 @@ namespace ICanPay.Alipay
                 _gatewayUrl = gatewayUrl;
             }
 
-            request.RequestUrl = _gatewayUrl + request.RequestUrl;
+            if (!request.RequestUrl.StartsWith("http"))
+            {
+                request.RequestUrl = _gatewayUrl + request.RequestUrl;
+            }
             request.GatewayData.Add(merchant, StringCase.Snake);
             if (!string.IsNullOrEmpty(request.NotifyUrl))
             {

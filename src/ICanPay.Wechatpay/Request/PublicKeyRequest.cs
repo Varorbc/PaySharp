@@ -7,6 +7,7 @@ namespace ICanPay.Wechatpay.Request
         public PublicKeyRequest()
         {
             RequestUrl = "https://fraud.mch.weixin.qq.com/risk/getpublickey";
+            IsUseCert = true;
         }
     }
 }

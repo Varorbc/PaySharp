@@ -144,25 +144,6 @@ namespace ICanPay.Wechatpay
             return false;
         }
 
-        /*/// <summary>
-        /// 提交请求
-        /// </summary>
-        /// <param name="isCert">是否添加证书</param>
-        private void Commit(bool isCert = false)
-        {
-            var cert = isCert ? new X509Certificate2(Merchant.SslCertPath, Merchant.SslCertPassword) : null;
-
-            string result = null;
-            Task.Run(async () =>
-            {
-                result = await HttpUtil
-                .PostAsync(RequestUrl, GatewayData.ToXml(), cert);
-            })
-            .GetAwaiter()
-            .GetResult();
-            ReadReturnResult(result);
-        }*/
-
         protected override void WriteSuccessFlag()
         {
             GatewayData.Add(Constant.RETURN_CODE, SUCCESS.ToUpper());

@@ -5,6 +5,7 @@ using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
 using ICanPay.Wechatpay.Request;
 using ICanPay.Wechatpay.Response;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace ICanPay.Wechatpay
@@ -17,11 +18,17 @@ namespace ICanPay.Wechatpay
         {
             AddMerchant(merchant, request, gatewayUrl);
 
+            X509Certificate2 cert = null;
+            if (((BaseRequest<TModel,TResponse>)request).IsUseCert)
+            {
+                cert = new X509Certificate2(merchant.SslCertPath, merchant.SslCertPassword);
+            }
+
             string result = null;
             Task.Run(async () =>
             {
                 result = await HttpUtil
-                 .PostAsync(request.RequestUrl, request.GatewayData.ToXml());
+                 .PostAsync(request.RequestUrl, request.GatewayData.ToXml(), cert);
             })
             .GetAwaiter()
             .GetResult();
@@ -53,7 +60,10 @@ namespace ICanPay.Wechatpay
                 _gatewayUrl = gatewayUrl;
             }
 
-            request.RequestUrl = _gatewayUrl + request.RequestUrl;
+            if (!request.RequestUrl.StartsWith("http"))
+            {
+                request.RequestUrl = _gatewayUrl + request.RequestUrl;
+            }
             request.GatewayData.Add(merchant, StringCase.Snake);
             if (!string.IsNullOrEmpty(request.NotifyUrl))
             {

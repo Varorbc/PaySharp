@@ -8,6 +8,7 @@ namespace ICanPay.Wechatpay.Request
         public CloseRequest()
         {
             RequestUrl = "/pay/closeorder";
+            IsUseCert = true;
         }
     }
 }
