@@ -1,5 +1,5 @@
 ﻿using ICanPay.Core.Request;
-using System.Threading.Tasks;
+using System.Text;
 
 namespace ICanPay.Wechatpay.Response
 {
@@ -13,18 +13,14 @@ namespace ICanPay.Wechatpay.Response
             return _billFile;
         }
 
-        /// <summary>
-        /// 获取账单文件
-        /// </summary>
-        public async Task<byte[]> GetBillFileAsync()
-        {
-            return _billFile;
-        }
-
         private byte[] _billFile;
 
         internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
+            if(!string.IsNullOrEmpty(Raw))
+            {
+                _billFile = Encoding.UTF8.GetBytes(Raw);
+            }
         }
     }
 }

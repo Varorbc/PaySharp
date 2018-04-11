@@ -4,7 +4,7 @@ using ICanPay.Wechatpay;
 using ICanPay.Wechatpay.Domain;
 using ICanPay.Wechatpay.Request;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using System;
 
 namespace ICanPay.Demo.Controllers
 {
@@ -207,7 +207,7 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Transfer(string out_trade_no, string openid,string check_name, string true_name, int amount, string desc)
+        public IActionResult Transfer(string out_trade_no, string openid, string check_name, string true_name, int amount, string desc)
         {
             var request = new TransferRequest();
             request.AddGatewayData(new TransferModel()
@@ -269,7 +269,7 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> BillDownload(string bill_date, string bill_type)
+        public IActionResult BillDownload(string bill_date, string bill_type)
         {
             var request = new BillDownloadRequest();
             request.AddGatewayData(new BillDownloadModel()
@@ -279,11 +279,11 @@ namespace ICanPay.Demo.Controllers
             });
 
             var response = _baseGateway.Execute(request);
-            return File(await response.GetBillFileAsync(), "application/gzip");
+            return File(response.GetBillFile(), "text/csv", $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.csv");
         }
 
         [HttpPost]
-        public async Task<IActionResult> FundFlowDownload(string bill_date, string account_type)
+        public IActionResult FundFlowDownload(string bill_date, string account_type)
         {
             var request = new FundFlowDownloadRequest();
             request.AddGatewayData(new FundFlowDownloadModel()
@@ -293,7 +293,7 @@ namespace ICanPay.Demo.Controllers
             });
 
             var response = _baseGateway.Execute(request);
-            return File(await response.GetBillFileAsync(), "application/gzip");
+            return File(response.GetBillFile(), "text/csv", $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.csv");
         }
     }
 }

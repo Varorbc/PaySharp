@@ -5,6 +5,7 @@ using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
 using ICanPay.Wechatpay.Request;
 using ICanPay.Wechatpay.Response;
+using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
@@ -19,13 +20,12 @@ namespace ICanPay.Wechatpay
             AddMerchant(merchant, request, gatewayUrl);
 
             X509Certificate2 cert = null;
-            if (((BaseRequest<TModel,TResponse>)request).IsUseCert)
+            if (((BaseRequest<TModel, TResponse>)request).IsUseCert)
             {
                 //TODO:测试
                 cert = new X509Certificate2(merchant.SslCertPath, merchant.SslCertPassword);
             }
 
-            //TODO:下载账单测试
             string result = null;
             Task.Run(async () =>
             {
@@ -35,20 +35,30 @@ namespace ICanPay.Wechatpay
             .GetAwaiter()
             .GetResult();
 
-            var gatewayData = new GatewayData();
-            gatewayData.FromXml(result);
-
-            var baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Snake);
-            baseResponse.Raw = result;
-            if (baseResponse.ReturnCode == "SUCCESS")
+            BaseResponse baseResponse;
+            if (!(request is BillDownloadRequest || request is FundFlowDownloadRequest))
             {
-                string sign = gatewayData.GetStringValue("sign");
+                var gatewayData = new GatewayData();
+                gatewayData.FromXml(result);
 
-                if (!CheckSign(gatewayData, merchant.Key, sign))
+                baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Snake);
+                baseResponse.Raw = result;
+                if (baseResponse.ReturnCode == "SUCCESS")
                 {
-                    throw new GatewayException("签名验证失败");
-                }
+                    string sign = gatewayData.GetStringValue("sign");
 
+                    if (!CheckSign(gatewayData, merchant.Key, sign))
+                    {
+                        throw new GatewayException("签名验证失败");
+                    }
+
+                    baseResponse.Execute(merchant, request);
+                }
+            }
+            else
+            {
+                baseResponse = (BaseResponse)Activator.CreateInstance(typeof(TResponse));
+                baseResponse.Raw = result;
                 baseResponse.Execute(merchant, request);
             }
 

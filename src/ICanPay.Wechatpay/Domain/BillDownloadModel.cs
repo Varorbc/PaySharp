@@ -24,12 +24,6 @@ namespace ICanPay.Wechatpay.Domain
         public string BillDate { get; set; }
 
         /// <summary>
-        /// 非必传参数，固定值：GZIP，返回格式为.gzip的压缩包账单。不传则默认为数据流形式。
-        /// </summary>
-        [StringLength(8, ErrorMessage = "压缩账单最大长度为8位")]
-        public string TarType { get; set; } = "GZIP";
-
-        /// <summary>
         /// 随机字符串
         /// </summary>
         public string NonceStr { get; } = Util.GenerateNonceStr();
