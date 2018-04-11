@@ -36,6 +36,16 @@ namespace ICanPay.Core
             set => _values[key] = value;
         }
 
+        public SortedDictionary<string, object>.KeyCollection Keys
+        {
+            get => _values.Keys;
+        }
+
+        public SortedDictionary<string, object>.ValueCollection Values
+        {
+            get => _values.Values;
+        }
+
         public KeyValuePair<string, object> this[int index]
         {
             get => _values.ElementAt(index);
@@ -85,6 +95,11 @@ namespace ICanPay.Core
             if (string.IsNullOrEmpty(key))
             {
                 throw new ArgumentNullException("key", "参数名不能为空");
+            }
+
+            if (value is null || string.IsNullOrEmpty(value.ToString()))
+            {
+                return false;
             }
 
             if (Exists(key))

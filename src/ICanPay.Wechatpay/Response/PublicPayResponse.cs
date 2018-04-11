@@ -24,18 +24,21 @@ namespace ICanPay.Wechatpay.Response
 
         internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
-            var gatewayData = new GatewayData();
-            gatewayData.Add("appId", merchant.AppId);
-            gatewayData.Add("timeStamp", DateTime.Now.ToTimeStamp());
-            gatewayData.Add("nonceStr", Util.GenerateNonceStr());
-            gatewayData.Add("package", $"prepay_id={PrepayId}");
-            gatewayData.Add("signType", "MD5");
+            if (ResultCode == "SUCCESS")
+            {
+                var gatewayData = new GatewayData();
+                gatewayData.Add("appId", merchant.AppId);
+                gatewayData.Add("timeStamp", DateTime.Now.ToTimeStamp());
+                gatewayData.Add("nonceStr", Util.GenerateNonceStr());
+                gatewayData.Add("package", $"prepay_id={PrepayId}");
+                gatewayData.Add("signType", "MD5");
 
-            string data = $"{gatewayData.ToUrl(false)}&key={merchant.Key}";
-            string sign = EncryptUtil.MD5(data);
-            gatewayData.Add("paySign", sign);
+                string data = $"{gatewayData.ToUrl(false)}&key={merchant.Key}";
+                string sign = EncryptUtil.MD5(data);
+                gatewayData.Add("paySign", sign);
 
-            OrderInfo = gatewayData.ToJson();
+                OrderInfo = gatewayData.ToJson();
+            }
         }
     }
 }

@@ -614,7 +614,7 @@
                     <form class="api-form" asp-controller="WeChatPay" asp-action="Query" method="post" target="_blank">
                         <p>
                             <label>微信订单号：</label>
-                            <input type="text" name="transaction_id">
+                            <input type="text" name="trade_no">
                         </p>
                         <p>
                             <label>订单号：</label>
@@ -735,7 +735,7 @@
                     <form class="api-form" asp-controller="WeChatPay" asp-action="BillDownload" method="post" target="_blank">
                         <p>
                             <label>下载对账单的日期：</label>
-                            <input type="text" name="bill_date" title="格式：yyyyMM">
+                            <input type="text" name="bill_date" title="格式：yyyyMMdd">
                         </p>
                         <p>
                             <label>账单类型：</label>
@@ -864,7 +864,7 @@
                     <form class="api-form" asp-controller="WeChatPay" asp-action="FundFlowDownload" method="post" target="_blank">
                         <p>
                             <label>下载资金账单日期：</label>
-                            <input type="text" name="bill_date" title="格式：yyyyMM">
+                            <input type="text" name="bill_date" title="格式：yyyyMMdd">
                         </p>
                         <p>
                             <label>资金账户类型：</label>
