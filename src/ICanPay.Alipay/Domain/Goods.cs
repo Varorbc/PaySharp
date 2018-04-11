@@ -10,7 +10,7 @@ namespace ICanPay.Alipay.Domain
         /// <summary>
         /// 商品的编号
         /// </summary>
-        [JsonProperty(PropertyName = Constant.GOODS_ID)]
+        [JsonProperty("goods_id")]
         [StringLength(32, ErrorMessage = "商品的编号最大长度为32位")]
         [Required(ErrorMessage = "请设置商品的编号")]
         public string Id { get; set; }
@@ -24,7 +24,7 @@ namespace ICanPay.Alipay.Domain
         /// <summary>
         /// 商品名称
         /// </summary>
-        [JsonProperty(PropertyName = Constant.GOODS_NAME)]
+        [JsonProperty("goods_name")]
         [StringLength(256, ErrorMessage = "商品名称最大长度为256位")]
         [Required(ErrorMessage = "请设置商品名称")]
         public string Name { get; set; }
@@ -44,7 +44,7 @@ namespace ICanPay.Alipay.Domain
         /// <summary>
         /// 商品类目
         /// </summary>
-        [JsonProperty(PropertyName = Constant.GOODS_CATEGORY)]
+        [JsonProperty("goods_category")]
         [StringLength(24, ErrorMessage = "商品类目最大长度为24位")]
         public string Category { get; set; }
 

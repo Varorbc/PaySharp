@@ -270,7 +270,7 @@ namespace ICanPay.Unionpay
         private FileStream CreateZip(string content)
         {
             byte[] buffer = Util.Inflater(content);
-            FileStream fileStream = new FileStream($"{DateTime.Now.ToString(TIMEFORMAT)}.zip", FileMode.Create);
+            FileStream fileStream = new FileStream($"{DateTime.Now.ToString("yyyyMMddHHmmss")}.zip", FileMode.Create);
             fileStream.Write(buffer, 0, buffer.Length);
             fileStream.Position = 0;
 

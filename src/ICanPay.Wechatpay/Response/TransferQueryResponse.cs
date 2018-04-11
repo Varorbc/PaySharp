@@ -34,7 +34,7 @@ namespace ICanPay.Wechatpay.Response
         /// <summary>
         /// 用户标识，此参数为微信用户在商户对应appid下的唯一标识。
         /// </summary>
-        [ReName(Name = Constant.OPENID)]
+        [ReName(Name = "openid")]
         public string OpenId { get; set; }
 
         /// <summary>

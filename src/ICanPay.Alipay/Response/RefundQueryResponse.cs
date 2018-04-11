@@ -18,7 +18,7 @@ namespace ICanPay.Alipay.Response
         /// <summary>
         /// 本笔退款对应的退款请求号
         /// </summary>
-        [JsonProperty(Constant.OUT_REQUEST_NO)]
+        [JsonProperty("out_request_no")]
         public string OutRefundNo { get; set; }
 
         /// <summary>

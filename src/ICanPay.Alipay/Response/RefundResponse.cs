@@ -31,7 +31,7 @@ namespace ICanPay.Alipay.Response
         /// <summary>
         /// 退款总金额
         /// </summary>
-        [JsonProperty(PropertyName = "refund_fee")]
+        [JsonProperty("refund_fee")]
         public double RefundAmount { get; set; }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ICanPay.Alipay.Response
         /// <summary>
         /// 退款使用的资金渠道
         /// </summary>
-        [JsonProperty(PropertyName = "refund_detail_item_list")]
+        [JsonProperty("refund_detail_item_list")]
         public List<TradeFundBill> FundBillList { get; set; }
 
         /// <summary>
@@ -63,19 +63,19 @@ namespace ICanPay.Alipay.Response
         /// <summary>
         /// 本次退款金额中买家退款金额
         /// </summary>
-        [JsonProperty(PropertyName = "present_refund_buyer_amount")]
+        [JsonProperty("present_refund_buyer_amount")]
         public double RefundBuyerAmount { get; set; }
 
         /// <summary>
         /// 本次退款金额中平台优惠退款金额
         /// </summary>
-        [JsonProperty(PropertyName = "present_refund_discount_amount")]
+        [JsonProperty("present_refund_discount_amount")]
         public double RefundDiscountAmount { get; set; }
 
         /// <summary>
         /// 本次退款金额中商家优惠退款金额
         /// </summary>
-        [JsonProperty(PropertyName = "present_refund_mdiscount_amount")]
+        [JsonProperty("present_refund_mdiscount_amount")]
         public double RefundMdiscountAmount { get; set; }
 
         internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)

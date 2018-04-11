@@ -10,7 +10,7 @@ namespace ICanPay.Alipay.Domain
         /// </summary>
         [Required(ErrorMessage = "请设置退款请求号")]
         [StringLength(64, ErrorMessage = "退款请求号最大长度为64位")]
-        [JsonProperty(Constant.OUT_REQUEST_NO)]
+        [JsonProperty("out_request_no")]
         public string OutRefundNo { get; set; }
     }
 }

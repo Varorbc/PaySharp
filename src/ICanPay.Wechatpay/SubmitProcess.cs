@@ -21,9 +21,11 @@ namespace ICanPay.Wechatpay
             X509Certificate2 cert = null;
             if (((BaseRequest<TModel,TResponse>)request).IsUseCert)
             {
+                //TODO:测试
                 cert = new X509Certificate2(merchant.SslCertPath, merchant.SslCertPassword);
             }
 
+            //TODO:下载账单测试
             string result = null;
             Task.Run(async () =>
             {
@@ -40,7 +42,7 @@ namespace ICanPay.Wechatpay
             baseResponse.Raw = result;
             if (baseResponse.ReturnCode == "SUCCESS")
             {
-                string sign = gatewayData.GetStringValue(Constant.SIGN);
+                string sign = gatewayData.GetStringValue("sign");
 
                 if (!CheckSign(gatewayData, merchant.Key, sign))
                 {
@@ -77,12 +79,12 @@ namespace ICanPay.Wechatpay
                 request.GatewayData.Remove("notify_url");
             }
 
-            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData, merchant.Key));
+            request.GatewayData.Add("sign", BuildSign(request.GatewayData, merchant.Key));
         }
 
         internal static string BuildSign(GatewayData gatewayData, string key)
         {
-            gatewayData.Remove(Constant.SIGN);
+            gatewayData.Remove("sign");
 
             string data = $"{gatewayData.ToUrl(false)}&key={key}";
             return EncryptUtil.MD5(data);

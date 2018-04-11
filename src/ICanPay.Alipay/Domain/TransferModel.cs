@@ -14,7 +14,7 @@ namespace ICanPay.Alipay.Domain
         /// </summary>
         [StringLength(64, ErrorMessage = "商户转账唯一订单号最大长度为64位")]
         [Required(ErrorMessage = "请设置商户转账唯一订单号")]
-        [JsonProperty(PropertyName = "out_biz_no")]
+        [JsonProperty("out_biz_no")]
         public string OutTradeNo { get; set; }
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace ICanPay.Wechatpay.Response
         /// 用户标识
         /// 用户在商户appid 下的唯一标识
         /// </summary>
-        [ReName(Name = Constant.OPENID)]
+        [ReName(Name = "openid")]
         public string OpenId { get; set; }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace ICanPay.Wechatpay.Response
         /// 订单金额
         /// 订单总金额，单位为分
         /// </summary>
-        [ReName(Name = Constant.TOTAL_FEE)]
+        [ReName(Name = "total_fee")]
         public int TotalAmount { get; set; }
 
         /// <summary>

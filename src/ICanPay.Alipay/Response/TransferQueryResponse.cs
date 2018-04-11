@@ -9,7 +9,7 @@ namespace ICanPay.Alipay.Response
         /// <summary>
         /// 支付宝转账单据号，查询失败不返回
         /// </summary>
-        [JsonProperty(PropertyName = "order_id")]
+        [JsonProperty("order_id")]
         public string TradeNo { get; set; }
 
         /// <summary>
@@ -17,7 +17,7 @@ namespace ICanPay.Alipay.Response
         /// 该参数的赋值均以查询结果中 的 out_biz_no 为准。 
         /// 如果查询失败，不返回该参数。
         /// </summary>
-        [JsonProperty(PropertyName = "out_biz_no")]
+        [JsonProperty("out_biz_no")]
         public string OutTradeNo { get; set; }
 
         /// <summary>

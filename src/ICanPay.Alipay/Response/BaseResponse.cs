@@ -18,7 +18,7 @@ namespace ICanPay.Alipay.Response
         /// 网关返回码描述,详见文档
         /// https://docs.open.alipay.com/common/105806
         /// </summary>
-        [JsonProperty(PropertyName = Constant.MSG)]
+        [JsonProperty("msg")]
         public string Message { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ICanPay.Alipay.Response
         /// 网关返回码描述,详见文档
         /// https://docs.open.alipay.com/common/105806
         /// </summary>
-        [JsonProperty(PropertyName = Constant.SUBMSG)]
+        [JsonProperty("sub_msg")]
         public string SubMessage { get; set; }
 
         /// <summary>

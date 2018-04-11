@@ -10,19 +10,6 @@ namespace ICanPay.Core
     /// </summary>
     public abstract class BaseGateway
     {
-        #region 公共字段
-
-        public const string TRUE = "true";
-        public const string FALSE = "false";
-        public const string SUCCESS = "success";
-        public const string FAILURE = "failure";
-        public const string FAIL = "FAIL";
-        public const string TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-        public const string TIMEFORMAT = "yyyyMMddHHmmss";
-        public const string BODY = "body";
-
-        #endregion
-
         #region 构造函数
 
         /// <summary>
@@ -90,7 +77,7 @@ namespace ICanPay.Core
         /// </summary>
         protected internal virtual void WriteSuccessFlag()
         {
-            HttpUtil.Write(SUCCESS);
+            HttpUtil.Write("success");
         }
 
         /// <summary>
@@ -98,7 +85,7 @@ namespace ICanPay.Core
         /// </summary>
         protected internal virtual void WriteFailureFlag()
         {
-            HttpUtil.Write(FAILURE);
+            HttpUtil.Write("failure");
         }
 
         /// <summary>

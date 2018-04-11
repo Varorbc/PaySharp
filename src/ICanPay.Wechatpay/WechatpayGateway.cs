@@ -39,7 +39,7 @@ namespace ICanPay.Wechatpay
 
         public new Notify Notify => (Notify)base.Notify;
 
-        protected override bool IsSuccessPay => Notify.ResultCode.ToLower() == SUCCESS;
+        protected override bool IsSuccessPay => Notify.ResultCode == "SUCCESS";
 
         protected override string[] NotifyVerifyParameter => new string[]
         {
@@ -100,7 +100,7 @@ namespace ICanPay.Wechatpay
             GatewayData.Add(Constant.MCH_ID, Merchant.AppId);
             GatewayData.Add(Constant.AUTH_CODE, Merchant.AppId);
             GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
-            GatewayData.Add(Constant.SIGN, BuildSign());
+            GatewayData.Add("sign", BuildSign());
             RequestUrl = AuthCodeToOpenIdUrl;
 
             Commit();
@@ -114,7 +114,7 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private string BuildSign()
         {
-            GatewayData.Remove(Constant.SIGN);
+            GatewayData.Remove("sign");
 
             string data = $"{GatewayData.ToUrl(false)}&key={_merchant.Key}";
             return EncryptUtil.MD5(data);
@@ -126,7 +126,7 @@ namespace ICanPay.Wechatpay
         /// <returns></returns>
         private bool IsSuccessResult()
         {
-            if (Notify.ReturnCode.ToLower() != SUCCESS)
+            if (Notify.ReturnCode != "SUCCESS")
             {
                 throw new GatewayException("不是成功的返回码");
             }
@@ -136,7 +136,7 @@ namespace ICanPay.Wechatpay
                 throw new GatewayException("签名不一致");
             }
 
-            if (Notify.ResultCode.ToLower() == SUCCESS)
+            if (Notify.ResultCode== "SUCCESS")
             {
                 return true;
             }
@@ -146,13 +146,13 @@ namespace ICanPay.Wechatpay
 
         protected override void WriteSuccessFlag()
         {
-            GatewayData.Add(Constant.RETURN_CODE, SUCCESS.ToUpper());
+            GatewayData.Add("return_code", "SUCCESS");
             HttpUtil.Write(GatewayData.ToXml());
         }
 
         protected override void WriteFailureFlag()
         {
-            GatewayData.Add(Constant.RETURN_CODE, FAIL);
+            GatewayData.Add("return_code", "FAIL");
             HttpUtil.Write(GatewayData.ToXml());
         }
 

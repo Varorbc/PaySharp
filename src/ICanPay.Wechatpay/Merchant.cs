@@ -12,7 +12,7 @@ namespace ICanPay.Wechatpay
         /// 应用ID
         /// </summary>
         [Required(ErrorMessage = "请输入支付机构提供的应用编号")]
-        [ReName(Name = Constant.APPID)]
+        [ReName(Name = "appid")]
         public string AppId { get; set; }
 
         /// <summary>

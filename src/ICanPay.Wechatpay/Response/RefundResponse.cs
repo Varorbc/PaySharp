@@ -31,7 +31,7 @@ namespace ICanPay.Wechatpay.Response
         /// <summary>
         /// 退款金额,退款总金额,单位为分,可以做部分退款
         /// </summary>
-        [ReName(Name = Constant.TOTAL_FEE)]
+        [ReName(Name = "refund_fee")]
         public int RefundAmount { get; set; }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ICanPay.Wechatpay.Response
         /// 订单金额
         /// 订单总金额，单位为分
         /// </summary>
-        [ReName(Name = Constant.TOTAL_FEE)]
+        [ReName(Name = "total_fee")]
         public int TotalAmount { get; set; }
 
         /// <summary>

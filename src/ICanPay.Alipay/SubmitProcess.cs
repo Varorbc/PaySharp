@@ -70,7 +70,7 @@ namespace ICanPay.Alipay
             {
                 request.GatewayData.Add("return_url", request.ReturnUrl);
             }
-            request.GatewayData.Add(Constant.SIGN, BuildSign(request.GatewayData, merchant.Privatekey, merchant.SignType));
+            request.GatewayData.Add("sign", BuildSign(request.GatewayData, merchant.Privatekey, merchant.SignType));
         }
 
         internal static string BuildSign(GatewayData gatewayData, string privatekey, string signType)

@@ -58,7 +58,7 @@ namespace ICanPay.Wechatpay.Domain
         /// <summary>
         /// 标价金额,订单总金额，单位为分，详见支付金额
         /// </summary>
-        [ReName(Name = Constant.TOTAL_FEE)]
+        [ReName(Name = "total_fee")]
         public int TotalAmount { get; set; }
 
         /// <summary>
