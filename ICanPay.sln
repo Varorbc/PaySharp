@@ -15,10 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICanPay.UnitTest", "test\IC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICanPay.Unionpay", "src\ICanPay.Unionpay\ICanPay.Unionpay.csproj", "{D0CBE889-BEAE-4F88-BF23-A4F1ED728620}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICanPay.UnitTest(Net)", "test\ICanPay.UnitTest(Net)\ICanPay.UnitTest(Net).csproj", "{9456F7D3-FDC2-4447-9E88-D97F542F5039}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICanPay.Demo(Net)", "sample\ICanPay.Demo(Net)\ICanPay.Demo(Net).csproj", "{7C1D33F1-EEB7-4B13-A594-24C764FB0381}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICanPay.Core.Mvc", "src\ICanPay.Core.Mvc\ICanPay.Core.Mvc.csproj", "{2E3EBDA4-F467-4A50-AA12-1DAD40450A97}"
 EndProject
 Global
@@ -51,14 +47,6 @@ Global
 		{D0CBE889-BEAE-4F88-BF23-A4F1ED728620}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0CBE889-BEAE-4F88-BF23-A4F1ED728620}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0CBE889-BEAE-4F88-BF23-A4F1ED728620}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9456F7D3-FDC2-4447-9E88-D97F542F5039}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9456F7D3-FDC2-4447-9E88-D97F542F5039}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9456F7D3-FDC2-4447-9E88-D97F542F5039}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9456F7D3-FDC2-4447-9E88-D97F542F5039}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C1D33F1-EEB7-4B13-A594-24C764FB0381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C1D33F1-EEB7-4B13-A594-24C764FB0381}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C1D33F1-EEB7-4B13-A594-24C764FB0381}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C1D33F1-EEB7-4B13-A594-24C764FB0381}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E3EBDA4-F467-4A50-AA12-1DAD40450A97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E3EBDA4-F467-4A50-AA12-1DAD40450A97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E3EBDA4-F467-4A50-AA12-1DAD40450A97}.Release|Any CPU.ActiveCfg = Release|Any CPU
