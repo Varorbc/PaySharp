@@ -4,7 +4,6 @@ using ICanPay.Alipay.Request;
 using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
 using System;
-using System.Net;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -50,6 +49,7 @@ namespace ICanPay.UnitTest
 
             var response = _alipayGateway.Execute(request);
 
+            _output.WriteLine(response.Html);
             Assert.NotNull(response.Html);
         }
 
@@ -66,10 +66,9 @@ namespace ICanPay.UnitTest
 
             var response = _alipayGateway.Execute(request);
 
-            Assert.Throws<WebException>(() =>
-            {
-                HttpUtil.Get(response.Url);
-            });
+            _output.WriteLine(response.Url);
+            string result = HttpUtil.Get(response.Url);
+            Assert.Contains("支付宝", result);
         }
 
         [Fact]
@@ -84,6 +83,8 @@ namespace ICanPay.UnitTest
             });
 
             var response = _alipayGateway.Execute(request);
+
+            _output.WriteLine(response.OrderInfo);
             Assert.NotNull(response.OrderInfo);
         }
 
@@ -102,7 +103,7 @@ namespace ICanPay.UnitTest
             request.PayFailed += BarcodePay_PayFaild;
 
             var response = _alipayGateway.Execute(request);
-            Assert.NotNull(response);
+            Assert.Equal("40004", response.Code);
         }
 
         private void BarcodePay_PaySucceed(IResponse response, string message)
@@ -125,6 +126,8 @@ namespace ICanPay.UnitTest
             });
 
             var response = _alipayGateway.Execute(request);
+
+            _output.WriteLine(response.QrCode);
             Assert.NotNull(response.QrCode);
         }
 
@@ -138,7 +141,7 @@ namespace ICanPay.UnitTest
             });
 
             var response = _alipayGateway.Execute(request);
-            Assert.NotNull(response);
+            Assert.Equal("40004", response.Code);
         }
 
         [Fact]
@@ -151,7 +154,7 @@ namespace ICanPay.UnitTest
             });
 
             var response = _alipayGateway.Execute(request);
-            Assert.NotNull(response);
+            Assert.Equal("10000", response.Code);
         }
 
         [Fact]
@@ -164,7 +167,7 @@ namespace ICanPay.UnitTest
             });
 
             var response = _alipayGateway.Execute(request);
-            Assert.NotNull(response);
+            Assert.Equal("40004", response.Code);
         }
 
         [Fact]
@@ -179,7 +182,7 @@ namespace ICanPay.UnitTest
             });
 
             var response = _alipayGateway.Execute(request);
-            Assert.NotNull(response);
+            Assert.Equal("40004", response.Code);
         }
 
         [Fact]
@@ -188,11 +191,12 @@ namespace ICanPay.UnitTest
             var request = new RefundQueryRequest();
             request.AddGatewayData(new RefundQueryModel()
             {
-                OutTradeNo = _outTradeNo
+                OutTradeNo = _outTradeNo,
+                OutRefundNo = _outRefundNo
             });
 
             var response = _alipayGateway.Execute(request);
-            Assert.NotNull(response);
+            Assert.Equal("40004", response.Code);
         }
 
         [Fact]
@@ -202,13 +206,13 @@ namespace ICanPay.UnitTest
             request.AddGatewayData(new TransferModel()
             {
                 OutTradeNo = _outTradeNo,
-                PayeeAccount = "123",
+                PayeeAccount = "lmgnst2438@sandbox.com",
                 Amount = 1,
                 PayeeType = "ALIPAY_LOGONID"
             });
 
             var response = _alipayGateway.Execute(request);
-            Assert.NotNull(response);
+            Assert.Equal("10000", response.Code);
         }
 
         [Fact]
@@ -221,7 +225,7 @@ namespace ICanPay.UnitTest
             });
 
             var response = _alipayGateway.Execute(request);
-            Assert.NotNull(response);
+            Assert.Equal("40004", response.Code);
         }
 
         [Fact]
@@ -230,7 +234,7 @@ namespace ICanPay.UnitTest
             var request = new BillDownloadRequest();
             request.AddGatewayData(new BillDownloadModel()
             {
-                BillDate = "201703",
+                BillDate = "2018-04-09",
                 BillType = "trade"
             });
 

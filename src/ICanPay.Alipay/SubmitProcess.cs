@@ -75,6 +75,7 @@ namespace ICanPay.Alipay
 
         internal static string BuildSign(GatewayData gatewayData, string privatekey, string signType)
         {
+            gatewayData.Remove("sign");
             return EncryptUtil.RSA(gatewayData.ToUrl(false), privatekey, signType);
         }
 
