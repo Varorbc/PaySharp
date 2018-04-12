@@ -76,27 +76,10 @@ namespace ICanPay.Wechatpay
                 request.RequestUrl = _gatewayUrl + request.RequestUrl;
             }
             request.GatewayData.Add(merchant, StringCase.Snake);
-            if (!string.IsNullOrEmpty(request.NotifyUrl))
-            {
-                request.GatewayData.Add("notify_url", request.NotifyUrl);
-            }
+            ((BaseRequest<TModel, TResponse>)request).Execute();
 
-            if (!(request is WapPayRequest || request is AppletPayRequest ||
-                request is PublicPayRequest || request is AppPayRequest ||
-                request is ScanPayRequest))
-            {
-                request.GatewayData.Remove("notify_url");
-            }
-
-            if (request is FundFlowDownloadRequest)
-            {
-                request.GatewayData.Add("sign_type", "HMAC-SHA256");
-                request.GatewayData.Add("sign", BuildSign(request.GatewayData, merchant.Key, false));
-            }
-            else
-            {
-                request.GatewayData.Add("sign", BuildSign(request.GatewayData, merchant.Key));
-            }
+            string sign = BuildSign(request.GatewayData, merchant.Key, request.GatewayData.GetStringValue("sign_type") == "MD5");
+            request.GatewayData.Add("sign", sign);
         }
 
         internal static string BuildSign(GatewayData gatewayData, string key, bool isMd5 = true)

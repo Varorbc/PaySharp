@@ -10,5 +10,13 @@ namespace ICanPay.Wechatpay.Request
             RequestUrl = "/mmpaymkttransfers/promotion/transfers";
             IsUseCert = true;
         }
+
+        internal override void Execute()
+        {
+            GatewayData.Remove("notify_url");
+            string appId = GatewayData.GetStringValue("appid");
+            GatewayData.Remove("appid");
+            GatewayData.Add("mch_appid", appId);
+        }
     }
 }

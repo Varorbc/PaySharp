@@ -10,5 +10,11 @@ namespace ICanPay.Wechatpay.Request
             RequestUrl = "/pay/downloadfundflow";
             IsUseCert = true;
         }
+
+        internal override void Execute()
+        {
+            GatewayData.Remove("notify_url");
+            GatewayData.Add("sign_type", "HMAC-SHA256");
+        }
     }
 }

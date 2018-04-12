@@ -10,5 +10,10 @@ namespace ICanPay.Wechatpay.Request
             RequestUrl = "/pay/closeorder";
             IsUseCert = true;
         }
+
+        internal override void Execute()
+        {
+            GatewayData.Remove("notify_url");
+        }
     }
 }

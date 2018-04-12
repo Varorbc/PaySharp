@@ -9,5 +9,10 @@ namespace ICanPay.Wechatpay.Request
             RequestUrl = "https://fraud.mch.weixin.qq.com/risk/getpublickey";
             IsUseCert = true;
         }
+
+        internal override void Execute()
+        {
+            GatewayData.Remove("notify_url");
+        }
     }
 }

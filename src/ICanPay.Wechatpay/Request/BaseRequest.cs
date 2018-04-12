@@ -22,5 +22,13 @@ namespace ICanPay.Wechatpay.Request
         /// 是否需要使用证书
         /// </summary>
         internal bool IsUseCert { get; set; }
+
+        internal virtual void Execute()
+        {
+            if (!string.IsNullOrEmpty(NotifyUrl))
+            {
+                GatewayData.Add("notify_url", NotifyUrl);
+            }
+        }
     }
 }

@@ -45,5 +45,10 @@ namespace ICanPay.Wechatpay.Request
         /// 网关同步返回的支付通知验证成功时触发
         /// </summary>
         public event Action<IResponse, string> PaySucceed;
+
+        internal override void Execute()
+        {
+            GatewayData.Remove("notify_url");
+        }
     }
 }
