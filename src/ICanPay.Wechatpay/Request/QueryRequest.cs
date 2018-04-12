@@ -10,7 +10,7 @@ namespace ICanPay.Wechatpay.Request
             RequestUrl = "/pay/orderquery";
         }
 
-        internal override void Execute()
+        internal override void Execute(Merchant merchant)
         {
             GatewayData.Remove("notify_url");
         }

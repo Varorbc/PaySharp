@@ -46,7 +46,7 @@ namespace ICanPay.Wechatpay.Request
         /// </summary>
         public event Action<IResponse, string> PaySucceed;
 
-        internal override void Execute()
+        internal override void Execute(Merchant merchant)
         {
             GatewayData.Remove("notify_url");
         }

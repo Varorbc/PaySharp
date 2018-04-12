@@ -11,13 +11,10 @@ namespace ICanPay.Wechatpay.Request
             IsUseCert = true;
         }
 
-        internal override void Execute()
+        internal override void Execute(Merchant merchant)
         {
-            string appId = GatewayData.GetStringValue("appid");
-            string mchId = GatewayData.GetStringValue("mch_id");
-
-            GatewayData.Add("mch_appid", appId);
-            GatewayData.Add("mchid", mchId);
+            GatewayData.Add("mch_appid", merchant.AppId);
+            GatewayData.Add("mchid", merchant.MchId);
 
             GatewayData.Remove("appid");
             GatewayData.Remove("mch_id");

@@ -23,7 +23,7 @@ namespace ICanPay.Wechatpay.Request
         /// </summary>
         internal bool IsUseCert { get; set; }
 
-        internal virtual void Execute()
+        internal virtual void Execute(Merchant merchant)
         {
             if (!string.IsNullOrEmpty(NotifyUrl))
             {

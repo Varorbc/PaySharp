@@ -76,7 +76,7 @@ namespace ICanPay.Wechatpay
                 request.RequestUrl = _gatewayUrl + request.RequestUrl;
             }
             request.GatewayData.Add(merchant, StringCase.Snake);
-            ((BaseRequest<TModel, TResponse>)request).Execute();
+            ((BaseRequest<TModel, TResponse>)request).Execute(merchant);
 
             string sign = BuildSign(request.GatewayData, merchant.Key, request.GatewayData.GetStringValue("sign_type") != "MD5");
             request.GatewayData.Add("sign", sign);
