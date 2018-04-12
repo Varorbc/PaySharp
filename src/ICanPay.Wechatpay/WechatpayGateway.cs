@@ -54,94 +54,17 @@ namespace ICanPay.Wechatpay
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
 
-            if (IsSuccessResult())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /*/// <summary>
-        /// 通过code获取AccessToken
-        /// </summary>
-        /// <param name="code"></param>
-        public OAuth GetAccessTokenByCode(string code)
-        {
-            string result = null;
-            Task.Run(async () =>
-            {
-                result = await HttpUtil
-                .GetAsync(string.Format(ACCESSTOKENURL, Merchant.AppId, Merchant.AppSecret, code));
-            })
-            .GetAwaiter()
-            .GetResult();
-            GatewayData.FromJson(result);
-
-            int _code = GatewayData.GetIntValue(Constant.ERRCODE);
-            int _msg = GatewayData.GetIntValue(Constant.ERRMSG);
-            if (_code == 40029)
-            {
-                throw new GatewayException($"{_code} {_msg}");
-            }
-
-            return GatewayData.ToObject<OAuth>(StringCase.Snake);
-        }
-
-        /// <summary>
-        /// 通过授权码获取OpenId
-        /// </summary>
-        /// <param name="authCode">授权码</param>
-        public string GetOpenIdByAuthCode(string authCode)
-        {
-            GatewayData.Clear();
-            Merchant.NonceStr = Util.GenerateNonceStr();
-            GatewayData.Add(Constant.APPID, Merchant.AppId);
-            GatewayData.Add(Constant.MCH_ID, Merchant.AppId);
-            GatewayData.Add(Constant.AUTH_CODE, Merchant.AppId);
-            GatewayData.Add(Constant.NONCE_STR, Merchant.NonceStr);
-            GatewayData.Add("sign", BuildSign());
-            RequestUrl = AuthCodeToOpenIdUrl;
-
-            Commit();
-
-            return Notify.OpenId;
-        }*/
-
-        /// <summary>
-        /// 获得签名
-        /// </summary>
-        /// <returns></returns>
-        private string BuildSign()
-        {
-            GatewayData.Remove("sign");
-
-            string data = $"{GatewayData.ToUrl(false)}&key={_merchant.Key}";
-            return EncryptUtil.MD5(data);
-        }
-
-        /// <summary>
-        /// 是否是已成功支付的支付通知
-        /// </summary>
-        /// <returns></returns>
-        private bool IsSuccessResult()
-        {
             if (Notify.ReturnCode != "SUCCESS")
             {
                 throw new GatewayException("不是成功的返回码");
             }
 
-            if (Notify.Sign != BuildSign())
+            if (Notify.Sign != SubmitProcess.BuildSign(GatewayData, _merchant.Key))
             {
                 throw new GatewayException("签名不一致");
             }
 
-            if (Notify.ResultCode== "SUCCESS")
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         protected override void WriteSuccessFlag()
