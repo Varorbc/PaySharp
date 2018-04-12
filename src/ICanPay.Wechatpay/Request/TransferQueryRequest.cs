@@ -14,6 +14,7 @@ namespace ICanPay.Wechatpay.Request
         internal override void Execute()
         {
             GatewayData.Remove("notify_url");
+            GatewayData.Remove("sign_type");
         }
     }
 }

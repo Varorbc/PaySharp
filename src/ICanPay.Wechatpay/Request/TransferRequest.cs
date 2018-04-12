@@ -13,10 +13,16 @@ namespace ICanPay.Wechatpay.Request
 
         internal override void Execute()
         {
-            GatewayData.Remove("notify_url");
             string appId = GatewayData.GetStringValue("appid");
-            GatewayData.Remove("appid");
+            string mchId = GatewayData.GetStringValue("mch_id");
+
             GatewayData.Add("mch_appid", appId);
+            GatewayData.Add("mchid", mchId);
+
+            GatewayData.Remove("appid");
+            GatewayData.Remove("mch_id");
+            GatewayData.Remove("notify_url");
+            GatewayData.Remove("sign_type");
         }
     }
 }

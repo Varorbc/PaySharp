@@ -46,7 +46,7 @@ namespace ICanPay.Wechatpay
                 {
                     string sign = gatewayData.GetStringValue("sign");
 
-                    if (!CheckSign(gatewayData, merchant.Key, sign))
+                    if (!string.IsNullOrEmpty(sign) && !CheckSign(gatewayData, merchant.Key, sign))
                     {
                         throw new GatewayException("签名验证失败");
                     }
@@ -78,7 +78,7 @@ namespace ICanPay.Wechatpay
             request.GatewayData.Add(merchant, StringCase.Snake);
             ((BaseRequest<TModel, TResponse>)request).Execute();
 
-            string sign = BuildSign(request.GatewayData, merchant.Key, request.GatewayData.GetStringValue("sign_type") == "MD5");
+            string sign = BuildSign(request.GatewayData, merchant.Key, request.GatewayData.GetStringValue("sign_type") != "MD5");
             request.GatewayData.Add("sign", sign);
         }
 
