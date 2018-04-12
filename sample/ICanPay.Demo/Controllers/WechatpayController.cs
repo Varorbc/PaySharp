@@ -166,14 +166,15 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult RefundQuery(string out_trade_no, string trade_no, string out_request_no)
+        public IActionResult RefundQuery(string out_trade_no, string trade_no, string out_refund_no, string refund_no)
         {
             var request = new RefundQueryRequest();
             request.AddGatewayData(new RefundQueryModel()
             {
                 TradeNo = trade_no,
                 OutTradeNo = out_trade_no,
-                OutRefundNo = out_request_no
+                OutRefundNo = out_refund_no,
+                RefundNo = refund_no
             });
 
             var response = _baseGateway.Execute(request);

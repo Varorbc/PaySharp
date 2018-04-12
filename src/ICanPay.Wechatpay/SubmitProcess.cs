@@ -22,7 +22,6 @@ namespace ICanPay.Wechatpay
             X509Certificate2 cert = null;
             if (((BaseRequest<TModel, TResponse>)request).IsUseCert)
             {
-                //TODO:测试
                 cert = new X509Certificate2(merchant.SslCertPath, merchant.SslCertPassword);
             }
 
@@ -89,15 +88,23 @@ namespace ICanPay.Wechatpay
                 request.GatewayData.Remove("notify_url");
             }
 
-            request.GatewayData.Add("sign", BuildSign(request.GatewayData, merchant.Key));
+            if (request is FundFlowDownloadRequest)
+            {
+                request.GatewayData.Add("sign_type", "HMAC-SHA256");
+                request.GatewayData.Add("sign", BuildSign(request.GatewayData, merchant.Key, false));
+            }
+            else
+            {
+                request.GatewayData.Add("sign", BuildSign(request.GatewayData, merchant.Key));
+            }
         }
 
-        internal static string BuildSign(GatewayData gatewayData, string key)
+        internal static string BuildSign(GatewayData gatewayData, string key, bool isMd5 = true)
         {
             gatewayData.Remove("sign");
 
             string data = $"{gatewayData.ToUrl(false)}&key={key}";
-            return EncryptUtil.MD5(data);
+            return isMd5 ? EncryptUtil.MD5(data) : EncryptUtil.HMACSHA256(data, key);
         }
 
         internal static bool CheckSign(GatewayData gatewayData, string key, string sign)

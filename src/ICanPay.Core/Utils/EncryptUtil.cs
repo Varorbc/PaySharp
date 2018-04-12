@@ -500,8 +500,27 @@ namespace ICanPay.Core.Utils
         public static string SHA256(string data)
         {
             byte[] byteData = Encoding.UTF8.GetBytes(data);
-            SHA256Managed sha256 = new SHA256Managed();
+            var sha256 = new SHA256Managed();
             byte[] result = sha256.ComputeHash(byteData);
+            return BitConverter.ToString(result).Replace("-", "").ToLower();
+        }
+
+        #endregion
+
+        #region HMACSHA256加密
+
+        /// <summary>
+        /// HMACSHA256加密
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <param name="key">密钥</param>
+        /// <returns></returns>
+        public static string HMACSHA256(string data, string key)
+        {
+            byte[] byteData = Encoding.UTF8.GetBytes(data);
+            byte[] byteKey = Encoding.UTF8.GetBytes(key);
+            var hmacsha256 = new HMACSHA256(byteKey);
+            byte[] result = hmacsha256.ComputeHash(byteData);
             return BitConverter.ToString(result).Replace("-", "").ToLower();
         }
 
