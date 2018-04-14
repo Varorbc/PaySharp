@@ -78,16 +78,16 @@ namespace ICanPay.Wechatpay
             request.GatewayData.Add(merchant, StringCase.Snake);
             ((BaseRequest<TModel, TResponse>)request).Execute(merchant);
 
-            string sign = BuildSign(request.GatewayData, merchant.Key, request.GatewayData.GetStringValue("sign_type") != "MD5");
+            string sign = BuildSign(request.GatewayData, merchant.Key, request.GatewayData.GetStringValue("sign_type") == "HMAC-SHA256");
             request.GatewayData.Add("sign", sign);
         }
 
-        internal static string BuildSign(GatewayData gatewayData, string key, bool isMd5 = true)
+        internal static string BuildSign(GatewayData gatewayData, string key, bool isHMACSHA256 = false)
         {
             gatewayData.Remove("sign");
 
             string data = $"{gatewayData.ToUrl(false)}&key={key}";
-            return isMd5 ? EncryptUtil.MD5(data) : EncryptUtil.HMACSHA256(data, key);
+            return isHMACSHA256 ? EncryptUtil.HMACSHA256(data, key) : EncryptUtil.MD5(data);
         }
 
         internal static bool CheckSign(GatewayData gatewayData, string key, string sign)
