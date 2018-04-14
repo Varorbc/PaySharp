@@ -42,6 +42,7 @@ namespace ICanPay.Wechatpay
 
                 baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Snake);
                 baseResponse.Raw = result;
+                baseResponse.GatewayData = gatewayData;
                 if (baseResponse.ReturnCode == "SUCCESS")
                 {
                     string sign = gatewayData.GetStringValue("sign");

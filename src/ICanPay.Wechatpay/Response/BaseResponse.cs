@@ -62,6 +62,8 @@ namespace ICanPay.Wechatpay.Response
         /// </summary>
         public string Raw { get; set; }
 
+        internal GatewayData GatewayData { get; set; }
+
         internal abstract void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request) where TResponse : IResponse;
     }
 }

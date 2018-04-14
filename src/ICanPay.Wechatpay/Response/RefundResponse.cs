@@ -1,9 +1,9 @@
 ﻿using ICanPay.Core;
 using ICanPay.Core.Request;
+using System.Collections.Generic;
 
 namespace ICanPay.Wechatpay.Response
 {
-    //TODO: xml转换器
     public class RefundResponse : BaseResponse
     {
         /// <summary>
@@ -90,11 +90,39 @@ namespace ICanPay.Wechatpay.Response
         /// <summary>
         /// 退款代金券使用数量
         /// </summary>
-        [ReName(Name = "coupon_refund_count")]
         public int CouponRefundCount { get; set; }
+
+        /// <summary>
+        /// 退款代金券
+        /// </summary>
+        public List<RefundCouponResponse> RefundCoupons { get; set; }
 
         internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
+            RefundCoupons = ConvertUtil.ToList<RefundCouponResponse, object>(GatewayData, -1);
+        }
+
+        public class RefundCouponResponse
+        {
+            /// <summary>
+            /// 编号
+            /// </summary>
+            [ReName(Name = "coupon_refund_id")]
+            public string Id { get; set; }
+
+            /// <summary>
+            /// 类型
+            /// CASH--充值代金券
+            /// NO_CASH---非充值优惠券
+            /// </summary>
+            [ReName(Name = "coupon_type")]
+            public string Type { get; set; }
+
+            /// <summary>
+            /// 金额
+            /// </summary>
+            [ReName(Name = "coupon_refund_fee")]
+            public int Amount { get; set; }
         }
     }
 }
