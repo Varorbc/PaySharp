@@ -1,4 +1,5 @@
-﻿using ICanPay.Wechatpay.Response;
+﻿using ICanPay.Core.Utils;
+using ICanPay.Wechatpay.Response;
 
 namespace ICanPay.Wechatpay.Request
 {
@@ -12,7 +13,9 @@ namespace ICanPay.Wechatpay.Request
 
         internal override void Execute(Merchant merchant)
         {
+            GatewayData.Remove("appid");
             GatewayData.Remove("notify_url");
+            GatewayData.Add("nonce_str", Util.GenerateNonceStr());
         }
     }
 }

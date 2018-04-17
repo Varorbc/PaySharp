@@ -40,11 +40,6 @@ namespace ICanPay.Alipay
         public string Charset => "UTF-8";
 
         /// <summary>
-        /// 接口名称
-        /// </summary>
-        public string Method { get; internal set; }
-
-        /// <summary>
         /// 应用授权
         /// //TODO:有些不添加
         /// </summary>
