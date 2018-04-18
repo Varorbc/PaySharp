@@ -16,16 +16,16 @@ namespace ICanPay.Demo.Controllers
         public async Task Index()
         {
             // 订阅支付通知事件
-            PaymentNotify notify = new PaymentNotify(gateways);
-            notify.PaymentSucceed += Notify_PaymentSucceed;
-            notify.PaymentFailed += Notify_PaymentFailed;
+            PayNotify notify = new PayNotify(gateways);
+            notify.PaySucceed += Notify_PaySucceed;
+            notify.PayFailed += Notify_PayFailed;
             notify.UnknownGateway += Notify_UnknownGateway;
 
             // 接收并处理支付通知
             await notify.ReceivedAsync();
         }
 
-        private bool Notify_PaymentSucceed(object sender, PaymentSucceedEventArgs e)
+        private bool Notify_PaySucceed(object sender, PaySucceedEventArgs e)
         {
             // 支付成功时时的处理代码
             /* 建议添加以下校验。
@@ -47,7 +47,7 @@ namespace ICanPay.Demo.Controllers
             return true;
         }
 
-        private void Notify_PaymentFailed(object sender, PaymentFailedEventArgs e)
+        private void Notify_PayFailed(object sender, PayFailedEventArgs e)
         {
             // 支付失败时的处理代码
         }

@@ -1,5 +1,6 @@
 ﻿using ICanPay.Core;
 using ICanPay.Core.Exceptions;
+using ICanPay.Core.Request;
 using ICanPay.Core.Utils;
 using System;
 using System.IO;
@@ -11,7 +12,7 @@ namespace ICanPay.Unionpay
     /// 银联支付网关
     /// </summary>
     public class UnionpayGateway
-        : GatewayBase,
+        : BaseGateway,
         IFormPayment, IAppPayment, IScanPayment, IBarcodePayment,
         IQuery, ICancel, IRefund, IBillDownload
     {
@@ -42,6 +43,7 @@ namespace ICanPay.Unionpay
             : base(merchant, new GatewayData(StringComparer.Ordinal))
         {
             _merchant = merchant;
+            //TODO:测试同时读取是否有问题
             _merchant.CertId = Util.GetCertId(merchant.CertPath, merchant.CertPwd);
             _merchant.CertKey = Util.GetCertKey(merchant.CertPath, merchant.CertPwd);
             //_merchant.EncryptCertId = Util.GetEncryptCertId();
@@ -268,7 +270,7 @@ namespace ICanPay.Unionpay
         private FileStream CreateZip(string content)
         {
             byte[] buffer = Util.Inflater(content);
-            FileStream fileStream = new FileStream($"{DateTime.Now.ToString(TIMEFORMAT)}.zip", FileMode.Create);
+            FileStream fileStream = new FileStream($"{DateTime.Now.ToString("yyyyMMddHHmmss")}.zip", FileMode.Create);
             fileStream.Write(buffer, 0, buffer.Length);
             fileStream.Position = 0;
 
@@ -369,6 +371,16 @@ namespace ICanPay.Unionpay
             }
 
             return result;
+        }
+
+        public override T SdkExecute<T>(Request<T> request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override T Execute<T>(Request<T> request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

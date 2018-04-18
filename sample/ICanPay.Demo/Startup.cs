@@ -1,11 +1,13 @@
 ﻿using ICanPay.Alipay;
 using ICanPay.Core;
-using ICanPay.Unionpay;
+//using ICanPay.Unionpay;
 using ICanPay.Wechatpay;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace ICanPay.Demo
 {
@@ -22,6 +24,10 @@ namespace ICanPay.Demo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddWebEncoders(opt =>
+            {
+                opt.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
+            });
 
             services.AddICanPay(a =>
             {
@@ -48,24 +54,24 @@ namespace ICanPay.Demo
                     NotifyUrl = "http://localhost:61377/Notify"
                 };
 
-                var unionpayMerchant = new Unionpay.Merchant
-                {
-                    AppId = "777290058110048",
-                    CertPwd = "000000",
-                    CertPath = "Certs/acp_test_sign.pfx",
-                    NotifyUrl = "http://localhost:61377/Notify",
-                    FrontUrl = "http://localhost:61377/Notify"
-                };
+                //var unionpayMerchant = new Unionpay.Merchant
+                //{
+                //    AppId = "777290058110048",
+                //    CertPwd = "000000",
+                //    CertPath = "Certs/acp_test_sign.pfx",
+                //    NotifyUrl = "http://localhost:61377/Notify",
+                //    FrontUrl = "http://localhost:61377/Notify"
+                //};
 
                 gateways.Add(new AlipayGateway(alipayMerchant)
                 {
-                    GatewayUrl = "https://openapi.alipaydev.com/"
+                    GatewayUrl = "https://openapi.alipaydev.com"
                 });
                 gateways.Add(new WechatpayGateway(wechatpayMerchant));
-                gateways.Add(new UnionpayGateway(unionpayMerchant)
-                {
-                    GatewayUrl= "https://gateway.test.95516.com/"
-                });
+                //gateways.Add(new UnionpayGateway(unionpayMerchant)
+                //{
+                //    GatewayUrl= "https://gateway.test.95516.com"
+                //});
 
                 return gateways;
             });
@@ -79,12 +85,18 @@ namespace ICanPay.Demo
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
             }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
+            app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Payment}/{action=Index}");
+                    template: "{controller=Home}/{action=Index}");
             });
 
             app.UseICanPay();

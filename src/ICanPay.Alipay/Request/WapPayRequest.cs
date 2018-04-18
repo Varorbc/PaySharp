@@ -1,23 +1,13 @@
-﻿using ICanPay.Alipay.Response;
-using ICanPay.Core;
-using ICanPay.Core.Request;
-using ICanPay.Core.Utils;
+﻿using ICanPay.Alipay.Domain;
+using ICanPay.Alipay.Response;
 
 namespace ICanPay.Alipay.Request
 {
-    public class WapPayRequest : Request<WapPayResponse>
+    public class WapPayRequest : BaseRequest<WapPayModel, WapPayResponse>
     {
         public WapPayRequest()
+            : base("alipay.trade.wap.pay")
         {
-            RequestUrl = "/gateway.do";
-            GatewayData.Add(Constant.METHOD, Constant.WAP);
-        }
-
-        public override void AddGatewayData(object obj)
-        {
-            base.AddGatewayData(obj);
-
-            GatewayData.Add(Constant.BIZ_CONTENT, Util.SerializeObject(obj));
         }
     }
 }

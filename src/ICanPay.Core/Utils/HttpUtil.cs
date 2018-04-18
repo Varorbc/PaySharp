@@ -35,11 +35,10 @@ namespace ICanPay.Core.Utils
         {
             get
             {
-#if DEBUG
-                return "127.0.0.1";
-#else
-                return Current.Connection.LocalIpAddress.ToString();
-#endif
+                var ipAddress = Current.Connection.LocalIpAddress;
+                return IPAddress.IsLoopback(ipAddress) ?
+                    IPAddress.Loopback.ToString() :
+                    ipAddress.MapToIPv4().ToString();
             }
         }
 
@@ -50,11 +49,10 @@ namespace ICanPay.Core.Utils
         {
             get
             {
-#if DEBUG
-                return "127.0.0.1";
-#else
-                return Current.Connection.RemoteIpAddress.ToString();
-#endif
+                var ipAddress = Current.Connection.RemoteIpAddress;
+                return IPAddress.IsLoopback(ipAddress) ?
+                    IPAddress.Loopback.ToString() :
+                    ipAddress.MapToIPv4().ToString();
             }
         }
 
@@ -297,29 +295,12 @@ namespace ICanPay.Core.Utils
         /// 下载
         /// </summary>
         /// <param name="url">url</param>
-        /// <param name="path">下载路径</param>
         /// <returns></returns>
-        public static FileStream Download(string url, string path)
+        public static byte[] Download(string url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (WebClient webClient = new WebClient())
             {
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    FileStream fileStream = new FileStream(path, FileMode.Create);
-                    byte[] buffer = new byte[1024];
-                    int size = responseStream.Read(buffer, 0, buffer.Length);
-                    while (size > 0)
-                    {
-                        fileStream.Write(buffer, 0, size);
-                        size = responseStream.Read(buffer, 0, buffer.Length);
-                    }
-
-                    fileStream.Position = 0;
-                    return fileStream;
-
-                }
+                return webClient.DownloadData(url);
             }
         }
 
@@ -327,11 +308,13 @@ namespace ICanPay.Core.Utils
         /// 异步下载
         /// </summary>
         /// <param name="url">url</param>
-        /// <param name="path">下载路径</param>
         /// <returns></returns>
-        public static async Task<FileStream> DownloadAsync(string url, string path)
+        public static async Task<byte[]> DownloadAsync(string url)
         {
-            return await Task.Run(() => Download(url, path));
+            using (WebClient webClient = new WebClient())
+            {
+                return await webClient.DownloadDataTaskAsync(url);
+            }
         }
 
         #endregion

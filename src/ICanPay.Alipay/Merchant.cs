@@ -6,7 +6,6 @@ namespace ICanPay.Alipay
 {
     public class Merchant : IMerchant
     {
-
         #region 属性
 
         /// <summary>
@@ -41,12 +40,8 @@ namespace ICanPay.Alipay
         public string Charset => "UTF-8";
 
         /// <summary>
-        /// 接口名称
-        /// </summary>
-        public string Method { get; internal set; }
-
-        /// <summary>
         /// 应用授权
+        /// //TODO:有些不添加
         /// </summary>
         [StringLength(40, ErrorMessage = "应用授权最大长度为40位")]
         public string AppAuthToken { get; set; }
@@ -97,11 +92,6 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 网关回发通知URL
         /// </summary>
-        [Necessary(new GatewayTradeType[] {
-            GatewayTradeType.App,
-            GatewayTradeType.Scan,
-            GatewayTradeType.Wap,
-            GatewayTradeType.Web }, ErrorMessage = "请输入网关回发通知URL")]
         public string NotifyUrl { get; set; }
 
         #endregion

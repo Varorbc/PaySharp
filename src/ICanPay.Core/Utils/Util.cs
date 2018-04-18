@@ -29,7 +29,7 @@ namespace ICanPay.Core.Utils
         /// <returns></returns>
         public static string GenerateNonceStr()
         {
-            return Guid.NewGuid().ToString().Replace("-", "");
+            return Guid.NewGuid().ToString("N");
         }
 
         /// <summary>

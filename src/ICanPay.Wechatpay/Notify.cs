@@ -7,7 +7,7 @@ namespace ICanPay.Wechatpay
         /// <summary>
         /// 应用ID
         /// </summary>
-        [ReName(Name = Constant.APPID)]
+        [ReName(Name = "appid")]
         public string AppId { get; set; }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace ICanPay.Wechatpay
         /// 用户标识
         /// 用户在商户appid 下的唯一标识
         /// </summary>
-        [ReName(Name = Constant.OPENID)]
+        [ReName(Name = "openid")]
         public string OpenId { get; set; }
 
         /// <summary>

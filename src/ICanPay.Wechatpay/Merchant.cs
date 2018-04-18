@@ -12,7 +12,7 @@ namespace ICanPay.Wechatpay
         /// 应用ID
         /// </summary>
         [Required(ErrorMessage = "请输入支付机构提供的应用编号")]
-        [ReName(Name = Constant.APPID)]
+        [ReName(Name = "appid")]
         public string AppId { get; set; }
 
         /// <summary>
@@ -51,18 +51,6 @@ namespace ICanPay.Wechatpay
         /// </summary>
         [Ignore]
         public string SslCertPassword { get; set; }
-
-        /// <summary>
-        /// 设备号
-        /// 自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"
-        /// </summary>
-        [StringLength(32, ErrorMessage = "设备号最大长度为32位")]
-        public string DeviceInfo { get; set; }
-
-        /// <summary>
-        /// 随机字符串，长度要求在32位以内
-        /// </summary>
-        public string NonceStr { get; set; }
 
         /// <summary>
         /// 网关回发通知URL

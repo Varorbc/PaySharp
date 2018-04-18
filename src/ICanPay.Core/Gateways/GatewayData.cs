@@ -25,7 +25,6 @@ namespace ICanPay.Core
         #region 私有字段
 
         private readonly SortedDictionary<string, object> _values;
-        private string _originalResult = null;
 
         #endregion
 
@@ -37,7 +36,27 @@ namespace ICanPay.Core
             set => _values[key] = value;
         }
 
+        public SortedDictionary<string, object>.KeyCollection Keys
+        {
+            get => _values.Keys;
+        }
+
+        public SortedDictionary<string, object>.ValueCollection Values
+        {
+            get => _values.Values;
+        }
+
+        public KeyValuePair<string, object> this[int index]
+        {
+            get => _values.ElementAt(index);
+        }
+
         public int Count => _values.Count;
+
+        /// <summary>
+        /// 原始值
+        /// </summary>
+        public string Raw { get; set; }
 
         #endregion
 
@@ -72,7 +91,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public bool Add(string key, object value)
         {
-            _originalResult = null;
+            Raw = null;
             if (string.IsNullOrEmpty(key))
             {
                 throw new ArgumentNullException("key", "参数名不能为空");
@@ -80,7 +99,7 @@ namespace ICanPay.Core
 
             if (value is null || string.IsNullOrEmpty(value.ToString()))
             {
-                throw new ArgumentNullException("value", "参数值不能为空");
+                return false;
             }
 
             if (Exists(key))
@@ -103,7 +122,9 @@ namespace ICanPay.Core
         /// <returns></returns>
         public bool Add(object obj, StringCase stringCase)
         {
-            _originalResult = null;
+            ValidateUtil.Validate(obj, null);
+
+            Raw = null;
             var type = obj.GetType();
             var properties = type.GetProperties();
             var fields = type.GetFields();
@@ -346,7 +367,7 @@ namespace ICanPay.Core
             }
             finally
             {
-                _originalResult = xml;
+                Raw = xml;
             }
         }
 
@@ -357,7 +378,7 @@ namespace ICanPay.Core
         /// <returns></returns>
         public string ToUrl(bool isUrlEncode = true)
         {
-            return string.Join("&", 
+            return string.Join("&",
                 _values
                 .Select(a => $"{a.Key}={(isUrlEncode ? WebUtility.UrlEncode(a.Value.ToString()) : a.Value.ToString())}"));
         }
@@ -394,7 +415,7 @@ namespace ICanPay.Core
             }
             finally
             {
-                _originalResult = url;
+                Raw = url;
             }
         }
 
@@ -479,16 +500,22 @@ namespace ICanPay.Core
                 if (!string.IsNullOrEmpty(json))
                 {
                     var jObject = JObject.Parse(json);
-                    var list = jObject.Children().OfType<JProperty>();
-                    foreach (var item in list)
+                    foreach (var item in jObject)
                     {
-                        Add(item.Name, item.Value.ToString());
+                        if (item.Value.Type == JTokenType.Object)
+                        {
+                            Add(item.Key, item.Value.ToString(Newtonsoft.Json.Formatting.None));
+                        }
+                        else
+                        {
+                            Add(item.Key, item.Value.ToString());
+                        }
                     }
                 }
             }
             finally
             {
-                _originalResult = json;
+                Raw = json;
             }
         }
 
@@ -568,12 +595,6 @@ namespace ICanPay.Core
         {
             return _values.Remove(key);
         }
-
-        /// <summary>
-        /// 获取原始数据
-        /// </summary>
-        /// <returns></returns>
-        public string GetOriginalResult() => _originalResult;
 
         #endregion
     }

@@ -46,6 +46,10 @@ ICanPay.Alipay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Alipay.svg)](
 ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.svg)](https://www.nuget.org/packages/ICanPay.Wechatpay)
 ICanPay.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Unionpay.svg)](https://www.nuget.org/packages/ICanPay.Unionpay)
 
+# 开发环境
+* Windows 10
+* VS2017
+
 # 如何使用
 ---
 
@@ -71,6 +75,13 @@ https://pay.weixin.qq.com/wiki/doc/api/index.html
 
 https://open.unionpay.com/ajweb/product
 
+# 支持/打赏
+
+<p align="center">
+    <img src="https://github.com/Varorbc/ICanPay/blob/2.0.0-alpha/reward.jpg">
+    <p align="center">打赏扫这里，请留下尊姓大名</p>
+</p>
+
 # 致谢
 ---
 
@@ -79,3 +90,5 @@ https://open.unionpay.com/ajweb/product
 [John0King](https://github.com/John0King)
 
 [stulzq](https://github.com/stulzq)
+
+[EssenRoc](https://github.com/EssenRoc)

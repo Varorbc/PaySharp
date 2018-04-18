@@ -11,7 +11,7 @@ namespace ICanPay.Core
     {
         #region 私有字段
 
-        private readonly ICollection<GatewayBase> _list;
+        private readonly ICollection<BaseGateway> _list;
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace ICanPay.Core
         /// </summary>
         public Gateways()
         {
-            _list = new List<GatewayBase>();
+            _list = new List<BaseGateway>();
         }
 
         #endregion
@@ -43,7 +43,7 @@ namespace ICanPay.Core
         /// </summary>
         /// <param name="gateway">网关</param>
         /// <returns></returns>
-        public bool Add(GatewayBase gateway)
+        public bool Add(BaseGateway gateway)
         {
             if (gateway != null)
             {
@@ -67,7 +67,7 @@ namespace ICanPay.Core
         /// </summary>
         /// <typeparam name="T">网关类型</typeparam>
         /// <returns></returns>
-        public GatewayBase Get<T>()
+        public BaseGateway Get<T>()
         {
             var gatewayList = _list
                 .Where(a => a is T)
@@ -77,30 +77,12 @@ namespace ICanPay.Core
         }
 
         /// <summary>
-        /// 通过交易类型获取网关
-        /// </summary>
-        /// <typeparam name="T">网关类型</typeparam>
-        /// <param name="gatewayTradeType">网关交易类型</param>
-        /// <returns></returns>
-        public GatewayBase Get<T>(GatewayTradeType gatewayTradeType)
-        {
-            var gatewayList = _list
-                .Where(a => a is T && a.GatewayTradeType == gatewayTradeType)
-                .ToList();
-
-            var gateway = gatewayList.Count > 0 ? gatewayList[0] : Get<T>();
-            gateway.GatewayTradeType = gatewayTradeType;
-
-            return gateway;
-        }
-
-        /// <summary>
         /// 通过AppId获取网关
         /// </summary>
         /// <typeparam name="T">网关类型</typeparam>
         /// <param name="appId">AppId</param>
         /// <returns></returns>
-        public GatewayBase Get<T>(string appId)
+        public BaseGateway Get<T>(string appId)
         {
             var gatewayList = _list
                 .Where(a => a is T && a.Merchant.AppId == appId)
@@ -122,7 +104,7 @@ namespace ICanPay.Core
         /// 获取网关列表
         /// </summary>
         /// <returns></returns>
-        public ICollection<GatewayBase> GetList()
+        public ICollection<BaseGateway> GetList()
         {
             return _list;
         }
