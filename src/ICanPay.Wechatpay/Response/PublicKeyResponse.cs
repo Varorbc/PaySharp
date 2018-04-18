@@ -1,13 +1,15 @@
-﻿using ICanPay.Core.Request;
+﻿using ICanPay.Core;
+using ICanPay.Core.Request;
 
 namespace ICanPay.Wechatpay.Response
 {
-    internal class PublicKeyResponse : BaseResponse
+    public class PublicKeyResponse : BaseResponse
     {
         /// <summary>
         /// RSA 公钥
         /// </summary>
-        public static string PubKey { get; set; }
+        [ReName(Name = "pub_key")]
+        public string PublicKey { get; set; }
 
         internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {

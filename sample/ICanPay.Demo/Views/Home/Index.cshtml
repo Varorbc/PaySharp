@@ -441,6 +441,7 @@
                     <li><a href="#tabs-purchase-14">下载资金账单</a></li>
                     <li><a href="#tabs-purchase-9">企业付款到零钱</a></li>
                     <li><a href="#tabs-purchase-10">查询企业付款零钱</a></li>
+                    <li><a href="#tabs-purchase-11">获取RSA公钥</a></li>
                     <li><a href="#tabs-purchase-12">企业付款到银行卡</a></li>
                     <li><a href="#tabs-purchase-13">查询企业付款银行卡</a></li>
                 </ul>
@@ -803,6 +804,19 @@
                     <hr />
                     <p class="faq">
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_3" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
+                <div id="tabs-purchase-11">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="PublicKey" method="post" target="_blank">
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=24_7&index=4" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
 

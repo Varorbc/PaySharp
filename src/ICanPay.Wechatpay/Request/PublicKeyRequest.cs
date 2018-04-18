@@ -3,7 +3,7 @@ using ICanPay.Wechatpay.Response;
 
 namespace ICanPay.Wechatpay.Request
 {
-    internal class PublicKeyRequest : BaseRequest<object, PublicKeyResponse>
+    public class PublicKeyRequest : BaseRequest<object, PublicKeyResponse>
     {
         public PublicKeyRequest()
         {

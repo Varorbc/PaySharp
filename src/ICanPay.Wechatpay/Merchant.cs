@@ -58,6 +58,13 @@ namespace ICanPay.Wechatpay
         [Required(ErrorMessage = "请输入网关回发通知URL")]
         public string NotifyUrl { get; set; }
 
+        /// <summary>
+        /// 商户公钥
+        /// 通过PublicKeyRequest获取
+        /// </summary>
+        [Ignore]
+        public string PublicKey { get; set; }
+
         #endregion
     }
 }

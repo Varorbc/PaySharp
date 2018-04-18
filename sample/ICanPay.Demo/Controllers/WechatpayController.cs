@@ -239,6 +239,15 @@ namespace ICanPay.Demo.Controllers
         }
 
         [HttpPost]
+        public IActionResult PublicKey()
+        {
+            var request = new PublicKeyRequest();
+
+            var response = _baseGateway.Execute(request);
+            return Json(response);
+        }
+
+        [HttpPost]
         public IActionResult TransferToBank(string out_trade_no, string bank_no, string true_name, string bank_code, int amount, string desc)
         {
             var request = new TransferToBankRequest();
