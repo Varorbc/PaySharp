@@ -20,7 +20,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var gateways = new Gateways();
             setupAction(gateways);
-            services.AddSingleton(gateways);
+            services.AddScoped<IGateways>(a =>
+            {
+                return gateways;
+            });
         }
 
         /// <summary>

@@ -40,13 +40,6 @@ namespace ICanPay.Alipay
         public string Charset => "UTF-8";
 
         /// <summary>
-        /// 应用授权
-        /// //TODO:有些不添加
-        /// </summary>
-        [StringLength(40, ErrorMessage = "应用授权最大长度为40位")]
-        public string AppAuthToken { get; set; }
-
-        /// <summary>
         /// 参数集合
         /// </summary>
         public string BizContent { get; internal set; }

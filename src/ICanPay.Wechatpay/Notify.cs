@@ -1,9 +1,22 @@
 ﻿using ICanPay.Core;
+using System;
+using System.Collections.Generic;
+using static ICanPay.Wechatpay.Response.QueryResponse;
 
 namespace ICanPay.Wechatpay
 {
     public class Notify : INotify
     {
+        /// <summary>
+        /// 返回状态码
+        /// </summary>
+        public string ReturnCode { get; set; }
+
+        /// <summary>
+        /// 返回信息
+        /// </summary>
+        public string ReturnMsg { get; set; }
+
         /// <summary>
         /// 应用ID
         /// </summary>
@@ -26,9 +39,19 @@ namespace ICanPay.Wechatpay
         public string NonceStr { get; set; }
 
         /// <summary>
+        /// 加密信息
+        /// </summary>
+        public string ReqInfo { get; set; }
+
+        /// <summary>
         /// 签名
         /// </summary>
         public string Sign { get; set; }
+
+        /// <summary>
+        /// 签名类型
+        /// </summary>
+        public string SignType { get; set; }
 
         /// <summary>
         /// 业务结果
@@ -46,38 +69,6 @@ namespace ICanPay.Wechatpay
         public string ErrCodeDes { get; set; }
 
         /// <summary>
-        /// 交易类型
-        /// </summary>
-        public string TradeType { get; set; }
-
-        /// <summary>
-        /// 微信生成的预支付回话标识，用于后续接口调用中使用，该值有效期为2小时
-        /// </summary>
-        public string PrepayId { get; set; }
-
-        /// <summary>
-        /// 返回状态码
-        /// </summary>
-        public string ReturnCode { get; set; }
-
-        /// <summary>
-        /// 返回信息
-        /// </summary>
-        public string ReturnMsg { get; set; }
-
-        /// <summary>
-        /// 支付跳转链接
-        /// mweb_url为拉起微信支付收银台的中间页面，可通过访问该url来拉起微信客户端，完成支付,mweb_url的有效期为5分钟。
-        /// </summary>
-        public string MWebUrl { get; set; }
-
-        /// <summary>
-        /// 二维码链接
-        /// trade_type为NATIVE时有返回，用于生成二维码，展示给用户进行扫码支付
-        /// </summary>
-        public string CodeUrl { get; set; }
-
-        /// <summary>
         /// 用户标识
         /// 用户在商户appid 下的唯一标识
         /// </summary>
@@ -91,21 +82,56 @@ namespace ICanPay.Wechatpay
         public string IsSubscribe { get; set; }
 
         /// <summary>
+        /// 交易类型
+        /// </summary>
+        public string TradeType { get; set; }
+
+        /// <summary>
         /// 银行类型，采用字符串类型的银行标识，详见银行类型
         /// </summary>
         public string BankType { get; set; }
 
         /// <summary>
+        /// 订单金额
+        /// 订单总金额，单位为分
+        /// </summary>
+        [ReName(Name = "total_fee")]
+        public double TotalAmount { get; set; }
+
+        /// <summary>
         /// 应结订单金额
         /// 当订单使用了免充值型优惠券后返回该参数，应结订单金额=订单金额-免充值优惠券金额。
         /// </summary>
-        public double SettlementTotalFee { get; set; }
+        [ReName(Name = "settlement_total_fee")]
+        public double SettlementTotalAmount { get; set; }
+
+        /// <summary>
+        /// 货币类型
+        /// 符合ISO 4217标准的三位字母代码，默认人民币：CNY，详见货币类型
+        /// </summary>
+        [ReName(Name = "fee_type")]
+        public string AmountType { get; set; }
+
+        /// <summary>
+        /// 现金支付金额
+        /// 订单现金支付金额，详见支付金额
+        /// </summary>
+        [ReName(Name = "cash_fee")]
+        public double CashAmount { get; set; }
+
+        /// <summary>
+        /// 现金支付货币类型
+        /// 符合ISO 4217标准的三位字母代码，默认人民币：CNY，其他值列表详见货币类型
+        /// </summary>
+        [ReName(Name = "cash_fee_type")]
+        public string CashAmountType { get; set; }
 
         /// <summary>
         /// 代金券金额
         /// “代金券”金额小于等于订单金额，订单金额-“代金券”金额=现金支付金额，详见支付金额
         /// </summary>
-        public double CouponFee { get; set; }
+        [ReName(Name = "coupon_fee")]
+        public double CouponAmount { get; set; }
 
         /// <summary>
         /// 代金券使用数量
@@ -113,38 +139,16 @@ namespace ICanPay.Wechatpay
         public int CouponCount { get; set; }
 
         /// <summary>
-        /// 货币类型
-        /// 符合ISO 4217标准的三位字母代码，默认人民币：CNY，详见货币类型
+        /// 退款代金券
+        /// TODO:特殊代金券
         /// </summary>
-        public string FeeType { get; set; }
-
-        /// <summary>
-        /// 订单金额
-        /// 订单总金额，单位为元
-        /// </summary>
-        public double TotalFee
-        {
-            get => _totalFee;
-            set => _totalFee = value / 100;
-        }
-        private double _totalFee;
-
-        /// <summary>
-        /// 现金支付货币类型
-        /// 符合ISO 4217标准的三位字母代码，默认人民币：CNY，其他值列表详见货币类型
-        /// </summary>
-        public string CashFeeType { get; set; }
-
-        /// <summary>
-        /// 现金支付金额
-        /// 订单现金支付金额，详见支付金额
-        /// </summary>
-        public double CashFee { get; set; }
+        public List<CouponResponse> Coupons { get; set; }
 
         /// <summary>
         /// 微信支付订单号
         /// </summary>
-        public string TransactionId { get; set; }
+        [ReName(Name = "transaction_id")]
+        public string TradeNo { get; set; }
 
         /// <summary>
         /// 商户订单号
@@ -162,76 +166,27 @@ namespace ICanPay.Wechatpay
         public string TimeEnd { get; set; }
 
         /// <summary>
-        /// 营销详情
-        /// 新增返回，单品优惠功能字段，需要接入请见详细说明
-        /// </summary>
-        public string PromotionDetail { get; set; }
-
-        /// <summary>
-        /// 交易状态描述
-        /// 对当前查询订单状态的描述和下一步操作的指引
-        /// </summary>
-        public string TradeStateDesc { get; set; }
-
-        /// <summary>
-        /// 交易状态
-        /// SUCCESS—支付成功
-        /// REFUND—转入退款
-        /// NOTPAY—未支付
-        /// CLOSED—已关闭
-        /// REVOKED—已撤销（刷卡支付）
-        /// USERPAYING--用户支付中
-        /// PAYERROR--支付失败(其他原因，如银行返回失败)
-        /// 支付状态机请见下单API页面
-        /// </summary>
-        public string TradeState { get; set; }
-
-        /// <summary>
-        /// 是否重调
-        /// 是否需要继续调用撤销，Y-需要，N-不需要
-        /// </summary>
-        public string Recall { get; set; }
-
-        /// <summary>
-        /// 是否重调
-        /// 是否需要继续调用撤销，Y-需要，N-不需要
+        /// 商户退款单号
         /// </summary>
         public string OutRefundNo { get; set; }
 
         /// <summary>
         /// 微信退款单号	
         /// </summary>
-        public string RefundId { get; set; }
+        [ReName(Name = "refund_id")]
+        public string RefundNo { get; set; }
 
         /// <summary>
         /// 退款金额	
         /// </summary>
-        public string RefundFee { get; set; }
+        [ReName(Name = "refund_fee")]
+        public string RefundAmount { get; set; }
 
         /// <summary>
         /// 应结退款金额	
         /// </summary>
-        public string SettlementRefundFee { get; set; }
-
-        /// <summary>
-        /// 现金退款金额	
-        /// </summary>
-        public string CashRefundFee { get; set; }
-
-        /// <summary>
-        /// 代金券退款总金额
-        /// </summary>
-        public string CouponRefundFee { get; set; }
-
-        /// <summary>
-        /// 订单总退款次数
-        /// </summary>
-        public string TotalRefundCount { get; set; }
-
-        /// <summary>
-        /// 退款笔数
-        /// </summary>
-        public string RefundCount { get; set; }
+        [ReName(Name = "settlement_refund_fee")]
+        public string SettlementRefundAmount { get; set; }
 
         /// <summary>
         /// 退款状态
@@ -241,7 +196,7 @@ namespace ICanPay.Wechatpay
         /// <summary>
         /// 退款成功时间
         /// </summary>
-        public string SuccessTime { get; set; }
+        public DateTime SuccessTime { get; set; }
 
         /// <summary>
         /// 退款入账账户

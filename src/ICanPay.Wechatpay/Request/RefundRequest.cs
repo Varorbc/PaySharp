@@ -13,7 +13,6 @@ namespace ICanPay.Wechatpay.Request
 
         internal override void Execute(Merchant merchant)
         {
-            GatewayData.Remove("notify_url");
         }
     }
 }

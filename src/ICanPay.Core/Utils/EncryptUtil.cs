@@ -525,5 +525,31 @@ namespace ICanPay.Core.Utils
         }
 
         #endregion
+
+        #region AES解密
+
+        /// <summary>
+        /// AES解密
+        /// </summary>
+        /// <param name="data">待解密数据</param>
+        /// <param name="key">密钥</param>
+        /// <returns></returns>
+        public static string AESDecrypt(string data, string key)
+        {
+            var keyArray = Encoding.UTF8.GetBytes(key);
+            var toEncryptArray = Convert.FromBase64String(data);
+            var rDel = new RijndaelManaged
+            {
+                Key = keyArray,
+                Mode = CipherMode.ECB,
+                Padding = PaddingMode.PKCS7
+            };
+
+            var cTransform = rDel.CreateDecryptor();
+            var resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+            return Encoding.UTF8.GetString(resultArray);
+        }
+
+        #endregion
     }
 }

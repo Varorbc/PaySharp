@@ -59,9 +59,18 @@ namespace ICanPay.Wechatpay
                 throw new GatewayException("不是成功的返回码");
             }
 
-            if (Notify.Sign != SubmitProcess.BuildSign(GatewayData, _merchant.Key))
+            if (string.IsNullOrEmpty(Notify.ReqInfo))
             {
-                throw new GatewayException("签名不一致");
+                if (Notify.Sign != SubmitProcess.BuildSign(GatewayData, _merchant.Key))
+                {
+                    throw new GatewayException("签名不一致");
+                }
+            }
+            else
+            {
+                //TODO:解密
+                var key = EncryptUtil.MD5(_merchant.Key).ToLower();
+                var data = EncryptUtil.AESDecrypt(Notify.ReqInfo, key);
             }
 
             return true;

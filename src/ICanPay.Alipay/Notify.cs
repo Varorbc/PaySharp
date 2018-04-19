@@ -46,6 +46,11 @@ namespace ICanPay.Alipay
         public string Sign { get; set; }
 
         /// <summary>
+        /// 授权方的app_id
+        /// </summary>
+        public string AuthAppId { get; set; }
+
+        /// <summary>
         /// 支付宝交易号
         /// </summary>
         public string TradeNo { get; set; }
@@ -113,7 +118,14 @@ namespace ICanPay.Alipay
         /// <summary>
         /// 总退款金额
         /// </summary>
-        public double RefundFee { get; set; }
+        [ReName(Name = "refund_fee")]
+        public double RefundAmount { get; set; }
+
+        /// <summary>
+        /// 实际退款金额
+        /// </summary>
+        [ReName(Name = "send_back_fee")]
+        public double SendBackAmount { get; set; }
 
         /// <summary>
         /// 订单标题
