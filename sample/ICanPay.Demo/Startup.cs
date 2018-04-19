@@ -1,8 +1,4 @@
-﻿using ICanPay.Alipay;
-using ICanPay.Core;
-//using ICanPay.Unionpay;
-using ICanPay.Wechatpay;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,33 +27,8 @@ namespace ICanPay.Demo
 
             services.AddICanPay(a =>
             {
-                var gateways = new Gateways();
-
-                var alipayMerchants = Configuration.GetSection("Alipay").Get<Alipay.Merchant[]>();
-                foreach (var item in alipayMerchants)
-                {
-                    gateways.Add(new AlipayGateway(item)
-                    {
-                        GatewayUrl = "https://openapi.alipaydev.com"
-                    });
-                }
-
-                var wechatpayMerchants = Configuration.GetSection("Wechatpay").Get<Wechatpay.Merchant[]>();
-                foreach (var item in wechatpayMerchants)
-                {
-                    gateways.Add(new WechatpayGateway(item));
-                }
-
-                //var unionpayMerchants = Configuration.GetSection("Unionpay").Get<Unionpay.Merchant[]>();
-                //foreach (var item in unionpayMerchants)
-                //{
-                //    gateways.Add(new UnionpayGateway(item)
-                //    {
-                //        GatewayUrl = "https://gateway.test.95516.com"
-                //    });
-                //}
-
-                return gateways;
+                a.UseAlipay(Configuration.GetSection("Alipay"));
+                a.UseWechatpay(Configuration.GetSection("Wechatpay"));
             });
         }
 

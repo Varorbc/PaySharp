@@ -1,5 +1,6 @@
 ﻿using ICanPay.Core.Response;
 using ICanPay.Core.Utils;
+using System.Collections.Generic;
 
 namespace ICanPay.Core.Request
 {
@@ -8,6 +9,11 @@ namespace ICanPay.Core.Request
         protected Request()
         {
             GatewayData = new GatewayData();
+        }
+
+        protected Request(IComparer<string> comparer)
+        {
+            GatewayData = new GatewayData(comparer);
         }
 
         /// <summary>

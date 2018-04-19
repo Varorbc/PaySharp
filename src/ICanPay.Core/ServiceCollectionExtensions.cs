@@ -1,24 +1,29 @@
 ﻿#if NETSTANDARD2_0
+using ICanPay.Core;
 using ICanPay.Core.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace ICanPay.Core
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ICanPayConfig
+    public static class ServiceCollectionExtensions
     {
         /// <summary>
         /// 添加ICanPay
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="func"></param>
-        public static void AddICanPay(this IServiceCollection services, Func<IServiceProvider, IGateways> func)
+        /// <param name="setupAction"></param>
+        public static void AddICanPay(this IServiceCollection services, Action<IGateways> setupAction)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddTransient(func);
+            var gateways = new Gateways();
+            setupAction(gateways);
+            services.AddScoped<IGateways>(a =>
+            {
+                return gateways;
+            });
         }
 
         /// <summary>
