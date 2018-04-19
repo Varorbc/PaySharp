@@ -11,12 +11,8 @@ namespace ICanPay.Unionpay
     /// <summary>
     /// 银联支付网关
     /// </summary>
-    public class UnionpayGateway
-        : BaseGateway,
-        IFormPayment, IAppPayment, IScanPayment, IBarcodePayment,
-        IQuery, ICancel, IRefund, IBillDownload
+    public class UnionpayGateway: BaseGateway
     {
-
         #region 私有字段
 
 #if DEBUG
@@ -67,17 +63,9 @@ namespace ICanPay.Unionpay
 
         public new Merchant Merchant => _merchant;
 
-        public new Order Order
-        {
-            get => (Order)base.Order;
-            set => base.Order = value;
-        }
-
         public new Notify Notify => (Notify)base.Notify;
 
         protected override bool IsSuccessPay => Notify.RespCode == "00" || Notify.RespCode == "A6";
-
-        protected override bool IsWaitPay => throw new NotImplementedException();
 
         protected override string[] NotifyVerifyParameter => new string[]
         { Constant.MERID, Constant.RESPCODE, Constant.RESPMSG, Constant.QUERYID, Constant.SIGNMETHOD };
@@ -373,12 +361,7 @@ namespace ICanPay.Unionpay
             return result;
         }
 
-        public override T SdkExecute<T>(Request<T> request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override T Execute<T>(Request<T> request)
+        public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
             throw new NotImplementedException();
         }
