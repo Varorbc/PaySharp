@@ -1,0 +1,44 @@
+﻿#if NETSTANDARD2_0
+using PaySharp.Core;
+using PaySharp.Core.Utils;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using System;
+
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class ServiceCollectionExtensions
+    {
+        /// <summary>
+        /// 添加PaySharp
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="setupAction"></param>
+        public static void AddPaySharp(this IServiceCollection services, Action<IGateways> setupAction)
+        {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            var gateways = new Gateways();
+            setupAction(gateways);
+            services.AddScoped<IGateways>(a =>
+            {
+                return gateways;
+            });
+        }
+
+        /// <summary>
+        /// 使用PaySharp
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UsePaySharp(this IApplicationBuilder app)
+        {
+            var httpContextAccessor = app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
+            HttpUtil.Configure(httpContextAccessor);
+
+            return app;
+        }
+    }
+}
+
+#endif

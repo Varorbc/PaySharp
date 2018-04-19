@@ -1,6 +1,6 @@
-﻿using ICanPay.Core;
+﻿using PaySharp.Core;
 
-namespace ICanPay.Unionpay
+namespace PaySharp.Unionpay
 {
     public class Notify : INotify
     {

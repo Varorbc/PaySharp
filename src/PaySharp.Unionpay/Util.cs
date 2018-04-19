@@ -1,5 +1,5 @@
-﻿using ICanPay.Core.Utils;
-using ICanPay.Unionpay.Properties;
+﻿using PaySharp.Core.Utils;
+using PaySharp.Unionpay.Properties;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -14,7 +14,7 @@ using System.Collections;
 using System.IO;
 using System.Text;
 
-namespace ICanPay.Unionpay
+namespace PaySharp.Unionpay
 {
     internal static class Util
     {

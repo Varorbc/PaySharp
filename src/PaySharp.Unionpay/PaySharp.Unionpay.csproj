@@ -3,24 +3,24 @@
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://github.com/Varorbc/ICanPay</PackageProjectUrl>
-    <Title>ICanPay.Unionpay</Title>
+    <PackageProjectUrl>https://github.com/Varorbc/PaySharp</PackageProjectUrl>
+    <Title>PaySharp.Unionpay</Title>
     <Authors>Varorbc</Authors>
     <Description>银联支付</Description>
     <Version>2.0.0-alpha</Version>
     <PackageTags>dotnetcore;pay;unionpay;</PackageTags>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/Varorbc/ICanPay</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/Varorbc/ICanPay/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/Varorbc/PaySharp</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/Varorbc/PaySharp/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Varorbc</Copyright>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>ICanPay.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>PaySharp.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
-    <DocumentationFile>..\..\output\release\netstandard2.0\ICanPay.Unionpay.xml</DocumentationFile>
+    <DocumentationFile>..\..\output\release\netstandard2.0\PaySharp.Unionpay.xml</DocumentationFile>
     <NoWarn>1701;1702;1705;1591;1570</NoWarn>
     <OutputPath>..\..\output\release\</OutputPath>
   </PropertyGroup>
@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ICanPay.Core\ICanPay.Core.csproj" />
+    <ProjectReference Include="..\PaySharp.Core\PaySharp.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

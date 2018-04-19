@@ -1,5 +1,5 @@
 ﻿
-namespace ICanPay.Unionpay
+namespace PaySharp.Unionpay
 {
     public static class Constant
     {

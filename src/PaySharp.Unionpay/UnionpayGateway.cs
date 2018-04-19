@@ -1,12 +1,12 @@
-﻿using ICanPay.Core;
-using ICanPay.Core.Exceptions;
-using ICanPay.Core.Request;
-using ICanPay.Core.Utils;
+﻿using PaySharp.Core;
+using PaySharp.Core.Exceptions;
+using PaySharp.Core.Request;
+using PaySharp.Core.Utils;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace ICanPay.Unionpay
+namespace PaySharp.Unionpay
 {
     /// <summary>
     /// 银联支付网关

@@ -1,8 +1,8 @@
-﻿using ICanPay.Core;
+﻿using PaySharp.Core;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ICanPay.Unionpay
+namespace PaySharp.Unionpay
 {
     public class Auxiliary : IAuxiliary
     {
