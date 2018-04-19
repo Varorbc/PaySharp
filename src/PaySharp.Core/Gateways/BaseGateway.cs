@@ -8,7 +8,7 @@ namespace PaySharp.Core
     /// <summary>
     /// 网关的抽象基类
     /// </summary>
-    public abstract class BaseGateway
+    public abstract class BaseGateway : IGateway
     {
         #region 构造函数
 

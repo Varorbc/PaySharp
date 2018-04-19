@@ -10,11 +10,11 @@ namespace PaySharp.Demo.Controllers
 {
     public class WechatpayController : Controller
     {
-        private readonly BaseGateway _baseGateway;
+        private readonly IGateway _gateway;
 
         public WechatpayController(IGateways gateways)
         {
-            _baseGateway = gateways.Get<WechatpayGateway>();
+            _gateway = gateways.Get<WechatpayGateway>();
         }
 
         [HttpPost]
@@ -29,7 +29,7 @@ namespace PaySharp.Demo.Controllers
                 OpenId = open_id
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -44,7 +44,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -60,7 +60,7 @@ namespace PaySharp.Demo.Controllers
                 OpenId = open_id
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -76,7 +76,7 @@ namespace PaySharp.Demo.Controllers
                 SceneInfo = scene_info
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -91,7 +91,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
 
             return Json(response);
         }
@@ -110,7 +110,7 @@ namespace PaySharp.Demo.Controllers
             request.PaySucceed += BarcodePay_PaySucceed;
             request.PayFailed += BarcodePay_PayFaild;
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
 
             return Json(response);
         }
@@ -143,7 +143,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -161,7 +161,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -177,7 +177,7 @@ namespace PaySharp.Demo.Controllers
                 RefundNo = refund_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -190,7 +190,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -203,7 +203,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -221,7 +221,7 @@ namespace PaySharp.Demo.Controllers
                 TrueName = true_name
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -234,7 +234,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -243,7 +243,7 @@ namespace PaySharp.Demo.Controllers
         {
             var request = new PublicKeyRequest();
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -261,7 +261,7 @@ namespace PaySharp.Demo.Controllers
                 TrueName = true_name
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -274,7 +274,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -288,7 +288,7 @@ namespace PaySharp.Demo.Controllers
                 BillType = bill_type
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return File(response.GetBillFile(), "text/csv", $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.csv");
         }
 
@@ -302,7 +302,7 @@ namespace PaySharp.Demo.Controllers
                 AccountType = account_type
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return File(response.GetBillFile(), "text/csv", $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.csv");
         }
     }

@@ -6,17 +6,17 @@ namespace PaySharp.Demo.Controllers
 {
     public class NotifyController : Controller
     {
-        private readonly IGateways gateways;
+        private readonly IGateways _gateways;
 
         public NotifyController(IGateways gateways)
         {
-            this.gateways = gateways;
+            _gateways = gateways;
         }
 
         public async Task Index()
         {
             // 订阅支付通知事件
-            PayNotify notify = new PayNotify(gateways);
+            PayNotify notify = new PayNotify(_gateways);
             notify.PaySucceed += Notify_PaySucceed;
             notify.PayFailed += Notify_PayFailed;
             notify.UnknownGateway += Notify_UnknownGateway;

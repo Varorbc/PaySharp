@@ -11,11 +11,11 @@ namespace PaySharp.Demo.Controllers
 {
     public class AlipayController : Controller
     {
-        private readonly BaseGateway _baseGateway;
+        private readonly IGateway _gateway;
 
         public AlipayController(IGateways gateways)
         {
-            _baseGateway = gateways.Get<AlipayGateway>();
+            _gateway = gateways.Get<AlipayGateway>();
         }
 
         [HttpPost]
@@ -30,7 +30,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Content(response.Html, "text/html", Encoding.UTF8);
         }
 
@@ -46,7 +46,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Redirect(response.Url);
         }
 
@@ -62,7 +62,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -78,7 +78,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
 
             return Json(response);
         }
@@ -98,7 +98,7 @@ namespace PaySharp.Demo.Controllers
             request.PaySucceed += BarcodePay_PaySucceed;
             request.PayFailed += BarcodePay_PayFaild;
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
 
             return Json(response);
         }
@@ -131,7 +131,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -148,7 +148,7 @@ namespace PaySharp.Demo.Controllers
                 OutRefundNo = out_request_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -163,7 +163,7 @@ namespace PaySharp.Demo.Controllers
                 OutRefundNo = out_request_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -177,7 +177,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -191,7 +191,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -208,7 +208,7 @@ namespace PaySharp.Demo.Controllers
                 PayeeType = payee_type
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -222,7 +222,7 @@ namespace PaySharp.Demo.Controllers
                 OutTradeNo = out_trade_no
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return Json(response);
         }
 
@@ -236,7 +236,7 @@ namespace PaySharp.Demo.Controllers
                 BillType = bill_type
             });
 
-            var response = _baseGateway.Execute(request);
+            var response = _gateway.Execute(request);
             return File(await response.GetBillFileAsync(), "application/zip");
         }
     }
