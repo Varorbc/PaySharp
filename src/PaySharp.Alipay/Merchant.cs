@@ -40,11 +40,6 @@ namespace PaySharp.Alipay
         public string Charset => "UTF-8";
 
         /// <summary>
-        /// 参数集合
-        /// </summary>
-        public string BizContent { get; internal set; }
-
-        /// <summary>
         /// 商户私钥
         /// </summary>
         [Required(ErrorMessage = "请设置商户私钥")]

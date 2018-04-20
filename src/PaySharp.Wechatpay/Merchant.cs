@@ -5,7 +5,6 @@ namespace PaySharp.Wechatpay
 {
     public class Merchant : IMerchant
     {
-
         #region 属性
 
         /// <summary>

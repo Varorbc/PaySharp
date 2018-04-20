@@ -1,8 +1,8 @@
 ﻿#if NETSTANDARD2_0
-using PaySharp.Core;
-using PaySharp.Core.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using PaySharp.Core;
+using PaySharp.Core.Utils;
 using System;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -18,10 +18,11 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            var gateways = new Gateways();
-            setupAction(gateways);
             services.AddScoped<IGateways>(a =>
             {
+                var gateways = new Gateways();
+                setupAction(gateways);
+
                 return gateways;
             });
         }
