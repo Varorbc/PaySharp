@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PaySharp.Alipay;
-using PaySharp.Wechatpay;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
@@ -63,14 +62,14 @@ namespace PaySharp.Demo
                 {
                     GatewayUrl = "https://openapi.alipaydev.com/"
                 });
-                a.Add(new WechatpayGateway(wechatpayMerchant));
+                //a.Add(new WechatpayGateway(wechatpayMerchant));
                 //a.Add(new UnionpayGateway(unionpayMerchant)
                 //{
                 //    GatewayUrl = "https://gateway.test.95516.com/"
                 //});
 
-                //a.UseAlipay(Configuration.GetSection("Alipay"));
-                //a.UseWechatpay(Configuration.GetSection("Wechatpay"));
+                //a.UseAlipay(Configuration);
+                a.UseWechatpay(Configuration);
             });
         }
 

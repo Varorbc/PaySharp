@@ -20,9 +20,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return gateways;
         }
 
-        public static IGateways UseWechatpay(this IGateways gateways, IConfigurationSection configuration)
+        public static IGateways UseWechatpay(this IGateways gateways, IConfiguration configuration)
         {
-            var merchants = configuration.Get<Merchant[]>();
+            var merchants = configuration.GetSection("Wechatpay").Get<Merchant[]>();
             if (merchants != null)
             {
                 for (int i = 0; i < merchants.Length; i++)
