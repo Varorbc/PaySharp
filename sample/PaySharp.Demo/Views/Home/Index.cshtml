@@ -15,6 +15,7 @@
             @*<li><a href="#tabs-api-qpay">QQ钱包</a></li>
                 <li><a href="#tabs-api-jdpay">京东支付</a></li>*@
             <li><a href="#tabs-api-unionpay">银联支付</a></li>
+            <li><a href="#tabs-support">赞助/支持</a></li>
         </ul>
         <div id="tabs-api-1">
             <h3>支付平台 官方文档：</h3>
@@ -28,6 +29,7 @@
             <h3>使用方式：</h3>
             <p>见示例项目：PaySharp.Demo</p>
         </div>
+
         <div id="tabs-api-alipay">
             <div id="tabs-purchase-alipay">
                 <ul>
@@ -1296,6 +1298,7 @@
 
                 </div>
             </div>*@
+
         <div id="tabs-api-unionpay">
             <div id="tabs-purchase-unionpay">
                 <ul>
@@ -1840,12 +1843,25 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-@section Scripts {
-    <script src="~/demo.js" asp-append-version="true"></script>
-}
-@section Styles {
-    <link rel="stylesheet" href="~/demo.css" asp-append-version="true">
-}
+        <div id="tabs-support">
+            <label>如果觉得项目对您有帮助，您可以选择打赏我，表示对我的支持.</label>
+            <br />
+            <label>
+                如果需要定制其他支付方式,请联系
+                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=574021756&site=qq&menu=yes">
+                    <img border="0" src="http://wpa.qq.com/pa?p=2:574021756:51" alt="点击这里给我发消息" title="点击这里给我发消息" />
+                </a>
+            </label>
+            <p>
+                <img src="https://raw.githubusercontent.com/Varorbc/ICanPay/2.0.0-alpha/reward.jpg" height="600" width="900" />
+            </p>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script src="~/demo.js" asp-append-version="true"></script>
+    }
+    @section Styles {
+        <link rel="stylesheet" href="~/demo.css" asp-append-version="true">
+    }
