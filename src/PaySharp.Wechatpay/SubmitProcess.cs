@@ -52,6 +52,7 @@ namespace PaySharp.Wechatpay
                         throw new GatewayException("签名验证失败");
                     }
 
+                    baseResponse.Sign = sign;
                     baseResponse.Execute(merchant, request);
                 }
             }

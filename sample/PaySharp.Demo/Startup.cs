@@ -61,12 +61,12 @@ namespace PaySharp.Demo
 
                 a.Add(new AlipayGateway(alipayMerchant)
                 {
-                    GatewayUrl = "https://openapi.alipaydev.com/"
+                    GatewayUrl = "https://openapi.alipaydev.com"
                 });
                 //a.Add(new WechatpayGateway(wechatpayMerchant));
                 a.Add(new UnionpayGateway(unionpayMerchant)
                 {
-                    GatewayUrl = "https://gateway.test.95516.com/"
+                    GatewayUrl = "https://gateway.test.95516.com"
                 });
 
                 //a.UseAlipay(Configuration);

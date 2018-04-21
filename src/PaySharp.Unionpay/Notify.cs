@@ -17,13 +17,13 @@ namespace PaySharp.Unionpay
         /// <summary>
         /// 签名类型
         /// </summary>
-        [ReName(Name = Constant.SIGNMETHOD)]
+        [ReName(Name = "signMethod")]
         public string SignType { get; set; }
 
         /// <summary>
         /// 签名
         /// </summary>
-        [ReName(Name = Constant.SIGNATURE)]
+        [ReName(Name = "signature")]
         public string Sign { get; set; }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace PaySharp.Unionpay
         /// <summary>
         /// 商户代码,即merId
         /// </summary>
-        [ReName(Name = Constant.MERID)]
+        [ReName(Name = "merId")]
         public string AppId { get; set; }
 
         /// <summary>
@@ -96,19 +96,14 @@ namespace PaySharp.Unionpay
         /// <summary>
         /// 商户订单号，不应含“-”或“_”
         /// </summary>
-        [ReName(Name = Constant.ORDERID)]
+        [ReName(Name = "orderId")]
         public string OutTradeNo { get; set; }
 
         /// <summary>
-        /// 交易金额,单位元
+        /// 交易金额,单位分
         /// </summary>
-        [ReName(Name = Constant.TXNAMT)]
-        public double Amount
-        {
-            get => _amount;
-            set => _amount = value / 100;
-        }
-        private double _amount;
+        [ReName(Name = "txnAmt")]
+        public double TotalAmount { get; set; }
 
         /// <summary>
         /// 交易币种,默认156

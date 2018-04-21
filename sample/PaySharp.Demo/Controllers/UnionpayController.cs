@@ -24,7 +24,7 @@ namespace PaySharp.Demo.Controllers
             var request = new WebPayRequest();
             request.AddGatewayData(new WebPayModel()
             {
-                ToalAmount = total_amount,
+                TotalAmount = total_amount,
                 OutTradeNo = out_trade_no
             });
 
@@ -48,21 +48,20 @@ namespace PaySharp.Demo.Controllers
         //    return Redirect(response.Url);
         //}
 
-        //[HttpPost]
-        //public IActionResult AppPay(string out_trade_no, string subject, double total_amount, string body)
-        //{
-        //    var request = new AppPayRequest();
-        //    request.AddGatewayData(new AppPayModel()
-        //    {
-        //        Body = body,
-        //        TotalAmount = total_amount,
-        //        Subject = subject,
-        //        OutTradeNo = out_trade_no
-        //    });
+        [HttpPost]
+        public IActionResult AppPay(string out_trade_no, double total_amount, string body)
+        {
+            var request = new AppPayRequest();
+            request.AddGatewayData(new AppPayModel()
+            {
+                Body = body,
+                TotalAmount = total_amount,
+                OutTradeNo = out_trade_no
+            });
 
-        //    var response = _gateway.Execute(request);
-        //    return Json(response);
-        //}
+            var response = _gateway.Execute(request);
+            return Json(response);
+        }
 
         //[HttpPost]
         //public IActionResult ScanPay(string out_trade_no, string subject, double total_amount, string body)

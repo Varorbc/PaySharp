@@ -1299,25 +1299,49 @@
         <div id="tabs-api-unionpay">
             <div id="tabs-purchase-unionpay">
                 <ul>
-                    <li><a>二维码支付产品</a></li>
+                    <li><a href="#tabs-purchase-10">电脑网站支付</a></li>
+                    <li><a href="#tabs-purchase-30">APP支付</a></li>
                     <li><a href="#tabs-purchase-1">二维码消费（被扫）</a></li>
                     <li><a href="#tabs-purchase-2">申请二维码（主扫）</a></li>
                     <li><a href="#tabs-purchase-3">消费撤销</a></li>
                     <li><a href="#tabs-purchase-4">退货</a></li>
                     <li><a href="#tabs-purchase-5">交易状态查询</a></li>
                     <li><a href="#tabs-purchase-6">对账文件下载</a></li>
-                    <li><a>网关支付产品</a></li>
-                    <li><a href="#tabs-purchase-10">跳转网关页面支付</a></li>
                     <li><a href="#tabs-purchase-11">交易状态查询</a></li>
                     <li><a href="#tabs-purchase-12">消费撤销</a></li>
                     <li><a href="#tabs-purchase-13">退货</a></li>
                     <li><a href="#tabs-purchase-14">对账文件下载</a></li>
-                    <li><a>网关支付产品-预授权</a></li>
                     <li><a href="#tabs-purchase-20">跳转网关页面预授权</a></li>
                     <li><a href="#tabs-purchase-21">预授权撤销</a></li>
                     <li><a href="#tabs-purchase-22">预授权完成</a></li>
                     <li><a href="#tabs-purchase-23">预授权完成撤销</a></li>
                 </ul>
+
+                <div id="tabs-purchase-30">
+                    <form class="api-form" asp-controller="UnionPay" asp-action="AppPay" method="post" target="_blank">
+                        <p>
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                        </p>
+                        <p>
+                            <label>描述：</label>
+                            <input type="text" name="body" value="银联APP支付测试">
+                        </p>
+                        <p>
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=3&apiId=110" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
                 <div id="tabs-purchase-1">
                     <form class="api-form" asp-controller="UnionPay" asp-action="AppConsume" method="post" target="_blank">
                         <p>
@@ -1455,7 +1479,6 @@
                             <label>origOrderId：</label>
                             <input type="text" name="origOrderId" value="" />
                         </p>
-
                         <p>
                             <label>origTxnTime：</label>
                             <input type="text" name="origTxnTime" />
