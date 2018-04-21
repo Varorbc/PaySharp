@@ -139,8 +139,7 @@ namespace PaySharp.Wechatpay
         public int CouponCount { get; set; }
 
         /// <summary>
-        /// 退款代金券
-        /// TODO:特殊代金券
+        /// 代金券
         /// </summary>
         public List<CouponResponse> Coupons { get; set; }
 

@@ -3,6 +3,7 @@ using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
 using System.Threading.Tasks;
+using static PaySharp.Wechatpay.Response.QueryResponse;
 
 namespace PaySharp.Wechatpay
 {
@@ -43,7 +44,7 @@ namespace PaySharp.Wechatpay
 
         protected override string[] NotifyVerifyParameter => new string[]
         {
-            "appid", "return_code", "mch_id", "nonce_str", "result_code"
+            "appid", "return_code", "mch_id", "nonce_str"
         };
 
         #endregion
@@ -61,6 +62,7 @@ namespace PaySharp.Wechatpay
 
             if (string.IsNullOrEmpty(Notify.ReqInfo))
             {
+                Notify.Coupons = ConvertUtil.ToList<CouponResponse, object>(GatewayData, -1);
                 if (Notify.Sign != SubmitProcess.BuildSign(GatewayData, _merchant.Key))
                 {
                     throw new GatewayException("签名不一致");
@@ -68,9 +70,19 @@ namespace PaySharp.Wechatpay
             }
             else
             {
-                //TODO:解密
+                var tempNotify = Notify;
                 var key = EncryptUtil.MD5(_merchant.Key).ToLower();
                 var data = EncryptUtil.AESDecrypt(Notify.ReqInfo, key);
+                var gatewayData = new GatewayData();
+                gatewayData.FromXml(data);
+                base.Notify = await gatewayData.ToObjectAsync<Notify>(StringCase.Snake);
+                GatewayData.Add(Notify, StringCase.Snake);
+
+                Notify.AppId = tempNotify.AppId;
+                Notify.MchId = tempNotify.MchId;
+                Notify.NonceStr = tempNotify.NonceStr;
+                Notify.ReqInfo = tempNotify.ReqInfo;
+                Notify.ReturnCode = tempNotify.ReturnCode;
             }
 
             return true;
