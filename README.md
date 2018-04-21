@@ -9,8 +9,9 @@ PaySharp是一个支持多商户多种支付方式的跨平台网关处理类库
 
 ##### 支持的支付方式：
 
-	移动支付(App)、手机网站支付(Wap)、电脑网站支付(Web)、小程序支付(Applet)、
-	条码支付(Barcode)、扫码支付(Scan)、转账(Transfer)、转账查询(TransferQuery)
+	移动支付(App)、手机网站支付(Wap)、电脑网站支付(Web)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)、
+	
+	转账(Transfer)、转账查询(TransferQuery)
 
 ##### 支持的辅助接口：
 
@@ -20,9 +21,9 @@ PaySharp是一个支持多商户多种支付方式的跨平台网关处理类库
 
 ##### 支持的支付方式：
 		
-	移动支付(App)、手机网站支付(Wap)、公众号支付(Public)、小程序支付(Applet)、
-	条码支付(Barcode)、扫码支付(Scan)、转账(Transfer)、转账查询(TransferQuery)、
-	转账到银行卡(TransferToBank)、转账到银行卡查询(TransferToBank)Query)
+	移动支付(App)、手机网站支付(Wap)、公众号支付(Public)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)、
+	
+	转账(Transfer)、转账查询(TransferQuery)、转账到银行卡(TransferToBank)、转账到银行卡查询(TransferToBank)Query)
 
 ##### 支持的辅助接口：
 		
