@@ -423,6 +423,7 @@
 
             </div>
         </div>
+
         <div id="tabs-api-wechatpay">
             <div id="tabs-purchase-wechatpay">
                 <ul>
@@ -897,6 +898,7 @@
 
             </div>
         </div>
+
         @*<div id="tabs-api-qpay">
                 <div id="tabs-purchase-qpay">
                     <ul>
@@ -1319,8 +1321,8 @@
                 <div id="tabs-purchase-1">
                     <form class="api-form" asp-controller="UnionPay" asp-action="AppConsume" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>qrNo：</label>
@@ -1331,8 +1333,8 @@
                             <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
                         </p>
                         <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>currencyCode：</label>
@@ -1354,19 +1356,20 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=89&apiId=55" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-2">
                     <form class="api-form" asp-controller="UnionPay" asp-action="ApplyQrCode" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>txnTime：</label>
                             <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
                         </p>
                         <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>currencyCode：</label>
@@ -1388,19 +1391,20 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=89&apiId=57" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-3">
                     <form class="api-form" asp-controller="UnionPay" asp-action="PurchaseUndo" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>txnTime：</label>
                             <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
                         </p>
                         <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>origQryId：</label>
@@ -1428,19 +1432,20 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=89&apiId=58" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-4">
                     <form class="api-form" asp-controller="UnionPay" asp-action="Refund" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>txnTime：</label>
                             <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
                         </p>
                         <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>origQryId：</label>
@@ -1469,11 +1474,12 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=89&apiId=59" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-5">
                     <form class="api-form" asp-controller="UnionPay" asp-action="Query563" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="">
                         </p>
                         <p>
                             <label>txnTime：</label>
@@ -1489,6 +1495,7 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=89&apiId=60" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-6">
                     <form class="api-form" asp-controller="UnionPay" asp-action="FileTransfer057" method="post" target="_blank">
                         <p>
@@ -1513,35 +1520,16 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=89&apiId=61" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-10">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="FrontConsume62" method="post" target="_blank">
+                    <form class="api-form" asp-controller="UnionPay" asp-action="WebPay" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>currencyCode：</label>
-                            <input type="text" name="currencyCode" value="156">
-                        </p>
-                        <p>
-                            <label>payTimeout：</label>
-                            <input type="text" name="payTimeout" value="@DateTime.Now.AddMinutes(15).ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>frontUrl：</label>
-                            <input type="text" name="frontUrl" value="http://www.baidu.com/unionpay/frontconsume62return">
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/frontconsume62">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -1553,11 +1541,12 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=63" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-11">
                     <form class="api-form" asp-controller="UnionPay" asp-action="Query65" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="">
                         </p>
                         <p>
                             <label>txnTime：</label>
@@ -1573,19 +1562,20 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=66" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-12">
                     <form class="api-form" asp-controller="UnionPay" asp-action="ConsumeUndo63" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>txnTime：</label>
                             <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
                         </p>
                         <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>origQryId：</label>
@@ -1605,19 +1595,20 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=64" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-13">
                     <form class="api-form" asp-controller="UnionPay" asp-action="Refund64" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>txnTime：</label>
                             <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
                         </p>
                         <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>origQryId：</label>
@@ -1637,6 +1628,7 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=65" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-14">
                     <form class="api-form" asp-controller="UnionPay" asp-action="FileTransfer66" method="post" target="_blank">
                         <p>
@@ -1661,19 +1653,20 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=89&apiId=61" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-20">
                     <form class="api-form" asp-controller="UnionPay" asp-action="AuthDealFront671" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>txnTime：</label>
                             <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
                         </p>
                         <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>currencyCode：</label>
@@ -1701,19 +1694,20 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=68" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-21">
                     <form class="api-form" asp-controller="UnionPay" asp-action="AuthUndo672" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>txnTime：</label>
                             <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
                         </p>
                         <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>origQryId：</label>
@@ -1733,19 +1727,20 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=69" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-22">
                     <form class="api-form" asp-controller="UnionPay" asp-action="AuthFinish673" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>txnTime：</label>
                             <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
                         </p>
                         <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>origQryId：</label>
@@ -1765,19 +1760,20 @@
                         <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=70" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
+
                 <div id="tabs-purchase-23">
                     <form class="api-form" asp-controller="UnionPay" asp-action="AuthFinishUndo674" method="post" target="_blank">
                         <p>
-                            <label>orderId：</label>
-                            <input type="text" name="orderId" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>txnTime：</label>
                             <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
                         </p>
                         <p>
-                            <label>txnAmt：</label>
-                            <input type="text" name="txnAmt" value="1" title="单位为分。">
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
                         </p>
                         <p>
                             <label>origQryId：</label>

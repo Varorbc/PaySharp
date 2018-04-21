@@ -7,7 +7,7 @@
     <Title>PaySharp.Unionpay</Title>
     <Authors>Varorbc</Authors>
     <Description>银联支付</Description>
-    <Version>2.0.0-alpha</Version>
+    <Version>1.0.0-alpha</Version>
     <PackageTags>dotnetcore;pay;unionpay;</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Varorbc/PaySharp</RepositoryUrl>
@@ -32,6 +32,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="SharpZipLib" Version="1.0.0-alpha2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PaySharp.Alipay;
+using PaySharp.Unionpay;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
@@ -49,27 +50,28 @@ namespace PaySharp.Demo
                     NotifyUrl = "http://localhost:61377/Notify"
                 };
 
-                //var unionpayMerchant = new Unionpay.Merchant
-                //{
-                //    AppId = "777290058110048",
-                //    CertPwd = "000000",
-                //    CertPath = "Certs/acp_test_sign.pfx",
-                //    NotifyUrl = "http://localhost:61377/Notify",
-                //    FrontUrl = "http://localhost:61377/Notify"
-                //};
+                var unionpayMerchant = new Unionpay.Merchant
+                {
+                    AppId = "777290058110048",
+                    CertPwd = "000000",
+                    CertPath = "Certs/acp_test_sign.pfx",
+                    NotifyUrl = "http://localhost:61377/Notify",
+                    FrontUrl = "http://localhost:61377/Notify"
+                };
 
                 a.Add(new AlipayGateway(alipayMerchant)
                 {
                     GatewayUrl = "https://openapi.alipaydev.com/"
                 });
                 //a.Add(new WechatpayGateway(wechatpayMerchant));
-                //a.Add(new UnionpayGateway(unionpayMerchant)
-                //{
-                //    GatewayUrl = "https://gateway.test.95516.com/"
-                //});
+                a.Add(new UnionpayGateway(unionpayMerchant)
+                {
+                    GatewayUrl = "https://gateway.test.95516.com/"
+                });
 
                 //a.UseAlipay(Configuration);
                 a.UseWechatpay(Configuration);
+                //a.UseUnionpay(Configuration);
             });
         }
 
