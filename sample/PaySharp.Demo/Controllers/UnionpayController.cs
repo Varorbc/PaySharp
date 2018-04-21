@@ -32,21 +32,19 @@ namespace PaySharp.Demo.Controllers
             return Content(response.Html, "text/html", Encoding.UTF8);
         }
 
-        //[HttpPost]
-        //public IActionResult WapPay(string out_trade_no, string subject, double total_amount, string body)
-        //{
-        //    var request = new WapPayRequest();
-        //    request.AddGatewayData(new WapPayModel()
-        //    {
-        //        Body = body,
-        //        TotalAmount = total_amount,
-        //        Subject = subject,
-        //        OutTradeNo = out_trade_no
-        //    });
+        [HttpPost]
+        public IActionResult WapPay(string out_trade_no, double total_amount)
+        {
+            var request = new WapPayRequest();
+            request.AddGatewayData(new WapPayModel()
+            {
+                TotalAmount = total_amount,
+                OutTradeNo = out_trade_no
+            });
 
-        //    var response = _gateway.Execute(request);
-        //    return Redirect(response.Url);
-        //}
+            var response = _gateway.Execute(request);
+            return Content(response.Html, "text/html", Encoding.UTF8);
+        }
 
         [HttpPost]
         public IActionResult AppPay(string out_trade_no, double total_amount, string body)

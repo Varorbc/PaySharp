@@ -1300,6 +1300,7 @@
             <div id="tabs-purchase-unionpay">
                 <ul>
                     <li><a href="#tabs-purchase-10">电脑网站支付</a></li>
+                    <li><a href="#tabs-purchase-31">手机网站支付</a></li>
                     <li><a href="#tabs-purchase-30">APP支付</a></li>
                     <li><a href="#tabs-purchase-1">二维码消费（被扫）</a></li>
                     <li><a href="#tabs-purchase-2">申请二维码（主扫）</a></li>
@@ -1546,6 +1547,27 @@
 
                 <div id="tabs-purchase-10">
                     <form class="api-form" asp-controller="UnionPay" asp-action="WebPay" method="post" target="_blank">
+                        <p>
+                            <label>订单号：</label>
+                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                        </p>
+                        <p>
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=63" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
+                <div id="tabs-purchase-31">
+                    <form class="api-form" asp-controller="UnionPay" asp-action="WapPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
                             <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
