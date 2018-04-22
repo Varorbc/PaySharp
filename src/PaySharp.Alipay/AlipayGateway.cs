@@ -1,4 +1,7 @@
-﻿using PaySharp.Alipay.Request;
+﻿#if NETSTANDARD2_0
+using Microsoft.Extensions.Options;
+#endif
+using PaySharp.Alipay.Request;
 using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
@@ -29,6 +32,19 @@ namespace PaySharp.Alipay
         {
             _merchant = merchant;
         }
+
+#if NETSTANDARD2_0
+
+        /// <summary>
+        /// 初始化支付宝网关
+        /// </summary>
+        /// <param name="merchant">商户数据</param>
+        public AlipayGateway(IOptions<Merchant> merchant)
+            : this(merchant.Value)
+        {
+        }
+
+#endif
 
         #endregion
 

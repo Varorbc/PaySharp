@@ -1,4 +1,7 @@
-﻿using PaySharp.Core;
+﻿#if NETSTANDARD2_0
+using Microsoft.Extensions.Options;
+#endif
+using PaySharp.Core;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
 using PaySharp.Unionpay.Request;
@@ -9,7 +12,7 @@ namespace PaySharp.Unionpay
     /// <summary>
     /// 银联支付网关
     /// </summary>
-    public class UnionpayGateway : BaseGateway
+    public sealed class UnionpayGateway : BaseGateway
     {
         #region 私有字段
 
@@ -30,7 +33,7 @@ namespace PaySharp.Unionpay
         #region 构造函数
 
         /// <summary>
-        /// 构造函数
+        /// 初始化银联支付网关
         /// </summary>
         /// <param name="merchant">商户数据</param>
         public UnionpayGateway(Merchant merchant)
@@ -42,6 +45,19 @@ namespace PaySharp.Unionpay
             _merchant.CertKey = Util.GetCertKey(merchant.CertPath, merchant.CertPwd);
             //_merchant.EncryptCertId = Util.GetEncryptCertId();
         }
+
+#if NETSTANDARD2_0
+
+        /// <summary>
+        /// 初始化银联支付网关
+        /// </summary>
+        /// <param name="merchant">商户数据</param>
+        public UnionpayGateway(IOptions<Merchant> merchant)
+           : this(merchant.Value)
+        {
+        }
+
+#endif
 
         #endregion
 
