@@ -1,11 +1,11 @@
-﻿using ICanPay.Abstractions;
+﻿using PaySharp.Abstractions;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace ICanPay.AspNetCore
+namespace PaySharp.AspNetCore
 {
     /// <summary>
     /// Asp.Net-Core 的键值提供器

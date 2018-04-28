@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ICanPay.Abstractions
+namespace PaySharp.Abstractions
 {
     public interface INotifyResponse
     {

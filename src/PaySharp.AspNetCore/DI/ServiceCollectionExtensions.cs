@@ -1,4 +1,4 @@
-﻿using ICanPay.AspNetCore.DI;
+﻿using PaySharp.AspNetCore.DI;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;

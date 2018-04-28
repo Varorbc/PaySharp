@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICanPay.AspNetCore.DI
+namespace PaySharp.AspNetCore.DI
 {
     public interface IGatewayProvider
     {

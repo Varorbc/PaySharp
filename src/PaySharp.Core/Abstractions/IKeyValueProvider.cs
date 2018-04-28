@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ICanPay.Abstractions
+namespace PaySharp.Abstractions
 {
     /// <summary>
     /// 键值提供器，用于从 HttpContext.Request 中提取数据。
