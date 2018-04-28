@@ -29,9 +29,24 @@ namespace PaySharp.Unionpay.Response
         public string RespMsg { get; set; }
 
         /// <summary>
-        /// 签名公钥证书
+        /// 原应答码
+        /// </summary>
+        public string OrigRespCode { get; set; }
+
+        /// <summary>
+        /// 原应答信息
+        /// </summary>
+        public string OrigRespMsg { get; set; }
+
+        /// <summary>
+        /// 证书ID
         /// </summary>
         public string SignPubKeyCert { get; set; }
+
+        /// <summary>
+        /// 签名公钥证书
+        /// </summary>
+        public string CertId { get; set; }
 
         /// <summary>
         ///版本号
@@ -120,8 +135,7 @@ namespace PaySharp.Unionpay.Response
         /// <summary>
         /// 商户订单号，不应含“-”或“_”
         /// </summary>
-        [ReName(Name = "orderId")]
-        public string OutTradeNo { get; set; }
+        public string OrderId { get; set; }
 
         /// <summary>
         /// 保留域
@@ -132,6 +146,41 @@ namespace PaySharp.Unionpay.Response
         /// 即base64后的{discountAmt=100}。
         /// </summary>
         public string Reserved { get; set; }
+
+        /// <summary>
+        /// 接入机构代码
+        /// </summary>
+        public string AccInsCode { get; set; }
+
+        /// <summary>
+        /// 交易传输时间
+        /// </summary>
+        public string TraceTime { get; set; }
+
+        /// <summary>
+        /// 系统跟踪号
+        /// </summary>
+        public string TraceNo { get; set; }
+
+        /// <summary>
+        /// 绑定标识号
+        /// </summary>
+        public string BindId { get; set; }
+
+        /// <summary>
+        /// 发卡机构识别模式
+        /// </summary>
+        public string IssuerIdentifyMode { get; set; }
+
+        /// <summary>
+        /// 发卡机构代码
+        /// </summary>
+        public string IssInsNo { get; set; }
+
+        /// <summary>
+        /// 有卡交易信息域
+        /// </summary>
+        public string CardTransData { get; set; }
 
         /// <summary>
         /// 原始值

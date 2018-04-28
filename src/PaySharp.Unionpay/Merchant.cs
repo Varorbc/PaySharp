@@ -79,9 +79,12 @@ namespace PaySharp.Unionpay
         public string CertPwd { get; set; }
 
         /// <summary>
-        /// 验证证书目录
+        /// 接入类型	
+        /// 0：商户直连接入
+        /// 1：收单机构接入
+        /// 2：平台商户接入
         /// </summary>
-        [Ignore]
-        public string ValidateCertDir { get; set; }
+        [Required(ErrorMessage = "请设置接入类型")]
+        public int AccessType { get; set; } = 0;
     }
 }

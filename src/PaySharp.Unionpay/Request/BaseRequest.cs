@@ -18,5 +18,9 @@ namespace PaySharp.Unionpay.Request
 
             GatewayData.Add(model, StringCase.Camel);
         }
+
+        internal virtual void Execute(Merchant merchant)
+        {
+        }
     }
 }

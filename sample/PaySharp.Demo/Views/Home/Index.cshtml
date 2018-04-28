@@ -35,18 +35,18 @@
                 <ul>
                     <li><a href="#tabs-purchase-1">电脑网站支付</a></li>
                     <li><a href="#tabs-purchase-2">手机网站支付</a></li>
-                    <li><a href="#tabs-purchase-12">手机APP支付</a></li>
-                    <li><a href="#tabs-purchase-13">小程序支付</a></li>
-                    <li><a href="#tabs-purchase-3">扫码支付</a></li>
-                    <li><a href="#tabs-purchase-4">条码支付</a></li>
-                    <li><a href="#tabs-purchase-5">交易查询</a></li>
-                    <li><a href="#tabs-purchase-6">交易退款</a></li>
-                    <li><a href="#tabs-purchase-7">退款查询</a></li>
-                    <li><a href="#tabs-purchase-14">交易撤销</a></li>
-                    <li><a href="#tabs-purchase-8">交易关闭</a></li>
-                    <li><a href="#tabs-purchase-9">单笔转账</a></li>
-                    <li><a href="#tabs-purchase-10">转账查询</a></li>
-                    <li><a href="#tabs-purchase-11">下载对账单</a></li>
+                    <li><a href="#tabs-purchase-3">APP支付</a></li>
+                    <li><a href="#tabs-purchase-4">小程序支付</a></li>
+                    <li><a href="#tabs-purchase-5">扫码支付</a></li>
+                    <li><a href="#tabs-purchase-6">条码支付</a></li>
+                    <li><a href="#tabs-purchase-7">交易查询</a></li>
+                    <li><a href="#tabs-purchase-8">交易退款</a></li>
+                    <li><a href="#tabs-purchase-9">退款查询</a></li>
+                    <li><a href="#tabs-purchase-10">交易撤销</a></li>
+                    <li><a href="#tabs-purchase-11">交易关闭</a></li>
+                    <li><a href="#tabs-purchase-12">单笔转账</a></li>
+                    <li><a href="#tabs-purchase-13">转账查询</a></li>
+                    <li><a href="#tabs-purchase-14">下载对账单</a></li>
                 </ul>
 
                 <div id="tabs-purchase-1">
@@ -107,7 +107,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-12">
+                <div id="tabs-purchase-3">
                     <form class="api-form" asp-controller="Alipay" asp-action="AppPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -136,7 +136,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-13">
+                <div id="tabs-purchase-4">
                     <form class="api-form" asp-controller="Alipay" asp-action="AppPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -165,7 +165,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-3">
+                <div id="tabs-purchase-5">
                     <form class="api-form" asp-controller="Alipay" asp-action="ScanPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -194,7 +194,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-4">
+                <div id="tabs-purchase-6">
                     <form class="api-form" asp-controller="Alipay" asp-action="BarcodePay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -227,7 +227,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-5">
+                <div id="tabs-purchase-7">
                     <form class="api-form" asp-controller="Alipay" asp-action="Query" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -248,7 +248,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-6">
+                <div id="tabs-purchase-8">
                     <form class="api-form" asp-controller="Alipay" asp-action="Refund" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -281,7 +281,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-7">
+                <div id="tabs-purchase-9">
                     <form class="api-form" asp-controller="Alipay" asp-action="RefundQuery" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -306,7 +306,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-14">
+                <div id="tabs-purchase-10">
                     <form class="api-form" asp-controller="Alipay" asp-action="Cancel" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -327,7 +327,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-8">
+                <div id="tabs-purchase-11">
                     <form class="api-form" asp-controller="Alipay" asp-action="Close" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -348,7 +348,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-9">
+                <div id="tabs-purchase-12">
                     <form class="api-form" asp-controller="Alipay" asp-action="Transfer" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -381,7 +381,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-10">
+                <div id="tabs-purchase-13">
                     <form class="api-form" asp-controller="Alipay" asp-action="TransferQuery" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -402,7 +402,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-11">
+                <div id="tabs-purchase-14">
                     <form class="api-form" asp-controller="Alipay" asp-action="BillDownload" method="post" target="_blank">
                         <p>
                             <label>账单日期：</label>
@@ -430,24 +430,25 @@
             <div id="tabs-purchase-wechatpay">
                 <ul>
                     <li><a href="#tabs-purchase-1">扫码支付</a></li>
-                    <li><a href="#tabs-purchase-17">条码支付</a></li>
-                    <li><a href="#tabs-purchase-2">公众号支付</a></li>
-                    <li><a href="#tabs-purchase-3">APP支付</a></li>
-                    <li><a href="#tabs-purchase-15">小程序支付</a></li>
-                    <li><a href="#tabs-purchase-16">H5支付</a></li>
-                    <li><a href="#tabs-purchase-4">查询订单</a></li>
-                    <li><a href="#tabs-purchase-5">关闭订单</a></li>
-                    <li><a href="#tabs-purchase-18">撤销订单</a></li>
-                    <li><a href="#tabs-purchase-6">申请退款</a></li>
-                    <li><a href="#tabs-purchase-7">查询退款</a></li>
-                    <li><a href="#tabs-purchase-8">下载对账单</a></li>
-                    <li><a href="#tabs-purchase-14">下载资金账单</a></li>
-                    <li><a href="#tabs-purchase-9">企业付款到零钱</a></li>
-                    <li><a href="#tabs-purchase-10">查询企业付款零钱</a></li>
-                    <li><a href="#tabs-purchase-11">获取RSA公钥</a></li>
-                    <li><a href="#tabs-purchase-12">企业付款到银行卡</a></li>
-                    <li><a href="#tabs-purchase-13">查询企业付款银行卡</a></li>
+                    <li><a href="#tabs-purchase-2">条码支付</a></li>
+                    <li><a href="#tabs-purchase-3">公众号支付</a></li>
+                    <li><a href="#tabs-purchase-4">APP支付</a></li>
+                    <li><a href="#tabs-purchase-5">小程序支付</a></li>
+                    <li><a href="#tabs-purchase-6">H5支付</a></li>
+                    <li><a href="#tabs-purchase-7">查询订单</a></li>
+                    <li><a href="#tabs-purchase-8">关闭订单</a></li>
+                    <li><a href="#tabs-purchase-9">撤销订单</a></li>
+                    <li><a href="#tabs-purchase-10">申请退款</a></li>
+                    <li><a href="#tabs-purchase-11">查询退款</a></li>
+                    <li><a href="#tabs-purchase-12">下载对账单</a></li>
+                    <li><a href="#tabs-purchase-13">下载资金账单</a></li>
+                    <li><a href="#tabs-purchase-14">企业付款到零钱</a></li>
+                    <li><a href="#tabs-purchase-15">查询企业付款零钱</a></li>
+                    <li><a href="#tabs-purchase-16">获取RSA公钥</a></li>
+                    <li><a href="#tabs-purchase-17">企业付款到银行卡</a></li>
+                    <li><a href="#tabs-purchase-18">查询企业付款银行卡</a></li>
                 </ul>
+
                 <div id="tabs-purchase-1">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="ScanPay" method="post" target="_blank">
                         <p>
@@ -473,7 +474,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-17">
+                <div id="tabs-purchase-2">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="BarcodePay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -502,7 +503,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-2">
+                <div id="tabs-purchase-3">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="PublicPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -531,7 +532,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-3">
+                <div id="tabs-purchase-4">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="AppPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -556,7 +557,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-15">
+                <div id="tabs-purchase-5">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="AppletPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -585,7 +586,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-16">
+                <div id="tabs-purchase-6">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="WapPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -614,7 +615,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-4">
+                <div id="tabs-purchase-7">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="Query" method="post" target="_blank">
                         <p>
                             <label>微信订单号：</label>
@@ -635,7 +636,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-5">
+                <div id="tabs-purchase-8">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="Close" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -652,7 +653,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-18">
+                <div id="tabs-purchase-9">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="Cancel" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -669,7 +670,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-6">
+                <div id="tabs-purchase-10">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="Refund" method="post" target="_blank">
                         <p>
                             <label>退款号：</label>
@@ -706,7 +707,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-7">
+                <div id="tabs-purchase-11">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="RefundQuery" method="post" target="_blank">
                         <p>
                             <label>微信退款订单号：</label>
@@ -735,7 +736,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-8">
+                <div id="tabs-purchase-12">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="BillDownload" method="post" target="_blank">
                         <p>
                             <label>下载对账单的日期：</label>
@@ -756,7 +757,28 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-9">
+                <div id="tabs-purchase-13">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="FundFlowDownload" method="post" target="_blank">
+                        <p>
+                            <label>下载资金账单日期：</label>
+                            <input type="text" name="bill_date" title="格式：yyyyMMdd">
+                        </p>
+                        <p>
+                            <label>资金账户类型：</label>
+                            <input type="text" name="account_type" value="Basic" title="账单的资金来源账户：Basic  基本账户 Operation 运营账户 Fees 手续费账户">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=9_18&index=7" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
+                <div id="tabs-purchase-14">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="Transfer" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -793,7 +815,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-10">
+                <div id="tabs-purchase-15">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="TransferQuery" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -810,7 +832,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-11">
+                <div id="tabs-purchase-16">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="PublicKey" method="post" target="_blank">
                         <p>
                             <label>&nbsp;</label>
@@ -823,7 +845,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-12">
+                <div id="tabs-purchase-17">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="TransferToBank" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -860,7 +882,7 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-13">
+                <div id="tabs-purchase-18">
                     <form class="api-form" asp-controller="WeChatPay" asp-action="TransferToBankQuery" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
@@ -874,27 +896,6 @@
                     <hr />
                     <p class="faq">
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=24_3" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
-
-                <div id="tabs-purchase-14">
-                    <form class="api-form" asp-controller="WeChatPay" asp-action="FundFlowDownload" method="post" target="_blank">
-                        <p>
-                            <label>下载资金账单日期：</label>
-                            <input type="text" name="bill_date" title="格式：yyyyMMdd">
-                        </p>
-                        <p>
-                            <label>资金账户类型：</label>
-                            <input type="text" name="account_type" value="Basic" title="账单的资金来源账户：Basic  基本账户 Operation 运营账户 Fees 手续费账户">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=9_18&index=7" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
 
@@ -1302,30 +1303,64 @@
         <div id="tabs-api-unionpay">
             <div id="tabs-purchase-unionpay">
                 <ul>
-                    <li><a href="#tabs-purchase-10">电脑网站支付</a></li>
-                    <li><a href="#tabs-purchase-31">手机网站支付</a></li>
-                    <li><a href="#tabs-purchase-30">APP支付</a></li>
-                    <li><a href="#tabs-purchase-1">二维码消费（被扫）</a></li>
-                    <li><a href="#tabs-purchase-2">申请二维码（主扫）</a></li>
-                    <li><a href="#tabs-purchase-3">消费撤销</a></li>
-                    <li><a href="#tabs-purchase-4">退货</a></li>
-                    <li><a href="#tabs-purchase-5">交易状态查询</a></li>
-                    <li><a href="#tabs-purchase-6">对账文件下载</a></li>
-                    <li><a href="#tabs-purchase-11">交易状态查询</a></li>
-                    <li><a href="#tabs-purchase-12">消费撤销</a></li>
-                    <li><a href="#tabs-purchase-13">退货</a></li>
-                    <li><a href="#tabs-purchase-14">对账文件下载</a></li>
-                    <li><a href="#tabs-purchase-20">跳转网关页面预授权</a></li>
-                    <li><a href="#tabs-purchase-21">预授权撤销</a></li>
-                    <li><a href="#tabs-purchase-22">预授权完成</a></li>
-                    <li><a href="#tabs-purchase-23">预授权完成撤销</a></li>
+                    <li><a href="#tabs-purchase-1">电脑网站支付</a></li>
+                    <li><a href="#tabs-purchase-2">手机网站支付</a></li>
+                    <li><a href="#tabs-purchase-3">APP支付</a></li>
+                    <li><a href="#tabs-purchase-4">条码支付</a></li>
+                    <li><a href="#tabs-purchase-5">扫码支付</a></li>
+                    <li><a href="#tabs-purchase-6">撤销订单</a></li>
+                    <li><a href="#tabs-purchase-7">申请退款</a></li>
+                    <li><a href="#tabs-purchase-8">查询订单</a></li>
+                    <li><a href="#tabs-purchase-9">下载对账单</a></li>
                 </ul>
 
-                <div id="tabs-purchase-30">
+                <div id="tabs-purchase-1">
+                    <form class="api-form" asp-controller="UnionPay" asp-action="WebPay" method="post" target="_blank">
+                        <p>
+                            <label>订单号：</label>
+                            <input type="text" name="order_id" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                        </p>
+                        <p>
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=63" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
+                <div id="tabs-purchase-2">
+                    <form class="api-form" asp-controller="UnionPay" asp-action="WapPay" method="post" target="_blank">
+                        <p>
+                            <label>订单号：</label>
+                            <input type="text" name="order_id" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                        </p>
+                        <p>
+                            <label>金额：</label>
+                            <input type="text" name="total_amount" value="1" title="单位为分。">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=63" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
+                <div id="tabs-purchase-3">
                     <form class="api-form" asp-controller="UnionPay" asp-action="AppPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <input type="text" name="order_id" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>描述：</label>
@@ -1346,31 +1381,19 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-1">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="AppConsume" method="post" target="_blank">
+                <div id="tabs-purchase-4">
+                    <form class="api-form" asp-controller="UnionPay" asp-action="BarcodePay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <input type="text" name="order_id" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>qrNo：</label>
-                            <input type="text" name="qrNo" value="">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
+                            <label>二维码编号：</label>
+                            <input type="text" name="qr_no" value="">
                         </p>
                         <p>
                             <label>金额：</label>
                             <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>currencyCode：</label>
-                            <input type="text" name="currencyCode" value="156">
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/appconsume">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -1385,27 +1408,15 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-2">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="ApplyQrCode" method="post" target="_blank">
+                <div id="tabs-purchase-5">
+                    <form class="api-form" asp-controller="UnionPay" asp-action="ScanPay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
+                            <input type="text" name="order_id" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>金额：</label>
                             <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>currencyCode：</label>
-                            <input type="text" name="currencyCode" value="156">
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/applyqrcode">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -1420,35 +1431,23 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-3">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="PurchaseUndo" method="post" target="_blank">
+                <div id="tabs-purchase-6">
+                    <form class="api-form" asp-controller="UnionPay" asp-action="Cancel" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
+                            <input type="text" name="order_id" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
                             <label>金额：</label>
-                            <input type="text" name="total_amount" value="1" title="单位为分。">
+                            <input type="text" name="cancel_amount" value="1" title="单位为分。">
                         </p>
                         <p>
-                            <label>origQryId：</label>
-                            <input type="text" name="origQryId" value="" />
+                            <label>原始流水号：</label>
+                            <input type="text" name="orig_qry_id" value="" />
                         </p>
                         <p>
-                            <label>origOrderId：</label>
-                            <input type="text" name="origOrderId" value="" />
-                        </p>
-                        <p>
-                            <label>origTxnTime：</label>
-                            <input type="text" name="origTxnTime" />
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/purchaseundo">
+                            <label>原始订单号：</label>
+                            <input type="text" name="orig_order_id" value="" />
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -1461,35 +1460,23 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-4">
+                <div id="tabs-purchase-7">
                     <form class="api-form" asp-controller="UnionPay" asp-action="Refund" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
+                            <input type="text" name="order_id" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
                         </p>
                         <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
+                            <label>退款金额：</label>
+                            <input type="text" name="refund_amount" value="1" title="单位为分">
                         </p>
                         <p>
-                            <label>金额：</label>
-                            <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>origQryId：</label>
+                            <label>原始流水号：</label>
                             <input type="text" name="origQryId" value="" />
                         </p>
                         <p>
-                            <label>origOrderId：</label>
+                            <label>原始订单号：</label>
                             <input type="text" name="origOrderId" value="" />
-                        </p>
-                        <p>
-                            <label>origTxnTime：</label>
-                            <input type="text" name="origTxnTime" />
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/refund">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -1502,15 +1489,15 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-5">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="Query563" method="post" target="_blank">
+                <div id="tabs-purchase-8">
+                    <form class="api-form" asp-controller="UnionPay" asp-action="Query" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="">
+                            <input type="text" name="order_id" value="">
                         </p>
                         <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="">
+                            <label>流水号：</label>
+                            <input type="text" name="query_id" value="">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -1523,19 +1510,11 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-6">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="FileTransfer057" method="post" target="_blank">
+                <div id="tabs-purchase-9">
+                    <form class="api-form" asp-controller="UnionPay" asp-action="BillDownload" method="post" target="_blank">
                         <p>
-                            <label>fileType：</label>
-                            <input type="text" name="fileType" value="00">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>settleDate：</label>
-                            <input type="text" name="settleDate" value="0119">
+                            <label>对账单日期：</label>
+                            <input type="text" name="bill_date" value="" title="MMDD">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -1548,299 +1527,6 @@
                     </p>
                 </div>
 
-                <div id="tabs-purchase-10">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="WebPay" method="post" target="_blank">
-                        <p>
-                            <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
-                        </p>
-                        <p>
-                            <label>金额：</label>
-                            <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=63" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
-
-                <div id="tabs-purchase-31">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="WapPay" method="post" target="_blank">
-                        <p>
-                            <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
-                        </p>
-                        <p>
-                            <label>金额：</label>
-                            <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=63" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
-
-                <div id="tabs-purchase-11">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="Query65" method="post" target="_blank">
-                        <p>
-                            <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=66" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
-
-                <div id="tabs-purchase-12">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="ConsumeUndo63" method="post" target="_blank">
-                        <p>
-                            <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>金额：</label>
-                            <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>origQryId：</label>
-                            <input type="text" name="origQryId" value="" />
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/consumeundo63">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=64" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
-
-                <div id="tabs-purchase-13">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="Refund64" method="post" target="_blank">
-                        <p>
-                            <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>金额：</label>
-                            <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>origQryId：</label>
-                            <input type="text" name="origQryId" value="" />
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/refund64">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=65" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
-
-                <div id="tabs-purchase-14">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="FileTransfer66" method="post" target="_blank">
-                        <p>
-                            <label>fileType：</label>
-                            <input type="text" name="fileType" value="00">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>settleDate：</label>
-                            <input type="text" name="settleDate" value="0119">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=89&apiId=61" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
-
-                <div id="tabs-purchase-20">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="AuthDealFront671" method="post" target="_blank">
-                        <p>
-                            <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>金额：</label>
-                            <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>currencyCode：</label>
-                            <input type="text" name="currencyCode" value="156">
-                        </p>
-                        <p>
-                            <label>payTimeout：</label>
-                            <input type="text" name="payTimeout" value="@DateTime.Now.AddMinutes(15).ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>frontUrl：</label>
-                            <input type="text" name="frontUrl" value="http://www.baidu.com/unionpay/authdealfront671return">
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/authdealfront671">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=68" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
-
-                <div id="tabs-purchase-21">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="AuthUndo672" method="post" target="_blank">
-                        <p>
-                            <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>金额：</label>
-                            <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>origQryId：</label>
-                            <input type="text" name="origQryId" value="" />
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/authundo672">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=69" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
-
-                <div id="tabs-purchase-22">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="AuthFinish673" method="post" target="_blank">
-                        <p>
-                            <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>金额：</label>
-                            <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>origQryId：</label>
-                            <input type="text" name="origQryId" value="" />
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/authfinish673">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=70" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
-
-                <div id="tabs-purchase-23">
-                    <form class="api-form" asp-controller="UnionPay" asp-action="AuthFinishUndo674" method="post" target="_blank">
-                        <p>
-                            <label>订单号：</label>
-                            <input type="text" name="out_trade_no" value="@DateTime.Now.ToString("yyyyMMddHHmmssfff")">
-                        </p>
-                        <p>
-                            <label>txnTime：</label>
-                            <input type="text" name="txnTime" value="@DateTime.Now.ToString("yyyyMMddHHmmss")">
-                        </p>
-                        <p>
-                            <label>金额：</label>
-                            <input type="text" name="total_amount" value="1" title="单位为分。">
-                        </p>
-                        <p>
-                            <label>origQryId：</label>
-                            <input type="text" name="origQryId" value="" />
-                        </p>
-                        <p>
-                            <label>backUrl：</label>
-                            <input type="text" name="backUrl" value="http://www.baidu.com/notify/unionpay/authfinishundo674">
-                        </p>
-                        <p>
-                            <label>&nbsp;</label>
-                            <input type="submit" class="button" value="提交">
-                        </p>
-                    </form>
-                    <hr />
-                    <p class="faq">
-                        <a href="https://open.unionpay.com/ajweb/product/newProApiShow?proId=1&apiId=71" target="_blank">* 查看接口 请求参数、响应参数</a>
-                    </p>
-                </div>
             </div>
         </div>
 

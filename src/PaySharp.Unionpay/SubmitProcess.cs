@@ -4,6 +4,7 @@ using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
 using PaySharp.Core.Response;
 using PaySharp.Core.Utils;
+using PaySharp.Unionpay.Request;
 using PaySharp.Unionpay.Response;
 using System;
 using System.Threading.Tasks;
@@ -32,18 +33,15 @@ namespace PaySharp.Unionpay
 
             var baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Camel);
             baseResponse.Raw = result;
-            if (baseResponse.RespCode == "00")
+
+            string sign = gatewayData.GetStringValue("signature");
+            if (!string.IsNullOrEmpty(sign) && !CheckSign(gatewayData, sign, baseResponse.SignPubKeyCert))
             {
-                string sign = gatewayData.GetStringValue("signature");
-
-                if (!string.IsNullOrEmpty(sign) && !CheckSign(gatewayData, sign, baseResponse.SignPubKeyCert))
-                {
-                    throw new GatewayException("签名验证失败");
-                }
-
-                baseResponse.Sign = sign;
-                baseResponse.Execute(merchant, request);
+                throw new GatewayException("签名验证失败");
             }
+
+            baseResponse.Sign = sign;
+            baseResponse.Execute(merchant, request);
 
             return (TResponse)(object)baseResponse;
         }
@@ -75,6 +73,9 @@ namespace PaySharp.Unionpay
             {
                 request.GatewayData.Add("frontUrl", request.ReturnUrl);
             }
+
+            ((BaseRequest<TModel, TResponse>)request).Execute(merchant);
+
             request.GatewayData.Add("signature", BuildSign(request.GatewayData, merchant.CertKey));
         }
 
