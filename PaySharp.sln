@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Unionpay", "src\PaySharp.Unionpay\PaySharp.Unionpay.csproj", "{E6D5C3A8-E2F8-491A-9535-9334BA0BC125}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Alipay", "src\PaySharp.Alipay\PaySharp.Alipay.csproj", "{9E981637-175D-44E3-B388-11D4389051A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Core", "src\PaySharp.Core\PaySharp.Core.csproj", "{3E3BBE89-6C4A-476D-A227-BE77F2BE6C7A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Core.Mvc", "src\PaySharp.Core.Mvc\PaySharp.Core.Mvc.csproj", "{8D517C53-EC18-40C7-BF07-F400E172F3AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Wechatpay", "src\PaySharp.Wechatpay\PaySharp.Wechatpay.csproj", "{DC8772E4-9F01-4744-93A3-0A795117418C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.UnitTest", "test\PaySharp.UnitTest\PaySharp.UnitTest.csproj", "{B9DD57BE-96FC-4F78-99E9-99CEAD33CC5F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Demo", "sample\PaySharp.Demo\PaySharp.Demo.csproj", "{8A0208C0-7046-44A7-A67F-DA122AB280A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6D5C3A8-E2F8-491A-9535-9334BA0BC125}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D5C3A8-E2F8-491A-9535-9334BA0BC125}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D5C3A8-E2F8-491A-9535-9334BA0BC125}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D5C3A8-E2F8-491A-9535-9334BA0BC125}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E981637-175D-44E3-B388-11D4389051A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E981637-175D-44E3-B388-11D4389051A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E981637-175D-44E3-B388-11D4389051A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E981637-175D-44E3-B388-11D4389051A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E3BBE89-6C4A-476D-A227-BE77F2BE6C7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E3BBE89-6C4A-476D-A227-BE77F2BE6C7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E3BBE89-6C4A-476D-A227-BE77F2BE6C7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E3BBE89-6C4A-476D-A227-BE77F2BE6C7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D517C53-EC18-40C7-BF07-F400E172F3AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D517C53-EC18-40C7-BF07-F400E172F3AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D517C53-EC18-40C7-BF07-F400E172F3AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D517C53-EC18-40C7-BF07-F400E172F3AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC8772E4-9F01-4744-93A3-0A795117418C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC8772E4-9F01-4744-93A3-0A795117418C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC8772E4-9F01-4744-93A3-0A795117418C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC8772E4-9F01-4744-93A3-0A795117418C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9DD57BE-96FC-4F78-99E9-99CEAD33CC5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9DD57BE-96FC-4F78-99E9-99CEAD33CC5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9DD57BE-96FC-4F78-99E9-99CEAD33CC5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9DD57BE-96FC-4F78-99E9-99CEAD33CC5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {35DA7CB4-3AB7-45FF-93D2-DBC4760221EF}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = PostWriting2.vsmdi
+	EndGlobalSection
+EndGlobal

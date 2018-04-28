@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="UnionpayGatewayTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="UnionpayGatewayTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ICanPay.AspNetCore\ICanPay.AspNetCore.csproj" />
+	<ProjectReference Include="..\..\src\PaySharp.Alipay\PaySharp.Alipay.csproj" />
+    <ProjectReference Include="..\..\src\PaySharp.Unionpay\PaySharp.Unionpay.csproj" />
+    <ProjectReference Include="..\..\src\PaySharp.Wechatpay\PaySharp.Wechatpay.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="acp_test_sign.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

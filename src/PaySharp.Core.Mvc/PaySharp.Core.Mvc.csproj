@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net45</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/Varorbc/PaySharp</PackageProjectUrl>
+    <Title>PaySharp.Core.Mvc</Title>
+    <Authors>Varorbc</Authors>
+    <Description>Mvc</Description>
+    <Version>1.0.0-alpha</Version>
+    <PackageTags>dotnetcore;pay;</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Varorbc/PaySharp</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/Varorbc/PaySharp/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Varorbc</Copyright>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>PaySharp.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DocumentationFile>..\..\output\release\netstandard2.0\PaySharp.Core.Mvc.xml</DocumentationFile>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+    <OutputPath>..\..\output\release\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Mvc5" Version="4.0.1" />
+    <!--<PackageReference Include="Autofac.WebApi2" Version="4.1.0" />-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PaySharp.Core\PaySharp.Core.csproj" />
+  </ItemGroup>
+
+</Project>

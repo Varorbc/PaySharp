@@ -1,7 +1,7 @@
-# ICanPay介绍
+# PaySharp介绍
 ---
 
-ICanPay是一个支持多商户多种支付方式的跨平台网关处理类库，使用ICanPay可以简化订单的创建、查询、退款和接收网关返回的支付通知等操作。
+PaySharp是一个支持多商户多种支付方式的跨平台网关处理类库，使用PaySharp可以简化订单的创建、查询、退款和接收网关返回的支付通知等操作。
 
 目前支持的支付网关有：支付宝(Alipay)、微信支付(Wechatpay)、银联支付(Unionpay)
 
@@ -9,7 +9,9 @@ ICanPay是一个支持多商户多种支付方式的跨平台网关处理类库�
 
 ##### 支持的支付方式：
 
-	移动支付(App)、手机网站支付(Wap)、电脑网站支付(Web)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)
+	移动支付(App)、手机网站支付(Wap)、电脑网站支付(Web)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)、
+	
+	转账(Transfer)、转账查询(TransferQuery)
 
 ##### 支持的辅助接口：
 
@@ -19,11 +21,13 @@ ICanPay是一个支持多商户多种支付方式的跨平台网关处理类库�
 
 ##### 支持的支付方式：
 		
-	移动支付(App)、手机网站支付(Wap)、公众号支付(Public)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)
+	移动支付(App)、手机网站支付(Wap)、公众号支付(Public)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)、
+	
+	转账(Transfer)、转账查询(TransferQuery)、转账到银行卡(TransferToBank)、转账到银行卡查询(TransferToBank)Query)
 
 ##### 支持的辅助接口：
 		
-	查询、退款、退款查询、撤销、关闭、对账单下载
+	查询、退款、退款查询、撤销、关闭、对账单下载、资金账单下载
 			
 ### 3.银联：
 
@@ -40,11 +44,11 @@ ICanPay是一个支持多商户多种支付方式的跨平台网关处理类库�
 
 Package  | NuGet 
 -------- | :------------ 
-ICanPay.Core		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Core.svg)](https://www.nuget.org/packages/ICanPay.Core)
-ICanPay.Core.Mvc		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Core.Mvc.svg)](https://www.nuget.org/packages/ICanPay.Core.Mvc)
-ICanPay.Alipay		| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Alipay.svg)](https://www.nuget.org/packages/ICanPay.Alipay)
-ICanPay.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Wechatpay.svg)](https://www.nuget.org/packages/ICanPay.Wechatpay)
-ICanPay.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Unionpay.svg)](https://www.nuget.org/packages/ICanPay.Unionpay)
+PaySharp.Core		| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Core.svg)](https://www.nuget.org/packages/PaySharp.Core)
+PaySharp.Core.Mvc		| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Core.Mvc.svg)](https://www.nuget.org/packages/PaySharp.Core.Mvc)
+PaySharp.Alipay		| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Alipay.svg)](https://www.nuget.org/packages/PaySharp.Alipay)
+PaySharp.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Wechatpay.svg)](https://www.nuget.org/packages/PaySharp.Wechatpay)
+PaySharp.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Unionpay.svg)](https://www.nuget.org/packages/PaySharp.Unionpay)
 
 # 开发环境
 * Windows 10
@@ -53,7 +57,7 @@ ICanPay.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/ICanPay.Unionpay.svg
 # 如何使用
 ---
 
-见[Wiki](https://github.com/Varorbc/ICanPay/wiki)
+见[Wiki](https://github.com/Varorbc/PaySharp/wiki)
 
 # 交流讨论
 ---
@@ -78,7 +82,7 @@ https://open.unionpay.com/ajweb/product
 # 支持/打赏
 
 <p align="center">
-    <img src="https://github.com/Varorbc/ICanPay/blob/2.0.0-alpha/reward.jpg">
+    <img src="https://github.com/Varorbc/PaySharp/blob/2.0.0-alpha/reward.jpg">
     <p align="center">打赏扫这里，请留下尊姓大名</p>
 </p>
 
