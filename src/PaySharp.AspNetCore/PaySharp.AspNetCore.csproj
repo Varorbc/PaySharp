@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\ICanPay.Core\ICanPay.Core.csproj" />
+    <ProjectReference Include="..\PaySharp.Core\PaySharp.Core.csproj" />
   </ItemGroup>
 
 </Project>

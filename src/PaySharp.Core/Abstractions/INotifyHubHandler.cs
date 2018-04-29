@@ -11,6 +11,7 @@ namespace PaySharp.Abstractions
     /// </summary>
     public interface INotifyHubHandler
     {
+        [Obsolete("似乎没什么用", true)]
         INotifyDataConverter Converter { get; }
         ProcessResult Process(IPaymentNotifyData notifyData);
 

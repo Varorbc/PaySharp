@@ -23,6 +23,11 @@ namespace PaySharp.AspNetCore
             HttpContext = httpContextAccessor.HttpContext;
         }
 
+        public HttpContextKeyValueProvider(HttpContext httpContext)
+        {
+            HttpContext = httpContext;
+        }
+
         /// <inheritdoc />
         public byte[] Get()
         {
