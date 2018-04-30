@@ -171,5 +171,7 @@ namespace PaySharp.Alipay
         /// 优惠券信息
         /// </summary>
         public string VoucherDetailList { get; set; }
+
+        public string Raw { get; set; }
     }
 }

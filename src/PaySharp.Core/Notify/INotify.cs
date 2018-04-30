@@ -5,5 +5,6 @@
     /// </summary>
     public interface INotify
     {
+        string Raw { get; set; }
     }
 }

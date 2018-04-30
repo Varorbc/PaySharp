@@ -295,5 +295,7 @@ namespace PaySharp.Unionpay
         /// 有卡交易信息域
         /// </summary>
         public string CardTransData { get; set; }
+
+        public string Raw { get; set; }
     }
 }

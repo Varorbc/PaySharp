@@ -211,5 +211,7 @@ namespace PaySharp.Wechatpay
         /// 退款发起来源
         /// </summary>
         public string RefundRequestSource { get; set; }
+
+        public string Raw { get; set; }
     }
 }

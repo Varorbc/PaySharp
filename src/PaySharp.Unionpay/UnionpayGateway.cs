@@ -70,6 +70,7 @@ namespace PaySharp.Unionpay
         protected override async Task<bool> ValidateNotifyAsync()
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Camel);
+            base.Notify.Raw = GatewayData.Raw;
             if (SubmitProcess.CheckSign(GatewayData, Notify.Sign, Notify.SignPubKeyCert))
             {
                 return true;

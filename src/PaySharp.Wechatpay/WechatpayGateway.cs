@@ -70,6 +70,7 @@ namespace PaySharp.Wechatpay
         protected override async Task<bool> ValidateNotifyAsync()
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
+            base.Notify.Raw = GatewayData.Raw;
 
             if (Notify.ReturnCode != "SUCCESS")
             {
