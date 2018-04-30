@@ -96,14 +96,18 @@ namespace PaySharp.Unionpay
         /// <summary>
         /// 商户订单号，不应含“-”或“_”
         /// </summary>
-        [ReName(Name = "orderId")]
-        public string OutTradeNo { get; set; }
+        public string OrderId { get; set; }
+
+        /// <summary>
+        /// 原交易商户订单号
+        /// </summary>
+        public string OrigOrderId { get; set; }
 
         /// <summary>
         /// 交易金额,单位分
         /// </summary>
         [ReName(Name = "txnAmt")]
-        public double TotalAmount { get; set; }
+        public int TotalAmount { get; set; }
 
         /// <summary>
         /// 交易币种,默认156
@@ -114,6 +118,11 @@ namespace PaySharp.Unionpay
         /// 订单发送时间
         /// </summary>
         public string TxnTime { get; set; }
+
+        /// <summary>
+        /// 原交易商户发送交易时间
+        /// </summary>
+        public string OrigTxnTime { get; set; }
 
         /// <summary>
         /// 支付方式
@@ -132,6 +141,11 @@ namespace PaySharp.Unionpay
         /// 9000：其他无卡支付(如手机客户端支付)
         /// </summary>
         public string PayType { get; set; }
+
+        /// <summary>
+        /// 银行卡验证信息及身份信息
+        /// </summary>
+        public string CustomerInfo { get; set; }
 
         /// <summary>
         /// 交易账号。请求时使用加密公钥对交易账号加密，并做 Base64 编码后上送；
@@ -175,6 +189,11 @@ namespace PaySharp.Unionpay
         public string QueryId { get; set; }
 
         /// <summary>
+        /// 原交易查询流水号
+        /// </summary>
+        public string OrigQryId { get; set; }
+
+        /// <summary>
         /// 系统跟踪号
         /// </summary>
         public string TraceNo { get; set; }
@@ -197,7 +216,8 @@ namespace PaySharp.Unionpay
         /// <summary>
         /// 清算金额
         /// </summary>
-        public string SettleAmt { get; set; }
+        [ReName(Name = "SettleAmt")]
+        public string SettleAmount { get; set; }
 
         /// <summary>
         /// 应答码
@@ -208,11 +228,6 @@ namespace PaySharp.Unionpay
         /// 应答信息
         /// </summary>
         public string RespMsg { get; set; }
-
-        /// <summary>
-        /// 银联受理订单号
-        /// </summary>
-        public string Tn { get; set; }
 
         /// <summary>
         /// 支付卡标识
@@ -252,9 +267,9 @@ namespace PaySharp.Unionpay
         public string AccInsCode { get; set; }
 
         /// <summary>
-        /// 二维码
+        /// 二维码编号
         /// </summary>
-        public string QrCode { get; set; }
+        public string QrNo { get; set; }
 
         /// <summary>
         /// 发卡机构识别模式
@@ -270,16 +285,6 @@ namespace PaySharp.Unionpay
         /// 原交易应答信息
         /// </summary>
         public string OrigRespMsg { get; set; }
-
-        /// <summary>
-        /// 文件名	
-        /// </summary>
-        public string FileName { get; set; }
-
-        /// <summary>
-        /// 批量文件内容
-        /// </summary>
-        public string FileContent { get; set; }
 
         /// <summary>
         /// 分账域
