@@ -1,5 +1,5 @@
-﻿using PaySharp.Core;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using PaySharp.Core;
 using System.Threading.Tasks;
 
 namespace PaySharp.Demo.Controllers
@@ -15,14 +15,14 @@ namespace PaySharp.Demo.Controllers
 
         public async Task Index()
         {
-            // 订阅支付通知事件
-            PayNotify notify = new PayNotify(_gateways);
-            notify.PaySucceed += Notify_PaySucceed;
-            notify.PayFailed += Notify_PayFailed;
-            notify.UnknownGateway += Notify_UnknownGateway;
+                // 订阅支付通知事件
+                PayNotify notify = new PayNotify(_gateways);
+                notify.PaySucceed += Notify_PaySucceed;
+                notify.PayFailed += Notify_PayFailed;
+                notify.UnknownGateway += Notify_UnknownGateway;
 
-            // 接收并处理支付通知
-            await notify.ReceivedAsync();
+                // 接收并处理支付通知
+                await notify.ReceivedAsync();
         }
 
         private bool Notify_PaySucceed(object sender, PaySucceedEventArgs e)
@@ -37,9 +37,9 @@ namespace PaySharp.Demo.Controllers
                 var alipayNotify = (Alipay.Notify)e.Notify;
 
                 //同步通知，即浏览器跳转返回
-                if(e.NotifyType == NotifyType.Sync)
+                if (e.NotifyType == NotifyType.Sync)
                 {
-
+                    //TODO：如何跳转
                 }
             }
 
@@ -50,6 +50,7 @@ namespace PaySharp.Demo.Controllers
         private void Notify_PayFailed(object sender, PayFailedEventArgs e)
         {
             // 支付失败时的处理代码
+            //TODO:有可能是退款，等待，考虑重命名
         }
 
         private void Notify_UnknownGateway(object sender, UnknownGatewayEventArgs e)
