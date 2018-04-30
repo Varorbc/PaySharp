@@ -18,6 +18,13 @@ namespace PaySharp.Unionpay
 {
     internal static class Util
     {
+        #region 字段
+
+        private static Pkcs12Store _pkcs12Store;
+        private static string _aliase;
+
+        #endregion
+
         #region 证书
 
         private static X509Certificate ACPENCCER = null;
@@ -34,21 +41,20 @@ namespace PaySharp.Unionpay
         /// <param name="path">证书路径</param>
         /// <param name="pwd">证书密码</param>
         /// <returns></returns>
-        private static (Pkcs12Store Store, string Aliase) GetPkcs12Store(string path, string pwd)
+        private static void GetPkcs12Store(string path, string pwd)
         {
-            using (FileStream fileStream = new FileStream(path, FileMode.Open))
+            using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                Pkcs12Store store = new Pkcs12Store(fileStream, pwd.ToCharArray());
-                foreach (string n in store.Aliases)
+                var pkcs12Store = new Pkcs12Store(fileStream, pwd.ToCharArray());
+                foreach (string item in pkcs12Store.Aliases)
                 {
-                    if (store.IsKeyEntry(n))
+                    if (pkcs12Store.IsKeyEntry(item))
                     {
-                        return (store, n);
+                        _pkcs12Store = pkcs12Store;
+                        _aliase = item;
                     }
                 }
             }
-
-            return (null, null);
         }
 
         /// <summary>
@@ -59,9 +65,13 @@ namespace PaySharp.Unionpay
         /// <returns></returns>
         public static string GetCertId(string path, string pwd)
         {
-            var (Store, Aliase) = GetPkcs12Store(path, pwd);
-            return Store
-                .GetCertificateChain(Aliase)[0]
+            if (string.IsNullOrEmpty(_aliase))
+            {
+                GetPkcs12Store(path, pwd);
+            }
+
+            return _pkcs12Store
+                .GetCertificateChain(_aliase)[0]
                 .Certificate
                 .SerialNumber
                 .ToString();
@@ -81,9 +91,13 @@ namespace PaySharp.Unionpay
         /// <returns></returns>
         public static AsymmetricKeyParameter GetCertKey(string path, string pwd)
         {
-            var (Store, Aliase) = GetPkcs12Store(path, pwd);
-            return Store
-                .GetKey(Aliase)
+            if (string.IsNullOrEmpty(_aliase))
+            {
+                GetPkcs12Store(path, pwd);
+            }
+
+            return _pkcs12Store
+                .GetKey(_aliase)
                 .Key;
         }
 
