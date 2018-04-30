@@ -27,6 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <Reference Include="System.Web" />
     <PackageReference Include="SharpZipLib" Version="0.86.0" />
   </ItemGroup>
 
