@@ -14,33 +14,33 @@ namespace PaySharp.Abstractions
         /// <summary>
         /// 支付机构订单Id
         /// </summary>
-        public string GatewayOrderId { get; set; }
+        public virtual string GatewayOrderId { get; set; }
 
         /// <summary>
         /// 业务逻辑的订单Id
         /// </summary>
-        public string BusinessOrderId { get; set; }
+        public virtual string BusinessOrderId { get; set; }
 
         /// <summary>
         /// 支付机构此次处理的时间
         /// </summary>
-        public DateTimeOffset ProcessTime { get; set; }
+        public virtual DateTimeOffset ProcessTime { get; set; }
 
         /// <summary>
         /// 支付处理器给的类型
         /// </summary>
         /// <remarks>可以利用此值决定 <see cref="RawData"/>的类型</remarks>
-        public string GatewayType { get; set; }
+        public virtual string GatewayType { get; set; }
 
         /// <summary>
         /// 原本的数据
         /// </summary>
-        public object RawData { get; set; }
+        public virtual object RawData { get; set; }
 
         /// <summary>
         /// 状态， 当为 null 时，为未知
         /// </summary>
-        public HubHandlerDataStatus? Status { get; set; }
+        public virtual HubHandlerDataStatus? Status { get; set; }
     }
 
     /// <summary>

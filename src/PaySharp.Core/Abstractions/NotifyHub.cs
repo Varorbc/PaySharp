@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace PaySharp.Abstractions
 {
+
+    /// <summary>
+    /// 通知适配器
+    /// </summary>
     public sealed class NotifyHub
     {
         private readonly INotifyHubHandler _hubHandler;
@@ -14,9 +18,29 @@ namespace PaySharp.Abstractions
         private Func<IKeyValueProvider, Task> _beforeProcessHandler;
         private Func<HubOrder, Task> _afterProcessHandler;
         private Func<Exception, Task> _exceptionHandler;
+
+        /// <summary>
+        /// 通过一个 <see cref="INotifyHubHandler"/> 来实例化 该适配器
+        /// </summary>
+        /// <param name="hubHandler">要用来处理的通知处理器</param>
         public NotifyHub(INotifyHubHandler hubHandler)
         {
             _hubHandler = hubHandler;
+        }
+
+        /// <summary>
+        /// 一次性添加整个处理流程
+        /// </summary>
+        /// <param name="handler">一个拥有所有处理流程的类的实例</param>
+        /// <returns>返回配置的<see cref="NotifyHub"/></returns>
+        public NotifyHub UseUserHandler(IUserHandler handler)
+        {
+            _beforeProcessHandler = handler.OnProcessingAsync;
+            _successHandler = handler.OnSuccessedAsync;
+            _failHandler = handler.OnFailedAsync;
+            _exceptionHandler = handler.OnExceptionAsync;
+            _afterProcessHandler = handler.OnProcessedAsync;
+            return this;
         }
 
         public NotifyHub WhenSuccess(Func<HubOrder, Task> deleget)
@@ -48,7 +72,7 @@ namespace PaySharp.Abstractions
         }
 
         //[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public async Task ProcessAsync(HubOrder data)
+        public async Task ProcessAsync(IKeyValueProvider valueProvider)
         {
             // 首先检查,   成功和异常处理必须注册
 
@@ -64,35 +88,34 @@ namespace PaySharp.Abstractions
             // before
             if(_beforeProcessHandler != null)
             {
-                await _beforeProcessHandler(null);
+                await _beforeProcessHandler(valueProvider);
             }
 
             try
             {
-                var result = _hubHandler.Process(null);
+                var result = await _hubHandler.ProcessAsync(valueProvider);
                 if (result.IsSuccess)
                 {
-                    await _successHandler(null);
+                    await _successHandler(result.Data);
                 }
                 else
                 {
                     if (_failHandler != null)
                     {
-                        await _failHandler(null);
+                        await _failHandler(result.Data);
                     }
+                }
+
+                if (_afterProcessHandler != null)
+                {
+                    await _afterProcessHandler(result.Data);
                 }
             }
             catch(Exception e)
             {
                 await _exceptionHandler(e);
             }
-            if(_afterProcessHandler != null)
-            {
-                await _afterProcessHandler(null);
-            }
             
-
-
         }
     }
 }
