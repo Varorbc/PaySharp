@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddPaySharp(this IServiceCollection services,Action<IGatewayBuilder> buildAction)
         {
-            services.TryAddSingleton<IGatewayBuilder, GatewayBuilder>();
+            services.TryAddScoped<IGatewayBuilder, GatewayBuilder>();
             services.TryAddScoped<IKeyValueProvider, HttpContextKeyValueProvider>();
             services.TryAddScoped(svcs =>
             {

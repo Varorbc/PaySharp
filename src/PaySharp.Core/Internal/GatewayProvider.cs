@@ -10,9 +10,9 @@ namespace PaySharp.Internal
     {
         private readonly IDictionary<Type, IDictionary<string, object>> _store;
 
-        internal GatewayProvider(IDictionary<Type,IDictionary<string,object>> store)
+        public GatewayProvider(IDictionary<Type,IDictionary<string,object>> store)
         {
-            _store = store;
+            _store = store ?? throw new ArgumentNullException(nameof(store));
         }
 
         /// <inheritdoc />

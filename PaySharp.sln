@@ -13,13 +13,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Core.Mvc", "src\Pa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Wechatpay", "src\PaySharp.Wechatpay\PaySharp.Wechatpay.csproj", "{DC8772E4-9F01-4744-93A3-0A795117418C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.UnitTest", "test\PaySharp.UnitTest\PaySharp.UnitTest.csproj", "{B9DD57BE-96FC-4F78-99E9-99CEAD33CC5F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Demo", "sample\PaySharp.Demo\PaySharp.Demo.csproj", "{8A0208C0-7046-44A7-A67F-DA122AB280A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.AspNetCore", "src\PaySharp.AspNetCore\PaySharp.AspNetCore.csproj", "{E649A330-1B5C-487B-99F7-208248161B8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaySharp.AspNet", "src\PaySharp.AspNet\PaySharp.AspNet.csproj", "{D20AC625-43A7-45A1-A111-81C3EDC7F6A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{9B98CFC6-581C-4006-ADB5-A757694915EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.UnitTest", "test\PaySharp.UnitTest\PaySharp.UnitTest.csproj", "{909EE2D9-5B9E-444B-91DF-A8E35F4D1076}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaySharp.AspNetCoreTest", "test\PaySharp.AspNetCoreTest\PaySharp.AspNetCoreTest.csproj", "{7695B8A5-2737-444A-AC7B-09E43B09B9D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +51,6 @@ Global
 		{DC8772E4-9F01-4744-93A3-0A795117418C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC8772E4-9F01-4744-93A3-0A795117418C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC8772E4-9F01-4744-93A3-0A795117418C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B9DD57BE-96FC-4F78-99E9-99CEAD33CC5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9DD57BE-96FC-4F78-99E9-99CEAD33CC5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B9DD57BE-96FC-4F78-99E9-99CEAD33CC5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B9DD57BE-96FC-4F78-99E9-99CEAD33CC5F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,9 +63,21 @@ Global
 		{D20AC625-43A7-45A1-A111-81C3EDC7F6A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D20AC625-43A7-45A1-A111-81C3EDC7F6A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D20AC625-43A7-45A1-A111-81C3EDC7F6A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{909EE2D9-5B9E-444B-91DF-A8E35F4D1076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{909EE2D9-5B9E-444B-91DF-A8E35F4D1076}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{909EE2D9-5B9E-444B-91DF-A8E35F4D1076}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{909EE2D9-5B9E-444B-91DF-A8E35F4D1076}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7695B8A5-2737-444A-AC7B-09E43B09B9D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7695B8A5-2737-444A-AC7B-09E43B09B9D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7695B8A5-2737-444A-AC7B-09E43B09B9D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7695B8A5-2737-444A-AC7B-09E43B09B9D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{909EE2D9-5B9E-444B-91DF-A8E35F4D1076} = {9B98CFC6-581C-4006-ADB5-A757694915EF}
+		{7695B8A5-2737-444A-AC7B-09E43B09B9D9} = {9B98CFC6-581C-4006-ADB5-A757694915EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35DA7CB4-3AB7-45FF-93D2-DBC4760221EF}
