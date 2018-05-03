@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ICanPay.AspNetCore\ICanPay.AspNetCore.csproj" />
 	<ProjectReference Include="..\..\src\PaySharp.Alipay\PaySharp.Alipay.csproj" />
     <ProjectReference Include="..\..\src\PaySharp.Unionpay\PaySharp.Unionpay.csproj" />
     <ProjectReference Include="..\..\src\PaySharp.Wechatpay\PaySharp.Wechatpay.csproj" />

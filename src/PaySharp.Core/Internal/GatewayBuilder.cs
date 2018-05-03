@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 using System.Text;
 using PaySharp.Abstractions;
 
-namespace PaySharp.AspNetCore.DI
+namespace PaySharp.Internal
 {
     /// <inheritdoc />
     public class GatewayBuilder : IGatewayBuilder
