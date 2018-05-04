@@ -44,7 +44,7 @@ namespace PaySharp.Abstractions
         }
         
         //[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public async Task ProcessAsync(IKeyValueProvider valueProvider)
+        public async Task<NotifyResponse> ProcessAsync(IKeyValueProvider valueProvider)
         {
             // 首先检查,   成功和异常处理必须注册
 
@@ -57,14 +57,17 @@ namespace PaySharp.Abstractions
                 throw new InvalidOperationException("No Exception delegate registed");
             }
 
-            // before
-            if(_beforeProcessHandler != null)
-            {
-                await _beforeProcessHandler(valueProvider);
-            }
+
+            
 
             try
             {
+                // before
+                if (_beforeProcessHandler != null)
+                {
+                    await _beforeProcessHandler(valueProvider);
+                }
+                // handing
                 var result = await _hubHandler.ProcessAsync(valueProvider);
                 if (result.IsSuccess)
                 {
@@ -77,17 +80,19 @@ namespace PaySharp.Abstractions
                         await _failHandler(result.Data,valueProvider);
                     }
                 }
-
+                // after
                 if (_afterProcessHandler != null)
                 {
                     await _afterProcessHandler(result.Data,valueProvider);
                 }
+                return result.Response;
             }
             catch(Exception e)
             {
                 await _exceptionHandler(e,valueProvider);
+                throw;
             }
-            
+
         }
     }
 }
