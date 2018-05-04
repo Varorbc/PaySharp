@@ -1,2 +1,2 @@
-cd sample\PaySharp.Demo
- dotnet run
+cd sample\PaySharp.Demo 
+dotnet run
