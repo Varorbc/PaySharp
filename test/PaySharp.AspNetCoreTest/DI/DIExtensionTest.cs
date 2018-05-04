@@ -42,6 +42,30 @@ namespace PaySharp.AspNetCoreTest
             }
         }
 
+        [Fact]
+        public void ConfigDI_Repeate_1scope_Test()
+        {
+            var service = new ServiceCollection();
+            service.TryAddScoped<IGatewayBuilder, TestGatewayBuilder>();
+            service.AddPaySharp(builder =>
+            {
+                builder.TryAdd("A", new XGateway());
+            });
+
+            var provider = service.BuildServiceProvider();
+            using(var scope = provider.CreateScope())
+            {
+                var b = scope.ServiceProvider.GetRequiredService<IGatewayProvider>();
+                var gateway1 = b.GetGateway<XGateway>("A");
+                var b2 = scope.ServiceProvider.GetRequiredService<IGatewayProvider>();
+                var gateway2 = b2.GetGateway<XGateway>("A");
+                
+            }
+            
+
+            
+        }
+
         private XGateway GetGateway(IServiceProvider servicProvider)
         {
             using (var provider = servicProvider.CreateScope())
@@ -57,6 +81,9 @@ namespace PaySharp.AspNetCoreTest
         }
 
 
+        /// <summary>
+        /// 采用Add 方法的Builder, 这将在重复添加的时候报错
+        /// </summary>
         private class TestGatewayBuilder : IGatewayBuilder
         {
             private readonly IDictionary<Type, IDictionary<string, object>> _store = new Dictionary<Type, IDictionary<string, object>>();
