@@ -68,6 +68,7 @@ namespace PaySharp.Alipay
         protected override async Task<bool> ValidateNotifyAsync()
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
+            base.Notify.Raw = GatewayData.ToUrl(false);
             GatewayData.Remove("sign");
             GatewayData.Remove("sign_type");
 

@@ -5,6 +5,7 @@ using PaySharp.Core;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
 using PaySharp.Unionpay.Request;
+using System;
 using System.Threading.Tasks;
 
 namespace PaySharp.Unionpay
@@ -30,10 +31,9 @@ namespace PaySharp.Unionpay
             : base(merchant)
         {
             _merchant = merchant;
-            //TODO:测试同时读取是否有问题
+
             _merchant.CertId = Util.GetCertId(merchant.CertPath, merchant.CertPwd);
             _merchant.CertKey = Util.GetCertKey(merchant.CertPath, merchant.CertPwd);
-            //_merchant.EncryptCertId = Util.GetEncryptCertId();
         }
 
 #if NETSTANDARD2_0
@@ -71,7 +71,11 @@ namespace PaySharp.Unionpay
         protected override async Task<bool> ValidateNotifyAsync()
         {
             base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Camel);
-            if (SubmitProcess.CheckSign(GatewayData, Notify.Sign, Notify.SignPubKeyCert))
+            base.Notify.Raw = GatewayData.ToUrl(false);
+
+            GatewayData gatewayData = new GatewayData(StringComparer.Ordinal);
+            gatewayData.FromUrl(Notify.Raw, false);
+            if (SubmitProcess.CheckSign(gatewayData, Notify.Sign, Notify.SignPubKeyCert))
             {
                 return true;
             }
@@ -87,6 +91,11 @@ namespace PaySharp.Unionpay
             }
 
             return SubmitProcess.Execute(_merchant, request, GatewayUrl);
+        }
+
+        protected override void WriteFailureFlag()
+        {
+            HttpUtil.Current.Response.StatusCode = 404;
         }
     }
 }

@@ -52,7 +52,6 @@ namespace PaySharp.Wechatpay.Response
 
         /// <summary>
         /// 微信侧订单创建时间
-
         /// </summary>
         public DateTime CreateTime { get; set; }
 

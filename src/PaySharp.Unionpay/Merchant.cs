@@ -22,11 +22,6 @@ namespace PaySharp.Unionpay
         public string CertId { get; internal set; }
 
         /// <summary>
-        /// 加密证书号
-        /// </summary>
-        public string EncryptCertId { get; internal set; }
-
-        /// <summary>
         /// 证书私钥
         /// </summary>
         [Ignore]

@@ -28,7 +28,7 @@ namespace PaySharp.Unionpay
             .GetAwaiter()
             .GetResult();
 
-            var gatewayData = new GatewayData();
+            var gatewayData = new GatewayData(StringComparer.Ordinal);
             gatewayData.FromUrl(result, false);
 
             var baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Camel);

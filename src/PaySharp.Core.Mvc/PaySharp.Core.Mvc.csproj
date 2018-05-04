@@ -15,6 +15,7 @@
     <Copyright>Varorbc</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>PaySharp.snk</AssemblyOriginatorKeyFile>
+    <PackageIconUrl>https://github.com/Varorbc/PaySharp/logo.png</PackageIconUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
