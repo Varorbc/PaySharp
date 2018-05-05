@@ -7,7 +7,7 @@
     <Title>PaySharp.Unionpay</Title>
     <Authors>Varorbc</Authors>
     <Description>银联支付</Description>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.0.0-preview1</Version>
     <PackageTags>dotnetcore;pay;unionpay;</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Varorbc/PaySharp</RepositoryUrl>
@@ -15,7 +15,7 @@
     <Copyright>Varorbc</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>PaySharp.snk</AssemblyOriginatorKeyFile>
-    <PackageIconUrl>https://github.com/Varorbc/PaySharp/logo.png</PackageIconUrl>
+    <PackageIconUrl>https://github.com/Varorbc/PaySharp/blob/master/logo.png</PackageIconUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
