@@ -1,4 +1,5 @@
 ﻿using PaySharp.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -43,6 +44,11 @@ namespace PaySharp.Unionpay.Domain
         /// 原交易商户订单号
         /// </summary>
         public string OrigOrderId { get; set; }
+
+        /// <summary>
+        /// 原交易商户发送交易时间
+        /// </summary>
+        public string OrigTxnTime { get; } = DateTime.Now.ToString("yyyyMMddHHmmss");
 
         /// <summary>
         /// 控制规则
