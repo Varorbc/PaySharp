@@ -14,5 +14,7 @@ namespace PaySharp.Alipay.Response
         /// 生成的Html网页
         /// </summary>
         public string Html { get; set; }
+
+        public string Raw { get; set; }
     }
 }

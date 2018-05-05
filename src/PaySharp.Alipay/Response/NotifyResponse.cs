@@ -1,9 +1,10 @@
 ﻿using PaySharp.Core;
+using PaySharp.Core.Response;
 using System;
 
-namespace PaySharp.Alipay
+namespace PaySharp.Alipay.Response
 {
-    public class Notify : INotify
+    public class NotifyResponse : IResponse
     {
         /// <summary>
         /// 通知时间

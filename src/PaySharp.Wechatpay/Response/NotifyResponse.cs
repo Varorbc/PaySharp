@@ -1,11 +1,12 @@
 ﻿using PaySharp.Core;
+using PaySharp.Core.Response;
 using System;
 using System.Collections.Generic;
 using static PaySharp.Wechatpay.Response.QueryResponse;
 
-namespace PaySharp.Wechatpay
+namespace PaySharp.Wechatpay.Response
 {
-    public class Notify : INotify
+    public class NotifyResponse : IResponse
     {
         /// <summary>
         /// 返回状态码

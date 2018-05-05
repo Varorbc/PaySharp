@@ -40,7 +40,7 @@ namespace PaySharp.Core
         /// <summary>
         /// 通知数据
         /// </summary>
-        public INotify Notify { get; set; }
+        public IResponse NotifyResponse { get; set; }
 
         /// <summary>
         /// 网关的地址

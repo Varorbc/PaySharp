@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PaySharp.Alipay.Response;
 using PaySharp.Core;
 using System.Threading.Tasks;
 
@@ -34,7 +35,7 @@ namespace PaySharp.Demo.Controllers
              */
             if (e.GatewayType == typeof(Alipay.AlipayGateway))
             {
-                var alipayNotify = (Alipay.Notify)e.Notify;
+                var alipayNotifyResponse = (NotifyResponse)e.NotifyResponse;
 
                 //同步通知，即浏览器跳转返回
                 if (e.NotifyType == NotifyType.Sync)

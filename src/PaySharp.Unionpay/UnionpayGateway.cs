@@ -5,6 +5,7 @@ using PaySharp.Core;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
 using PaySharp.Unionpay.Request;
+using PaySharp.Unionpay.Response;
 using System;
 using System.Threading.Tasks;
 
@@ -57,9 +58,9 @@ namespace PaySharp.Unionpay
 
         public new Merchant Merchant => _merchant;
 
-        public new Notify Notify => (Notify)base.Notify;
+        public new NotifyResponse NotifyResponse => (NotifyResponse)base.NotifyResponse;
 
-        protected override bool IsSuccessPay => Notify.RespCode == "00" || Notify.RespCode == "A6";
+        protected override bool IsSuccessPay => NotifyResponse.RespCode == "00" || NotifyResponse.RespCode == "A6";
 
         protected override string[] NotifyVerifyParameter => new string[]
         {
@@ -70,12 +71,12 @@ namespace PaySharp.Unionpay
 
         protected override async Task<bool> ValidateNotifyAsync()
         {
-            base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Camel);
-            base.Notify.Raw = GatewayData.ToUrl(false);
+            base.NotifyResponse = await GatewayData.ToObjectAsync<NotifyResponse>(StringCase.Camel);
+            base.NotifyResponse.Raw = GatewayData.ToUrl(false);
 
             GatewayData gatewayData = new GatewayData(StringComparer.Ordinal);
-            gatewayData.FromUrl(Notify.Raw, false);
-            if (SubmitProcess.CheckSign(gatewayData, Notify.Sign, Notify.SignPubKeyCert))
+            gatewayData.FromUrl(NotifyResponse.Raw, false);
+            if (SubmitProcess.CheckSign(gatewayData, NotifyResponse.Sign, NotifyResponse.SignPubKeyCert))
             {
                 return true;
             }

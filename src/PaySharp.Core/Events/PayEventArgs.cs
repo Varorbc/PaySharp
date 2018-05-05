@@ -1,4 +1,5 @@
-﻿using PaySharp.Core.Utils;
+﻿using PaySharp.Core.Response;
+using PaySharp.Core.Utils;
 using System;
 
 namespace PaySharp.Core
@@ -67,11 +68,11 @@ namespace PaySharp.Core
         /// <summary>
         /// 通知数据
         /// </summary>
-        public INotify Notify
+        public IResponse NotifyResponse
         {
             get
             {
-                return _gateway.Notify;
+                return _gateway.NotifyResponse;
             }
         }
 

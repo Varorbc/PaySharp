@@ -1,8 +1,9 @@
 ﻿using PaySharp.Core;
+using PaySharp.Core.Response;
 
-namespace PaySharp.Unionpay
+namespace PaySharp.Unionpay.Response
 {
-    public class Notify : INotify
+    public class NotifyResponse : IResponse
     {
         /// <summary>
         /// 版本号
