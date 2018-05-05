@@ -11,7 +11,11 @@ namespace PaySharp.Core
     {
         public override string GatewayUrl { get; set; }
 
-        protected internal override bool IsSuccessPay { get; }
+        protected internal override bool IsPaySuccess { get; }
+
+        protected internal override bool IsRefundSuccess { get; }
+
+        protected internal override bool IsCancelSuccess { get; }
 
         protected internal override string[] NotifyVerifyParameter { get; }
 

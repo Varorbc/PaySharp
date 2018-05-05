@@ -3,7 +3,7 @@
     /// <summary>
     /// 支付成功网关事件数据
     /// </summary>
-    public class PaySucceedEventArgs : PayEventArgs
+    public class PaySucceedEventArgs : NotifyEventArgs
     {
         #region 构造函数
 

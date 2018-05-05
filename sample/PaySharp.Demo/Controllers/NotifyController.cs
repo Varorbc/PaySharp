@@ -16,14 +16,16 @@ namespace PaySharp.Demo.Controllers
 
         public async Task Index()
         {
-                // 订阅支付通知事件
-                PayNotify notify = new PayNotify(_gateways);
-                notify.PaySucceed += Notify_PaySucceed;
-                notify.PayFailed += Notify_PayFailed;
-                notify.UnknownGateway += Notify_UnknownGateway;
+            // 订阅支付通知事件
+            Notify notify = new Notify(_gateways);
+            notify.PaySucceed += Notify_PaySucceed;
+            notify.RefundSucceed += Notify_RefundSucceed;
+            notify.CancelSucceed += Notify_CancelSucceed;
+            notify.UnknownNotify += Notify_UnknownNotify;
+            notify.UnknownGateway += Notify_UnknownGateway;
 
-                // 接收并处理支付通知
-                await notify.ReceivedAsync();
+            // 接收并处理支付通知
+            await notify.ReceivedAsync();
         }
 
         private bool Notify_PaySucceed(object sender, PaySucceedEventArgs e)
@@ -40,7 +42,7 @@ namespace PaySharp.Demo.Controllers
                 //同步通知，即浏览器跳转返回
                 if (e.NotifyType == NotifyType.Sync)
                 {
-                    //TODO：如何跳转
+
                 }
             }
 
@@ -48,10 +50,22 @@ namespace PaySharp.Demo.Controllers
             return true;
         }
 
-        private void Notify_PayFailed(object sender, PayFailedEventArgs e)
+        private bool Notify_RefundSucceed(object arg1, RefundSucceedEventArgs arg2)
         {
-            // 支付失败时的处理代码
-            //TODO:有可能是退款，等待，考虑重命名
+            // 订单退款时的处理代码
+            return true;
+        }
+
+        private bool Notify_CancelSucceed(object arg1, CancelSucceedEventArgs arg2)
+        {
+            // 订单撤销时的处理代码
+            return true;
+        }
+
+        private bool Notify_UnknownNotify(object sender, UnKnownNotifyEventArgs e)
+        {
+            // 未知时的处理代码
+            return true;
         }
 
         private void Notify_UnknownGateway(object sender, UnknownGatewayEventArgs e)

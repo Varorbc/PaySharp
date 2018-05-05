@@ -5,9 +5,9 @@ using System;
 namespace PaySharp.Core
 {
     /// <summary>
-    /// 支付事件数据的基类
+    /// 事件数据的基类
     /// </summary>
-    public abstract class PayEventArgs : EventArgs
+    public abstract class NotifyEventArgs : EventArgs
     {
         #region 私有字段
 
@@ -19,10 +19,10 @@ namespace PaySharp.Core
         #region 构造函数
 
         /// <summary>
-        /// 初始化支付事件数据的基类
+        /// 构造函数
         /// </summary>
         /// <param name="gateway">支付网关</param>
-        protected PayEventArgs(BaseGateway gateway)
+        protected NotifyEventArgs(BaseGateway gateway)
         {
             _gateway = gateway;
             _notifyServerHostAddress = HttpUtil.RemoteIpAddress;
@@ -44,7 +44,7 @@ namespace PaySharp.Core
         }
 
         /// <summary>
-        /// 支付网关的数据
+        /// 网关的数据
         /// </summary>
         public GatewayData GatewayData
         {
@@ -55,7 +55,7 @@ namespace PaySharp.Core
         }
 
         /// <summary>
-        /// 支付网关类型
+        /// 网关类型
         /// </summary>
         public Type GatewayType
         {

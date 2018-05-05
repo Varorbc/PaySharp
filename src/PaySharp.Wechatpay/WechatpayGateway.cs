@@ -57,7 +57,11 @@ namespace PaySharp.Wechatpay
 
         public new NotifyResponse NotifyResponse => (NotifyResponse)base.NotifyResponse;
 
-        protected override bool IsSuccessPay => NotifyResponse.ResultCode == "SUCCESS";
+        protected override bool IsPaySuccess => NotifyResponse.ResultCode == "SUCCESS" && !string.IsNullOrEmpty(NotifyResponse.TradeType);
+
+        protected override bool IsRefundSuccess => NotifyResponse.RefundStatus == "SUCCESS";
+
+        protected override bool IsCancelSuccess { get; }
 
         protected override string[] NotifyVerifyParameter => new string[]
         {

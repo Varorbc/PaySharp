@@ -1,17 +1,14 @@
 ﻿namespace PaySharp.Core
 {
-    /// <summary>
-    /// 支付失败网关事件数据
-    /// </summary>
-    public class PayFailedEventArgs : PayEventArgs
+    public class UnKnownNotifyEventArgs : NotifyEventArgs
     {
         #region 构造函数
 
         /// <summary>
-        /// 初始化支付失败网关事件数据
+        /// 构造函数
         /// </summary>
         /// <param name="gateway">支付网关</param>
-        public PayFailedEventArgs(BaseGateway gateway)
+        public UnKnownNotifyEventArgs(BaseGateway gateway)
             : base(gateway)
         {
         }
@@ -20,9 +17,6 @@
 
         #region 属性
 
-        /// <summary>
-        /// 支付失败信息
-        /// </summary>
         public string Message { get; set; }
 
         #endregion

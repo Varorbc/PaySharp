@@ -60,7 +60,11 @@ namespace PaySharp.Unionpay
 
         public new NotifyResponse NotifyResponse => (NotifyResponse)base.NotifyResponse;
 
-        protected override bool IsSuccessPay => NotifyResponse.RespCode == "00" || NotifyResponse.RespCode == "A6";
+        protected override bool IsPaySuccess => NotifyResponse.TxnType == "01" && NotifyResponse.RespCode == "00";
+
+        protected override bool IsRefundSuccess => NotifyResponse.TxnType == "04" && NotifyResponse.RespCode == "00";
+
+        protected override bool IsCancelSuccess => NotifyResponse.TxnType == "31" && NotifyResponse.RespCode == "00";
 
         protected override string[] NotifyVerifyParameter => new string[]
         {

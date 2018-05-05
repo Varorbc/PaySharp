@@ -55,7 +55,11 @@ namespace PaySharp.Alipay
 
         public new NotifyResponse NotifyResponse => (NotifyResponse)base.NotifyResponse;
 
-        protected override bool IsSuccessPay => NotifyResponse.TradeStatus == "TRADE_SUCCESS";
+        protected override bool IsPaySuccess => NotifyResponse.TradeStatus == "TRADE_SUCCESS";
+
+        protected override bool IsRefundSuccess { get; }
+
+        protected override bool IsCancelSuccess { get; }
 
         protected override string[] NotifyVerifyParameter => new string[]
         {
