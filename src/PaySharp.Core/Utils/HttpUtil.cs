@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Specialized;
 using System.Web;
 #endif
+using System;
 using System.IO;
 using System.Net;
+using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,6 +77,14 @@ namespace PaySharp.Core.Utils
 
         /// <summary>
         /// 构造函数
+        /// </summary>
+        static HttpUtil()
+        {
+            ServicePointManager.DefaultConnectionLimit = 200;
+        }
+
+        /// <summary>
+        /// 配置
         /// </summary>
         /// <param name="httpContextAccessor"></param>
         internal static void Configure(IHttpContextAccessor httpContextAccessor)
@@ -254,6 +264,12 @@ namespace PaySharp.Core.Utils
         /// <returns></returns>
         public static string Post(string url, string data, X509Certificate2 cert = null)
         {
+            if (url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+            {
+                ServicePointManager.ServerCertificateValidationCallback =
+                        new RemoteCertificateValidationCallback(CheckValidationResult);
+            }
+
             byte[] dataByte = Encoding.UTF8.GetBytes(data);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
@@ -277,6 +293,11 @@ namespace PaySharp.Core.Utils
                     return reader.ReadToEnd().Trim();
                 }
             }
+        }
+
+        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+        {
+            return true;
         }
 
         /// <summary>
