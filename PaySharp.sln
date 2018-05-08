@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.UnitTest", "test\P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Demo", "sample\PaySharp.Demo\PaySharp.Demo.csproj", "{8A0208C0-7046-44A7-A67F-DA122AB280A3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Qpay", "src\PaySharp.Qpay\PaySharp.Qpay.csproj", "{E63F24B7-C8EE-4E92-8897-38FB117CE371}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E63F24B7-C8EE-4E92-8897-38FB117CE371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E63F24B7-C8EE-4E92-8897-38FB117CE371}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E63F24B7-C8EE-4E92-8897-38FB117CE371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E63F24B7-C8EE-4E92-8897-38FB117CE371}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

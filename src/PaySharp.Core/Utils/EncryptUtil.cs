@@ -507,6 +507,25 @@ namespace PaySharp.Core.Utils
 
         #endregion
 
+        #region HMACSHA1加密
+
+        /// <summary>
+        /// HMACSHA1加密
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <param name="key">密钥</param>
+        /// <returns></returns>
+        public static string HMACSHA1(string data, string key)
+        {
+            byte[] byteData = Encoding.UTF8.GetBytes(data);
+            byte[] byteKey = Encoding.UTF8.GetBytes(key);
+            var hmacsha1 = new HMACSHA1(byteKey);
+            byte[] result = hmacsha1.ComputeHash(byteData);
+            return Convert.ToBase64String(result);
+        }
+
+        #endregion
+
         #region HMACSHA256加密
 
         /// <summary>
