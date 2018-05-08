@@ -31,7 +31,8 @@ namespace PaySharp.Alipay
             var jObject = JObject.Parse(result);
             var jToken = jObject.First.First;
             string sign = jObject.Value<string>("sign");
-            if (!CheckSign(jToken.ToString(Formatting.None), sign, merchant.AlipayPublicKey, merchant.SignType))
+            if (!string.IsNullOrEmpty(sign) &&
+                !CheckSign(jToken.ToString(Formatting.None), sign, merchant.AlipayPublicKey, merchant.SignType))
             {
                 throw new GatewayException("签名验证失败");
             }
