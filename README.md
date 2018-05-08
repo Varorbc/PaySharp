@@ -3,31 +3,29 @@
 
 PaySharp是一个支持多商户多种支付方式的跨平台网关处理类库，使用PaySharp可以简化订单的创建、查询、退款和接收网关返回的支付通知等操作。
 
-目前支持的支付网关有：支付宝(Alipay)、微信支付(Wechatpay)、银联支付(Unionpay)
+目前支持的支付网关有：支付宝(Alipay)、微信支付(Wechatpay)、银联支付(Unionpay)、QQ钱包支付(Qpay)
 
 ### 1.支付宝：
 
 ##### 支持的支付方式：
 
-	移动支付(App)、手机网站支付(Wap)、电脑网站支付(Web)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)、
-	
-	转账(Transfer)、转账查询(TransferQuery)
+	移动支付(App)、手机网站支付(Wap)、电脑网站支付(Web)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)
 
 ##### 支持的辅助接口：
 
-	查询、退款、退款查询、撤销、关闭、对账单下载
+	查询、退款、退款查询、撤销、关闭、对账单下载、转账(Transfer)、转账查询(TransferQuery)
 
 ### 2.微信：
 
 ##### 支持的支付方式：
 		
-	移动支付(App)、手机网站支付(Wap)、公众号支付(Public)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)、
-	
-	转账(Transfer)、转账查询(TransferQuery)、转账到银行卡(TransferToBank)、转账到银行卡查询(TransferToBank)Query)
+	移动支付(App)、手机网站支付(Wap)、公众号支付(Public)、小程序支付(Applet)、条码支付(Barcode)、扫码支付(Scan)
 
 ##### 支持的辅助接口：
 		
-	查询、退款、退款查询、撤销、关闭、对账单下载、资金账单下载
+	查询、退款、退款查询、撤销、关闭、对账单下载、资金账单下载、
+	
+	转账(Transfer)、转账查询(TransferQuery)、转账到银行卡(TransferToBank)、转账到银行卡查询(TransferToBank)Query)
 			
 ### 3.银联：
 
@@ -38,6 +36,16 @@ PaySharp是一个支持多商户多种支付方式的跨平台网关处理类库
 ##### 支持的辅助接口：
 		
 	查询、退款、撤销、对账单下载
+	
+### 4.QQ钱包：
+
+##### 支持的支付方式：
+		
+	移动支付(App)、公众号支付(Public)、条码支付(Barcode)、扫码支付(Scan)
+
+##### 支持的辅助接口：
+		
+	查询、退款、退款查询、撤销、关闭、对账单下载
 
 # Package
 ---
@@ -49,6 +57,7 @@ PaySharp.Core.Mvc		| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Core.Mvc.
 PaySharp.Alipay		| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Alipay.svg)](https://www.nuget.org/packages/PaySharp.Alipay)
 PaySharp.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Wechatpay.svg)](https://www.nuget.org/packages/PaySharp.Wechatpay)
 PaySharp.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Unionpay.svg)](https://www.nuget.org/packages/PaySharp.Unionpay)
+PaySharp.Qpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Qpay.svg)](https://www.nuget.org/packages/PaySharp.Qpay)
 
 # 开发环境
 * Windows 10
@@ -78,6 +87,10 @@ https://pay.weixin.qq.com/wiki/doc/api/index.html
 银联支付文档：
 
 https://open.unionpay.com/ajweb/product
+
+QQ钱包支付文档：
+
+https://qpay.qq.com/qpaywiki.shtml
 
 # 支持/打赏
 

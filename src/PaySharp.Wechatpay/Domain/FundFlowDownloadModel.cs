@@ -17,7 +17,7 @@ namespace PaySharp.Wechatpay.Domain
         public string AccountType { get; set; } = "Basic";
 
         /// <summary>
-        /// 下载对账单的日期，格式"yyyy-MM"	
+        /// 下载对账单的日期，格式"yyyyMMdd"	
         /// </summary>
         [Required(ErrorMessage = "请设置下载对账单的日期")]
         [StringLength(8, ErrorMessage = "下载对账单的日期最大长度为8位")]
