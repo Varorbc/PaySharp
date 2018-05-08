@@ -356,8 +356,8 @@ namespace PaySharp.Core
                 {
                     var xmlDoc = new XmlDocument();
                     xmlDoc.LoadXml(xml);
-                    var xmlNode = xmlDoc.FirstChild;
-                    var nodes = xmlNode.ChildNodes;
+                    var xmlElement = xmlDoc.DocumentElement;
+                    var nodes = xmlElement.ChildNodes;
                     foreach (var item in nodes)
                     {
                         var xe = (XmlElement)item;
