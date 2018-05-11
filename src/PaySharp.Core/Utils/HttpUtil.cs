@@ -105,11 +105,10 @@ namespace PaySharp.Core.Utils
         {
             get
             {
-#if DEBUG
-                return "127.0.0.1";
-#else
-                return  Current.Request.UserHostAddress;
-#endif
+                var ipAddress = IPAddress.Parse(Current.Request.UserHostAddress);
+                return IPAddress.IsLoopback(ipAddress) ?
+                    IPAddress.Loopback.ToString() :
+                    ipAddress.MapToIPv4().ToString();
             }
         }
 
@@ -120,11 +119,12 @@ namespace PaySharp.Core.Utils
         {
             get
             {
-#if DEBUG
-                return "127.0.0.1";
-#else
-                return  Current.Request.ServerVariables ["REMOTE_ADDR"];
-#endif
+                var ipAddress = IPAddress.Parse(
+                    Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] ??
+                    Current.Request.ServerVariables["REMOTE_ADDR"]);
+                return IPAddress.IsLoopback(ipAddress) ?
+                    IPAddress.Loopback.ToString() :
+                    ipAddress.MapToIPv4().ToString();
             }
         }
 
