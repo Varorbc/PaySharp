@@ -1,4 +1,4 @@
-# PaySharp<img src="https://github.com/Varorbc/PaySharp/blob/master/logo.png" width="50px" height="50px">
+# PaySharp<img src="https://github.com/Varorbc/PaySharp/raw/master/logo.png" width="50px" height="50px">
 ---
 
 PaySharp是一个支持多商户多种支付方式的跨平台网关处理类库，使用PaySharp可以简化订单的创建、查询、退款和接收网关返回的支付通知等操作。
@@ -95,7 +95,7 @@ https://qpay.qq.com/qpaywiki.shtml
 # 支持/打赏
 
 <p align="center">
-    <img src="https://github.com/Varorbc/PaySharp/blob/master/reward.jpg">
+    <img src="https://github.com/Varorbc/PaySharp/raw/master/reward.jpg">
     <p align="center">打赏扫这里，请留下尊姓大名</p>
 </p>
 
