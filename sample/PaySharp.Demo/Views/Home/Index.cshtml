@@ -447,6 +447,7 @@
                     <li><a href="#tabs-purchase-16">获取RSA公钥</a></li>
                     <li><a href="#tabs-purchase-17">企业付款到银行卡</a></li>
                     <li><a href="#tabs-purchase-18">查询企业付款银行卡</a></li>
+                    <li><a href="#tabs-purchase-19">获取OpenId</a></li>
                 </ul>
 
                 <div id="tabs-purchase-1">
@@ -896,6 +897,23 @@
                     <hr />
                     <p class="faq">
                         <a href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=24_3" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
+                <div id="tabs-purchase-19">
+                    <form class="api-form" asp-controller="WeChatPay" asp-action="OAuth" method="post" target="_blank">
+                        <p>
+                            <label>微信Code：</label>
+                            <input type="text" name="code">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140842" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
 

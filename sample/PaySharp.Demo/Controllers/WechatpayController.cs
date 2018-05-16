@@ -305,5 +305,18 @@ namespace PaySharp.Demo.Controllers
             var response = _gateway.Execute(request);
             return File(response.GetBillFile(), "text/csv", $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.csv");
         }
+
+        [HttpPost]
+        public IActionResult OAuth(string code)
+        {
+            var request = new OAuthRequest();
+            request.AddGatewayData(new OAuthModel()
+            {
+                Code = code
+            });
+
+            var response = _gateway.Execute(request);
+            return Json(response);
+        }
     }
 }

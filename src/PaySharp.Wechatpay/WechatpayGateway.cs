@@ -5,6 +5,7 @@ using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
+using PaySharp.Wechatpay.Request;
 using PaySharp.Wechatpay.Response;
 using System.Threading.Tasks;
 using static PaySharp.Wechatpay.Response.QueryResponse;
@@ -124,6 +125,11 @@ namespace PaySharp.Wechatpay
 
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
+            if (request is OAuthRequest)
+            {
+                return SubmitProcess.AuthExecute(_merchant, request, GatewayUrl);
+            }
+
             return SubmitProcess.Execute(_merchant, request, GatewayUrl);
         }
 
