@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿#if NETCOREAPP
+using Microsoft.AspNetCore.Mvc;
+#else
+using System.Web.Mvc;
+#endif
 using PaySharp.Alipay.Response;
 using PaySharp.Core;
 using System.Threading.Tasks;

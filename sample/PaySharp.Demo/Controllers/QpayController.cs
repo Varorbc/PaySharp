@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿#if NETCOREAPP
+using Microsoft.AspNetCore.Mvc;
+#else
+using System.Web.Mvc;
+#endif
 using PaySharp.Core;
 using PaySharp.Core.Response;
 using PaySharp.Qpay;
@@ -18,7 +22,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult PublicPay(string out_trade_no, int total_amount, string body)
+        public ActionResult PublicPay(string out_trade_no, int total_amount, string body)
         {
             var request = new PublicPayRequest();
             request.AddGatewayData(new PublicPayModel()
@@ -33,7 +37,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult AppPay(string out_trade_no, int total_amount, string body)
+        public ActionResult AppPay(string out_trade_no, int total_amount, string body)
         {
             var request = new AppPayRequest();
             request.AddGatewayData(new AppPayModel()
@@ -48,7 +52,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult ScanPay(string out_trade_no, string body, int total_amount)
+        public ActionResult ScanPay(string out_trade_no, string body, int total_amount)
         {
             var request = new ScanPayRequest();
             request.AddGatewayData(new ScanPayModel()
@@ -64,7 +68,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult BarcodePay(string out_trade_no, string auth_code, int total_amount, string body, string device_info)
+        public ActionResult BarcodePay(string out_trade_no, string auth_code, int total_amount, string body, string device_info)
         {
             var request = new BarcodePayRequest();
             request.AddGatewayData(new BarcodePayModel()
@@ -102,7 +106,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Query(string out_trade_no, string trade_no)
+        public ActionResult Query(string out_trade_no, string trade_no)
         {
             var request = new QueryRequest();
             request.AddGatewayData(new QueryModel()
@@ -116,7 +120,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Refund(string out_trade_no, string trade_no, string out_refund_no, int refund_amount, string op_user_id, string op_user_passwd)
+        public ActionResult Refund(string out_trade_no, string trade_no, string out_refund_no, int refund_amount, string op_user_id, string op_user_passwd)
         {
             var request = new RefundRequest();
             request.AddGatewayData(new RefundModel()
@@ -134,7 +138,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult RefundQuery(string out_trade_no, string trade_no, string out_refund_no, string refund_no)
+        public ActionResult RefundQuery(string out_trade_no, string trade_no, string out_refund_no, string refund_no)
         {
             var request = new RefundQueryRequest();
             request.AddGatewayData(new RefundQueryModel()
@@ -150,7 +154,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Close(string out_trade_no)
+        public ActionResult Close(string out_trade_no)
         {
             var request = new CloseRequest();
             request.AddGatewayData(new CloseModel()
@@ -163,7 +167,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cancel(string out_trade_no)
+        public ActionResult Cancel(string out_trade_no)
         {
             var request = new CancelRequest();
             request.AddGatewayData(new CancelModel()
@@ -176,7 +180,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult BillDownload(string bill_date, string bill_type)
+        public ActionResult BillDownload(string bill_date, string bill_type)
         {
             var request = new BillDownloadRequest();
             request.AddGatewayData(new BillDownloadModel()

@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿#if NETCOREAPP
+using Microsoft.AspNetCore.Mvc;
+#else
+using System.Web.Mvc;
+#endif
 using PaySharp.Core;
 using PaySharp.Core.Response;
 using PaySharp.Unionpay;
@@ -18,7 +22,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult WebPay(string order_id, int total_amount)
+        public ActionResult WebPay(string order_id, int total_amount)
         {
             var request = new WebPayRequest();
             request.AddGatewayData(new WebPayModel()
@@ -32,7 +36,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult WapPay(string order_id, int total_amount)
+        public ActionResult WapPay(string order_id, int total_amount)
         {
             var request = new WapPayRequest();
             request.AddGatewayData(new WapPayModel()
@@ -46,7 +50,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult AppPay(string order_id, int total_amount, string body)
+        public ActionResult AppPay(string order_id, int total_amount, string body)
         {
             var request = new AppPayRequest();
             request.AddGatewayData(new AppPayModel()
@@ -61,7 +65,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult ScanPay(string order_id, int total_amount)
+        public ActionResult ScanPay(string order_id, int total_amount)
         {
             var request = new ScanPayRequest();
             request.AddGatewayData(new ScanPayModel()
@@ -76,7 +80,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult BarcodePay(string order_id, string qr_no, int total_amount)
+        public ActionResult BarcodePay(string order_id, string qr_no, int total_amount)
         {
             var request = new BarcodePayRequest();
             request.AddGatewayData(new BarcodePayModel()
@@ -112,7 +116,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Query(string order_id, string query_id)
+        public ActionResult Query(string order_id, string query_id)
         {
             var request = new QueryRequest();
             request.AddGatewayData(new QueryModel()
@@ -126,7 +130,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Refund(string order_id, int refund_amount, string orig_qry_id, string orig_order_id)
+        public ActionResult Refund(string order_id, int refund_amount, string orig_qry_id, string orig_order_id)
         {
             var request = new RefundRequest();
             request.AddGatewayData(new RefundModel()
@@ -142,7 +146,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cancel(string order_id, int cancel_amount, string orig_qry_id, string orig_order_id)
+        public ActionResult Cancel(string order_id, int cancel_amount, string orig_qry_id, string orig_order_id)
         {
             var request = new CancelRequest();
             request.AddGatewayData(new CancelModel()
@@ -158,7 +162,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult BillDownload(string bill_date)
+        public ActionResult BillDownload(string bill_date)
         {
             var request = new BillDownloadRequest();
             request.AddGatewayData(new BillDownloadModel()
