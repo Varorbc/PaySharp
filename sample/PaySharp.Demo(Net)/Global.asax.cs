@@ -1,8 +1,10 @@
 ﻿using Autofac;
 using PaySharp.Alipay;
 using PaySharp.Core;
+using PaySharp.Core.Mvc;
 using PaySharp.Unionpay;
 using PaySharp.Wechatpay;
+using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -19,6 +21,7 @@ namespace PaySharp.Demo_Net_
             PaySharpConfig.Register(typeof(MvcApplication), containerBuilder, a =>
              {
                  var gateways = new Gateways();
+                 //gateways.RegisterAlipay();
 
                  var alipayMerchant = new Alipay.Merchant
                  {
@@ -35,7 +38,7 @@ namespace PaySharp.Demo_Net_
                      MchId = "1233410002",
                      Key = "e10adc3849ba56abbe56e056f20f883e",
                      AppSecret = "51c56b886b5be869567dd389b3e5d1d6",
-                     SslCertPath = "Certs/apiclient_cert.p12",
+                     SslCertPath = AppDomain.CurrentDomain.BaseDirectory + "Certs/apiclient_cert.p12",
                      SslCertPassword = "1233410002",
                      NotifyUrl = "http://localhost:61378/Notify"
                  };
@@ -44,7 +47,7 @@ namespace PaySharp.Demo_Net_
                  {
                      AppId = "777290058110048",
                      CertPwd = "000000",
-                     CertPath = "Certs/acp_test_sign.pfx",
+                     CertPath = AppDomain.CurrentDomain.BaseDirectory + "Certs/acp_test_sign.pfx",
                      NotifyUrl = "http://localhost:61378/Notify",
                      ReturnUrl = "http://localhost:61378/Notify"
                  };

@@ -22,12 +22,19 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IGateways UseUnionpay(this IGateways gateways, IConfiguration configuration)
         {
-            var merchants = configuration.GetSection("Unionpay").Get<Merchant[]>();
+            var merchants = configuration.GetSection("PaySharp:Unionpays").Get<Merchant[]>();
             if (merchants != null)
             {
                 for (int i = 0; i < merchants.Length; i++)
                 {
-                    gateways.Add(new UnionpayGateway(merchants[i]));
+                    var unionpayGateway = new UnionpayGateway(merchants[i]);
+                    var gatewayUrl = configuration.GetSection($"PaySharp:Unionpays:{i}:GatewayUrl").Value;
+                    if (!string.IsNullOrEmpty(gatewayUrl))
+                    {
+                        unionpayGateway.GatewayUrl = gatewayUrl;
+                    }
+
+                    gateways.Add(unionpayGateway);
                 }
             }
 

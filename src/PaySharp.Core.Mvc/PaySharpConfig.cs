@@ -5,7 +5,7 @@ using System.Web.Mvc;
 //using System.Web.Http;
 using System;
 
-namespace PaySharp.Core
+namespace PaySharp.Core.Mvc
 {
     public static class PaySharpConfig
     {

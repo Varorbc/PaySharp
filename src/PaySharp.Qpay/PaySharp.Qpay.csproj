@@ -1,37 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="../../packaging.props" />
+
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://github.com/Varorbc/PaySharp</PackageProjectUrl>
     <Title>PaySharp.Qpay</Title>
-    <Authors>Varorbc</Authors>
     <Description>QQ钱包支付</Description>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <PackageTags>dotnetcore;pay;qpay;</PackageTags>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/Varorbc/PaySharp</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/Varorbc/PaySharp/blob/master/LICENSE</PackageLicenseUrl>
-    <Copyright>Varorbc</Copyright>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>PaySharp.snk</AssemblyOriginatorKeyFile>
-    <PackageIconUrl>https://github.com/Varorbc/PaySharp/raw/master/logo.png</PackageIconUrl>
+    <PackageReleaseNotes>
+      1.Net环境添加通过配置文件注册方式
+      2.修改Core下配置方式
+    </PackageReleaseNotes>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-    <DocumentationFile>..\..\output\release\netstandard2.0\PaySharp.Qpay.xml</DocumentationFile>
-    <NoWarn>1701;1702;1705;1591</NoWarn>
-    <OutputPath>..\..\output\release\</OutputPath>
-  </PropertyGroup>
+  <Import Project="../../output.props" />
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\PaySharp.Core\PaySharp.Core.csproj" />
-  </ItemGroup>
+  <Import Project="../../dependencies.props" />
 
 </Project>

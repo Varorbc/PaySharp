@@ -22,12 +22,19 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IGateways UseQpay(this IGateways gateways, IConfiguration configuration)
         {
-            var merchants = configuration.GetSection("Qpay").Get<Merchant[]>();
+            var merchants = configuration.GetSection("PaySharp:Qpays").Get<Merchant[]>();
             if (merchants != null)
             {
                 for (int i = 0; i < merchants.Length; i++)
                 {
-                    gateways.Add(new QpayGateway(merchants[i]));
+                    var qpayGateway = new QpayGateway(merchants[i]);
+                    var gatewayUrl = configuration.GetSection($"PaySharp:Qpays:{i}:GatewayUrl").Value;
+                    if (!string.IsNullOrEmpty(gatewayUrl))
+                    {
+                        qpayGateway.GatewayUrl = gatewayUrl;
+                    }
+
+                    gateways.Add(qpayGateway);
                 }
             }
 
