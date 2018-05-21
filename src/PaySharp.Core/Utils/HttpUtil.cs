@@ -71,7 +71,15 @@ namespace PaySharp.Core.Utils
         /// <summary>
         /// 请求体
         /// </summary>
-        public static Stream Body => Current.Request.Body;
+        public static Stream Body
+        {
+            get
+            {
+                var body = Current.Request.Body;
+                body.Position = 0;
+                return body;
+            }
+        }
 
         #region 构造函数
 
@@ -141,7 +149,15 @@ namespace PaySharp.Core.Utils
         /// <summary>
         /// 请求体
         /// </summary>
-        public static Stream Body => Current.Request.InputStream;
+        public static Stream Body
+        {
+            get
+            {
+                var inputStream = Current.Request.InputStream;
+                inputStream.Position = 0;
+                return inputStream;
+            }
+        }
 
 #endif
 
