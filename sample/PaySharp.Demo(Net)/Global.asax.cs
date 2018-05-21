@@ -6,6 +6,7 @@ using PaySharp.Unionpay;
 using PaySharp.Wechatpay;
 using System;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -16,6 +17,16 @@ namespace PaySharp.Demo_Net_
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+            GlobalConfiguration.Configure(a =>
+            {
+                a.MapHttpAttributeRoutes();
+
+                a.Routes.MapHttpRoute(
+                    name: "DefaultApi",
+                    routeTemplate: "api/{controller}/{action}",
+                    defaults: new { id = RouteParameter.Optional }
+                );
+            });
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             var containerBuilder = new ContainerBuilder();
             PaySharpConfig.Register(typeof(MvcApplication), containerBuilder, a =>
