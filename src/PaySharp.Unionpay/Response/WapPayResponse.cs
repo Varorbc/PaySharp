@@ -5,7 +5,7 @@ namespace PaySharp.Unionpay.Response
 {
     public class WapPayResponse : IResponse
     {
-        public WapPayResponse(WebPayRequest request)
+        public WapPayResponse(WapPayRequest request)
         {
             Html = request.GatewayData.ToForm(request.RequestUrl);
         }

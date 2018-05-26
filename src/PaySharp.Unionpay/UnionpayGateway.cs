@@ -90,7 +90,7 @@ namespace PaySharp.Unionpay
 
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
-            if (request is WebPayRequest)
+            if (request is WebPayRequest || request is WapPayRequest)
             {
                 return SubmitProcess.SdkExecute(_merchant, request, GatewayUrl);
             }
