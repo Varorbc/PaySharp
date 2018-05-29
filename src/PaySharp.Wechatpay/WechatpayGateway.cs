@@ -113,12 +113,14 @@ namespace PaySharp.Wechatpay
 
         protected override void WriteSuccessFlag()
         {
+            GatewayData.Clear();
             GatewayData.Add("return_code", "SUCCESS");
             HttpUtil.Write(GatewayData.ToXml());
         }
 
         protected override void WriteFailureFlag()
         {
+            GatewayData.Clear();
             GatewayData.Add("return_code", "FAIL");
             HttpUtil.Write(GatewayData.ToXml());
         }

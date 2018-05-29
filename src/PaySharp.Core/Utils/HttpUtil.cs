@@ -195,7 +195,7 @@ namespace PaySharp.Core.Utils
         /// <param name="text">内容</param>
         public static void Write(string text)
         {
-            Current.Response.ContentType = "text/html;charset=utf-8";
+            Current.Response.ContentType = "text/plain;charset=utf-8";
 
 #if NETSTANDARD2_0
             Task.Run(async () =>
@@ -206,6 +206,7 @@ namespace PaySharp.Core.Utils
             .GetResult();
 #else
             Current.Response.Write(text);
+            Current.Response.End();
 #endif
 
         }

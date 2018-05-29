@@ -6,11 +6,9 @@
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <Title>PaySharp.Qpay</Title>
     <Description>QQ钱包支付</Description>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <PackageTags>dotnetcore;pay;qpay;</PackageTags>
     <PackageReleaseNotes>
-      1.Net环境添加通过配置文件注册方式
-      2.修改Core下配置方式
     </PackageReleaseNotes>
   </PropertyGroup>
 

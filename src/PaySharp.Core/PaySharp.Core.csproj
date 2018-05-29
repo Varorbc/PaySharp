@@ -6,11 +6,10 @@
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <Title>PaySharp.Core</Title>
     <Description>支付核心</Description>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <PackageTags>dotnetcore;pay;</PackageTags>
     <PackageReleaseNotes>
-      1.Net环境添加通过配置文件注册方式
-      2.修改Core下配置方式
+      修复WebApi下，无法回复通知
     </PackageReleaseNotes>
   </PropertyGroup>
 
