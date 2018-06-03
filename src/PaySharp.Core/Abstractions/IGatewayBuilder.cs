@@ -19,7 +19,7 @@ namespace PaySharp.Abstractions
         bool TryAdd<T>(string name,T gateway) where T:class;
 
         /// <summary>
-        /// 返回一个 <see cref="IGatewayBuilder"/> 的实例
+        /// 返回一个 <see cref="IGatewayProvider"/> 的实例
         /// </summary>
         /// <returns></returns>
         IGatewayProvider Build();
