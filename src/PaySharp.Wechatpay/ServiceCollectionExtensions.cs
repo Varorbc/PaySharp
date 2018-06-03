@@ -22,12 +22,19 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IGateways UseWechatpay(this IGateways gateways, IConfiguration configuration)
         {
-            var merchants = configuration.GetSection("Wechatpay").Get<Merchant[]>();
+            var merchants = configuration.GetSection("PaySharp:Wechatpays").Get<Merchant[]>();
             if (merchants != null)
             {
                 for (int i = 0; i < merchants.Length; i++)
                 {
-                    gateways.Add(new WechatpayGateway(merchants[i]));
+                    var wechatpayGateway = new WechatpayGateway(merchants[i]);
+                    var gatewayUrl = configuration.GetSection($"PaySharp:Wechatpays:{i}:GatewayUrl").Value;
+                    if (!string.IsNullOrEmpty(gatewayUrl))
+                    {
+                        wechatpayGateway.GatewayUrl = gatewayUrl;
+                    }
+
+                    gateways.Add(wechatpayGateway);
                 }
             }
 

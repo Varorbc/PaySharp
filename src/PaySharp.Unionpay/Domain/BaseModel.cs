@@ -23,7 +23,7 @@ namespace PaySharp.Unionpay.Domain
         /// <summary>
         /// 订单发送时间
         /// </summary>
-        public string TxnTime { get; internal set; } = DateTime.Now.ToString("yyyyMMddHHmmss");
+        public string TxnTime { get; } = DateTime.Now.ToString("yyyyMMddHHmmss");
 
         /// <summary>
         /// 交易类型

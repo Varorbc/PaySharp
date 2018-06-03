@@ -14,5 +14,7 @@ namespace PaySharp.Alipay.Response
         /// 跳转链接
         /// </summary>
         public string Url { get; set; }
+
+        public string Raw { get; set; }
     }
 }

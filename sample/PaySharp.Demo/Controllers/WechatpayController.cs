@@ -3,7 +3,11 @@ using PaySharp.Core.Response;
 using PaySharp.Wechatpay;
 using PaySharp.Wechatpay.Domain;
 using PaySharp.Wechatpay.Request;
+#if NETCOREAPP
 using Microsoft.AspNetCore.Mvc;
+#else
+using System.Web.Mvc;
+#endif
 using System;
 
 namespace PaySharp.Demo.Controllers
@@ -18,7 +22,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult PublicPay(string out_trade_no, int total_amount, string body, string open_id)
+        public ActionResult PublicPay(string out_trade_no, int total_amount, string body, string open_id)
         {
             var request = new PublicPayRequest();
             request.AddGatewayData(new PublicPayModel()
@@ -34,7 +38,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult AppPay(string out_trade_no, int total_amount, string body)
+        public ActionResult AppPay(string out_trade_no, int total_amount, string body)
         {
             var request = new AppPayRequest();
             request.AddGatewayData(new AppPayModel()
@@ -49,7 +53,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult AppletPay(string out_trade_no, int total_amount, string body, string open_id)
+        public ActionResult AppletPay(string out_trade_no, int total_amount, string body, string open_id)
         {
             var request = new AppletPayRequest();
             request.AddGatewayData(new AppletPayModel()
@@ -65,7 +69,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult WapPay(string out_trade_no, int total_amount, string body, string scene_info)
+        public ActionResult WapPay(string out_trade_no, int total_amount, string body, string scene_info)
         {
             var request = new WapPayRequest();
             request.AddGatewayData(new WapPayModel()
@@ -81,7 +85,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult ScanPay(string out_trade_no, string body, int total_amount)
+        public ActionResult ScanPay(string out_trade_no, string body, int total_amount)
         {
             var request = new ScanPayRequest();
             request.AddGatewayData(new ScanPayModel()
@@ -97,7 +101,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult BarcodePay(string out_trade_no, string auth_code, int total_amount, string body)
+        public ActionResult BarcodePay(string out_trade_no, string auth_code, int total_amount, string body)
         {
             var request = new BarcodePayRequest();
             request.AddGatewayData(new BarcodePayModel()
@@ -134,7 +138,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Query(string out_trade_no, string trade_no)
+        public ActionResult Query(string out_trade_no, string trade_no)
         {
             var request = new QueryRequest();
             request.AddGatewayData(new QueryModel()
@@ -148,7 +152,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Refund(string out_trade_no, string trade_no, int total_amount, int refund_amount, string refund_desc, string out_refund_no)
+        public ActionResult Refund(string out_trade_no, string trade_no, int total_amount, int refund_amount, string refund_desc, string out_refund_no)
         {
             var request = new RefundRequest();
             request.AddGatewayData(new RefundModel()
@@ -166,7 +170,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult RefundQuery(string out_trade_no, string trade_no, string out_refund_no, string refund_no)
+        public ActionResult RefundQuery(string out_trade_no, string trade_no, string out_refund_no, string refund_no)
         {
             var request = new RefundQueryRequest();
             request.AddGatewayData(new RefundQueryModel()
@@ -182,7 +186,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Close(string out_trade_no)
+        public ActionResult Close(string out_trade_no)
         {
             var request = new CloseRequest();
             request.AddGatewayData(new CloseModel()
@@ -195,7 +199,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cancel(string out_trade_no)
+        public ActionResult Cancel(string out_trade_no)
         {
             var request = new CancelRequest();
             request.AddGatewayData(new CancelModel()
@@ -208,7 +212,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Transfer(string out_trade_no, string openid, string check_name, string true_name, int amount, string desc)
+        public ActionResult Transfer(string out_trade_no, string openid, string check_name, string true_name, int amount, string desc)
         {
             var request = new TransferRequest();
             request.AddGatewayData(new TransferModel()
@@ -226,7 +230,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult TransferQuery(string out_trade_no)
+        public ActionResult TransferQuery(string out_trade_no)
         {
             var request = new TransferQueryRequest();
             request.AddGatewayData(new TransferQueryModel()
@@ -239,7 +243,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult PublicKey()
+        public ActionResult PublicKey()
         {
             var request = new PublicKeyRequest();
 
@@ -248,7 +252,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult TransferToBank(string out_trade_no, string bank_no, string true_name, string bank_code, int amount, string desc)
+        public ActionResult TransferToBank(string out_trade_no, string bank_no, string true_name, string bank_code, int amount, string desc)
         {
             var request = new TransferToBankRequest();
             request.AddGatewayData(new TransferToBankModel()
@@ -266,7 +270,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult TransferToBankQuery(string out_trade_no)
+        public ActionResult TransferToBankQuery(string out_trade_no)
         {
             var request = new TransferToBankQueryRequest();
             request.AddGatewayData(new TransferToBankQueryModel()
@@ -279,7 +283,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult BillDownload(string bill_date, string bill_type)
+        public ActionResult BillDownload(string bill_date, string bill_type)
         {
             var request = new BillDownloadRequest();
             request.AddGatewayData(new BillDownloadModel()
@@ -293,7 +297,7 @@ namespace PaySharp.Demo.Controllers
         }
 
         [HttpPost]
-        public IActionResult FundFlowDownload(string bill_date, string account_type)
+        public ActionResult FundFlowDownload(string bill_date, string account_type)
         {
             var request = new FundFlowDownloadRequest();
             request.AddGatewayData(new FundFlowDownloadModel()
@@ -304,6 +308,19 @@ namespace PaySharp.Demo.Controllers
 
             var response = _gateway.Execute(request);
             return File(response.GetBillFile(), "text/csv", $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.csv");
+        }
+
+        [HttpPost]
+        public ActionResult OAuth(string code)
+        {
+            var request = new OAuthRequest();
+            request.AddGatewayData(new OAuthModel()
+            {
+                Code = code
+            });
+
+            var response = _gateway.Execute(request);
+            return Json(response);
         }
     }
 }

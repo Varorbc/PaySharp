@@ -9,7 +9,6 @@ namespace PaySharp.Wechatpay.Domain
     {
         /// <summary>
         /// 商户订单号
-        /// 微信订单号查询的优先级是： RefundNo > OutRefundNo > TradeNo > OutTradeNo
         /// </summary>
         [StringLength(32, ErrorMessage = "商户订单号最大长度为32位")]
         public string OutTradeNo { get; set; }

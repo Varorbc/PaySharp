@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 #endif
 using PaySharp.Alipay.Request;
+using PaySharp.Alipay.Response;
 using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
@@ -52,9 +53,13 @@ namespace PaySharp.Alipay
 
         public override string GatewayUrl { get; set; } = "https://openapi.alipay.com";
 
-        public new Notify Notify => (Notify)base.Notify;
+        public new NotifyResponse NotifyResponse => (NotifyResponse)base.NotifyResponse;
 
-        protected override bool IsSuccessPay => Notify.TradeStatus == "TRADE_SUCCESS";
+        protected override bool IsPaySuccess => NotifyResponse.TradeStatus == "TRADE_SUCCESS";
+
+        protected override bool IsRefundSuccess { get; }
+
+        protected override bool IsCancelSuccess { get; }
 
         protected override string[] NotifyVerifyParameter => new string[]
         {
@@ -67,12 +72,13 @@ namespace PaySharp.Alipay
 
         protected override async Task<bool> ValidateNotifyAsync()
         {
-            base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
+            base.NotifyResponse = await GatewayData.ToObjectAsync<NotifyResponse>(StringCase.Snake);
+            base.NotifyResponse.Raw = GatewayData.ToUrl(false);
             GatewayData.Remove("sign");
             GatewayData.Remove("sign_type");
 
             bool result = EncryptUtil.RSAVerifyData(GatewayData.ToUrl(false),
-                Notify.Sign, _merchant.AlipayPublicKey, _merchant.SignType);
+                NotifyResponse.Sign, _merchant.AlipayPublicKey, _merchant.SignType);
             if (result)
             {
                 return true;

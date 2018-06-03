@@ -15,7 +15,7 @@ namespace PaySharp.Wechatpay.Domain
         public string OutTradeNo { get; set; }
 
         /// <summary>
-        /// 微信订单号，和商户订单号不能同时为空
+        /// 微信订单号
         /// </summary>
         [ReName(Name = "transaction_id")]
         [StringLength(32, ErrorMessage = "微信订单号最大长度为32位")]

@@ -3,7 +3,7 @@
     /// <summary>
     /// 未知网关事件数据
     /// </summary>
-    public class UnknownGatewayEventArgs : PayEventArgs
+    public class UnknownGatewayEventArgs : NotifyEventArgs
     {
         #region 构造函数
 

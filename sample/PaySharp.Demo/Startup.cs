@@ -82,6 +82,15 @@ namespace PaySharp.Demo
                 //a.UseAlipay(Configuration);
                 a.UseWechatpay(Configuration);
                 //a.UseUnionpay(Configuration);
+                a.UseQpay(opt =>
+                {
+                    opt.AppId = "100619284";
+                    opt.MchId = "1900000109";
+                    opt.Key = "8934e7d15453e97507ef794cf7b0519d";
+                    opt.SslCertPath = "Certs/1900000109_532398_new.pfx";
+                    opt.SslCertPassword = "532398";
+                    opt.NotifyUrl = "http://localhost:61377/Notify";
+                });
             });
         }
 
@@ -91,11 +100,11 @@ namespace PaySharp.Demo
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
             app.UseStaticFiles();

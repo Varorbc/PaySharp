@@ -40,7 +40,7 @@ namespace PaySharp.Core
         /// <summary>
         /// 通知数据
         /// </summary>
-        public INotify Notify { get; set; }
+        public IResponse NotifyResponse { get; set; }
 
         /// <summary>
         /// 网关的地址
@@ -53,9 +53,19 @@ namespace PaySharp.Core
         protected internal GatewayData GatewayData { get; set; }
 
         /// <summary>
-        /// 是否成功支付
+        /// 是否支付成功
         /// </summary>
-        protected internal abstract bool IsSuccessPay { get; }
+        protected internal abstract bool IsPaySuccess { get; }
+
+        /// <summary>
+        /// 是否退款成功
+        /// </summary>
+        protected internal abstract bool IsRefundSuccess { get; }
+
+        /// <summary>
+        /// 是否撤销成功
+        /// </summary>
+        protected internal abstract bool IsCancelSuccess { get; }
 
         /// <summary>
         /// 需要验证的参数名称数组，用于识别不同的网关类型。

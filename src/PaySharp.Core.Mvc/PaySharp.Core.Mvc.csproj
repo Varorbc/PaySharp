@@ -1,28 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../packaging.props" />
 
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://github.com/Varorbc/PaySharp</PackageProjectUrl>
     <Title>PaySharp.Core.Mvc</Title>
-    <Authors>Varorbc</Authors>
     <Description>Mvc</Description>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.0.1</Version>
     <PackageTags>dotnetcore;pay;</PackageTags>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/Varorbc/PaySharp</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/Varorbc/PaySharp/blob/master/LICENSE</PackageLicenseUrl>
-    <Copyright>Varorbc</Copyright>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>PaySharp.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-    <DocumentationFile>..\..\output\release\netstandard2.0\PaySharp.Core.Mvc.xml</DocumentationFile>
-    <NoWarn>1701;1702;1705;1591</NoWarn>
-    <OutputPath>..\..\output\release\</OutputPath>
+    <PackageReleaseNotes>修改命名空间</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,4 +20,6 @@
     <ProjectReference Include="..\PaySharp.Core\PaySharp.Core.csproj" />
   </ItemGroup>
 
+  <Import Project="../../output.props" />
+  
 </Project>

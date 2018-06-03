@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Specialized;
 using System.Web;
 #endif
+using System;
 using System.IO;
 using System.Net;
+using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,12 +71,28 @@ namespace PaySharp.Core.Utils
         /// <summary>
         /// 请求体
         /// </summary>
-        public static Stream Body => Current.Request.Body;
+        public static Stream Body
+        {
+            get
+            {
+                var body = Current.Request.Body;
+                body.Position = 0;
+                return body;
+            }
+        }
 
         #region 构造函数
 
         /// <summary>
         /// 构造函数
+        /// </summary>
+        static HttpUtil()
+        {
+            ServicePointManager.DefaultConnectionLimit = 200;
+        }
+
+        /// <summary>
+        /// 配置
         /// </summary>
         /// <param name="httpContextAccessor"></param>
         internal static void Configure(IHttpContextAccessor httpContextAccessor)
@@ -95,11 +113,10 @@ namespace PaySharp.Core.Utils
         {
             get
             {
-#if DEBUG
-                return "127.0.0.1";
-#else
-                return  Current.Request.UserHostAddress;
-#endif
+                var ipAddress = IPAddress.Parse(Current.Request.UserHostAddress);
+                return IPAddress.IsLoopback(ipAddress) ?
+                    IPAddress.Loopback.ToString() :
+                    ipAddress.MapToIPv4().ToString();
             }
         }
 
@@ -110,11 +127,12 @@ namespace PaySharp.Core.Utils
         {
             get
             {
-#if DEBUG
-                return "127.0.0.1";
-#else
-                return  Current.Request.ServerVariables ["REMOTE_ADDR"];
-#endif
+                var ipAddress = IPAddress.Parse(
+                    Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] ??
+                    Current.Request.ServerVariables["REMOTE_ADDR"]);
+                return IPAddress.IsLoopback(ipAddress) ?
+                    IPAddress.Loopback.ToString() :
+                    ipAddress.MapToIPv4().ToString();
             }
         }
 
@@ -131,7 +149,15 @@ namespace PaySharp.Core.Utils
         /// <summary>
         /// 请求体
         /// </summary>
-        public static Stream Body => Current.Request.InputStream;
+        public static Stream Body
+        {
+            get
+            {
+                var inputStream = Current.Request.InputStream;
+                inputStream.Position = 0;
+                return inputStream;
+            }
+        }
 
 #endif
 
@@ -169,7 +195,7 @@ namespace PaySharp.Core.Utils
         /// <param name="text">内容</param>
         public static void Write(string text)
         {
-            Current.Response.ContentType = "text/html;charset=utf-8";
+            Current.Response.ContentType = "text/plain;charset=utf-8";
 
 #if NETSTANDARD2_0
             Task.Run(async () =>
@@ -180,6 +206,7 @@ namespace PaySharp.Core.Utils
             .GetResult();
 #else
             Current.Response.Write(text);
+            Current.Response.End();
 #endif
 
         }
@@ -254,6 +281,12 @@ namespace PaySharp.Core.Utils
         /// <returns></returns>
         public static string Post(string url, string data, X509Certificate2 cert = null)
         {
+            if (url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+            {
+                ServicePointManager.ServerCertificateValidationCallback =
+                        new RemoteCertificateValidationCallback(CheckValidationResult);
+            }
+
             byte[] dataByte = Encoding.UTF8.GetBytes(data);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
@@ -277,6 +310,11 @@ namespace PaySharp.Core.Utils
                     return reader.ReadToEnd().Trim();
                 }
             }
+        }
+
+        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+        {
+            return true;
         }
 
         /// <summary>

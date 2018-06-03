@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../packaging.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
+    <Title>PaySharp.Qpay</Title>
+    <Description>QQ钱包支付</Description>
+    <Version>1.0.2</Version>
+    <PackageTags>dotnetcore;pay;qpay;</PackageTags>
+    <PackageReleaseNotes>
+    </PackageReleaseNotes>
+  </PropertyGroup>
+
+  <Import Project="../../output.props" />
+
+  <Import Project="../../dependencies.props" />
+
+</Project>

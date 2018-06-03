@@ -5,6 +5,8 @@ using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
+using PaySharp.Wechatpay.Request;
+using PaySharp.Wechatpay.Response;
 using System.Threading.Tasks;
 using static PaySharp.Wechatpay.Response.QueryResponse;
 
@@ -54,9 +56,13 @@ namespace PaySharp.Wechatpay
 
         public new Merchant Merchant => _merchant;
 
-        public new Notify Notify => (Notify)base.Notify;
+        public new NotifyResponse NotifyResponse => (NotifyResponse)base.NotifyResponse;
 
-        protected override bool IsSuccessPay => Notify.ResultCode == "SUCCESS";
+        protected override bool IsPaySuccess => NotifyResponse.ResultCode == "SUCCESS" && !string.IsNullOrEmpty(NotifyResponse.TradeType);
+
+        protected override bool IsRefundSuccess => NotifyResponse.RefundStatus == "SUCCESS";
+
+        protected override bool IsCancelSuccess { get; }
 
         protected override string[] NotifyVerifyParameter => new string[]
         {
@@ -69,36 +75,37 @@ namespace PaySharp.Wechatpay
 
         protected override async Task<bool> ValidateNotifyAsync()
         {
-            base.Notify = await GatewayData.ToObjectAsync<Notify>(StringCase.Snake);
+            base.NotifyResponse = await GatewayData.ToObjectAsync<NotifyResponse>(StringCase.Snake);
+            base.NotifyResponse.Raw = GatewayData.Raw;
 
-            if (Notify.ReturnCode != "SUCCESS")
+            if (NotifyResponse.ReturnCode != "SUCCESS")
             {
                 throw new GatewayException("不是成功的返回码");
             }
 
-            if (string.IsNullOrEmpty(Notify.ReqInfo))
+            if (string.IsNullOrEmpty(NotifyResponse.ReqInfo))
             {
-                Notify.Coupons = ConvertUtil.ToList<CouponResponse, object>(GatewayData, -1);
-                if (Notify.Sign != SubmitProcess.BuildSign(GatewayData, _merchant.Key))
+                NotifyResponse.Coupons = ConvertUtil.ToList<CouponResponse, object>(GatewayData, -1);
+                if (NotifyResponse.Sign != SubmitProcess.BuildSign(GatewayData, _merchant.Key))
                 {
                     throw new GatewayException("签名不一致");
                 }
             }
             else
             {
-                var tempNotify = Notify;
+                var tempNotify = NotifyResponse;
                 var key = EncryptUtil.MD5(_merchant.Key).ToLower();
-                var data = EncryptUtil.AESDecrypt(Notify.ReqInfo, key);
+                var data = EncryptUtil.AESDecrypt(NotifyResponse.ReqInfo, key);
                 var gatewayData = new GatewayData();
                 gatewayData.FromXml(data);
-                base.Notify = await gatewayData.ToObjectAsync<Notify>(StringCase.Snake);
-                GatewayData.Add(Notify, StringCase.Snake);
+                base.NotifyResponse = await gatewayData.ToObjectAsync<NotifyResponse>(StringCase.Snake);
+                GatewayData.Add(NotifyResponse, StringCase.Snake);
 
-                Notify.AppId = tempNotify.AppId;
-                Notify.MchId = tempNotify.MchId;
-                Notify.NonceStr = tempNotify.NonceStr;
-                Notify.ReqInfo = tempNotify.ReqInfo;
-                Notify.ReturnCode = tempNotify.ReturnCode;
+                NotifyResponse.AppId = tempNotify.AppId;
+                NotifyResponse.MchId = tempNotify.MchId;
+                NotifyResponse.NonceStr = tempNotify.NonceStr;
+                NotifyResponse.ReqInfo = tempNotify.ReqInfo;
+                NotifyResponse.ReturnCode = tempNotify.ReturnCode;
             }
 
             return true;
@@ -106,18 +113,25 @@ namespace PaySharp.Wechatpay
 
         protected override void WriteSuccessFlag()
         {
+            GatewayData.Clear();
             GatewayData.Add("return_code", "SUCCESS");
             HttpUtil.Write(GatewayData.ToXml());
         }
 
         protected override void WriteFailureFlag()
         {
+            GatewayData.Clear();
             GatewayData.Add("return_code", "FAIL");
             HttpUtil.Write(GatewayData.ToXml());
         }
 
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)
         {
+            if (request is OAuthRequest)
+            {
+                return SubmitProcess.AuthExecute(_merchant, request, GatewayUrl);
+            }
+
             return SubmitProcess.Execute(_merchant, request, GatewayUrl);
         }
 

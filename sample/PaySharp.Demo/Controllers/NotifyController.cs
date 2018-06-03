@@ -1,5 +1,10 @@
-﻿using PaySharp.Core;
+﻿#if NETCOREAPP
 using Microsoft.AspNetCore.Mvc;
+#else
+using System.Web.Mvc;
+#endif
+using PaySharp.Alipay.Response;
+using PaySharp.Core;
 using System.Threading.Tasks;
 
 namespace PaySharp.Demo.Controllers
@@ -16,9 +21,11 @@ namespace PaySharp.Demo.Controllers
         public async Task Index()
         {
             // 订阅支付通知事件
-            PayNotify notify = new PayNotify(_gateways);
+            Notify notify = new Notify(_gateways);
             notify.PaySucceed += Notify_PaySucceed;
-            notify.PayFailed += Notify_PayFailed;
+            notify.RefundSucceed += Notify_RefundSucceed;
+            notify.CancelSucceed += Notify_CancelSucceed;
+            notify.UnknownNotify += Notify_UnknownNotify;
             notify.UnknownGateway += Notify_UnknownGateway;
 
             // 接收并处理支付通知
@@ -34,10 +41,10 @@ namespace PaySharp.Demo.Controllers
              */
             if (e.GatewayType == typeof(Alipay.AlipayGateway))
             {
-                var alipayNotify = (Alipay.Notify)e.Notify;
+                var alipayNotifyResponse = (NotifyResponse)e.NotifyResponse;
 
                 //同步通知，即浏览器跳转返回
-                if(e.NotifyType == NotifyType.Sync)
+                if (e.NotifyType == NotifyType.Sync)
                 {
 
                 }
@@ -47,9 +54,22 @@ namespace PaySharp.Demo.Controllers
             return true;
         }
 
-        private void Notify_PayFailed(object sender, PayFailedEventArgs e)
+        private bool Notify_RefundSucceed(object arg1, RefundSucceedEventArgs arg2)
         {
-            // 支付失败时的处理代码
+            // 订单退款时的处理代码
+            return true;
+        }
+
+        private bool Notify_CancelSucceed(object arg1, CancelSucceedEventArgs arg2)
+        {
+            // 订单撤销时的处理代码
+            return true;
+        }
+
+        private bool Notify_UnknownNotify(object sender, UnKnownNotifyEventArgs e)
+        {
+            // 未知时的处理代码
+            return true;
         }
 
         private void Notify_UnknownGateway(object sender, UnknownGatewayEventArgs e)

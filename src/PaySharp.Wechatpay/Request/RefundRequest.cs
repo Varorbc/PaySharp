@@ -10,9 +10,5 @@ namespace PaySharp.Wechatpay.Request
             RequestUrl = "/secapi/pay/refund";
             IsUseCert = true;
         }
-
-        internal override void Execute(Merchant merchant)
-        {
-        }
     }
 }

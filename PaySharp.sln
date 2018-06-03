@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.UnitTest", "test\P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Demo", "sample\PaySharp.Demo\PaySharp.Demo.csproj", "{8A0208C0-7046-44A7-A67F-DA122AB280A3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Qpay", "src\PaySharp.Qpay\PaySharp.Qpay.csproj", "{E63F24B7-C8EE-4E92-8897-38FB117CE371}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaySharp.Demo(Net)", "sample\PaySharp.Demo(Net)\PaySharp.Demo(Net).csproj", "{C5D9D464-563B-44FC-A115-25889A73CA23}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.AspNetCore", "src\PaySharp.AspNetCore\PaySharp.AspNetCore.csproj", "{E649A330-1B5C-487B-99F7-208248161B8F}"
 EndProject
 Global
@@ -53,6 +57,14 @@ Global
 		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A0208C0-7046-44A7-A67F-DA122AB280A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E63F24B7-C8EE-4E92-8897-38FB117CE371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E63F24B7-C8EE-4E92-8897-38FB117CE371}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E63F24B7-C8EE-4E92-8897-38FB117CE371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E63F24B7-C8EE-4E92-8897-38FB117CE371}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5D9D464-563B-44FC-A115-25889A73CA23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5D9D464-563B-44FC-A115-25889A73CA23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5D9D464-563B-44FC-A115-25889A73CA23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5D9D464-563B-44FC-A115-25889A73CA23}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E649A330-1B5C-487B-99F7-208248161B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E649A330-1B5C-487B-99F7-208248161B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E649A330-1B5C-487B-99F7-208248161B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU

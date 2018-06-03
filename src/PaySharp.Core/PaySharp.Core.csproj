@@ -1,41 +1,32 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../packaging.props" />
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://github.com/Varorbc/PaySharp</PackageProjectUrl>
     <Title>PaySharp.Core</Title>
-    <Authors>Varorbc</Authors>
     <Description>支付核心</Description>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.0.3</Version>
     <PackageTags>dotnetcore;pay;</PackageTags>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/Varorbc/PaySharp</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/Varorbc/PaySharp/blob/master/LICENSE</PackageLicenseUrl>
-    <Copyright>Varorbc</Copyright>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>PaySharp.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-    <DocumentationFile>..\..\output\release\netstandard2.0\PaySharp.Core.xml</DocumentationFile>
-    <NoWarn>1701;1702;1705;1591</NoWarn>
-    <OutputPath>..\..\output\release\</OutputPath>
+    <PackageReleaseNotes>
+      修复WebApi下，无法回复通知
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <Reference Include="System.Web" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.1.0" />
   </ItemGroup>
+
+  <Import Project="../../output.props" />
 
 </Project>

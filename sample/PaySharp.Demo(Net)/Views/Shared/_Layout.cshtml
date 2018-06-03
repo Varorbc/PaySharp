@@ -1,0 +1,16 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/Content/jquery-ui.min.css" asp-append-version="true">
+    @RenderSection("Styles", required: false)
+</head>
+<body style="background-color:#e5eecc;">
+    @RenderBody()
+    <script src="~/Content/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/Content/jquery-ui.min.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
