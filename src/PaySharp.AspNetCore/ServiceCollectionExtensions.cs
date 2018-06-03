@@ -1,4 +1,4 @@
-﻿using PaySharp.AspNetCore.DI;
+﻿using PaySharp.Internal;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
@@ -9,19 +9,28 @@ using PaySharp.AspNetCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// PaySharp 对 <see cref="IServiceCollection"/> 的扩展方法
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
         [EditorBrowsable(EditorBrowsableState.Never)]//先不要让其他人访问
-        public static IServiceCollection AddICanPay(this IServiceCollection services)
+        public static IServiceCollection AddPaySharp(this IServiceCollection services)
         {
             services = services ?? throw new ArgumentNullException(nameof(services));
-            services.AddICanPay(null);
+            AddPaySharp(services, null);
             return services;
         }
 
-        public static IServiceCollection AddICanPay(this IServiceCollection services,Action<IGatewayBuilder> buildAction)
+        /// <summary>
+        /// 添加PaySharp相关服务
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="buildAction"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddPaySharp(this IServiceCollection services,Action<IGatewayBuilder> buildAction)
         {
-            services.TryAddSingleton<IGatewayBuilder, GatewayBuilder>();
+            services.TryAddScoped<IGatewayBuilder, GatewayBuilder>();
             services.TryAddScoped<IKeyValueProvider, HttpContextKeyValueProvider>();
             services.TryAddScoped(svcs =>
             {

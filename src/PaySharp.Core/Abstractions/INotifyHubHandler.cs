@@ -13,7 +13,13 @@ namespace PaySharp.Abstractions
     {
         [Obsolete("似乎没什么用", true)]
         INotifyDataConverter Converter { get; }
-        ProcessResult Process(IPaymentNotifyData notifyData);
+        Task<HandlerResult> ProcessAsync(IKeyValueProvider valueProvider);
+
+        /// <summary>
+        /// 获取失败的<see cref="NotifyResponse"/>
+        /// </summary>
+        /// <returns></returns>
+        Task<NotifyResponse> GetFailedResponseAsync();
 
     }
 
