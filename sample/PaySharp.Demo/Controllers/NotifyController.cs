@@ -12,6 +12,7 @@ namespace PaySharp.Demo.Controllers
     public class NotifyController : Controller
     {
         private readonly IGateways _gateways;
+        private bool isRedirect;
 
         public NotifyController(IGateways gateways)
         {
@@ -30,6 +31,11 @@ namespace PaySharp.Demo.Controllers
 
             // 接收并处理支付通知
             await notify.ReceivedAsync();
+            
+            if (isRedirect)
+            {
+                Response.Redirect("https://github.com/Varorbc/PaySharp");
+            }
         }
 
         private bool Notify_PaySucceed(object sender, PaySucceedEventArgs e)
@@ -46,7 +52,7 @@ namespace PaySharp.Demo.Controllers
                 //同步通知，即浏览器跳转返回
                 if (e.NotifyType == NotifyType.Sync)
                 {
-
+                    isRedirect = true;
                 }
             }
 
