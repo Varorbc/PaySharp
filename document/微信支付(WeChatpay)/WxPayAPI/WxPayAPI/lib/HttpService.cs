@@ -15,6 +15,7 @@ namespace WxPayAPI
     /// </summary>
     public class HttpService
     {
+        private static string USER_AGENT = "WxPayAPI:SecureUserAgent";
 
         public static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
@@ -47,6 +48,7 @@ namespace WxPayAPI
                 * 下面设置HttpWebRequest的相关属性
                 * ************************************************************/
                 request = (HttpWebRequest)WebRequest.Create(url);
+                request.UserAgent = USER_AGENT;
 
                 request.Method = "POST";
                 request.Timeout = timeout * 1000;
@@ -148,7 +150,7 @@ namespace WxPayAPI
                 * 下面设置HttpWebRequest的相关属性
                 * ************************************************************/
                 request = (HttpWebRequest)WebRequest.Create(url);
-
+                request.UserAgent = USER_AGENT;
                 request.Method = "GET";
 
                 //设置代理

@@ -354,7 +354,10 @@ namespace PaySharp.Core
                 Clear();
                 if (!string.IsNullOrEmpty(xml))
                 {
-                    var xmlDoc = new XmlDocument();
+                    var xmlDoc = new XmlDocument()
+                    {
+                        XmlResolver = null
+                    };
                     xmlDoc.LoadXml(xml);
                     var xmlElement = xmlDoc.DocumentElement;
                     var nodes = xmlElement.ChildNodes;
