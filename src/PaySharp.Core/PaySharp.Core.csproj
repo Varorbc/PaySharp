@@ -6,10 +6,10 @@
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <Title>PaySharp.Core</Title>
     <Description>支付核心</Description>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <PackageTags>dotnetcore;pay;</PackageTags>
     <PackageReleaseNotes>
-      修复XXE漏洞
+      修复.Net环境下,ip带端口的问题
     </PackageReleaseNotes>
   </PropertyGroup>
 

@@ -39,8 +39,8 @@ namespace PaySharp.Core.Utils
             {
                 var ipAddress = Current.Connection.LocalIpAddress;
                 return IPAddress.IsLoopback(ipAddress) ?
-                    IPAddress.Loopback.ToString() :
-                    ipAddress.MapToIPv4().ToString();
+                       IPAddress.Loopback.ToString() :
+                       ipAddress.MapToIPv4().ToString();
             }
         }
 
@@ -53,8 +53,8 @@ namespace PaySharp.Core.Utils
             {
                 var ipAddress = Current.Connection.RemoteIpAddress;
                 return IPAddress.IsLoopback(ipAddress) ?
-                    IPAddress.Loopback.ToString() :
-                    ipAddress.MapToIPv4().ToString();
+                       IPAddress.Loopback.ToString() :
+                       ipAddress.MapToIPv4().ToString();
             }
         }
 
@@ -113,10 +113,18 @@ namespace PaySharp.Core.Utils
         {
             get
             {
-                var ipAddress = IPAddress.Parse(Current.Request.UserHostAddress);
-                return IPAddress.IsLoopback(ipAddress) ?
-                    IPAddress.Loopback.ToString() :
-                    ipAddress.MapToIPv4().ToString();
+                try
+                {
+                    var ip = Current.Request.UserHostAddress;
+                    var ipAddress = IPAddress.Parse(ip.Split(':')[0]);
+                    return IPAddress.IsLoopback(ipAddress) ?
+                           IPAddress.Loopback.ToString() :
+                           ipAddress.MapToIPv4().ToString();
+                }
+                catch
+                {
+                    return IPAddress.Loopback.ToString();
+                }
             }
         }
 
@@ -127,12 +135,19 @@ namespace PaySharp.Core.Utils
         {
             get
             {
-                var ipAddress = IPAddress.Parse(
-                    Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] ??
-                    Current.Request.ServerVariables["REMOTE_ADDR"]);
-                return IPAddress.IsLoopback(ipAddress) ?
-                    IPAddress.Loopback.ToString() :
-                    ipAddress.MapToIPv4().ToString();
+                try
+                {
+                    var ip = Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] ??
+                             Current.Request.ServerVariables["REMOTE_ADDR"];
+                    var ipAddress = IPAddress.Parse(ip.Split(':')[0]);
+                    return IPAddress.IsLoopback(ipAddress) ?
+                           IPAddress.Loopback.ToString() :
+                           ipAddress.MapToIPv4().ToString();
+                }
+                catch
+                {
+                    return IPAddress.Loopback.ToString();
+                }
             }
         }
 
