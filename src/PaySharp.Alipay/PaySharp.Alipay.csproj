@@ -6,11 +6,10 @@
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <Title>PaySharp.Alipay</Title>
     <Description>支付宝支付</Description>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <PackageTags>dotnetcore;pay;alipay;</PackageTags>
     <PackageReleaseNotes>
-      1.Net环境添加通过配置文件注册方式
-      2.修改Core下配置方式
+      增加退款异步通知
     </PackageReleaseNotes>
   </PropertyGroup>
 
