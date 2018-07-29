@@ -35,7 +35,7 @@ namespace Aop.Api.Domain
         public string BuyerLogonId { get; set; }
 
         /// <summary>
-        /// 禁用渠道，用户不可用指定渠道支付  当有多个渠道时用“,”分隔  注，与enable_pay_channels互斥
+        /// 禁用渠道，用户不可用指定渠道支付  当有多个渠道时用“,”分隔  注，与enable_pay_channels互斥  渠道列表：https://docs.open.alipay.com/common/wifww7
         /// </summary>
         [XmlElement("disable_pay_channels")]
         public string DisablePayChannels { get; set; }
@@ -47,7 +47,7 @@ namespace Aop.Api.Domain
         public string DiscountableAmount { get; set; }
 
         /// <summary>
-        /// 可用渠道，用户只能在指定渠道范围内支付  当有多个渠道时用“,”分隔  注，与disable_pay_channels互斥
+        /// 可用渠道，用户只能在指定渠道范围内支付  当有多个渠道时用“,”分隔  注，与disable_pay_channels互斥  <a href="https://docs.open.alipay.com/common/wifww7">渠道列表</a>
         /// </summary>
         [XmlElement("enable_pay_channels")]
         public string EnablePayChannels { get; set; }
@@ -65,7 +65,7 @@ namespace Aop.Api.Domain
         public ExtendParams ExtendParams { get; set; }
 
         /// <summary>
-        /// 订单包含的商品列表信息.Json格式. 其它说明详见：“商品明细说明”
+        /// 订单包含的商品列表信息.json格式. 其它说明详见：“商品明细说明”
         /// </summary>
         [XmlArray("goods_detail")]
         [XmlArrayItem("goods_detail")]
@@ -100,6 +100,12 @@ namespace Aop.Api.Domain
         /// </summary>
         [XmlElement("seller_id")]
         public string SellerId { get; set; }
+
+        /// <summary>
+        /// 描述结算信息，json格式，详见结算参数说明
+        /// </summary>
+        [XmlElement("settle_info")]
+        public SettleInfo SettleInfo { get; set; }
 
         /// <summary>
         /// 商户门店编号

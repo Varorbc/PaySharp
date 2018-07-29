@@ -42,10 +42,23 @@ namespace Aop.Api.Domain
         public string RefundAmount { get; set; }
 
         /// <summary>
+        /// 订单退款币种信息
+        /// </summary>
+        [XmlElement("refund_currency")]
+        public string RefundCurrency { get; set; }
+
+        /// <summary>
         /// 退款的原因说明
         /// </summary>
         [XmlElement("refund_reason")]
         public string RefundReason { get; set; }
+
+        /// <summary>
+        /// 退分账明细信息
+        /// </summary>
+        [XmlArray("refund_royalty_parameters")]
+        [XmlArrayItem("open_api_royalty_detail_info_pojo")]
+        public List<OpenApiRoyaltyDetailInfoPojo> RefundRoyaltyParameters { get; set; }
 
         /// <summary>
         /// 商户的门店编号

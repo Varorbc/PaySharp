@@ -10,6 +10,12 @@ namespace Aop.Api.Domain
     public class AlipayTradeRefundApplyModel : AopObject
     {
         /// <summary>
+        /// 商户传入业务信息，具体值要和支付宝约定，格式为json格式。  医保退款场景下，DESIGNATED_REFUND_ASSET为INNER_ASSET表示只退自费部分，DESIGNATED_REFUND_ASSET为OUTSIDE_ASSET表示只退医保部分，医保部分不支持部分退。退医保资金必需传cancel_bill_no和cancel_serial_no。
+        /// </summary>
+        [XmlElement("extend_params")]
+        public string ExtendParams { get; set; }
+
+        /// <summary>
         /// 商户的操作员编号
         /// </summary>
         [XmlElement("operator_id")]

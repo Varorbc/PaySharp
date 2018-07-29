@@ -10,6 +10,12 @@ namespace Aop.Api.Domain
     public class ExtendParams : AopObject
     {
         /// <summary>
+        /// 卡类型
+        /// </summary>
+        [XmlElement("card_type")]
+        public string CardType { get; set; }
+
+        /// <summary>
         /// 使用花呗分期要进行的分期数
         /// </summary>
         [XmlElement("hb_fq_num")]
@@ -20,6 +26,12 @@ namespace Aop.Api.Domain
         /// </summary>
         [XmlElement("hb_fq_seller_percent")]
         public string HbFqSellerPercent { get; set; }
+
+        /// <summary>
+        /// 行业数据回流信息, 详见：地铁支付接口参数补充说明
+        /// </summary>
+        [XmlElement("industry_reflux_info")]
+        public string IndustryRefluxInfo { get; set; }
 
         /// <summary>
         /// 系统商编号  该参数作为系统商返佣数据提取的依据，请填写系统商签约协议的PID

@@ -1,10 +1,11 @@
-﻿using Aop.Api.Request;
-using Aop.Api.Util;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Serialization;
+using Jayrock.Json.Conversion;
+using Aop.Api.Request;
+using Aop.Api.Util;
 
 namespace Aop.Api.Parser
 {
@@ -20,7 +21,7 @@ namespace Aop.Api.Parser
         {
             T rsp = null;
 
-            IDictionary json = AopUtils.ParseJson(body);
+            IDictionary json = JsonConvert.Import(body) as IDictionary;
             if (json != null)
             {
                 IDictionary data = null;
@@ -205,7 +206,7 @@ namespace Aop.Api.Parser
 
         private static string GetSign(string body)
         {
-            IDictionary json = AopUtils.ParseJson(body);
+            IDictionary json = JsonConvert.Import(body) as IDictionary;
             Console.WriteLine(json);
             return (string)json["sign"];
         }
