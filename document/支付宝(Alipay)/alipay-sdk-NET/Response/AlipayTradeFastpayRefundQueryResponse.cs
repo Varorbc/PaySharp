@@ -1,5 +1,7 @@
 using System;
 using System.Xml.Serialization;
+using System.Collections.Generic;
+using Aop.Api.Domain;
 
 namespace Aop.Api.Response
 {
@@ -8,6 +10,12 @@ namespace Aop.Api.Response
     /// </summary>
     public class AlipayTradeFastpayRefundQueryResponse : AopResponse
     {
+        /// <summary>
+        /// 退款失败错误码。只在使用异步退款接口情况下才会返回该字段
+        /// </summary>
+        [XmlElement("error_code")]
+        public string ErrorCode { get; set; }
+
         /// <summary>
         /// 行业特殊信息（例如在医保卡支付退款中，医保局向商户返回医疗信息）。
         /// </summary>
@@ -55,6 +63,19 @@ namespace Aop.Api.Response
         /// </summary>
         [XmlElement("refund_reason")]
         public string RefundReason { get; set; }
+
+        /// <summary>
+        /// 退分账明细信息
+        /// </summary>
+        [XmlArray("refund_royaltys")]
+        [XmlArrayItem("refund_royalty_result")]
+        public List<RefundRoyaltyResult> RefundRoyaltys { get; set; }
+
+        /// <summary>
+        /// 只在使用异步退款接口情况下才返回该字段。REFUND_PROCESSING 退款处理中；REFUND_SUCCESS 退款处理成功；REFUND_FAIL 退款失败;
+        /// </summary>
+        [XmlElement("refund_status")]
+        public string RefundStatus { get; set; }
 
         /// <summary>
         /// 该笔退款所对应的交易的订单金额

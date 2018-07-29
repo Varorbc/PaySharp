@@ -82,7 +82,7 @@ namespace Aop.Api.Domain
         public string PromoParams { get; set; }
 
         /// <summary>
-        /// 描述分账信息，Json格式，详见分账参数说明
+        /// 描述分账信息，json格式，详见分账参数说明
         /// </summary>
         [XmlElement("royalty_info")]
         public RoyaltyInfo RoyaltyInfo { get; set; }
@@ -92,6 +92,12 @@ namespace Aop.Api.Domain
         /// </summary>
         [XmlElement("seller_id")]
         public string SellerId { get; set; }
+
+        /// <summary>
+        /// 描述结算信息，json格式，详见结算参数说明
+        /// </summary>
+        [XmlElement("settle_info")]
+        public SettleInfo SettleInfo { get; set; }
 
         /// <summary>
         /// 指定渠道，目前仅支持传入pcredit  若由于用户原因渠道不可用，用户可选择是否用其他渠道支付。  注：该参数不可与花呗分期参数同时传入

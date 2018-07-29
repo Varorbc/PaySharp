@@ -29,6 +29,12 @@ namespace Aop.Api.Domain
         public string AuthCode { get; set; }
 
         /// <summary>
+        /// 预授权确认模式，授权转交易请求中传入，适用于预授权转交易业务使用，目前只支持PRE_AUTH(预授权产品码)  COMPLETE：转交易支付完成结束预授权，解冻剩余金额; NOT_COMPLETE：转交易支付完成不结束预授权，不解冻剩余金额
+        /// </summary>
+        [XmlElement("auth_confirm_mode")]
+        public string AuthConfirmMode { get; set; }
+
+        /// <summary>
         /// 预授权号，预授权转交易请求中传入，适用于预授权转交易业务使用，目前只支持FUND_TRADE_FAST_PAY（资金订单即时到帐交易）、境外预授权产品（OVERSEAS_AUTH_PAY）两个产品。
         /// </summary>
         [XmlElement("auth_no")]
@@ -77,7 +83,7 @@ namespace Aop.Api.Domain
         public ExtendParams ExtendParams { get; set; }
 
         /// <summary>
-        /// 订单包含的商品列表信息，Json格式，其它说明详见商品明细说明
+        /// 订单包含的商品列表信息，json格式，其它说明详见商品明细说明
         /// </summary>
         [XmlArray("goods_detail")]
         [XmlArrayItem("goods_detail")]
@@ -108,7 +114,7 @@ namespace Aop.Api.Domain
         public string ProductCode { get; set; }
 
         /// <summary>
-        /// 描述分账信息，Json格式，其它说明详见分账说明
+        /// 描述分账信息，json格式，其它说明详见分账说明
         /// </summary>
         [XmlElement("royalty_info")]
         public RoyaltyInfo RoyaltyInfo { get; set; }
@@ -124,6 +130,18 @@ namespace Aop.Api.Domain
         /// </summary>
         [XmlElement("seller_id")]
         public string SellerId { get; set; }
+
+        /// <summary>
+        /// 商户指定的结算币种，支持英镑：GBP、港币：HKD、美元：USD、新加坡元：SGD、日元：JPY、加拿大元：CAD、澳元：AUD、欧元：EUR、新西兰元：NZD、韩元：KRW、泰铢：THB、瑞士法郎：CHF、瑞典克朗：SEK、丹麦克朗：DKK、挪威克朗：NOK、马来西亚林吉特：MYR、印尼卢比：IDR、菲律宾比索：PHP、毛里求斯卢比：MUR、以色列新谢克尔：ILS、斯里兰卡卢比：LKR、俄罗斯卢布：RUB、阿联酋迪拉姆：AED、捷克克朗：CZK、南非兰特：ZAR、人民币：CNY
+        /// </summary>
+        [XmlElement("settle_currency")]
+        public string SettleCurrency { get; set; }
+
+        /// <summary>
+        /// 描述结算信息，json格式，详见结算参数说明
+        /// </summary>
+        [XmlElement("settle_info")]
+        public SettleInfo SettleInfo { get; set; }
 
         /// <summary>
         /// 商户门店编号
@@ -150,6 +168,12 @@ namespace Aop.Api.Domain
         public string TerminalId { get; set; }
 
         /// <summary>
+        /// 商户传入终端设备相关信息，具体值要和支付宝约定
+        /// </summary>
+        [XmlElement("terminal_params")]
+        public string TerminalParams { get; set; }
+
+        /// <summary>
         /// 该笔订单允许的最晚付款时间，逾期将关闭交易。取值范围：1m～15d。m-分钟，h-小时，d-天，1c-当天（1c-当天的情况下，无论交易何时创建，都在0点关闭）。 该参数数值不接受小数点， 如 1.5h，可转换为 90m
         /// </summary>
         [XmlElement("timeout_express")]
@@ -160,6 +184,12 @@ namespace Aop.Api.Domain
         /// </summary>
         [XmlElement("total_amount")]
         public string TotalAmount { get; set; }
+
+        /// <summary>
+        /// 标价币种,  total_amount 对应的币种单位。支持英镑：GBP、港币：HKD、美元：USD、新加坡元：SGD、日元：JPY、加拿大元：CAD、澳元：AUD、欧元：EUR、新西兰元：NZD、韩元：KRW、泰铢：THB、瑞士法郎：CHF、瑞典克朗：SEK、丹麦克朗：DKK、挪威克朗：NOK、马来西亚林吉特：MYR、印尼卢比：IDR、菲律宾比索：PHP、毛里求斯卢比：MUR、以色列新谢克尔：ILS、斯里兰卡卢比：LKR、俄罗斯卢布：RUB、阿联酋迪拉姆：AED、捷克克朗：CZK、南非兰特：ZAR、人民币：CNY
+        /// </summary>
+        [XmlElement("trans_currency")]
+        public string TransCurrency { get; set; }
 
         /// <summary>
         /// 不参与优惠计算的金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]。如果该值未传入，但传入了【订单总金额】和【可打折金额】，则该值默认为【订单总金额】-【可打折金额】

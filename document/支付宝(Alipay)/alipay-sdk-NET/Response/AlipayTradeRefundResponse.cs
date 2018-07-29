@@ -65,6 +65,12 @@ namespace Aop.Api.Response
         public string PresentRefundMdiscountAmount { get; set; }
 
         /// <summary>
+        /// 退款币种信息
+        /// </summary>
+        [XmlElement("refund_currency")]
+        public string RefundCurrency { get; set; }
+
+        /// <summary>
         /// 退款使用的资金渠道
         /// </summary>
         [XmlArray("refund_detail_item_list")]
