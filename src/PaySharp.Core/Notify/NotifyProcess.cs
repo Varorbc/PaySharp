@@ -92,11 +92,9 @@ namespace PaySharp.Core
             {
                 if (IsXmlData)
                 {
-                    using (var reader = new StreamReader(HttpUtil.Body))
-                    {
-                        string xmlData = reader.ReadToEnd();
-                        gatewayData.FromXml(xmlData);
-                    }
+                    var reader = new StreamReader(HttpUtil.Body);
+                    var xmlData = reader.ReadToEnd();
+                    gatewayData.FromXml(xmlData);
                 }
                 else
                 {

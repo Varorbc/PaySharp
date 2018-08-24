@@ -6,10 +6,9 @@
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <Title>PaySharp.Core</Title>
     <Description>支付核心</Description>
-    <Version>1.0.3</Version>
+    <Version>1.0.6</Version>
     <PackageTags>dotnetcore;pay;</PackageTags>
     <PackageReleaseNotes>
-      修复WebApi下，无法回复通知
     </PackageReleaseNotes>
   </PropertyGroup>
 

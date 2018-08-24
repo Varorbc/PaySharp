@@ -108,6 +108,7 @@
     <Compile Include="lib\Exception.cs" />
     <Compile Include="lib\Log.cs" />
     <Compile Include="lib\Notify.cs" />
+    <Compile Include="lib\SafeXmlDocument.cs" />
     <Compile Include="lib\WxPayApi.cs" />
     <Compile Include="example\MicroPayPage.aspx.cs">
       <DependentUpon>MicroPayPage.aspx</DependentUpon>

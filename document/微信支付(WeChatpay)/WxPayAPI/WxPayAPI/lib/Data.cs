@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
-using System.Xml;
+﻿using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-using LitJson;
+using System.Xml;
+using WxPayAPI.lib;
 
 namespace WxPayAPI
 {
@@ -117,7 +115,7 @@ namespace WxPayAPI
                 throw new WxPayException("将空的xml串转换为WxPayData不合法!");
             }
 
-            XmlDocument xmlDoc = new XmlDocument();
+            SafeXmlDocument xmlDoc = new SafeXmlDocument();
             xmlDoc.LoadXml(xml);
             XmlNode xmlNode = xmlDoc.FirstChild;//获取到根节点<xml>
             XmlNodeList nodes = xmlNode.ChildNodes;
