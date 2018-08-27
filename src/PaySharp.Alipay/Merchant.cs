@@ -1,11 +1,17 @@
 ﻿using PaySharp.Core;
+using PaySharp.Abstractions;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace PaySharp.Alipay
 {
-    public class Merchant : IMerchant
+    public class Merchant : IMerchant,IPaySharpOption
     {
+        private string _name;
+        public string Name {
+            get => _name ?? AppId;
+            set => _name = value;
+        }
         #region 属性
 
         /// <summary>
