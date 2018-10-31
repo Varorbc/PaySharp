@@ -25,7 +25,7 @@ namespace PaySharp.Wechatpay
             X509Certificate2 cert = null;
             if (((BaseRequest<TModel, TResponse>)request).IsUseCert)
             {
-                cert = new X509Certificate2(merchant.SslCertPath, merchant.SslCertPassword);
+                cert = new X509Certificate2(merchant.SslCertPath, merchant.SslCertPassword, X509KeyStorageFlags.MachineKeySet);
             }
 
             string result = null;
