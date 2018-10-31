@@ -6,9 +6,10 @@
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <Title>PaySharp.Wechatpay</Title>
     <Description>微信支付</Description>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <PackageTags>dotnetcore;pay;wechatpay;</PackageTags>
     <PackageReleaseNotes>
+      修复Azure下证书无法使用的问题
     </PackageReleaseNotes>
   </PropertyGroup>
 
