@@ -10,14 +10,7 @@ namespace PaySharp.Wechatpay
 {
     internal static class ConvertUtil
     {
-        /// <summary>
-        /// 递归获取微信返回值列表
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TChildren"></typeparam>
-        /// <param name="gatewayData"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
+
         public static List<T> ToList<T, TChildren>(GatewayData gatewayData, int index) where T:new() where TChildren:new()
         {
             var flag = true;
@@ -73,6 +66,7 @@ namespace PaySharp.Wechatpay
 
             return list;
         }
+
         /// <summary>
         /// 获取字段json中的名字
         /// </summary>
@@ -93,6 +87,7 @@ namespace PaySharp.Wechatpay
 
             return key;
         }
+
         /// <summary>
         /// 将微信返回值特殊格式转化为列表
         /// </summary>
@@ -118,6 +113,7 @@ namespace PaySharp.Wechatpay
             }
             return list;
         }
+
         /// <summary>
         /// 将微信返回值特殊格式转化为列表(二级)
         /// </summary>
