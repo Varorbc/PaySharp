@@ -19,7 +19,6 @@ namespace PaySharp.Wechatpay
             while (flag)
             {
                 var type = typeof(T);
-                //var obj = Activator.CreateInstance(type);
                 var obj = new T();
                 var properties = type.GetProperties();
                 var isFirstProperty = true;

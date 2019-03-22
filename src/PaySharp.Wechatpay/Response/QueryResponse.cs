@@ -123,7 +123,6 @@ namespace PaySharp.Wechatpay.Response
 
         internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
-            //Coupons = ConvertUtil.ToList<CouponResponse, object>(GatewayData, -1);
             Coupons = ConvertUtil.ToList<CouponResponse>(GatewayData);
         }
 

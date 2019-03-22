@@ -85,7 +85,6 @@ namespace PaySharp.Wechatpay
 
             if (string.IsNullOrEmpty(NotifyResponse.ReqInfo))
             {
-                //NotifyResponse.Coupons = ConvertUtil.ToList<CouponResponse, object>(GatewayData, -1);
                 NotifyResponse.Coupons = ConvertUtil.ToList<CouponResponse>(GatewayData);
                 if (NotifyResponse.Sign != SubmitProcess.BuildSign(GatewayData, _merchant.Key))
                 {
