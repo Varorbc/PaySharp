@@ -115,6 +115,7 @@ namespace PaySharp.Wechatpay
         {
             GatewayData.Clear();
             GatewayData.Add("return_code", "SUCCESS");
+            GatewayData.Add("return_msg", "OK");
             HttpUtil.Write(GatewayData.ToXml());
         }
 
