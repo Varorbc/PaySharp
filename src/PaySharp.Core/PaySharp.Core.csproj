@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../../packaging.props" />
+  <Import Project="../../package.props" />
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <Title>PaySharp.Core</Title>
     <Description>支付核心</Description>
-    <Version>1.0.6</Version>
     <PackageTags>dotnetcore;pay;</PackageTags>
     <PackageReleaseNotes>
     </PackageReleaseNotes>

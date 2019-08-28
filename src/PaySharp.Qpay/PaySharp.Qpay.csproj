@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../../packaging.props" />
+  <Import Project="../../package.props" />
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <Title>PaySharp.Qpay</Title>
     <Description>QQ钱包支付</Description>
-    <Version>1.0.3</Version>
     <PackageTags>dotnetcore;pay;qpay;</PackageTags>
     <PackageReleaseNotes>
       修复Azure下证书无法使用的问题

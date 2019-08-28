@@ -1,14 +1,23 @@
 <Project>
+
   <PropertyGroup>
+    <Version>1.0.7</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Varorbc/PaySharp</PackageProjectUrl>
     <Authors>Varorbc</Authors>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Varorbc/PaySharp</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/Varorbc/PaySharp/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Varorbc</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>PaySharp.snk</AssemblyOriginatorKeyFile>
     <PackageIconUrl>https://github.com/Varorbc/PaySharp/raw/master/logo.png</PackageIconUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19351-01" PrivateAssets="All"/>
+  </ItemGroup>
+  
 </Project>

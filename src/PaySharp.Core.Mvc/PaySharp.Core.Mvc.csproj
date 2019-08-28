@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../../packaging.props" />
+  <Import Project="../../package.props" />
 
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
     <Title>PaySharp.Core.Mvc</Title>
     <Description>Mvc</Description>
-    <Version>1.0.1</Version>
     <PackageTags>dotnetcore;pay;</PackageTags>
     <PackageReleaseNotes>修改命名空间</PackageReleaseNotes>
   </PropertyGroup>

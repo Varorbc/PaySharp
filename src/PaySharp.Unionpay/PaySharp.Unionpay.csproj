@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../../packaging.props" />
+  <Import Project="../../package.props" />
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <Title>PaySharp.Unionpay</Title>
     <Description>银联支付</Description>
-    <Version>1.0.3</Version>
     <PackageTags>dotnetcore;pay;unionpay;</PackageTags>
     <PackageReleaseNotes>
       更新SharpZipLib
