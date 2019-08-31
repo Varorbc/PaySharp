@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
-MinimumVisualStudioVersion = 10.0.40219.1
+MinimumVisualStudioVersion = 15.0.27130.2010
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Unionpay", "src\PaySharp.Unionpay\PaySharp.Unionpay.csproj", "{E6D5C3A8-E2F8-491A-9535-9334BA0BC125}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Alipay", "src\PaySharp.Alipay\PaySharp.Alipay.csproj", "{9E981637-175D-44E3-B388-11D4389051A1}"
