@@ -64,7 +64,7 @@ namespace PaySharp.Wechatpay.Response
 
         internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
-            Refunds = ConvertUtil.ToList<RefundResponse, RefundCouponResponse>(GatewayData, -1);
+            Refunds = ConvertUtil.ToList<RefundResponse, RefundCouponResponse>(GatewayData);
         }
 
         public class RefundResponse
