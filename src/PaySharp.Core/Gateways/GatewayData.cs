@@ -1,9 +1,6 @@
 ﻿#if NETCOREAPP3_0
 using Microsoft.AspNetCore.Http;
 #endif
-using PaySharp.Core.Utils;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -14,6 +11,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using PaySharp.Core.Utils;
 
 namespace PaySharp.Core
 {
@@ -36,20 +36,11 @@ namespace PaySharp.Core
             set => _values[key] = value;
         }
 
-        public SortedDictionary<string, object>.KeyCollection Keys
-        {
-            get => _values.Keys;
-        }
+        public SortedDictionary<string, object>.KeyCollection Keys => _values.Keys;
 
-        public SortedDictionary<string, object>.ValueCollection Values
-        {
-            get => _values.Values;
-        }
+        public SortedDictionary<string, object>.ValueCollection Values => _values.Values;
 
-        public KeyValuePair<string, object> this[int index]
-        {
-            get => _values.ElementAt(index);
-        }
+        public KeyValuePair<string, object> this[int index] => _values.ElementAt(index);
 
         public int Count => _values.Count;
 
@@ -145,7 +136,6 @@ namespace PaySharp.Core
                     }
 
                     string key;
-                    object value;
                     var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
                     if (renameAttribute.Length > 0)
                     {
@@ -167,18 +157,12 @@ namespace PaySharp.Core
                         }
                     }
 
-                    switch (item.MemberType)
+                    var value = item.MemberType switch
                     {
-                        case MemberTypes.Field:
-                            value = ((FieldInfo)item).GetValue(obj);
-                            break;
-                        case MemberTypes.Property:
-                            value = ((PropertyInfo)item).GetValue(obj);
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
-
+                        MemberTypes.Field => ((FieldInfo)item).GetValue(obj),
+                        MemberTypes.Property => ((PropertyInfo)item).GetValue(obj),
+                        _ => throw new NotImplementedException(),
+                    };
                     if (value is null || string.IsNullOrEmpty(value.ToString()))
                     {
                         continue;
@@ -203,7 +187,7 @@ namespace PaySharp.Core
         /// <returns>参数值</returns>
         public object GetValue(string key)
         {
-            _values.TryGetValue(key, out object value);
+            _values.TryGetValue(key, out var value);
             return value;
         }
 
@@ -224,7 +208,7 @@ namespace PaySharp.Core
         /// <returns>参数值</returns>
         public double GetDoubleValue(string key)
         {
-            double.TryParse(GetStringValue(key), out double value);
+            double.TryParse(GetStringValue(key), out var value);
             return value;
         }
 
@@ -235,7 +219,7 @@ namespace PaySharp.Core
         /// <returns>参数值</returns>
         public int GetIntValue(string key)
         {
-            int.TryParse(GetStringValue(key), out int value);
+            int.TryParse(GetStringValue(key), out var value);
             return value;
         }
 
@@ -246,7 +230,7 @@ namespace PaySharp.Core
         /// <returns>参数值</returns>
         public DateTime GetDateTimeValue(string key)
         {
-            DateTime.TryParse(GetStringValue(key), out DateTime value);
+            DateTime.TryParse(GetStringValue(key), out var value);
             return value;
         }
 
@@ -257,7 +241,7 @@ namespace PaySharp.Core
         /// <returns>参数值</returns>
         public float GetFloatValue(string key)
         {
-            float.TryParse(GetStringValue(key), out float value);
+            float.TryParse(GetStringValue(key), out var value);
             return value;
         }
 
@@ -268,7 +252,7 @@ namespace PaySharp.Core
         /// <returns>参数值</returns>
         public decimal GetDecimalValue(string key)
         {
-            decimal.TryParse(GetStringValue(key), out decimal value);
+            decimal.TryParse(GetStringValue(key), out var value);
             return value;
         }
 
@@ -279,7 +263,7 @@ namespace PaySharp.Core
         /// <returns>参数值</returns>
         public byte GetByteValue(string key)
         {
-            byte.TryParse(GetStringValue(key), out byte value);
+            byte.TryParse(GetStringValue(key), out var value);
             return value;
         }
 
@@ -290,7 +274,7 @@ namespace PaySharp.Core
         /// <returns>参数值</returns>
         public char GetCharValue(string key)
         {
-            char.TryParse(GetStringValue(key), out char value);
+            char.TryParse(GetStringValue(key), out var value);
             return value;
         }
 
@@ -301,7 +285,7 @@ namespace PaySharp.Core
         /// <returns>参数值</returns>
         public bool GetBoolValue(string key)
         {
-            bool.TryParse(GetStringValue(key), out bool value);
+            bool.TryParse(GetStringValue(key), out var value);
             return value;
         }
 
@@ -399,7 +383,7 @@ namespace PaySharp.Core
                 Clear();
                 if (!string.IsNullOrEmpty(url))
                 {
-                    int index = url.IndexOf('?');
+                    var index = url.IndexOf('?');
 
                     if (index == 0)
                     {
@@ -411,7 +395,7 @@ namespace PaySharp.Core
 
                     foreach (Match item in mc)
                     {
-                        string value = item.Result("$3");
+                        var value = item.Result("$3");
                         Add(item.Result("$2"), isUrlDecode ? WebUtility.UrlDecode(value) : value);
                     }
                 }

@@ -1,7 +1,7 @@
-﻿using PaySharp.Core;
-using PaySharp.Core.Utils;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using PaySharp.Core;
+using PaySharp.Core.Utils;
 
 namespace PaySharp.Qpay.Domain
 {

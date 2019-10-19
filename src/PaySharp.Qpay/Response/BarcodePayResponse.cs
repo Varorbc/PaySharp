@@ -1,8 +1,8 @@
-﻿using PaySharp.Core.Request;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using PaySharp.Core.Request;
 using PaySharp.Qpay.Domain;
 using PaySharp.Qpay.Request;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PaySharp.Qpay.Response
 {
@@ -58,7 +58,7 @@ namespace PaySharp.Qpay.Response
         /// <returns></returns>
         private QueryResponse PollQueryTradeState(string outTradeNo, int pollTime, int pollCount)
         {
-            for (int i = 0; i < pollCount; i++)
+            for (var i = 0; i < pollCount; i++)
             {
                 var queryRequest = new QueryRequest();
                 queryRequest.AddGatewayData(new QueryModel

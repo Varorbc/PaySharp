@@ -1,7 +1,7 @@
-﻿using PaySharp.Core;
+﻿using System;
+using PaySharp.Core;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
-using System;
 
 namespace PaySharp.Wechatpay.Response
 {
@@ -33,8 +33,8 @@ namespace PaySharp.Wechatpay.Response
                 gatewayData.Add("package", $"prepay_id={PrepayId}");
                 gatewayData.Add("signType", "MD5");
 
-                string data = $"{gatewayData.ToUrl(false)}&key={merchant.Key}";
-                string sign = EncryptUtil.MD5(data);
+                var data = $"{gatewayData.ToUrl(false)}&key={merchant.Key}";
+                var sign = EncryptUtil.MD5(data);
                 gatewayData.Add("paySign", sign);
 
                 OrderInfo = gatewayData.ToJson();

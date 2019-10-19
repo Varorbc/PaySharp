@@ -1,13 +1,13 @@
 ﻿#if NETCOREAPP3_0
 using Microsoft.Extensions.Options;
 #endif
+using System;
+using System.Threading.Tasks;
 using PaySharp.Core;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
 using PaySharp.Unionpay.Request;
 using PaySharp.Unionpay.Response;
-using System;
-using System.Threading.Tasks;
 
 namespace PaySharp.Unionpay
 {
@@ -78,14 +78,9 @@ namespace PaySharp.Unionpay
             base.NotifyResponse = await GatewayData.ToObjectAsync<NotifyResponse>(StringCase.Camel);
             base.NotifyResponse.Raw = GatewayData.ToUrl(false);
 
-            GatewayData gatewayData = new GatewayData(StringComparer.Ordinal);
+            var gatewayData = new GatewayData(StringComparer.Ordinal);
             gatewayData.FromUrl(NotifyResponse.Raw, false);
-            if (SubmitProcess.CheckSign(gatewayData, NotifyResponse.Sign, NotifyResponse.SignPubKeyCert))
-            {
-                return true;
-            }
-
-            return false;
+            return SubmitProcess.CheckSign(gatewayData, NotifyResponse.Sign, NotifyResponse.SignPubKeyCert);
         }
 
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)

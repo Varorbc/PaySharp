@@ -1,8 +1,8 @@
-﻿using PaySharp.Core.Exceptions;
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using PaySharp.Core.Exceptions;
 
 namespace PaySharp.Core.Utils
 {
@@ -137,14 +137,14 @@ namespace PaySharp.Core.Utils
         {
             try
             {
-                string sPublicKeyPEM = publicKeyPem;
+                var sPublicKeyPEM = publicKeyPem;
 
                 if (keyFromFile)
                 {
                     sPublicKeyPEM = File.ReadAllText(publicKeyPem);
                 }
                 var rsa = CreateRsaProviderFromPublicKey(sPublicKeyPEM, signType);
-                bool bVerifyResultOriginal = false;
+                var bVerifyResultOriginal = false;
 
                 if ("RSA2".Equals(signType))
                 {
@@ -179,118 +179,114 @@ namespace PaySharp.Core.Utils
         private static RSA CreateRsaProviderFromPublicKey(string publicKeyString, string signType)
         {
             byte[] seqOid = { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 };
-            byte[] seq = new byte[15];
+            var seq = new byte[15];
 
             var x509Key = Convert.FromBase64String(publicKeyString);
-            using (MemoryStream mem = new MemoryStream(x509Key))
+            using var mem = new MemoryStream(x509Key);
+            using var binr = new BinaryReader(mem);
+            byte bt = 0;
+            ushort twobytes = 0;
+
+            twobytes = binr.ReadUInt16();
+            if (twobytes == 0x8130)
             {
-                using (BinaryReader binr = new BinaryReader(mem))
-                {
-                    byte bt = 0;
-                    ushort twobytes = 0;
-
-                    twobytes = binr.ReadUInt16();
-                    if (twobytes == 0x8130)
-                    {
-                        binr.ReadByte();
-                    }
-                    else if (twobytes == 0x8230)
-                    {
-                        binr.ReadInt16();
-                    }
-                    else
-                    {
-                        return null;
-                    }
-
-                    seq = binr.ReadBytes(15);
-                    if (!CompareBytearrays(seq, seqOid))
-                    {
-                        return null;
-                    }
-
-                    twobytes = binr.ReadUInt16();
-                    if (twobytes == 0x8103)
-                    {
-                        binr.ReadByte();
-                    }
-                    else if (twobytes == 0x8203)
-                    {
-                        binr.ReadInt16();
-                    }
-                    else
-                    {
-                        return null;
-                    }
-
-                    bt = binr.ReadByte();
-                    if (bt != 0x00)
-                    {
-                        return null;
-                    }
-
-                    twobytes = binr.ReadUInt16();
-                    if (twobytes == 0x8130)
-                    {
-                        binr.ReadByte();
-                    }
-                    else if (twobytes == 0x8230)
-                    {
-                        binr.ReadInt16();
-                    }
-                    else
-                    {
-                        return null;
-                    }
-
-                    twobytes = binr.ReadUInt16();
-                    byte lowbyte = 0x00;
-                    byte highbyte = 0x00;
-
-                    if (twobytes == 0x8102)
-                    {
-                        lowbyte = binr.ReadByte();
-                    }
-                    else if (twobytes == 0x8202)
-                    {
-                        highbyte = binr.ReadByte();
-                        lowbyte = binr.ReadByte();
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                    byte[] modint = { lowbyte, highbyte, 0x00, 0x00 };
-                    int modsize = BitConverter.ToInt32(modint, 0);
-
-                    int firstbyte = binr.PeekChar();
-                    if (firstbyte == 0x00)
-                    {
-                        binr.ReadByte();
-                        modsize -= 1;
-                    }
-
-                    byte[] modulus = binr.ReadBytes(modsize);
-
-                    if (binr.ReadByte() != 0x02)
-                    {
-                        return null;
-                    }
-                    int expbytes = binr.ReadByte();
-                    byte[] exponent = binr.ReadBytes(expbytes);
-
-                    RSA rsa = System.Security.Cryptography.RSA.Create();
-                    rsa.KeySize = signType == "RSA" ? 1024 : 2048;
-                    RSAParameters rsaKeyInfo = new RSAParameters
-                    {
-                        Modulus = modulus,
-                        Exponent = exponent
-                    };
-                    rsa.ImportParameters(rsaKeyInfo);
-
-                    return rsa;
-                }
+                binr.ReadByte();
             }
+            else if (twobytes == 0x8230)
+            {
+                binr.ReadInt16();
+            }
+            else
+            {
+                return null;
+            }
+
+            seq = binr.ReadBytes(15);
+            if (!CompareBytearrays(seq, seqOid))
+            {
+                return null;
+            }
+
+            twobytes = binr.ReadUInt16();
+            if (twobytes == 0x8103)
+            {
+                binr.ReadByte();
+            }
+            else if (twobytes == 0x8203)
+            {
+                binr.ReadInt16();
+            }
+            else
+            {
+                return null;
+            }
+
+            bt = binr.ReadByte();
+            if (bt != 0x00)
+            {
+                return null;
+            }
+
+            twobytes = binr.ReadUInt16();
+            if (twobytes == 0x8130)
+            {
+                binr.ReadByte();
+            }
+            else if (twobytes == 0x8230)
+            {
+                binr.ReadInt16();
+            }
+            else
+            {
+                return null;
+            }
+
+            twobytes = binr.ReadUInt16();
+            byte lowbyte = 0x00;
+            byte highbyte = 0x00;
+
+            if (twobytes == 0x8102)
+            {
+                lowbyte = binr.ReadByte();
+            }
+            else if (twobytes == 0x8202)
+            {
+                highbyte = binr.ReadByte();
+                lowbyte = binr.ReadByte();
+            }
+            else
+            {
+                return null;
+            }
+            byte[] modint = { lowbyte, highbyte, 0x00, 0x00 };
+            var modsize = BitConverter.ToInt32(modint, 0);
+
+            var firstbyte = binr.PeekChar();
+            if (firstbyte == 0x00)
+            {
+                binr.ReadByte();
+                modsize -= 1;
+            }
+
+            var modulus = binr.ReadBytes(modsize);
+
+            if (binr.ReadByte() != 0x02)
+            {
+                return null;
+            }
+            int expbytes = binr.ReadByte();
+            var exponent = binr.ReadBytes(expbytes);
+
+            var rsa = System.Security.Cryptography.RSA.Create();
+            rsa.KeySize = signType == "RSA" ? 1024 : 2048;
+            var rsaKeyInfo = new RSAParameters
+            {
+                Modulus = modulus,
+                Exponent = exponent
+            };
+            rsa.ImportParameters(rsaKeyInfo);
+
+            return rsa;
         }
 
         private static bool CompareBytearrays(byte[] a, byte[] b)
@@ -299,8 +295,8 @@ namespace PaySharp.Core.Utils
             {
                 return false;
             }
-            int i = 0;
-            foreach (byte c in a)
+            var i = 0;
+            foreach (var c in a)
             {
                 if (c != b[i])
                 {
@@ -313,29 +309,27 @@ namespace PaySharp.Core.Utils
 
         private static RSA LoadCertificateFile(string filename, string signType)
         {
-            using (FileStream fs = File.OpenRead(filename))
+            using var fs = File.OpenRead(filename);
+            var data = new byte[fs.Length];
+            byte[] res = null;
+            fs.Read(data, 0, data.Length);
+            if (data[0] != 0x30)
             {
-                byte[] data = new byte[fs.Length];
-                byte[] res = null;
-                fs.Read(data, 0, data.Length);
-                if (data[0] != 0x30)
-                {
-                    res = GetPem("RSA PRIVATE KEY", data);
-                }
-                try
-                {
-                    return DecodeRSAPrivateKey(res, signType);
-                }
-                catch
-                {
-                    return null;
-                }
+                res = GetPem("RSA PRIVATE KEY", data);
+            }
+            try
+            {
+                return DecodeRSAPrivateKey(res, signType);
+            }
+            catch
+            {
+                return null;
             }
         }
 
         private static RSA LoadCertificateString(string strKey, string signType)
         {
-            byte[] data = Convert.FromBase64String(strKey);
+            var data = Convert.FromBase64String(strKey);
             try
             {
                 return DecodeRSAPrivateKey(data, signType);
@@ -348,15 +342,12 @@ namespace PaySharp.Core.Utils
 
         private static RSA DecodeRSAPrivateKey(byte[] privkey, string signType)
         {
-            byte[] MODULUS, E, D, P, Q, DP, DQ, IQ;
-            MemoryStream mem = new MemoryStream(privkey);
-            BinaryReader binr = new BinaryReader(mem);
-            byte bt = 0;
-            ushort twobytes = 0;
-            int elems = 0;
+            byte[] modulus, e, d, p, q, dP, dQ, iQ;
+            var mem = new MemoryStream(privkey);
+            var binr = new BinaryReader(mem);
             try
             {
-                twobytes = binr.ReadUInt16();
+                var twobytes = binr.ReadUInt16();
                 if (twobytes == 0x8130)
                 {
                     binr.ReadByte();
@@ -376,57 +367,57 @@ namespace PaySharp.Core.Utils
                     return null;
                 }
 
-                bt = binr.ReadByte();
+                var bt = binr.ReadByte();
                 if (bt != 0x00)
                 {
                     return null;
                 }
 
-                elems = GetIntegerSize(binr);
-                MODULUS = binr.ReadBytes(elems);
+                var elems = GetIntegerSize(binr);
+                modulus = binr.ReadBytes(elems);
 
                 elems = GetIntegerSize(binr);
-                E = binr.ReadBytes(elems);
+                e = binr.ReadBytes(elems);
 
                 elems = GetIntegerSize(binr);
-                D = binr.ReadBytes(elems);
+                d = binr.ReadBytes(elems);
 
                 elems = GetIntegerSize(binr);
-                P = binr.ReadBytes(elems);
+                p = binr.ReadBytes(elems);
 
                 elems = GetIntegerSize(binr);
-                Q = binr.ReadBytes(elems);
+                q = binr.ReadBytes(elems);
 
                 elems = GetIntegerSize(binr);
-                DP = binr.ReadBytes(elems);
+                dP = binr.ReadBytes(elems);
 
                 elems = GetIntegerSize(binr);
-                DQ = binr.ReadBytes(elems);
+                dQ = binr.ReadBytes(elems);
 
                 elems = GetIntegerSize(binr);
-                IQ = binr.ReadBytes(elems);
+                iQ = binr.ReadBytes(elems);
 
-                int bitLen = 1024;
+                var bitLen = 1024;
                 if ("RSA2".Equals(signType))
                 {
                     bitLen = 2048;
                 }
 
-                RSA RSA = RSA.Create();
-                RSA.KeySize = bitLen;
-                RSAParameters RSAparams = new RSAParameters
+                var rSA = System.Security.Cryptography.RSA.Create();
+                rSA.KeySize = bitLen;
+                var rSAparams = new RSAParameters
                 {
-                    Modulus = MODULUS,
-                    Exponent = E,
-                    D = D,
-                    P = P,
-                    Q = Q,
-                    DP = DP,
-                    DQ = DQ,
-                    InverseQ = IQ
+                    Modulus = modulus,
+                    Exponent = e,
+                    D = d,
+                    P = p,
+                    Q = q,
+                    DP = dP,
+                    DQ = dQ,
+                    InverseQ = iQ
                 };
-                RSA.ImportParameters(RSAparams);
-                return RSA;
+                rSA.ImportParameters(rSAparams);
+                return rSA;
             }
             catch
             {
@@ -440,23 +431,19 @@ namespace PaySharp.Core.Utils
 
         private static byte[] GetPem(string type, byte[] data)
         {
-            string pem = Encoding.UTF8.GetString(data);
-            string header = String.Format("-----BEGIN {0}-----\\n", type);
-            string footer = String.Format("-----END {0}-----", type);
-            int start = pem.IndexOf(header) + header.Length;
-            int end = pem.IndexOf(footer, start);
-            string base64 = pem.Substring(start, (end - start));
+            var pem = Encoding.UTF8.GetString(data);
+            var header = string.Format("-----BEGIN {0}-----\\n", type);
+            var footer = string.Format("-----END {0}-----", type);
+            var start = pem.IndexOf(header) + header.Length;
+            var end = pem.IndexOf(footer, start);
+            var base64 = pem.Substring(start, end - start);
 
             return Convert.FromBase64String(base64);
         }
 
         private static int GetIntegerSize(BinaryReader binr)
         {
-            byte bt = 0;
-            byte lowbyte = 0x00;
-            byte highbyte = 0x00;
-            int count = 0;
-            bt = binr.ReadByte();
+            var bt = binr.ReadByte();
             if (bt != 0x02)
             {
                 return 0;
@@ -464,14 +451,15 @@ namespace PaySharp.Core.Utils
 
             bt = binr.ReadByte();
 
+            int count;
             if (bt == 0x81)
             {
                 count = binr.ReadByte();
             }
             else if (bt == 0x82)
             {
-                highbyte = binr.ReadByte();
-                lowbyte = binr.ReadByte();
+                var highbyte = binr.ReadByte();
+                var lowbyte = binr.ReadByte();
                 byte[] modint = { lowbyte, highbyte, 0x00, 0x00 };
                 count = BitConverter.ToInt32(modint, 0);
             }
@@ -499,9 +487,9 @@ namespace PaySharp.Core.Utils
         /// <returns></returns>
         public static string SHA256(string data)
         {
-            byte[] byteData = Encoding.UTF8.GetBytes(data);
+            var byteData = Encoding.UTF8.GetBytes(data);
             var sha256 = new SHA256Managed();
-            byte[] result = sha256.ComputeHash(byteData);
+            var result = sha256.ComputeHash(byteData);
             return BitConverter.ToString(result).Replace("-", "").ToLower();
         }
 
@@ -517,10 +505,10 @@ namespace PaySharp.Core.Utils
         /// <returns></returns>
         public static string HMACSHA1(string data, string key)
         {
-            byte[] byteData = Encoding.UTF8.GetBytes(data);
-            byte[] byteKey = Encoding.UTF8.GetBytes(key);
+            var byteData = Encoding.UTF8.GetBytes(data);
+            var byteKey = Encoding.UTF8.GetBytes(key);
             var hmacsha1 = new HMACSHA1(byteKey);
-            byte[] result = hmacsha1.ComputeHash(byteData);
+            var result = hmacsha1.ComputeHash(byteData);
             return Convert.ToBase64String(result);
         }
 
@@ -536,10 +524,10 @@ namespace PaySharp.Core.Utils
         /// <returns></returns>
         public static string HMACSHA256(string data, string key)
         {
-            byte[] byteData = Encoding.UTF8.GetBytes(data);
-            byte[] byteKey = Encoding.UTF8.GetBytes(key);
+            var byteData = Encoding.UTF8.GetBytes(data);
+            var byteKey = Encoding.UTF8.GetBytes(key);
             var hmacsha256 = new HMACSHA256(byteKey);
-            byte[] result = hmacsha256.ComputeHash(byteData);
+            var result = hmacsha256.ComputeHash(byteData);
             return BitConverter.ToString(result).Replace("-", "").ToLower();
         }
 

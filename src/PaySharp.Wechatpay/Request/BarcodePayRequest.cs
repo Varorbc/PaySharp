@@ -1,7 +1,7 @@
-﻿using PaySharp.Core.Response;
+﻿using System;
+using PaySharp.Core.Response;
 using PaySharp.Wechatpay.Domain;
 using PaySharp.Wechatpay.Response;
-using System;
 
 namespace PaySharp.Wechatpay.Request
 {

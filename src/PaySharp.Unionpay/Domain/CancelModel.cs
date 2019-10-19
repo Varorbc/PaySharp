@@ -1,7 +1,7 @@
-﻿using PaySharp.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using PaySharp.Core;
 
 namespace PaySharp.Unionpay.Domain
 {

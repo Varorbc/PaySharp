@@ -1,4 +1,6 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using System;
+using System.Threading.Tasks;
+using Org.BouncyCastle.Crypto;
 using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
@@ -6,8 +8,6 @@ using PaySharp.Core.Response;
 using PaySharp.Core.Utils;
 using PaySharp.Unionpay.Request;
 using PaySharp.Unionpay.Response;
-using System;
-using System.Threading.Tasks;
 
 namespace PaySharp.Unionpay
 {
@@ -34,7 +34,7 @@ namespace PaySharp.Unionpay
             var baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Camel);
             baseResponse.Raw = result;
 
-            string sign = gatewayData.GetStringValue("signature");
+            var sign = gatewayData.GetStringValue("signature");
             if (!string.IsNullOrEmpty(sign) && !CheckSign(gatewayData, sign, baseResponse.SignPubKeyCert))
             {
                 throw new GatewayException("签名验证失败");

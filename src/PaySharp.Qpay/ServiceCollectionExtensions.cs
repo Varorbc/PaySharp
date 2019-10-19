@@ -1,8 +1,8 @@
 ﻿#if NETCOREAPP3_0
-using Microsoft.Extensions.Configuration;
-using PaySharp.Qpay;
-using PaySharp.Core;
 using System;
+using Microsoft.Extensions.Configuration;
+using PaySharp.Core;
+using PaySharp.Qpay;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var merchants = configuration.GetSection("PaySharp:Qpays").Get<Merchant[]>();
             if (merchants != null)
             {
-                for (int i = 0; i < merchants.Length; i++)
+                for (var i = 0; i < merchants.Length; i++)
                 {
                     var qpayGateway = new QpayGateway(merchants[i]);
                     var gatewayUrl = configuration.GetSection($"PaySharp:Qpays:{i}:GatewayUrl").Value;

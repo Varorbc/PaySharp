@@ -262,8 +262,8 @@ namespace PaySharp.Core.Utils
         /// <param name="stream">文件流</param>
         public static void Write(FileStream stream)
         {
-            long size = stream.Length;
-            byte[] buffer = new byte[size];
+            var size = stream.Length;
+            var buffer = new byte[size];
             stream.Read(buffer, 0, (int)size);
             stream.Dispose();
             File.Delete(stream.Name);
@@ -294,17 +294,13 @@ namespace PaySharp.Core.Utils
         /// <returns></returns>
         public static string Get(string url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            var request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
             request.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
 
-            using (WebResponse response = request.GetResponse())
-            {
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                {
-                    return reader.ReadToEnd().Trim();
-                }
-            }
+            using var response = request.GetResponse();
+            using var reader = new StreamReader(response.GetResponseStream());
+            return reader.ReadToEnd().Trim();
         }
 
         /// <summary>
@@ -332,8 +328,8 @@ namespace PaySharp.Core.Utils
                         new RemoteCertificateValidationCallback(CheckValidationResult);
             }
 
-            byte[] dataByte = Encoding.UTF8.GetBytes(data);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            var dataByte = Encoding.UTF8.GetBytes(data);
+            var request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
             request.ContentLength = dataByte.Length;
@@ -343,18 +339,14 @@ namespace PaySharp.Core.Utils
                 request.ClientCertificates.Add(cert);
             }
 
-            using (Stream outStream = request.GetRequestStream())
+            using (var outStream = request.GetRequestStream())
             {
                 outStream.Write(dataByte, 0, dataByte.Length);
             }
 
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            {
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                {
-                    return reader.ReadToEnd().Trim();
-                }
-            }
+            using var response = (HttpWebResponse)request.GetResponse();
+            using var reader = new StreamReader(response.GetResponseStream());
+            return reader.ReadToEnd().Trim();
         }
 
         private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
@@ -381,10 +373,8 @@ namespace PaySharp.Core.Utils
         /// <returns></returns>
         public static byte[] Download(string url)
         {
-            using (WebClient webClient = new WebClient())
-            {
-                return webClient.DownloadData(url);
-            }
+            using var webClient = new WebClient();
+            return webClient.DownloadData(url);
         }
 
         /// <summary>
@@ -394,10 +384,8 @@ namespace PaySharp.Core.Utils
         /// <returns></returns>
         public static async Task<byte[]> DownloadAsync(string url)
         {
-            using (WebClient webClient = new WebClient())
-            {
-                return await webClient.DownloadDataTaskAsync(url);
-            }
+            using var webClient = new WebClient();
+            return await webClient.DownloadDataTaskAsync(url);
         }
 
         #endregion

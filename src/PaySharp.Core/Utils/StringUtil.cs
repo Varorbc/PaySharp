@@ -42,10 +42,10 @@ namespace PaySharp.Core.Utils
                 return s;
             }
 
-            StringBuilder sb = new StringBuilder();
-            SnakeCaseState state = SnakeCaseState.Start;
+            var sb = new StringBuilder();
+            var state = SnakeCaseState.Start;
 
-            for (int i = 0; i < s.Length; i++)
+            for (var i = 0; i < s.Length; i++)
             {
                 if (s[i] == ' ')
                 {
@@ -59,10 +59,10 @@ namespace PaySharp.Core.Utils
                     switch (state)
                     {
                         case SnakeCaseState.Upper:
-                            bool hasNext = (i + 1 < s.Length);
+                            var hasNext = i + 1 < s.Length;
                             if (i > 0 && hasNext)
                             {
-                                char nextChar = s[i + 1];
+                                var nextChar = s[i + 1];
                                 if (!char.IsUpper(nextChar) && nextChar != '_')
                                 {
                                     sb.Append('_');
@@ -111,16 +111,16 @@ namespace PaySharp.Core.Utils
                 return s;
             }
 
-            char[] chars = s.ToCharArray();
+            var chars = s.ToCharArray();
 
-            for (int i = 0; i < chars.Length; i++)
+            for (var i = 0; i < chars.Length; i++)
             {
                 if (i == 1 && !char.IsUpper(chars[i]))
                 {
                     break;
                 }
 
-                bool hasNext = (i + 1 < chars.Length);
+                var hasNext = i + 1 < chars.Length;
                 if (i > 0 && hasNext && !char.IsUpper(chars[i + 1]))
                 {
                     if (char.IsSeparator(chars[i + 1]))

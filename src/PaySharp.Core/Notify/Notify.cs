@@ -1,7 +1,7 @@
-﻿using PaySharp.Core.Exceptions;
-using PaySharp.Core.Utils;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using PaySharp.Core.Exceptions;
+using PaySharp.Core.Utils;
 
 namespace PaySharp.Core
 {
@@ -100,7 +100,7 @@ namespace PaySharp.Core
                     return;
                 }
 
-                bool result = false;
+                var result = false;
                 if (gateway.IsPaySuccess)
                 {
                     result = OnPaySucceed(new PaySucceedEventArgs(gateway));

@@ -1,7 +1,13 @@
-﻿using PaySharp.Core;
+﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+/* 项目“PaySharp.Alipay (netcoreapp3.0)”的未合并的更改
+在此之前:
 using System.ComponentModel.DataAnnotations;
+在此之后:
+using PaySharp.Core;
+*/
+
 
 namespace PaySharp.Alipay.Domain
 {

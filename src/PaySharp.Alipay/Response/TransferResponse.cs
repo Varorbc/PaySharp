@@ -1,6 +1,6 @@
-﻿using PaySharp.Core.Request;
+﻿using System;
 using Newtonsoft.Json;
-using System;
+using PaySharp.Core.Request;
 
 namespace PaySharp.Alipay.Response
 {

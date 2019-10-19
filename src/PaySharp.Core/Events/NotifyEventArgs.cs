@@ -1,6 +1,6 @@
-﻿using PaySharp.Core.Response;
+﻿using System;
+using PaySharp.Core.Response;
 using PaySharp.Core.Utils;
-using System;
 
 namespace PaySharp.Core
 {
@@ -12,7 +12,6 @@ namespace PaySharp.Core
         #region 私有字段
 
         protected BaseGateway _gateway;
-        private readonly string _notifyServerHostAddress;
 
         #endregion
 
@@ -25,7 +24,7 @@ namespace PaySharp.Core
         protected NotifyEventArgs(BaseGateway gateway)
         {
             _gateway = gateway;
-            _notifyServerHostAddress = HttpUtil.RemoteIpAddress;
+            NotifyServerHostAddress = HttpUtil.RemoteIpAddress;
         }
 
         #endregion
@@ -35,46 +34,22 @@ namespace PaySharp.Core
         /// <summary>
         /// 发送支付通知的网关IP地址
         /// </summary>
-        public string NotifyServerHostAddress
-        {
-            get
-            {
-                return _notifyServerHostAddress;
-            }
-        }
+        public string NotifyServerHostAddress { get; private set; }
 
         /// <summary>
         /// 网关的数据
         /// </summary>
-        public GatewayData GatewayData
-        {
-            get
-            {
-                return _gateway.GatewayData;
-            }
-        }
+        public GatewayData GatewayData => _gateway.GatewayData;
 
         /// <summary>
         /// 网关类型
         /// </summary>
-        public Type GatewayType
-        {
-            get
-            {
-                return _gateway.GetType();
-            }
-        }
+        public Type GatewayType => _gateway.GetType();
 
         /// <summary>
         /// 通知数据
         /// </summary>
-        public IResponse NotifyResponse
-        {
-            get
-            {
-                return _gateway.NotifyResponse;
-            }
-        }
+        public IResponse NotifyResponse => _gateway.NotifyResponse;
 
         /// <summary>
         /// 通知类型

@@ -1,7 +1,7 @@
-﻿using PaySharp.Alipay.Domain;
+﻿using System;
+using PaySharp.Alipay.Domain;
 using PaySharp.Alipay.Response;
 using PaySharp.Core.Response;
-using System;
 
 namespace PaySharp.Alipay.Request
 {
@@ -39,7 +39,7 @@ namespace PaySharp.Alipay.Request
         /// <summary>
         /// 网关同步返回的支付通知验证失败时触发
         /// </summary>
-        public event Action<IResponse,string> PayFailed;
+        public event Action<IResponse, string> PayFailed;
 
         /// <summary>
         /// 网关同步返回的支付通知验证成功时触发

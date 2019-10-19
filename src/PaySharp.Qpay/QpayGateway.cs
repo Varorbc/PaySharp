@@ -1,12 +1,12 @@
 ﻿#if NETCOREAPP3_0
 using Microsoft.Extensions.Options;
 #endif
+using System.Threading.Tasks;
 using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
 using PaySharp.Qpay.Response;
-using System.Threading.Tasks;
 
 namespace PaySharp.Qpay
 {

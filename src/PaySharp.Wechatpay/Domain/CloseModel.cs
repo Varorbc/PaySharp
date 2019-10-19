@@ -1,5 +1,5 @@
-﻿using PaySharp.Core.Utils;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using PaySharp.Core.Utils;
 
 namespace PaySharp.Wechatpay.Domain
 {

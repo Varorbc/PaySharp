@@ -1,8 +1,8 @@
 ﻿#if NETCOREAPP3_0
+using System;
 using Microsoft.Extensions.Configuration;
 using PaySharp.Alipay;
 using PaySharp.Core;
-using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

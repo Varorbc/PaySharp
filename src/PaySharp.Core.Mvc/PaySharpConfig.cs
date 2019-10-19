@@ -1,9 +1,9 @@
-﻿using Autofac;
-using Autofac.Integration.Mvc;
+﻿//using System.Web.Http;
+using System;
 //using Autofac.Integration.WebApi;
 using System.Web.Mvc;
-//using System.Web.Http;
-using System;
+using Autofac;
+using Autofac.Integration.Mvc;
 
 namespace PaySharp.Core.Mvc
 {

@@ -1,10 +1,10 @@
-﻿using PaySharp.Alipay.Domain;
-using PaySharp.Alipay.Request;
-using PaySharp.Core.Request;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using PaySharp.Alipay.Domain;
+using PaySharp.Alipay.Request;
+using PaySharp.Core.Request;
 
 namespace PaySharp.Alipay.Response
 {
@@ -150,6 +150,7 @@ namespace PaySharp.Alipay.Response
         public double DiscountAmount { get; set; }
 
         private Merchant _merchant;
+
         internal override void Execute<TModel, TResponse>(Merchant merchant, Request<TModel, TResponse> request)
         {
             _merchant = merchant;
@@ -198,7 +199,7 @@ namespace PaySharp.Alipay.Response
         /// <returns></returns>
         private QueryResponse PollQueryTradeState(string tradeNo, int pollTime, int pollCount)
         {
-            for (int i = 0; i < pollCount; i++)
+            for (var i = 0; i < pollCount; i++)
             {
                 var queryRequest = new QueryRequest();
                 queryRequest.AddGatewayData(new QueryModel

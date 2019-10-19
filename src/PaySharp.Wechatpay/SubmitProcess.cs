@@ -1,13 +1,13 @@
-﻿using PaySharp.Core;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
 using PaySharp.Core.Response;
 using PaySharp.Core.Utils;
 using PaySharp.Wechatpay.Request;
 using PaySharp.Wechatpay.Response;
-using System;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 
 namespace PaySharp.Wechatpay
 {
@@ -19,7 +19,7 @@ namespace PaySharp.Wechatpay
         {
             AddMerchant(merchant, request, gatewayUrl);
 
-            string sign = BuildSign(request.GatewayData, merchant.Key, request.GatewayData.GetStringValue("sign_type") == "HMAC-SHA256");
+            var sign = BuildSign(request.GatewayData, merchant.Key, request.GatewayData.GetStringValue("sign_type") == "HMAC-SHA256");
             request.GatewayData.Add("sign", sign);
 
             X509Certificate2 cert = null;
@@ -85,7 +85,7 @@ namespace PaySharp.Wechatpay
             var gatewayData = new GatewayData();
             gatewayData.FromJson(result);
 
-            OAuthResponse baseResponse = (OAuthResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Snake);
+            var baseResponse = (OAuthResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Snake);
             baseResponse.Raw = result;
             baseResponse.GatewayData = gatewayData;
 
@@ -111,7 +111,7 @@ namespace PaySharp.Wechatpay
         {
             gatewayData.Remove("sign");
 
-            string data = $"{gatewayData.ToUrl(false)}&key={key}";
+            var data = $"{gatewayData.ToUrl(false)}&key={key}";
             return isHMACSHA256 ? EncryptUtil.HMACSHA256(data, key) : EncryptUtil.MD5(data);
         }
 

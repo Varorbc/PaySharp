@@ -1,7 +1,7 @@
-﻿using PaySharp.Core.Response;
+﻿using System;
+using PaySharp.Core.Response;
 using PaySharp.Qpay.Domain;
 using PaySharp.Qpay.Response;
-using System;
 
 namespace PaySharp.Qpay.Request
 {

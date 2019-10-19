@@ -1,7 +1,7 @@
-﻿using PaySharp.Alipay.Domain;
-using PaySharp.Core.Request;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using PaySharp.Alipay.Domain;
+using PaySharp.Core.Request;
 
 namespace PaySharp.Alipay.Response
 {

@@ -9,7 +9,7 @@
         /// 构造函数
         /// </summary>
         public AppPayModel()
-            :base("QUICK_MSECURITY_PAY")
+            : base("QUICK_MSECURITY_PAY")
         {
         }
     }

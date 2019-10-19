@@ -1,8 +1,8 @@
-﻿using PaySharp.Alipay.Domain;
-using PaySharp.Core.Request;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using PaySharp.Alipay.Domain;
+using PaySharp.Core.Request;
 
 namespace PaySharp.Alipay.Response
 {
