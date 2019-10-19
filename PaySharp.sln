@@ -21,6 +21,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaySharp.Qpay", "src\PaySha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaySharp.Demo(Net)", "sample\PaySharp.Demo(Net)\PaySharp.Demo(Net).csproj", "{C5D9D464-563B-44FC-A115-25889A73CA23}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5DF0C9E1-9D21-4128-8C87-1518279559BB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		_config.yml = _config.yml
+		build.bat = build.bat
+		dependencies.props = dependencies.props
+		global.json = global.json
+		LICENSE = LICENSE
+		output.props = output.props
+		package.props = package.props
+		publish.bat = publish.bat
+		README.md = README.md
+		run.bat = run.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
