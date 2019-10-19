@@ -100,7 +100,7 @@ namespace PaySharp.Core
                 {
                     try
                     {
-#if NETSTANDARD2_0
+#if NETCOREAPP3_0
                         gatewayData.FromForm(HttpUtil.Form);
 #else
                         gatewayData.FromNameValueCollection(HttpUtil.Form);

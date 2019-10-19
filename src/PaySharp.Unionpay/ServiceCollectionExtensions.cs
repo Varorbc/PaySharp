@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0
+﻿#if NETCOREAPP3_0
 using Microsoft.Extensions.Configuration;
 using PaySharp.Unionpay;
 using PaySharp.Core;

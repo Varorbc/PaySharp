@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0
+﻿#if NETCOREAPP3_0
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using PaySharp.Core;

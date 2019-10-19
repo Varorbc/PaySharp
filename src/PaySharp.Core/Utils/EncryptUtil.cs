@@ -97,7 +97,7 @@ namespace PaySharp.Core.Utils
 
                 if ("RSA2".Equals(signType))
                 {
-#if NETSTANDARD2_0
+#if NETCOREAPP3_0
                     signatureBytes = rsaCsp.SignData(dataBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
 #else
                     signatureBytes = ((RSACryptoServiceProvider)rsaCsp).SignData(dataBytes, "SHA256");
@@ -105,7 +105,7 @@ namespace PaySharp.Core.Utils
                 }
                 else
                 {
-#if NETSTANDARD2_0
+#if NETCOREAPP3_0
                     signatureBytes = rsaCsp.SignData(dataBytes, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
 #else
                     signatureBytes = ((RSACryptoServiceProvider)rsaCsp).SignData(dataBytes, "SHA1");
@@ -148,7 +148,7 @@ namespace PaySharp.Core.Utils
 
                 if ("RSA2".Equals(signType))
                 {
-#if NETSTANDARD2_0
+#if NETCOREAPP3_0
                     bVerifyResultOriginal = rsa.VerifyData(Encoding.GetEncoding(charset).GetBytes(signContent),
                        Convert.FromBase64String(sign), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
 #else
@@ -158,7 +158,7 @@ namespace PaySharp.Core.Utils
                 }
                 else
                 {
-#if NETSTANDARD2_0
+#if NETCOREAPP3_0
                     bVerifyResultOriginal = rsa.VerifyData(Encoding.GetEncoding(charset).GetBytes(signContent),
                        Convert.FromBase64String(sign), HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
 #else

@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0
+﻿#if NETCOREAPP3_0
 using Microsoft.Extensions.Options;
 #endif
 using PaySharp.Core;
@@ -33,7 +33,7 @@ namespace PaySharp.Qpay
             _merchant = merchant;
         }
 
-#if NETSTANDARD2_0
+#if NETCOREAPP3_0
 
         /// <summary>
         /// 初始化QQ钱包网关
