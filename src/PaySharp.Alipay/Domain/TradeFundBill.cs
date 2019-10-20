@@ -7,7 +7,7 @@ namespace PaySharp.Alipay.Domain
     public class TradeFundBill
     {
         /// <summary>
-        /// 交易使用的资金渠道,详见 https://doc.open.alipay.com/doc2/detail?treeId=26&articleId=103259&docType=1
+        /// 交易使用的资金渠道,详见 https://doc.open.alipay.com/doc2/detail?treeId=26&amp;articleId=103259&amp;docType=1
         /// </summary>
         public string FundChannel { get; set; }
 

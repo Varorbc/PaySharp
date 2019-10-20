@@ -1,6 +1,6 @@
-﻿using PaySharp.Core;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using PaySharp.Core;
 
 namespace PaySharp.Unionpay.Domain
 {
@@ -40,7 +40,7 @@ namespace PaySharp.Unionpay.Domain
 
         /// <summary>
         /// 分期付款信息域
-        /// 相关子域见注 10。 格式如下：{子域名1=值&子域名2=值&子域名3=值}
+        /// 相关子域见注 10。 格式如下：{子域名1=值&amp;子域名2=值&amp;子域名3=值}
         /// </summary>
         [StringLength(1024, ErrorMessage = "分期付款信息域最大长度为1024位")]
         public string InstalTransInfo { get; set; }
@@ -49,7 +49,7 @@ namespace PaySharp.Unionpay.Domain
         /// 银行卡验证信息及身份信息
         /// 该域需整体做 Base64 编码。 
         /// 所有子域需用“有子域包含，子域间以“含，符号链接。 
-        /// 格式如下：{子域名 1=值&子域名 2=值&子域名 3=值} 
+        /// 格式如下：{子域名 1=值&amp;子域名 2=值&amp;子域名 3=值} 
         /// 各子域取值见注 
         /// 1。 借记卡可上送姓名、手机号、证件类型、证件号码；
         /// 贷记卡可上送姓名、手机号、证件类型、证件号码、有效 期、CVN2。

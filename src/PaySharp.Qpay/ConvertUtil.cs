@@ -1,7 +1,7 @@
-﻿using PaySharp.Core;
-using PaySharp.Core.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using PaySharp.Core;
+using PaySharp.Core.Utils;
 
 namespace PaySharp.Qpay
 {
@@ -11,7 +11,7 @@ namespace PaySharp.Qpay
         {
             var flag = true;
             var list = new List<T>();
-            int i = 0;
+            var i = 0;
             while (flag)
             {
                 var type = typeof(T);

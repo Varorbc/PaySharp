@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Text.Encodings.Web;
+using System.Text.Unicode;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using PaySharp.Alipay;
 using PaySharp.Unionpay;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 
 namespace PaySharp.Demo
 {
@@ -21,7 +22,7 @@ namespace PaySharp.Demo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddControllersWithViews();
             services.AddWebEncoders(opt =>
             {
                 opt.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
@@ -95,7 +96,7 @@ namespace PaySharp.Demo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -107,13 +108,16 @@ namespace PaySharp.Demo
                 app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}");
+                    pattern: "{controller=Home}/{action=Index}");
             });
 
             app.UsePaySharp();

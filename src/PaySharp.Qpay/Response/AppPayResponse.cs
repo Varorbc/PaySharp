@@ -1,7 +1,7 @@
-﻿using PaySharp.Core;
+﻿using System;
+using PaySharp.Core;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
-using System;
 
 namespace PaySharp.Qpay.Response
 {
@@ -26,9 +26,9 @@ namespace PaySharp.Qpay.Response
         {
             if (ResultCode == "SUCCESS")
             {
-                string data = $"appId={merchant.AppId}&bargainorId={merchant.MchId}&"
+                var data = $"appId={merchant.AppId}&bargainorId={merchant.MchId}&"
                             + $"nonce={Util.GenerateNonceStr()}&pubAcc=&tokenId={PrepayId}";
-                string sign = EncryptUtil.HMACSHA1(data, $"{merchant.Key}&");
+                var sign = EncryptUtil.HMACSHA1(data, $"{merchant.Key}&");
 
                 var gatewayData = new GatewayData();
                 gatewayData.Add("pubAccHint", "欢迎关注");

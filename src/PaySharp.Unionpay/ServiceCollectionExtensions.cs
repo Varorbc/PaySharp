@@ -1,8 +1,8 @@
-﻿#if NETSTANDARD2_0
-using Microsoft.Extensions.Configuration;
-using PaySharp.Unionpay;
-using PaySharp.Core;
+﻿#if NETCOREAPP3_0
 using System;
+using Microsoft.Extensions.Configuration;
+using PaySharp.Core;
+using PaySharp.Unionpay;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var merchants = configuration.GetSection("PaySharp:Unionpays").Get<Merchant[]>();
             if (merchants != null)
             {
-                for (int i = 0; i < merchants.Length; i++)
+                for (var i = 0; i < merchants.Length; i++)
                 {
                     var unionpayGateway = new UnionpayGateway(merchants[i]);
                     var gatewayUrl = configuration.GetSection($"PaySharp:Unionpays:{i}:GatewayUrl").Value;

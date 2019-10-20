@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace PaySharp.Core.Utils
 {
@@ -39,7 +39,7 @@ namespace PaySharp.Core.Utils
         /// <returns></returns>
         public static int ToTimeStamp(this DateTime time)
         {
-            return (int)(time.ToUniversalTime().Ticks / 10000000 - 62135596800);
+            return (int)((time.ToUniversalTime().Ticks / 10000000) - 62135596800);
         }
 
         #endregion

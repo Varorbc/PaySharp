@@ -1,9 +1,9 @@
-﻿#if NETSTANDARD2_0
+﻿#if NETCOREAPP3_0
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using PaySharp.Core;
 using PaySharp.Core.Utils;
-using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -1,5 +1,5 @@
-﻿using PaySharp.Core.Utils;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using PaySharp.Core.Utils;
 
 namespace PaySharp.Qpay.Domain
 {
@@ -26,14 +26,8 @@ namespace PaySharp.Qpay.Domain
         [StringLength(32, ErrorMessage = "退款原因最大长度为32位")]
         public string OpUserPasswd
         {
-            get
-            {
-                return _opUserPasswd;
-            }
-            set
-            {
-                _opUserPasswd = EncryptUtil.MD5(value).ToLower();
-            }
+            get => _opUserPasswd;
+            set => _opUserPasswd = EncryptUtil.MD5(value).ToLower();
         }
         private string _opUserPasswd = "111111";
 

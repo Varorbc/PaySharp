@@ -1,6 +1,6 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using System.ComponentModel.DataAnnotations;
+using Org.BouncyCastle.Crypto;
 using PaySharp.Core;
-using System.ComponentModel.DataAnnotations;
 
 namespace PaySharp.Unionpay
 {

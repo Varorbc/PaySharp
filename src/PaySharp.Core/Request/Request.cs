@@ -1,6 +1,6 @@
-﻿using PaySharp.Core.Response;
+﻿using System.Collections.Generic;
+using PaySharp.Core.Response;
 using PaySharp.Core.Utils;
-using System.Collections.Generic;
 
 namespace PaySharp.Core.Request
 {

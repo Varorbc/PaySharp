@@ -3,26 +3,27 @@
   <Import Project="../../package.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;netcoreapp3.0</TargetFrameworks>
     <Title>PaySharp.Core</Title>
     <Description>支付核心</Description>
     <PackageTags>dotnetcore;pay;</PackageTags>
     <PackageReleaseNotes>
+      支持.net core3.0
     </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <Reference Include="System.Web" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.0.0" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.1.0" />
   </ItemGroup>
 
   <Import Project="../../output.props" />

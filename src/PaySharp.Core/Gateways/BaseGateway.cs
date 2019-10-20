@@ -1,7 +1,7 @@
-﻿using PaySharp.Core.Request;
+﻿using System.Threading.Tasks;
+using PaySharp.Core.Request;
 using PaySharp.Core.Response;
 using PaySharp.Core.Utils;
-using System.Threading.Tasks;
 
 namespace PaySharp.Core
 {

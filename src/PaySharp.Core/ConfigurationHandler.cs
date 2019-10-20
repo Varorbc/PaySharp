@@ -10,7 +10,7 @@ namespace PaySharp.Core
     {
         public object Create(object parent, object configContext, XmlNode section)
         {
-            List<Hashtable> list = new List<Hashtable>();
+            var list = new List<Hashtable>();
 
             foreach (XmlNode child in section.ChildNodes)
             {

@@ -1,6 +1,6 @@
-﻿using PaySharp.Core;
+﻿using System.Collections.Generic;
+using PaySharp.Core;
 using PaySharp.Core.Request;
-using System.Collections.Generic;
 
 namespace PaySharp.Qpay.Response
 {

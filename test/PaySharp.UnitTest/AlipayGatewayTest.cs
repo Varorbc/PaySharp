@@ -1,9 +1,9 @@
-﻿using PaySharp.Alipay;
+﻿using System;
+using PaySharp.Alipay;
 using PaySharp.Alipay.Domain;
 using PaySharp.Alipay.Request;
 using PaySharp.Core.Response;
 using PaySharp.Core.Utils;
-using System;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -67,7 +67,7 @@ namespace PaySharp.UnitTest
             var response = _alipayGateway.Execute(request);
 
             _output.WriteLine(response.Url);
-            string result = HttpUtil.Get(response.Url);
+            var result = HttpUtil.Get(response.Url);
             Assert.Contains("支付宝", result);
         }
 

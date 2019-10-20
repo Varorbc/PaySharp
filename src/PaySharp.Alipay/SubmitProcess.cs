@@ -1,13 +1,13 @@
-﻿using PaySharp.Alipay.Response;
+﻿using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using PaySharp.Alipay.Response;
 using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
 using PaySharp.Core.Response;
 using PaySharp.Core.Utils;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Threading.Tasks;
 
 namespace PaySharp.Alipay
 {
@@ -30,7 +30,7 @@ namespace PaySharp.Alipay
 
             var jObject = JObject.Parse(result);
             var jToken = jObject.First.First;
-            string sign = jObject.Value<string>("sign");
+            var sign = jObject.Value<string>("sign");
             if (!string.IsNullOrEmpty(sign) &&
                 !CheckSign(jToken.ToString(Formatting.None), sign, merchant.AlipayPublicKey, merchant.SignType))
             {
@@ -82,7 +82,7 @@ namespace PaySharp.Alipay
 
         internal static bool CheckSign(string data, string sign, string alipayPublicKey, string signType)
         {
-            bool result = EncryptUtil.RSAVerifyData(data, sign, alipayPublicKey, signType);
+            var result = EncryptUtil.RSAVerifyData(data, sign, alipayPublicKey, signType);
             if (!result)
             {
                 data = data.Replace("/", "\\/");

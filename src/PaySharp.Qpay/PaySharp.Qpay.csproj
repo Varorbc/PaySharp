@@ -3,12 +3,12 @@
   <Import Project="../../package.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;netcoreapp3.0</TargetFrameworks>
     <Title>PaySharp.Qpay</Title>
     <Description>QQ钱包支付</Description>
     <PackageTags>dotnetcore;pay;qpay;</PackageTags>
     <PackageReleaseNotes>
-      修复Azure下证书无法使用的问题
+      支持.net core3.0
     </PackageReleaseNotes>
   </PropertyGroup>
 

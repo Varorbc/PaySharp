@@ -1,9 +1,9 @@
 ﻿#if NET45
-using PaySharp.Qpay;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using PaySharp.Qpay;
 
 namespace PaySharp.Core.Mvc
 {
@@ -31,7 +31,7 @@ namespace PaySharp.Core.Mvc
 
             foreach (var item in merchants)
             {
-                var QpayGateway = new QpayGateway(new Merchant
+                var qpayGateway = new QpayGateway(new Merchant
                 {
                     AppId = item["appId"].ToString(),
                     MchId = item["mchId"].ToString(),
@@ -44,10 +44,10 @@ namespace PaySharp.Core.Mvc
                 var gatewayUrl = item["gatewayUrl"].ToString();
                 if (!string.IsNullOrEmpty(gatewayUrl))
                 {
-                    QpayGateway.GatewayUrl = gatewayUrl;
+                    qpayGateway.GatewayUrl = gatewayUrl;
                 }
 
-                gateways.Add(QpayGateway);
+                gateways.Add(qpayGateway);
             }
 
             return gateways;

@@ -1,5 +1,5 @@
-﻿using PaySharp.Core;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using PaySharp.Core;
 
 namespace PaySharp.Qpay
 {

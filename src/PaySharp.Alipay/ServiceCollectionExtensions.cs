@@ -1,8 +1,8 @@
-﻿#if NETSTANDARD2_0
+﻿#if NETCOREAPP3_0
+using System;
 using Microsoft.Extensions.Configuration;
 using PaySharp.Alipay;
 using PaySharp.Core;
-using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var merchants = configuration.GetSection("PaySharp:Alipays").Get<Merchant[]>();
             if (merchants != null)
             {
-                for (int i = 0; i < merchants.Length; i++)
+                for (var i = 0; i < merchants.Length; i++)
                 {
                     var alipayGateway = new AlipayGateway(merchants[i]);
                     var gatewayUrl = configuration.GetSection($"PaySharp:Alipays:{i}:GatewayUrl").Value;

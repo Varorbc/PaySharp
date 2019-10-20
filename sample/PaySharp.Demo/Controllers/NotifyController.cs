@@ -22,7 +22,7 @@ namespace PaySharp.Demo.Controllers
         public async Task Index()
         {
             // 订阅支付通知事件
-            Notify notify = new Notify(_gateways);
+            var notify = new Notify(_gateways);
             notify.PaySucceed += Notify_PaySucceed;
             notify.RefundSucceed += Notify_RefundSucceed;
             notify.CancelSucceed += Notify_CancelSucceed;
@@ -31,7 +31,7 @@ namespace PaySharp.Demo.Controllers
 
             // 接收并处理支付通知
             await notify.ReceivedAsync();
-            
+
             if (isRedirect)
             {
                 Response.Redirect("https://github.com/Varorbc/PaySharp");

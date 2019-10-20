@@ -1,9 +1,9 @@
 ﻿#if NET45
-using PaySharp.Unionpay;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using PaySharp.Unionpay;
 
 namespace PaySharp.Core.Mvc
 {
@@ -31,7 +31,7 @@ namespace PaySharp.Core.Mvc
 
             foreach (var item in merchants)
             {
-                var UnionpayGateway = new UnionpayGateway(new Merchant
+                var unionpayGateway = new UnionpayGateway(new Merchant
                 {
                     AppId = item["appId"].ToString(),
                     CertPwd = item["certPwd"].ToString(),
@@ -43,10 +43,10 @@ namespace PaySharp.Core.Mvc
                 var gatewayUrl = item["gatewayUrl"].ToString();
                 if (!string.IsNullOrEmpty(gatewayUrl))
                 {
-                    UnionpayGateway.GatewayUrl = gatewayUrl;
+                    unionpayGateway.GatewayUrl = gatewayUrl;
                 }
 
-                gateways.Add(UnionpayGateway);
+                gateways.Add(unionpayGateway);
             }
 
             return gateways;

@@ -1,14 +1,14 @@
-﻿using Autofac;
+﻿using System;
+using System.Web;
+using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.Routing;
+using Autofac;
 using PaySharp.Alipay;
 using PaySharp.Core;
 using PaySharp.Core.Mvc;
 using PaySharp.Unionpay;
 using PaySharp.Wechatpay;
-using System;
-using System.Web;
-using System.Web.Http;
-using System.Web.Mvc;
-using System.Web.Routing;
 
 namespace PaySharp.Demo_Net_
 {

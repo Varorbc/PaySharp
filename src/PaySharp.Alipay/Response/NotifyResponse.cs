@@ -1,6 +1,6 @@
-﻿using PaySharp.Core;
+﻿using System;
+using PaySharp.Core;
 using PaySharp.Core.Response;
-using System;
 
 namespace PaySharp.Alipay.Response
 {

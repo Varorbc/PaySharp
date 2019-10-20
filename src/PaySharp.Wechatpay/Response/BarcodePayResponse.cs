@@ -1,9 +1,9 @@
-﻿using PaySharp.Core;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using PaySharp.Core;
 using PaySharp.Core.Request;
 using PaySharp.Wechatpay.Domain;
 using PaySharp.Wechatpay.Request;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PaySharp.Wechatpay.Response
 {
@@ -150,7 +150,7 @@ namespace PaySharp.Wechatpay.Response
         /// <returns></returns>
         private QueryResponse PollQueryTradeState(string outTradeNo, int pollTime, int pollCount)
         {
-            for (int i = 0; i < pollCount; i++)
+            for (var i = 0; i < pollCount; i++)
             {
                 var queryRequest = new QueryRequest();
                 queryRequest.AddGatewayData(new QueryModel

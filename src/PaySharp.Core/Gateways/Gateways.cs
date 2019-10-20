@@ -1,6 +1,6 @@
-﻿using PaySharp.Core.Exceptions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using PaySharp.Core.Exceptions;
 
 namespace PaySharp.Core
 {

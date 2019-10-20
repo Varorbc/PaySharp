@@ -1,5 +1,7 @@
-﻿using PaySharp.Core.Utils;
-using PaySharp.Unionpay.Properties;
+﻿using System;
+using System.Collections;
+using System.IO;
+using System.Text;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -9,10 +11,8 @@ using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Collections;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.X509.Store;
-using System;
-using System.Collections;
-using System.IO;
-using System.Text;
+using PaySharp.Core.Utils;
+using PaySharp.Unionpay.Properties;
 
 namespace PaySharp.Unionpay
 {
@@ -43,16 +43,14 @@ namespace PaySharp.Unionpay
         /// <returns></returns>
         private static void GetPkcs12Store(string path, string pwd)
         {
-            using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var pkcs12Store = new Pkcs12Store(fileStream, pwd.ToCharArray());
+            foreach (string item in pkcs12Store.Aliases)
             {
-                var pkcs12Store = new Pkcs12Store(fileStream, pwd.ToCharArray());
-                foreach (string item in pkcs12Store.Aliases)
+                if (pkcs12Store.IsKeyEntry(item))
                 {
-                    if (pkcs12Store.IsKeyEntry(item))
-                    {
-                        _pkcs12Store = pkcs12Store;
-                        _aliase = item;
-                    }
+                    _pkcs12Store = pkcs12Store;
+                    _aliase = item;
                 }
             }
         }
@@ -114,10 +112,10 @@ namespace PaySharp.Unionpay
         public static string Sign(AsymmetricKeyParameter key, string data)
         {
             var byteData = Encoding.UTF8.GetBytes(EncryptUtil.SHA256(data));
-            ISigner normalSig = SignerUtilities.GetSigner("SHA256WithRSA");
+            var normalSig = SignerUtilities.GetSigner("SHA256WithRSA");
             normalSig.Init(true, key);
             normalSig.BlockUpdate(byteData, 0, byteData.Length);
-            byte[] normalResult = normalSig.GenerateSignature();
+            var normalResult = normalSig.GenerateSignature();
             return Convert.ToBase64String(normalResult);
         }
 
@@ -134,20 +132,16 @@ namespace PaySharp.Unionpay
         /// <returns></returns>
         public static bool VerifyData(string data, string sign, string signPubKeyCert)
         {
-            byte[] dataByte = Encoding.UTF8.GetBytes(EncryptUtil.SHA256(data));
-            byte[] signByte = Convert.FromBase64String(sign);
+            var dataByte = Encoding.UTF8.GetBytes(EncryptUtil.SHA256(data));
+            var signByte = Convert.FromBase64String(sign);
 
-            X509Certificate x509Cert = VerifyAndGetPubKey(signPubKeyCert);
-            if (x509Cert == null)
-            {
-                return false;
-            }
-            return VerifySignature(x509Cert.GetPublicKey(), signByte, dataByte);
+            var x509Cert = VerifyAndGetPubKey(signPubKeyCert);
+            return x509Cert == null ? false : VerifySignature(x509Cert.GetPublicKey(), signByte, dataByte);
         }
 
         private static bool VerifySignature(AsymmetricKeyParameter key, byte[] base64DecodingSignStr, byte[] srcByte)
         {
-            ISigner verifier = SignerUtilities.GetSigner("SHA256WithRSA");
+            var verifier = SignerUtilities.GetSigner("SHA256WithRSA");
             verifier.Init(false, key);
             verifier.BlockUpdate(srcByte, 0, srcByte.Length);
             return verifier.VerifySignature(base64DecodingSignStr);
@@ -155,18 +149,13 @@ namespace PaySharp.Unionpay
 
         private static X509Certificate VerifyAndGetPubKey(string signPubKeyCert)
         {
-            X509Certificate x509Cert = GetPubKeyCert(signPubKeyCert);
-            if (x509Cert == null)
-            {
-                return null;
-            }
-
-            return VerifyCertificate(x509Cert) ? x509Cert : null;
+            var x509Cert = GetPubKeyCert(signPubKeyCert);
+            return x509Cert == null ? null : VerifyCertificate(x509Cert) ? x509Cert : null;
         }
 
         private static bool VerifyCertificate(X509Certificate x509Cert)
         {
-            string cn = GetIdentitiesFromCertficate(x509Cert);
+            var cn = GetIdentitiesFromCertficate(x509Cert);
             try
             {
                 x509Cert.CheckValidity();//验证有效期
@@ -180,13 +169,8 @@ namespace PaySharp.Unionpay
                 return false;
             }
 
-            string unionpayCnName = "中国银联股份有限公司";
-            if (!unionpayCnName.Equals(cn) && !"00040000:SIGN".Equals(cn))
-            {
-                return false;
-            }
-
-            return true;
+            var unionpayCnName = "中国银联股份有限公司";
+            return unionpayCnName.Equals(cn) || "00040000:SIGN".Equals(cn);
         }
 
         private static bool VerifyCertificateChain(X509Certificate cert)
@@ -196,13 +180,13 @@ namespace PaySharp.Unionpay
                 return false;
             }
 
-            X509Certificate rootCert = GetRootCert();
+            var rootCert = GetRootCert();
             if (rootCert is null)
             {
                 return false;
             }
 
-            X509Certificate middleCert = GetMiddleCert();
+            var middleCert = GetMiddleCert();
             if (middleCert is null)
             {
                 return false;
@@ -210,7 +194,7 @@ namespace PaySharp.Unionpay
 
             try
             {
-                X509CertStoreSelector selector = new X509CertStoreSelector
+                var selector = new X509CertStoreSelector
                 {
                     Subject = cert.SubjectDN
                 };
@@ -219,7 +203,7 @@ namespace PaySharp.Unionpay
                 {
                     new TrustAnchor(rootCert, null)
                 };
-                PkixBuilderParameters pkixParams = new PkixBuilderParameters(trustAnchors, selector);
+                var pkixParams = new PkixBuilderParameters(trustAnchors, selector);
 
                 IList intermediateCerts = new ArrayList
                 {
@@ -230,14 +214,14 @@ namespace PaySharp.Unionpay
 
                 pkixParams.IsRevocationEnabled = false;
 
-                IX509Store intermediateCertStore = X509StoreFactory.Create(
+                var intermediateCertStore = X509StoreFactory.Create(
                     "Certificate/Collection",
                     new X509CollectionStoreParameters(intermediateCerts));
                 pkixParams.AddStore(intermediateCertStore);
 
-                PkixCertPathBuilder pathBuilder = new PkixCertPathBuilder();
-                PkixCertPathBuilderResult result = pathBuilder.Build(pkixParams);
-                PkixCertPath path = result.CertPath;
+                var pathBuilder = new PkixCertPathBuilder();
+                var result = pathBuilder.Build(pkixParams);
+                var path = result.CertPath;
                 return true;
             }
             catch
@@ -323,11 +307,11 @@ namespace PaySharp.Unionpay
 
         private static string GetIdentitiesFromCertficate(X509Certificate aCert)
         {
-            string tDN = aCert.SubjectDN.ToString();
-            string tPart = "";
-            if ((tDN != null))
+            var tDN = aCert.SubjectDN.ToString();
+            var tPart = "";
+            if (tDN != null)
             {
-                string[] tSplitStr = tDN.Substring(tDN.IndexOf("CN=")).Split("@".ToCharArray());
+                var tSplitStr = tDN.Substring(tDN.IndexOf("CN=")).Split("@".ToCharArray());
                 if (tSplitStr != null && tSplitStr.Length > 2 && tSplitStr[2] != null)
                 {
                     tPart = tSplitStr[2];
@@ -343,9 +327,9 @@ namespace PaySharp.Unionpay
                 pubKeyCert = pubKeyCert
                     .Replace("-----END CERTIFICATE-----", "")
                     .Replace("-----BEGIN CERTIFICATE-----", "");
-                byte[] x509CertBytes = Convert.FromBase64String(pubKeyCert);
-                X509CertificateParser cf = new X509CertificateParser();
-                X509Certificate x509Cert = cf.ReadCertificate(x509CertBytes);
+                var x509CertBytes = Convert.FromBase64String(pubKeyCert);
+                var cf = new X509CertificateParser();
+                var x509Cert = cf.ReadCertificate(x509CertBytes);
                 return x509Cert;
             }
             catch
@@ -365,7 +349,7 @@ namespace PaySharp.Unionpay
         /// <returns></returns>
         public static string Encrypt(string data)
         {
-            IBufferedCipher c = CipherUtilities.GetCipher("RSA/NONE/PKCS1Padding");
+            var c = CipherUtilities.GetCipher("RSA/NONE/PKCS1Padding");
             c.Init(true, new ParametersWithRandom(GetEncCert().GetPublicKey(), new SecureRandom()));
             return Convert.ToBase64String(c.DoFinal(Encoding.UTF8.GetBytes(data)));
         }
@@ -382,8 +366,8 @@ namespace PaySharp.Unionpay
         /// <returns></returns>
         public static string Decrypt(AsymmetricKeyParameter key, string data)
         {
-            byte[] dataByte = Convert.FromBase64String(data);
-            IBufferedCipher c = CipherUtilities.GetCipher("RSA/NONE/PKCS1Padding");
+            var dataByte = Convert.FromBase64String(data);
+            var c = CipherUtilities.GetCipher("RSA/NONE/PKCS1Padding");
             c.Init(false, key);
             return Encoding.UTF8.GetString(c.DoFinal(dataByte));
         }
@@ -399,13 +383,13 @@ namespace PaySharp.Unionpay
         /// <returns></returns>
         public static byte[] Inflater(string data)
         {
-            byte[] temp = new byte[1024];
-            MemoryStream memory = new MemoryStream();
-            Inflater inf = new Inflater();
+            var temp = new byte[1024];
+            var memory = new MemoryStream();
+            var inf = new Inflater();
             inf.SetInput(Convert.FromBase64String(data));
             while (!inf.IsFinished)
             {
-                int extracted = inf.Inflate(temp);
+                var extracted = inf.Inflate(temp);
                 if (extracted > 0)
                 {
                     memory.Write(temp, 0, extracted);

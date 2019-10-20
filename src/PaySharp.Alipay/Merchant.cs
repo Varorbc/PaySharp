@@ -1,6 +1,6 @@
-﻿using PaySharp.Core;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using PaySharp.Core;
 
 namespace PaySharp.Alipay
 {
@@ -60,10 +60,7 @@ namespace PaySharp.Alipay
         /// </summary>
         public string ReturnUrl
         {
-            get
-            {
-                return returnUrl;
-            }
+            get => returnUrl;
             set
             {
                 if (value.StartsWith("http") || value.StartsWith("https"))

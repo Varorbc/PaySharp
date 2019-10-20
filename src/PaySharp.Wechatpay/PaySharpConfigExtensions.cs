@@ -1,9 +1,9 @@
 ﻿#if NET45
-using PaySharp.Wechatpay;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using PaySharp.Wechatpay;
 
 namespace PaySharp.Core.Mvc
 {
@@ -31,7 +31,7 @@ namespace PaySharp.Core.Mvc
 
             foreach (var item in merchants)
             {
-                var WechatpayGateway = new WechatpayGateway(new Merchant
+                var wechatpayGateway = new WechatpayGateway(new Merchant
                 {
                     AppId = item["appId"].ToString(),
                     MchId = item["mchId"].ToString(),
@@ -46,10 +46,10 @@ namespace PaySharp.Core.Mvc
                 var gatewayUrl = item["gatewayUrl"].ToString();
                 if (!string.IsNullOrEmpty(gatewayUrl))
                 {
-                    WechatpayGateway.GatewayUrl = gatewayUrl;
+                    wechatpayGateway.GatewayUrl = gatewayUrl;
                 }
 
-                gateways.Add(WechatpayGateway);
+                gateways.Add(wechatpayGateway);
             }
 
             return gateways;

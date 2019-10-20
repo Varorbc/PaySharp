@@ -1,13 +1,13 @@
-﻿using PaySharp.Core;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
 using PaySharp.Core.Response;
 using PaySharp.Core.Utils;
 using PaySharp.Qpay.Request;
 using PaySharp.Qpay.Response;
-using System;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 
 namespace PaySharp.Qpay
 {
@@ -45,7 +45,7 @@ namespace PaySharp.Qpay
                 baseResponse.GatewayData = gatewayData;
                 if (baseResponse.ReturnCode == "SUCCESS")
                 {
-                    string sign = gatewayData.GetStringValue("sign");
+                    var sign = gatewayData.GetStringValue("sign");
 
                     if (!string.IsNullOrEmpty(sign) && !CheckSign(gatewayData, merchant.Key, sign))
                     {
@@ -80,7 +80,7 @@ namespace PaySharp.Qpay
             request.GatewayData.Add(merchant, StringCase.Snake);
             ((BaseRequest<TModel, TResponse>)request).Execute(merchant);
 
-            string sign = BuildSign(request.GatewayData, merchant.Key);
+            var sign = BuildSign(request.GatewayData, merchant.Key);
             request.GatewayData.Add("sign", sign);
         }
 
@@ -88,7 +88,7 @@ namespace PaySharp.Qpay
         {
             gatewayData.Remove("sign");
 
-            string data = $"{gatewayData.ToUrl(false)}&key={key}";
+            var data = $"{gatewayData.ToUrl(false)}&key={key}";
             return EncryptUtil.MD5(data);
         }
 

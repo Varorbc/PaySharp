@@ -45,21 +45,21 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Antlr" Version="3.5.0.2" />
-    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Autofac" Version="4.9.4" />
     <PackageReference Include="Autofac.Mvc5" Version="4.0.2" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.6" />
-    <PackageReference Include="Microsoft.AspNet.Mvc.zh-Hans" Version="5.2.6" />
-    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.6" />
-    <PackageReference Include="Microsoft.AspNet.Razor.zh-Hans" Version="3.2.6" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.Mvc.zh-Hans" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.7" />
+    <PackageReference Include="Microsoft.AspNet.Razor.zh-Hans" Version="3.2.7" />
     <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
     <PackageReference Include="Microsoft.AspNet.Web.Optimization.zh-Hans" Version="1.1.3" />
     <PackageReference Include="Microsoft.AspNet.WebApi">
-      <Version>5.2.6</Version>
+      <Version>5.2.7</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.6" />
-    <PackageReference Include="Microsoft.AspNet.WebPages.zh-Hans" Version="3.2.6" />
+    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.7" />
+    <PackageReference Include="Microsoft.AspNet.WebPages.zh-Hans" Version="3.2.7" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="WebGrease" Version="1.6.0" />
   </ItemGroup>
   <ItemGroup>

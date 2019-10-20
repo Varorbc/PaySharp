@@ -1,12 +1,12 @@
-﻿#if NETSTANDARD2_0
+﻿#if NETCOREAPP3_0
 using Microsoft.Extensions.Options;
 #endif
+using System.Threading.Tasks;
 using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
 using PaySharp.Core.Utils;
 using PaySharp.Qpay.Response;
-using System.Threading.Tasks;
 
 namespace PaySharp.Qpay
 {
@@ -33,7 +33,7 @@ namespace PaySharp.Qpay
             _merchant = merchant;
         }
 
-#if NETSTANDARD2_0
+#if NETCOREAPP3_0
 
         /// <summary>
         /// 初始化QQ钱包网关

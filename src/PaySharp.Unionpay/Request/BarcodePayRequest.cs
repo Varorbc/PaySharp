@@ -1,7 +1,7 @@
-﻿using PaySharp.Core.Response;
+﻿using System;
+using PaySharp.Core.Response;
 using PaySharp.Unionpay.Domain;
 using PaySharp.Unionpay.Response;
-using System;
 
 namespace PaySharp.Unionpay.Request
 {

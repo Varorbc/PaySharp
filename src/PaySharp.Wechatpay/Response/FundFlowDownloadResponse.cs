@@ -1,5 +1,5 @@
-﻿using PaySharp.Core.Request;
-using System.Text;
+﻿using System.Text;
+using PaySharp.Core.Request;
 
 namespace PaySharp.Wechatpay.Response
 {

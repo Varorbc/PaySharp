@@ -1,6 +1,6 @@
-﻿using PaySharp.Core.Utils;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
+using PaySharp.Core.Utils;
 
 namespace PaySharp.Core
 {
@@ -60,7 +60,7 @@ namespace PaySharp.Core
         /// <param name="gatewayData">网关数据</param>
         public static bool ExistParameter(string[] parmaName, GatewayData gatewayData)
         {
-            int compareCount = 0;
+            var compareCount = 0;
             foreach (var item in parmaName)
             {
                 if (gatewayData.Exists(item))
@@ -69,12 +69,7 @@ namespace PaySharp.Core
                 }
             }
 
-            if (compareCount == parmaName.Length)
-            {
-                return true;
-            }
-
-            return false;
+            return compareCount == parmaName.Length;
         }
 
         /// <summary>
@@ -100,7 +95,7 @@ namespace PaySharp.Core
                 {
                     try
                     {
-#if NETSTANDARD2_0
+#if NETCOREAPP3_0
                         gatewayData.FromForm(HttpUtil.Form);
 #else
                         gatewayData.FromNameValueCollection(HttpUtil.Form);

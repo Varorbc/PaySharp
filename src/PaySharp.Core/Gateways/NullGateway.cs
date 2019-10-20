@@ -1,6 +1,6 @@
-﻿using PaySharp.Core.Request;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using PaySharp.Core.Request;
 
 namespace PaySharp.Core
 {
