@@ -8,6 +8,7 @@
     <Description>支付核心</Description>
     <PackageTags>dotnetcore;pay;</PackageTags>
     <PackageReleaseNotes>
+      支持.net core3.0
     </PackageReleaseNotes>
   </PropertyGroup>
 

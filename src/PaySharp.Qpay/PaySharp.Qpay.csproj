@@ -8,7 +8,7 @@
     <Description>QQ钱包支付</Description>
     <PackageTags>dotnetcore;pay;qpay;</PackageTags>
     <PackageReleaseNotes>
-      更新至3.0
+      支持.net core3.0
     </PackageReleaseNotes>
   </PropertyGroup>
 

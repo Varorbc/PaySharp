@@ -8,7 +8,7 @@
     <Description>银联支付</Description>
     <PackageTags>dotnetcore;pay;unionpay;</PackageTags>
     <PackageReleaseNotes>
-      更新至3.0
+      支持.net core3.0
     </PackageReleaseNotes>
   </PropertyGroup>
 
