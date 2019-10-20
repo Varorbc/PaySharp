@@ -403,9 +403,9 @@ namespace PaySharp.Core.Utils
                     bitLen = 2048;
                 }
 
-                var rSA = System.Security.Cryptography.RSA.Create();
-                rSA.KeySize = bitLen;
-                var rSAparams = new RSAParameters
+                var rsa = System.Security.Cryptography.RSA.Create();
+                rsa.KeySize = bitLen;
+                var rsaParams = new RSAParameters
                 {
                     Modulus = modulus,
                     Exponent = e,
@@ -416,8 +416,8 @@ namespace PaySharp.Core.Utils
                     DQ = dQ,
                     InverseQ = iQ
                 };
-                rSA.ImportParameters(rSAparams);
-                return rSA;
+                rsa.ImportParameters(rsaParams);
+                return rsa;
             }
             catch
             {
