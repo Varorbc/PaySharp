@@ -61,8 +61,8 @@ PaySharp.Qpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Qpay.svg)](htt
 
 # 开发环境
 * Windows 10
-* Visual Studio 2017(15.7)
-* .NET Core SDK 2.1
+* Visual Studio 2019(16.3)
+* .NET Core SDK 3.0
 
 # 如何使用
 ---
