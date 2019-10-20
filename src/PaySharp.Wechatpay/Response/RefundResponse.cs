@@ -35,7 +35,7 @@ namespace PaySharp.Wechatpay.Response
         public int RefundAmount { get; set; }
 
         /// <summary>
-        /// 应结退款金额,去掉非充值代金券退款金额后的退款金额，退款金额=申请退款金额-非充值代金券退款金额，退款金额<=申请退款金额
+        /// 应结退款金额,去掉非充值代金券退款金额后的退款金额，退款金额=申请退款金额-非充值代金券退款金额，退款金额&lt;=申请退款金额
         /// </summary>
         [ReName(Name = "settlement_refund_fee")]
         public int SettlementRefundAmount { get; set; }
@@ -82,7 +82,7 @@ namespace PaySharp.Wechatpay.Response
         public int CashRefundAmount { get; set; }
 
         /// <summary>
-        /// 代金券退款总金额,代金券退款金额<=退款金额，退款金额-代金券或立减优惠退款金额为现金，说明详见代金券或立减优惠
+        /// 代金券退款总金额,代金券退款金额&lt;=退款金额，退款金额-代金券或立减优惠退款金额为现金，说明详见代金券或立减优惠
         /// </summary>
         [ReName(Name = "coupon_refund_fee")]
         public int CouponRefundAmount { get; set; }

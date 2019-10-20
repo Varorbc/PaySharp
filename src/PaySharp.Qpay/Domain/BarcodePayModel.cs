@@ -65,7 +65,7 @@ namespace PaySharp.Qpay.Domain
         /// 指定本单参与某个QQ钱包活动或活动档位的标识，包含两个标识：
         /// sale_tag --- 不同活动的匹配标志
         /// level_tag --- 同一活动不同优惠档位的标志，可不填。
-        /// 格式如下（本字段参与签名）：promotion_tag=level_tag=xxx&sale_tag=xxx
+        /// 格式如下（本字段参与签名）：promotion_tag=level_tag=xxx&amp;sale_tag=xxx
         /// </summary>
         [StringLength(128, ErrorMessage = "QQ钱包活动标识最大长度为128位")]
         public string PromotionTag { get; set; }
