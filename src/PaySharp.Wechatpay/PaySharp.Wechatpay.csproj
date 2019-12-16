@@ -8,7 +8,7 @@
     <Description>微信支付</Description>
     <PackageTags>dotnetcore;pay;wechatpay;</PackageTags>
     <PackageReleaseNotes>
-      支持.net core3.0
+      支持.net core3.1
     </PackageReleaseNotes>
   </PropertyGroup>
 

@@ -2,7 +2,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
-    <DocumentationFile>..\..\output\release\netcoreapp3.0\$(Title).xml</DocumentationFile>
+    <DocumentationFile>..\..\output\release\netcoreapp3.1\$(Title).xml</DocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
     <OutputPath>..\..\output\release\</OutputPath>
   </PropertyGroup>
