@@ -1,4 +1,4 @@
-﻿#if NETCOREAPP3_0
+﻿#if NETCOREAPP3_1
 using Microsoft.AspNetCore.Http;
 #endif
 using System;
@@ -406,7 +406,7 @@ namespace PaySharp.Core
             }
         }
 
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
 
         /// <summary>
         /// 将表单数据转换为网关数据

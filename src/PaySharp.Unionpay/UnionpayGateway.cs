@@ -1,4 +1,4 @@
-﻿#if NETCOREAPP3_0
+﻿#if NETCOREAPP3_1
 using Microsoft.Extensions.Options;
 #endif
 using System;
@@ -37,7 +37,7 @@ namespace PaySharp.Unionpay
             _merchant.CertKey = Util.GetCertKey(merchant.CertPath, merchant.CertPwd);
         }
 
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
 
         /// <summary>
         /// 初始化银联支付网关

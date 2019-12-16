@@ -3,7 +3,7 @@
   <Import Project="../../package.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net45;netcoreapp3.1</TargetFrameworks>
     <Title>PaySharp.Unionpay</Title>
     <Description>银联支付</Description>
     <PackageTags>dotnetcore;pay;unionpay;</PackageTags>

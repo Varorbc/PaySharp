@@ -1,4 +1,4 @@
-﻿#if NETCOREAPP3_0
+﻿#if NETCOREAPP3_1
 using Microsoft.AspNetCore.Http;
 #else
 using System.Collections.Specialized;
@@ -21,7 +21,7 @@ namespace PaySharp.Core.Utils
     {
         #region 属性
 
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
 
         private static IHttpContextAccessor _httpContextAccessor;
 
@@ -242,7 +242,7 @@ namespace PaySharp.Core.Utils
         {
             Current.Response.ContentType = "text/plain;charset=utf-8";
 
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
             Task.Run(async () =>
             {
                 await Current.Response.WriteAsync(text);
@@ -272,7 +272,7 @@ namespace PaySharp.Core.Utils
             Current.Response.Headers.Add("Content-Disposition", "attachment;filename=" + WebUtility.UrlEncode(Path.GetFileName(stream.Name)));
             Current.Response.Headers.Add("Content-Length", size.ToString());
 
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
             Task.Run(async () =>
             {
                 await Current.Response.Body.WriteAsync(buffer, 0, (int)size);
