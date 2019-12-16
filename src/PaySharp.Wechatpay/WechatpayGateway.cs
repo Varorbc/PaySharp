@@ -1,4 +1,4 @@
-﻿#if NETCOREAPP3_0
+﻿#if NETCOREAPP3_1
 using Microsoft.Extensions.Options;
 #endif
 using System.Threading.Tasks;
@@ -35,7 +35,7 @@ namespace PaySharp.Wechatpay
             _merchant = merchant;
         }
 
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
 
         /// <summary>
         /// 初始化微信支付网关
