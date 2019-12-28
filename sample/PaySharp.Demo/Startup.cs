@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PaySharp.Alipay;
+using PaySharp.Allinpay;
 using PaySharp.Unionpay;
 
 namespace PaySharp.Demo
@@ -70,6 +71,14 @@ namespace PaySharp.Demo
                     ReturnUrl = "http://localhost:61377/Notify"
                 };
 
+                var allinpayMerchant = new Allinpay.Merchant
+                {
+                    AppId = "00000051",
+                    MchId = "990581007426001",
+                    Key = "allinpay888",
+                    NotifyUrl = "http://localhost:61337/Notify"
+                };
+
                 a.Add(new AlipayGateway(alipayMerchant)
                 {
                     GatewayUrl = "https://openapi.alipaydev.com"
@@ -78,6 +87,10 @@ namespace PaySharp.Demo
                 a.Add(new UnionpayGateway(unionpayMerchant)
                 {
                     GatewayUrl = "https://gateway.test.95516.com"
+                });
+                a.Add(new AllinpayGateway(allinpayMerchant)
+                {
+                    GatewayUrl = "https://test.allinpaygd.com"
                 });
 
                 //a.UseAlipay(Configuration);

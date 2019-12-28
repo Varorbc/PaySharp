@@ -59,7 +59,7 @@
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.7" />
     <PackageReference Include="Microsoft.AspNet.WebPages.zh-Hans" Version="3.2.7" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="WebGrease" Version="1.6.0" />
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +82,9 @@
   <ItemGroup>
     <Compile Include="..\PaySharp.Demo\Controllers\AlipayController.cs">
       <Link>Controllers\AlipayController.cs</Link>
+    </Compile>
+    <Compile Include="..\PaySharp.Demo\Controllers\AllinpayController.cs">
+      <Link>Controllers\AllinpayController.cs</Link>
     </Compile>
     <Compile Include="..\PaySharp.Demo\Controllers\HomeController.cs">
       <Link>Controllers\HomeController.cs</Link>
@@ -140,6 +143,10 @@
     <ProjectReference Include="..\..\src\PaySharp.Alipay\PaySharp.Alipay.csproj">
       <Project>{9e981637-175d-44e3-b388-11d4389051a1}</Project>
       <Name>PaySharp.Alipay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\PaySharp.Allinpay\PaySharp.Allinpay.csproj">
+      <Project>{5d183f2a-bbb4-4b3e-9951-4584a70ecb60}</Project>
+      <Name>PaySharp.Allinpay</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\PaySharp.Core.Mvc\PaySharp.Core.Mvc.csproj">
       <Project>{8d517c53-ec18-40c7-bf07-f400e172f3aa}</Project>
