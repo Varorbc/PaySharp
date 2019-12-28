@@ -69,7 +69,7 @@ namespace PaySharp.Demo_Net_
                      AppId = "00000051",
                      MchId = "990581007426001",
                      Key = "allinpay888",
-                     NotifyUrl = "http://localhost:61337/Notify"
+                     NotifyUrl = "http://localhost:61338/Notify"
                  };
 
                  gateways.Add(new AlipayGateway(alipayMerchant)
