@@ -19,7 +19,7 @@ namespace PaySharp.Allinpay
         /// </summary>
         /// <remarks>只对微信支付有效</remarks>
         [ReName(Name = "sub_appid")]
-        [StringLength(32, ErrorMessage = "应用编号最大长度为32位")]
+        [StringLength(32, ErrorMessage = "微信子AppId最大长度为32位")]
         public string SubAppId { get; set; }
 
         /// <summary>

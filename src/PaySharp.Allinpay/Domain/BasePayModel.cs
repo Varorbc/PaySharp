@@ -32,7 +32,7 @@ namespace PaySharp.Allinpay.Domain
         /// <summary>
         /// 商品名称，为空则以商户名作为商品名称
         /// </summary>
-        [StringLength(50, ErrorMessage = "商品描述最大长度为50位")]
+        [StringLength(50, ErrorMessage = "商品名称最大长度为50位")]
         public string Body { get; set; }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace PaySharp.Allinpay.Domain
         /// </summary>
         /// <remarks>暂时只对微信支付和支付宝有效,仅支持no_credit</remarks>
         [ReName(Name = "limit_pay")]
-        [StringLength(32, ErrorMessage = "指定支付方式最大长度为32位")]
+        [StringLength(32, ErrorMessage = "支付限制方式最大长度为32位")]
         public string LimitPay { get; set; }
 
         /// <summary>

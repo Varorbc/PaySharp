@@ -74,7 +74,7 @@ namespace PaySharp.Allinpay
             base.NotifyResponse = await GatewayData.ToObjectAsync<NotifyResponse>(StringCase.Lower);
             base.NotifyResponse.Raw = GatewayData.Raw;
 
-            if (NotifyResponse.Sign != SubmitProcess.BuildSign(GatewayData, _merchant.Key))
+            if (!SubmitProcess.CheckSign(GatewayData, _merchant.Key, NotifyResponse.Sign))
             {
                 throw new GatewayException("签名不一致");
             }
