@@ -7,10 +7,10 @@ namespace PaySharp.Allinpay.Response
     public class QueryResponse : BaseResponse
     {
         /// <summary>
-        /// 支付平台用户标识
+        /// 交易账户
         /// </summary>
         [ReName(Name = "acct")]
-        public string UserId { get; set; }
+        public string TradeAccount { get; set; }
 
         /// <summary>
         /// 交易类型

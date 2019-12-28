@@ -17,11 +17,11 @@ namespace PaySharp.Allinpay.Domain
         public int ValidTime { get; set; } = 5;
 
         /// <summary>
-        /// 支付平台用户标识
+        /// 交易账户
         /// </summary>
         [ReName(Name = "acct")]
-        [StringLength(32, ErrorMessage = "支付平台用户标识最大长度为32位")]
-        public string UserId { get; set; }
+        [StringLength(32, ErrorMessage = "交易账户最大长度为32位")]
+        public string TradeAccount { get; set; }
 
         /// <summary>
         /// 商户的终端ip

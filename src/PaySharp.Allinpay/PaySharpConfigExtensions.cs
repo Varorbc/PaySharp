@@ -35,6 +35,7 @@ namespace PaySharp.Core.Mvc
                 {
                     AppId = item["appId"].ToString(),
                     MchId = item["mchId"].ToString(),
+                    Key = item["key"].ToString(),
                     NotifyUrl = item["notifyUrl"].ToString()
                 });
 
