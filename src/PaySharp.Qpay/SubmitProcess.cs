@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 using PaySharp.Core;
 using PaySharp.Core.Exceptions;
 using PaySharp.Core.Request;
@@ -25,14 +24,7 @@ namespace PaySharp.Qpay
                 cert = new X509Certificate2(merchant.SslCertPath, merchant.SslCertPassword, X509KeyStorageFlags.MachineKeySet);
             }
 
-            string result = null;
-            Task.Run(async () =>
-            {
-                result = await HttpUtil
-                 .PostAsync(request.RequestUrl, request.GatewayData.ToXml(), cert);
-            })
-            .GetAwaiter()
-            .GetResult();
+            var result = HttpUtil.Post(request.RequestUrl, request.GatewayData.ToXml(), cert);
 
             BaseResponse baseResponse;
             if (!(request is BillDownloadRequest))

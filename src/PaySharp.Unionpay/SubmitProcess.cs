@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Org.BouncyCastle.Crypto;
 using PaySharp.Core;
 using PaySharp.Core.Exceptions;
@@ -19,14 +18,7 @@ namespace PaySharp.Unionpay
         {
             AddMerchant(merchant, request, gatewayUrl);
 
-            string result = null;
-            Task.Run(async () =>
-            {
-                result = await HttpUtil
-                 .PostAsync(request.RequestUrl, request.GatewayData.ToUrl());
-            })
-            .GetAwaiter()
-            .GetResult();
+            var result = HttpUtil.Post(request.RequestUrl, request.GatewayData.ToUrl());
 
             var gatewayData = new GatewayData(StringComparer.Ordinal);
             gatewayData.FromUrl(result, false);
