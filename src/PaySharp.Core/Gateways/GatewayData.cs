@@ -120,62 +120,57 @@ namespace PaySharp.Core
             var properties = type.GetProperties();
             var fields = type.GetFields();
 
-            Add(properties);
-            Add(fields);
+            Add(obj, properties, stringCase);
+            Add(obj, fields, stringCase);
 
             return true;
+        }
 
-            void Add(MemberInfo[] info)
+        private void Add(object obj, MemberInfo[] info, StringCase stringCase)
+        {
+            foreach (var item in info)
             {
-                foreach (var item in info)
+                var notAddattributes = item.GetCustomAttributes(typeof(IgnoreAttribute), true);
+                if (notAddattributes.Length > 0)
                 {
-                    var notAddattributes = item.GetCustomAttributes(typeof(IgnoreAttribute), true);
-                    if (notAddattributes.Length > 0)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    string key;
-                    var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
-                    if (renameAttribute.Length > 0)
+                string key;
+                var renameAttribute = item.GetCustomAttributes(typeof(ReNameAttribute), true);
+                if (renameAttribute.Length > 0)
+                {
+                    key = ((ReNameAttribute)renameAttribute[0]).Name;
+                }
+                else
+                {
+                    key = stringCase switch
                     {
-                        key = ((ReNameAttribute)renameAttribute[0]).Name;
-                    }
-                    else
-                    {
-                        if (stringCase is StringCase.Camel)
-                        {
-                            key = item.Name.ToCamelCase();
-                        }
-                        else if (stringCase is StringCase.Snake)
-                        {
-                            key = item.Name.ToSnakeCase();
-                        }
-                        else
-                        {
-                            key = item.Name;
-                        }
-                    }
-
-                    var value = item.MemberType switch
-                    {
-                        MemberTypes.Field => ((FieldInfo)item).GetValue(obj),
-                        MemberTypes.Property => ((PropertyInfo)item).GetValue(obj),
-                        _ => throw new NotImplementedException(),
+                        StringCase.Snake => item.Name.ToSnakeCase(),
+                        StringCase.Camel => item.Name.ToCamelCase(),
+                        StringCase.Lower => item.Name.ToLower(),
+                        _ => item.Name,
                     };
-                    if (value is null || string.IsNullOrEmpty(value.ToString()))
-                    {
-                        continue;
-                    }
+                }
 
-                    if (Exists(key))
-                    {
-                        _values[key] = value;
-                    }
-                    else
-                    {
-                        _values.Add(key, value);
-                    }
+                var value = item.MemberType switch
+                {
+                    MemberTypes.Field => ((FieldInfo)item).GetValue(obj),
+                    MemberTypes.Property => ((PropertyInfo)item).GetValue(obj),
+                    _ => throw new NotImplementedException(),
+                };
+                if (value is null || string.IsNullOrEmpty(value.ToString()))
+                {
+                    continue;
+                }
+
+                if (Exists(key))
+                {
+                    _values[key] = value;
+                }
+                else
+                {
+                    _values.Add(key, value);
                 }
             }
         }
