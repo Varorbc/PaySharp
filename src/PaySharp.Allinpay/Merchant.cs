@@ -19,8 +19,7 @@ namespace PaySharp.Allinpay
         /// </summary>
         /// <remarks>只对微信支付有效</remarks>
         [ReName(Name = "sub_appid")]
-        [Required(ErrorMessage = "请输入支付机构提供的应用编号")]
-        [StringLength(8, ErrorMessage = "应用编号最大长度为8位")]
+        [StringLength(32, ErrorMessage = "应用编号最大长度为32位")]
         public string SubAppId { get; set; }
 
         /// <summary>
@@ -34,8 +33,7 @@ namespace PaySharp.Allinpay
         /// <summary>
         /// 接口版本号
         /// </summary>
-        [StringLength(2, ErrorMessage = "接口版本号最大长度为2位")]
-        public string Version { get; set; } = "11";
+        public int Version => 11;
 
         /// <summary>
         /// MD5交易密钥

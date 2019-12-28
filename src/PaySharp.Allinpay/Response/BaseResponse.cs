@@ -71,11 +71,13 @@ namespace PaySharp.Allinpay.Response
         /// <summary>
         /// 返回状态码
         /// </summary>
+        [ReName(Name = "retcode")]
         public string ReturnCode { get; set; }
 
         /// <summary>
         /// 返回信息
         /// </summary>
+        [ReName(Name = "retmsg")]
         public string ReturnMsg { get; set; }
 
         /// <summary>

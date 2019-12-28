@@ -20,19 +20,12 @@ namespace PaySharp.Allinpay
             var sign = BuildSign(request.GatewayData, merchant.Key);
             request.GatewayData.Add("sign", sign);
 
-            string result = null;
-            Task.Run(async () =>
-            {
-                result = await HttpUtil
-                 .PostAsync(request.RequestUrl, request.GatewayData.ToXml());
-            })
-            .GetAwaiter()
-            .GetResult();
+            var result = HttpUtil.Post(request.RequestUrl, request.GatewayData.ToUrl());
 
             var gatewayData = new GatewayData();
-            gatewayData.FromXml(result);
+            gatewayData.FromJson(result);
 
-            var baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Snake);
+            var baseResponse = (BaseResponse)(object)gatewayData.ToObject<TResponse>(StringCase.Lower);
             baseResponse.Raw = result;
             baseResponse.GatewayData = gatewayData;
             if (baseResponse.ReturnCode == "SUCCESS")
@@ -44,7 +37,6 @@ namespace PaySharp.Allinpay
                     throw new GatewayException("签名验证失败");
                 }
 
-                baseResponse.Sign = sign;
                 baseResponse.Execute(merchant, request);
             }
 
@@ -62,7 +54,7 @@ namespace PaySharp.Allinpay
             {
                 request.RequestUrl = _gatewayUrl + request.RequestUrl;
             }
-            request.GatewayData.Add(merchant, StringCase.Snake);
+            request.GatewayData.Add(merchant, StringCase.Lower);
             ((BaseRequest<TModel, TResponse>)request).Execute(merchant);
         }
 
@@ -74,7 +66,7 @@ namespace PaySharp.Allinpay
             var data = gatewayData.ToUrl(false);
             var sign = EncryptUtil.MD5(data);
 
-            gatewayData.Remove("sign");
+            gatewayData.Remove("key");
 
             return sign;
         }

@@ -524,18 +524,13 @@ namespace PaySharp.Core
                 }
                 else
                 {
-                    if (stringCase is StringCase.Camel)
+                    key = stringCase switch
                     {
-                        key = item.Name.ToCamelCase();
-                    }
-                    else if (stringCase is StringCase.Snake)
-                    {
-                        key = item.Name.ToSnakeCase();
-                    }
-                    else
-                    {
-                        key = item.Name;
-                    }
+                        StringCase.Snake => item.Name.ToSnakeCase(),
+                        StringCase.Camel => item.Name.ToCamelCase(),
+                        StringCase.Lower => item.Name.ToLower(),
+                        _ => item.Name
+                    };
                 }
 
                 var value = GetStringValue(key);

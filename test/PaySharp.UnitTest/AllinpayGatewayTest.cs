@@ -3,7 +3,6 @@ using PaySharp.Allinpay;
 using PaySharp.Allinpay.Domain;
 using PaySharp.Allinpay.Enum;
 using PaySharp.Allinpay.Request;
-using PaySharp.Allinpay.Response;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -35,10 +34,10 @@ namespace PaySharp.UnitTest
         }
 
         [Fact]
-        public void TestWebPay()
+        public void TestUnifiedPay()
         {
-            var request = new BaseRequest<BasePayModel, BaseResponse>();
-            request.AddGatewayData(new BasePayModel()
+            var request = new UnifiedPayRequest();
+            request.AddGatewayData(new UnifiedPayModel
             {
                 PayType = PayType.A01,
                 Body = "通联收银宝商品测试",

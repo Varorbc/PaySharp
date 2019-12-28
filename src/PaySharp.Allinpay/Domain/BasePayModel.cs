@@ -19,6 +19,7 @@ namespace PaySharp.Allinpay.Domain
         /// <summary>
         /// 商户的交易订单号
         /// </summary>
+        [ReName(Name = "reqsn")]
         [StringLength(32, ErrorMessage = "商户的交易订单号最大长度为32位")]
         [Required(ErrorMessage = "请设置商户的交易订单号")]
         public string OutTradeNo { get; set; }
@@ -52,9 +53,17 @@ namespace PaySharp.Allinpay.Domain
         public int ValidTime { get; set; } = 5;
 
         /// <summary>
+        /// 支付平台用户标识
+        /// </summary>
+        [ReName(Name = "acct")]
+        [StringLength(32, ErrorMessage = "支付平台用户标识最大长度为32位")]
+        public string UserId { get; set; }
+
+        /// <summary>
         /// 支付限制,上传此参数no_credit--可限制用户不能使用信用卡支付
         /// </summary>
         /// <remarks>暂时只对微信支付和支付宝有效,仅支持no_credit</remarks>
+        [ReName(Name = "limit_pay")]
         [StringLength(32, ErrorMessage = "指定支付方式最大长度为32位")]
         public string LimitPay { get; set; }
 
@@ -62,6 +71,7 @@ namespace PaySharp.Allinpay.Domain
         /// 订单优惠标记，用于区分订单是否可以享受优惠，字段内容在微信后台配置券时进行设置，说明详见代金券或立减优惠
         /// </summary>
         /// <remarks>只对微信支付有效W01交易方式不支持</remarks>
+        [ReName(Name = "goods_tag")]
         [StringLength(32, ErrorMessage = "订单优惠标记最大长度为32位")]
         public string GoodsTag { get; set; }
 
@@ -118,6 +128,6 @@ namespace PaySharp.Allinpay.Domain
         /// <summary>
         /// 花呗分期数
         /// </summary>
-        public int FQNum { get; set; }
+        public int? FQNum { get; set; }
     }
 }
