@@ -534,10 +534,19 @@ namespace PaySharp.Core
                 }
 
                 var value = GetStringValue(key);
-
-                if (value != null)
+                if (value == null)
                 {
-                    item.SetValue(obj, Convert.ChangeType(value, item.PropertyType));
+                    continue;
+                }
+
+                var propertyType = item.PropertyType;
+                if (propertyType.IsEnum)
+                {
+                    item.SetValue(obj, Enum.Parse(propertyType, value));
+                }
+                else
+                {
+                    item.SetValue(obj, Convert.ChangeType(value, propertyType));
                 }
             }
 

@@ -3,6 +3,7 @@ using PaySharp.Allinpay;
 using PaySharp.Allinpay.Domain;
 using PaySharp.Allinpay.Enum;
 using PaySharp.Allinpay.Request;
+using PaySharp.Core.Response;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -40,7 +41,7 @@ namespace PaySharp.UnitTest
             request.AddGatewayData(new UnifiedPayModel
             {
                 PayType = PayType.A01,
-                Body = "通联收银宝商品测试",
+                Body = "通联收银宝统一支付测试",
                 TotalAmount = 1,
                 OutTradeNo = OutTradeNo
             });
@@ -49,6 +50,32 @@ namespace PaySharp.UnitTest
 
             _output.WriteLine(response.PayInfo);
             Assert.NotNull(response.PayInfo);
+        }
+
+        [Fact]
+        public void TestBarcodePay()
+        {
+            var request = new BarcodePayRequest();
+            request.AddGatewayData(new BarcodePayModel()
+            {
+                TotalAmount = 1,
+                Body = "通联收银宝条码支付测试",
+                OutTradeNo = OutTradeNo,
+                AuthCode = "134689476208686162"
+            });
+            request.PaySucceed += BarcodePay_PaySucceed;
+            request.PayFailed += BarcodePay_PayFaild;
+
+            var response = _allinpayGateway.Execute(request);
+            //Assert.Equal("40004", response.Code);
+        }
+
+        private void BarcodePay_PaySucceed(IResponse response, string message)
+        {
+        }
+
+        private void BarcodePay_PayFaild(IResponse response, string message)
+        {
         }
     }
 }

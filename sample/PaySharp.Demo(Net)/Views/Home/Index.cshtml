@@ -1422,8 +1422,9 @@
             <div id="tabs-purchase-allinpay">
                 <ul>
                     <li><a href="#tabs-purchase-1">统一支付</a></li>
-                    <li><a href="#tabs-purchase-2">统一扫码</a></li>
+                    <li><a href="#tabs-purchase-2">统一条码</a></li>
                     <li><a href="#tabs-purchase-3">查询订单</a></li>
+                    <li><a href="#tabs-purchase-4">撤销订单</a></li>
                 </ul>
 
                 <div id="tabs-purchase-1">
@@ -1452,7 +1453,7 @@
                 </div>
 
                 <div id="tabs-purchase-2">
-                    <form class="api-form" action="/Allinpay/ScanPay" method="post" target="_blank">
+                    <form class="api-form" action="/Allinpay/BarcodePay" method="post" target="_blank">
                         <p>
                             <label>订单号：</label>
                             <input type="text" name="out_trade_no" value='@DateTime.Now.ToString("yyyyMMddHHmmssfff")'>
@@ -1464,6 +1465,10 @@
                         <p>
                             <label>金额：</label>
                             <input type="text" name="total_amount" value="1" title="单位为分。">
+                        </p>
+                        <p>
+                            <label>授权码：</label>
+                            <input type="text" name="auth_code" title="支付授权码">
                         </p>
                         <p>
                             <label>&nbsp;</label>
@@ -1494,6 +1499,27 @@
                     <hr />
                     <p class="faq">
                         <a href="https://aipboss.allinpay.com/know/devhelp/home.php?id=93" target="_blank">* 查看接口 请求参数、响应参数</a>
+                    </p>
+                </div>
+
+                <div id="tabs-purchase-4">
+                    <form class="api-form" action="/Allinpay/Cancel" method="post" target="_blank">
+                        <p>
+                            <label>订单号：</label>
+                            <input type="text" name="order_id" value="">
+                        </p>
+                        <p>
+                            <label>流水号：</label>
+                            <input type="text" name="query_id" value="">
+                        </p>
+                        <p>
+                            <label>&nbsp;</label>
+                            <input type="submit" class="button" value="提交">
+                        </p>
+                    </form>
+                    <hr />
+                    <p class="faq">
+                        <a href="https://aipboss.allinpay.com/know/devhelp/home.php?id=91" target="_blank">* 查看接口 请求参数、响应参数</a>
                     </p>
                 </div>
 

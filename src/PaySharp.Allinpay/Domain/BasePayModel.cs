@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using PaySharp.Allinpay.Enum;
 using PaySharp.Core;
 using PaySharp.Core.Utils;
 
@@ -25,11 +24,6 @@ namespace PaySharp.Allinpay.Domain
         public string OutTradeNo { get; set; }
 
         /// <summary>
-        /// 交易方式
-        /// </summary>
-        public PayType PayType { get; set; }
-
-        /// <summary>
         /// 随机字符串
         /// </summary>
         [ReName(Name = "randomstr")]
@@ -46,18 +40,6 @@ namespace PaySharp.Allinpay.Domain
         /// </summary>
         [StringLength(80, ErrorMessage = "备注最大长度为80位")]
         public string Remark { get; set; }
-
-        /// <summary>
-        /// 订单有效时间，以分为单位
-        /// </summary>
-        public int ValidTime { get; set; } = 5;
-
-        /// <summary>
-        /// 支付平台用户标识
-        /// </summary>
-        [ReName(Name = "acct")]
-        [StringLength(32, ErrorMessage = "支付平台用户标识最大长度为32位")]
-        public string UserId { get; set; }
 
         /// <summary>
         /// 支付限制,上传此参数no_credit--可限制用户不能使用信用卡支付
@@ -97,13 +79,6 @@ namespace PaySharp.Allinpay.Domain
         /// 业务扩展参数
         /// </summary>
         public string ExtendParams { get; set; }
-
-        /// <summary>
-        /// 商户的终端ip
-        /// </summary>
-        [ReName(Name = "cusip")]
-        [StringLength(16, ErrorMessage = "商户的终端ip最大长度为16位")]
-        public string TerminalIP { get; set; }
 
         /// <summary>
         /// 证件号
