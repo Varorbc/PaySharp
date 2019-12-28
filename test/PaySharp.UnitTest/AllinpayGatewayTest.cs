@@ -61,13 +61,13 @@ namespace PaySharp.UnitTest
                 TotalAmount = 1,
                 Body = "通联收银宝条码支付测试",
                 OutTradeNo = OutTradeNo,
-                AuthCode = "134689476208686162"
+                AuthCode = "134682490424538597"
             });
             request.PaySucceed += BarcodePay_PaySucceed;
             request.PayFailed += BarcodePay_PayFaild;
 
             var response = _allinpayGateway.Execute(request);
-            //Assert.Equal("40004", response.Code);
+            Assert.Equal("SUCCESS", response.ReturnCode);
         }
 
         private void BarcodePay_PaySucceed(IResponse response, string message)
@@ -76,6 +76,19 @@ namespace PaySharp.UnitTest
 
         private void BarcodePay_PayFaild(IResponse response, string message)
         {
+        }
+
+        [Fact]
+        public void TestQuery()
+        {
+            var request = new QueryRequest();
+            request.AddGatewayData(new QueryModel()
+            {
+                OutTradeNo = "20191228080146"
+            });
+
+            var response = _allinpayGateway.Execute(request);
+            Assert.Equal("SUCCESS", response.ReturnCode);
         }
     }
 }

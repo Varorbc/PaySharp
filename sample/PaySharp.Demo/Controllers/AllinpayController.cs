@@ -74,31 +74,18 @@ namespace PaySharp.Demo.Controllers
         {
         }
 
-        //[HttpPost]
-        //public ActionResult Query(string out_trade_no, string trade_no)
-        //{
-        //    var request = new QueryRequest();
-        //    request.AddGatewayData(new QueryModel()
-        //    {
-        //        TradeNo = trade_no,
-        //        OutTradeNo = out_trade_no
-        //    });
+        [HttpPost]
+        public ActionResult Query(string out_trade_no, string trade_no)
+        {
+            var request = new QueryRequest();
+            request.AddGatewayData(new QueryModel()
+            {
+                TradeNo = trade_no,
+                OutTradeNo = out_trade_no
+            });
 
-        //    var response = _gateway.Execute(request);
-        //    return Json(response);
-        //}
-
-        //[HttpPost]
-        //public ActionResult Cancel(string out_trade_no)
-        //{
-        //    var request = new CancelRequest();
-        //    request.AddGatewayData(new CancelModel()
-        //    {
-        //        OutTradeNo = out_trade_no
-        //    });
-
-        //    var response = _gateway.Execute(request);
-        //    return Json(response);
-        //}
+            var response = _gateway.Execute(request);
+            return Json(response);
+        }
     }
 }

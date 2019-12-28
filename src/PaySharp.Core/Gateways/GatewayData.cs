@@ -544,6 +544,14 @@ namespace PaySharp.Core
                 {
                     item.SetValue(obj, Enum.Parse(propertyType, value));
                 }
+                else if (propertyType.IsGenericType)
+                {
+                    propertyType = propertyType.GenericTypeArguments[0];
+                    if (propertyType.IsEnum)
+                    {
+                        item.SetValue(obj, Enum.Parse(propertyType, value));
+                    }
+                }
                 else
                 {
                     item.SetValue(obj, Convert.ChangeType(value, propertyType));

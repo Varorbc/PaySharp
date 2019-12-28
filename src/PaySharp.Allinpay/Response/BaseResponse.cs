@@ -1,5 +1,4 @@
-﻿using System;
-using PaySharp.Core;
+﻿using PaySharp.Core;
 using PaySharp.Core.Request;
 using PaySharp.Core.Response;
 

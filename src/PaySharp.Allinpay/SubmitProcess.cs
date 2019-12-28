@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using PaySharp.Allinpay.Request;
+﻿using PaySharp.Allinpay.Request;
 using PaySharp.Allinpay.Response;
 using PaySharp.Core;
 using PaySharp.Core.Exceptions;
