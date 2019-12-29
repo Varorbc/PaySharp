@@ -5,7 +5,7 @@
   <PropertyGroup>
     <TargetFrameworks>net45;netcoreapp3.1</TargetFrameworks>
     <Title>PaySharp.Unionpay</Title>
-    <Description>银联支付</Description>
+    <Description>中国银联</Description>
     <PackageTags>dotnetcore;pay;unionpay;</PackageTags>
     <PackageReleaseNotes>
       支持.net core3.1
