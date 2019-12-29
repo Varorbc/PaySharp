@@ -1,1 +1,0 @@
-﻿<%@ Page Language="C#" AutoEventWireup="True" CodeBehind="VerifyAppData.aspx.cs" Inherits="upacp_demo_app.demo.api_05_app.VerifyAppData" %>

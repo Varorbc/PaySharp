@@ -1,1 +1,0 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Form_6_6_SmsConsume.aspx.cs" Inherits="upacp_demo_wtz.demo.api_03_wtz.Form_6_6_SmsConsume" %>
