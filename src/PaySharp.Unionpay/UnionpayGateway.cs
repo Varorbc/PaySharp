@@ -12,7 +12,7 @@ using PaySharp.Unionpay.Response;
 namespace PaySharp.Unionpay
 {
     /// <summary>
-    /// 银联支付网关
+    /// 中国银联网关
     /// </summary>
     public sealed class UnionpayGateway : BaseGateway
     {
@@ -25,7 +25,7 @@ namespace PaySharp.Unionpay
         #region 构造函数
 
         /// <summary>
-        /// 初始化银联支付网关
+        /// 初始化中国银联网关
         /// </summary>
         /// <param name="merchant">商户数据</param>
         public UnionpayGateway(Merchant merchant)
@@ -40,7 +40,7 @@ namespace PaySharp.Unionpay
 #if NETCOREAPP3_1
 
         /// <summary>
-        /// 初始化银联支付网关
+        /// 初始化中国银联网关
         /// </summary>
         /// <param name="merchant">商户数据</param>
         public UnionpayGateway(IOptions<Merchant> merchant)

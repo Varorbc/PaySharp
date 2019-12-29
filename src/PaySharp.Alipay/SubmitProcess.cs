@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PaySharp.Alipay.Response;
@@ -19,14 +18,7 @@ namespace PaySharp.Alipay
         {
             AddMerchant(merchant, request, gatewayUrl);
 
-            string result = null;
-            Task.Run(async () =>
-            {
-                result = await HttpUtil
-                 .PostAsync(request.RequestUrl, request.GatewayData.ToUrl());
-            })
-            .GetAwaiter()
-            .GetResult();
+            var result = HttpUtil.Post(request.RequestUrl, request.GatewayData.ToUrl());
 
             var jObject = JObject.Parse(result);
             var jToken = jObject.First.First;

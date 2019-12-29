@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Autofac;
 using PaySharp.Alipay;
+using PaySharp.Allinpay;
 using PaySharp.Core;
 using PaySharp.Core.Mvc;
 using PaySharp.Unionpay;
@@ -63,6 +64,14 @@ namespace PaySharp.Demo_Net_
                      ReturnUrl = "http://localhost:61378/Notify"
                  };
 
+                 var allinpayMerchant = new Allinpay.Merchant
+                 {
+                     AppId = "00000051",
+                     MchId = "990581007426001",
+                     Key = "allinpay888",
+                     NotifyUrl = "http://localhost:61338/Notify"
+                 };
+
                  gateways.Add(new AlipayGateway(alipayMerchant)
                  {
                      GatewayUrl = "https://openapi.alipaydev.com"
@@ -71,6 +80,10 @@ namespace PaySharp.Demo_Net_
                  gateways.Add(new UnionpayGateway(unionpayMerchant)
                  {
                      GatewayUrl = "https://gateway.test.95516.com"
+                 });
+                 gateways.Add(new AllinpayGateway(allinpayMerchant)
+                 {
+                     GatewayUrl = "https://test.allinpaygd.com"
                  });
 
                  return gateways;

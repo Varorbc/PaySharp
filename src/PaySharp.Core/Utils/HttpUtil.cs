@@ -333,6 +333,7 @@ namespace PaySharp.Core.Utils
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
             request.ContentLength = dataByte.Length;
+            request.UserAgent = "PaySharp";
 
             if (cert != null)
             {
@@ -352,18 +353,6 @@ namespace PaySharp.Core.Utils
         private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
             return true;
-        }
-
-        /// <summary>
-        /// 异步Post请求
-        /// </summary>
-        /// <param name="url">url</param>
-        /// <param name="data">数据</param>
-        /// <param name="cert">证书</param>
-        /// <returns></returns>
-        public static async Task<string> PostAsync(string url, string data, X509Certificate2 cert = null)
-        {
-            return await Task.Run(() => Post(url, data, cert));
         }
 
         /// <summary>

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../package.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;netcoreapp3.1</TargetFrameworks>
+    <Title>PaySharp.Allinpay</Title>
+    <Description>通联收银宝</Description>
+    <PackageTags>dotnetcore;pay;Allinpay;</PackageTags>
+    <PackageReleaseNotes>
+    </PackageReleaseNotes>
+  </PropertyGroup>
+
+  <Import Project="../../output.props" />
+
+  <Import Project="../../dependencies.props" />
+
+</Project>

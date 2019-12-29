@@ -3,8 +3,8 @@ $(function () {
     setApiDemoTabs("#tabs-purchase-alipay");
     setApiDemoTabs("#tabs-purchase-wechatpay");
     setApiDemoTabs("#tabs-purchase-qpay");
-    setApiDemoTabs("#tabs-purchase-jdpay");
     setApiDemoTabs("#tabs-purchase-unionpay");
+    setApiDemoTabs("#tabs-purchase-allinpay");
     $(document).tooltip();
 });
 

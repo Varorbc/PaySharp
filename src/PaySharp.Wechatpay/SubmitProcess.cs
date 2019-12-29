@@ -28,14 +28,7 @@ namespace PaySharp.Wechatpay
                 cert = new X509Certificate2(merchant.SslCertPath, merchant.SslCertPassword, X509KeyStorageFlags.MachineKeySet);
             }
 
-            string result = null;
-            Task.Run(async () =>
-            {
-                result = await HttpUtil
-                 .PostAsync(request.RequestUrl, request.GatewayData.ToXml(), cert);
-            })
-            .GetAwaiter()
-            .GetResult();
+            var result = HttpUtil.Post(request.RequestUrl, request.GatewayData.ToXml(), cert);
 
             BaseResponse baseResponse;
             if (!(request is BillDownloadRequest || request is FundFlowDownloadRequest))

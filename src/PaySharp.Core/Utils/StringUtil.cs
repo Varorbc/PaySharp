@@ -15,6 +15,11 @@ namespace PaySharp.Core.Utils
         Camel,
 
         /// <summary>
+        /// 小写策略
+        /// </summary>
+        Lower,
+
+        /// <summary>
         /// 不执行策略
         /// </summary>
         None

@@ -3,7 +3,7 @@
 
 PaySharp是一个支持多商户多种支付方式的跨平台网关处理类库，使用PaySharp可以简化订单的创建、查询、退款和接收网关返回的支付通知等操作。
 
-目前支持的支付网关有：支付宝(Alipay)、微信支付(Wechatpay)、银联支付(Unionpay)、QQ钱包支付(Qpay)
+目前支持的支付网关有：支付宝(Alipay)、微信支付(Wechatpay)、中国银联(Unionpay)、QQ钱包支付(Qpay)、通联收银宝(Allinpay)
 
 ### 1.支付宝：
 
@@ -47,6 +47,16 @@ PaySharp是一个支持多商户多种支付方式的跨平台网关处理类库
 		
 	查询、退款、退款查询、撤销、关闭、对账单下载
 
+### 5.通联收银宝：
+
+##### 支持的支付方式：
+		
+	统一支付(Unified)、统一条码(Barcode)
+
+##### 支持的辅助接口：
+		
+	查询
+
 # Package
 ---
 
@@ -58,6 +68,7 @@ PaySharp.Alipay		| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Alipay.svg)
 PaySharp.Wechatpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Wechatpay.svg)](https://www.nuget.org/packages/PaySharp.Wechatpay)
 PaySharp.Unionpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Unionpay.svg)](https://www.nuget.org/packages/PaySharp.Unionpay)
 PaySharp.Qpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Qpay.svg)](https://www.nuget.org/packages/PaySharp.Qpay)
+PaySharp.Allinpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Allinpay.svg)](https://www.nuget.org/packages/PaySharp.Allinpay)
 
 # 开发环境
 * Windows 10
@@ -85,13 +96,17 @@ https://openhome.alipay.com/developmentDocument.htm
 
 https://pay.weixin.qq.com/wiki/doc/api/index.html
 
-银联支付文档：
+中国银联文档：
 
-https://open.unionpay.com/ajweb/product
+https://open.unionpay.com/tjweb/doc/index
 
 QQ钱包支付文档：
 
-https://qpay.qq.com/qpaywiki.shtml
+https://qpay.qq.com/buss/doc.shtml
+
+通联收银宝支付文档：
+
+https://aipboss.allinpay.com/know/devhelp/index.php
 
 # 支持/打赏
 
