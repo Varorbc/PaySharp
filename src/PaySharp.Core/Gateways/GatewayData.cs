@@ -360,9 +360,23 @@ namespace PaySharp.Core
         /// <returns></returns>
         public string ToUrl(bool isUrlEncode = true)
         {
-            return string.Join("&",
-                _values
-                .Select(a => $"{a.Key}={(isUrlEncode ? WebUtility.UrlEncode(a.Value.ToString()) : a.Value.ToString())}"));
+            var values = _values.Select(a =>
+            {
+                var value = a.Value.ToString();
+                if (a.Value is bool)
+                {
+                    value = value.ToLower();
+                }
+
+                if (isUrlEncode)
+                {
+                    value = WebUtility.UrlEncode(value);
+                }
+
+                return $"{a.Key}={value}";
+            });
+
+            return string.Join("&", values);
         }
 
         /// <summary>
