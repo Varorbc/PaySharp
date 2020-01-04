@@ -34,6 +34,7 @@ namespace PaySharp.Core.Mvc
                 var allinpayGateway = new AllinpayGateway(new Merchant
                 {
                     AppId = item["appId"].ToString(),
+                    SubAppId = item["subAppId"].ToString(),
                     MchId = item["mchId"].ToString(),
                     Key = item["key"].ToString(),
                     NotifyUrl = item["notifyUrl"].ToString()

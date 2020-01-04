@@ -11,7 +11,7 @@ using PaySharp.Core.Utils;
 namespace PaySharp.Allinpay
 {
     /// <summary>
-    /// 微信支付网关
+    /// 通联收银宝网关
     /// </summary>
     public sealed class AllinpayGateway : BaseGateway
     {
@@ -24,7 +24,7 @@ namespace PaySharp.Allinpay
         #region 构造函数
 
         /// <summary>
-        /// 初始化微信支付网关
+        /// 初始化通联收银宝网关
         /// </summary>
         /// <param name="merchant">商户数据</param>
         public AllinpayGateway(Merchant merchant)
@@ -36,7 +36,7 @@ namespace PaySharp.Allinpay
 #if NETCOREAPP3_1
 
         /// <summary>
-        /// 初始化微信支付网关
+        /// 初始化通联收银宝网关
         /// </summary>
         /// <param name="merchant">商户数据</param>
         public AllinpayGateway(IOptions<Merchant> merchant)
