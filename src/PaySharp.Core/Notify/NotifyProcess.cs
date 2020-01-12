@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using PaySharp.Core.Utils;
 
 namespace PaySharp.Core
@@ -26,9 +27,9 @@ namespace PaySharp.Core
         /// </summary>
         /// <param name="gateways">网关列表</param>
         /// <returns></returns>
-        public static BaseGateway GetGateway(IGateways gateways)
+        public static async Task<BaseGateway> GetGatewayAsync(IGateways gateways)
         {
-            var gatewayData = ReadNotifyData();
+            var gatewayData = await ReadNotifyDataAsync();
             BaseGateway gateway = null;
 
             foreach (var item in gateways.GetList())
@@ -76,7 +77,7 @@ namespace PaySharp.Core
         /// 读取网关发回的数据
         /// </summary>
         /// <returns></returns>
-        public static GatewayData ReadNotifyData()
+        public static async Task<GatewayData> ReadNotifyDataAsync()
         {
             var gatewayData = new GatewayData();
             if (IsGetRequest)
@@ -88,7 +89,7 @@ namespace PaySharp.Core
                 if (IsXmlData)
                 {
                     var reader = new StreamReader(HttpUtil.Body);
-                    var xmlData = reader.ReadToEnd();
+                    var xmlData = await reader.ReadToEndAsync();
                     gatewayData.FromXml(xmlData);
                 }
                 else

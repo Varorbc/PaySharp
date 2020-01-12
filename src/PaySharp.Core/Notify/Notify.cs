@@ -75,7 +75,7 @@ namespace PaySharp.Core
         /// </summary>
         public async Task ReceivedAsync()
         {
-            var gateway = NotifyProcess.GetGateway(_gateways);
+            var gateway = await NotifyProcess.GetGatewayAsync(_gateways);
             if (gateway is NullGateway)
             {
                 OnUnknownGateway(new UnknownGatewayEventArgs(gateway));
