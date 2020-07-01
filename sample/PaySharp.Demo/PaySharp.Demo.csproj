@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\PaySharp.Alipay\PaySharp.Alipay.csproj" />
     <ProjectReference Include="..\..\src\PaySharp.Allinpay\PaySharp.Allinpay.csproj" />
     <ProjectReference Include="..\..\src\PaySharp.Qpay\PaySharp.Qpay.csproj" />

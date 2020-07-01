@@ -10,6 +10,7 @@ using PaySharp.Core;
 using PaySharp.Core.Mvc;
 using PaySharp.Unionpay;
 using PaySharp.Wechatpay;
+using Serilog;
 
 namespace PaySharp.Demo_Net_
 {
@@ -17,6 +18,12 @@ namespace PaySharp.Demo_Net_
     {
         protected void Application_Start()
         {
+            Log.Logger = new LoggerConfiguration()
+                         .WriteTo.File($"{AppDomain.CurrentDomain.BaseDirectory}\\logs\\log.txt")
+                         .Enrich.WithWebApiRouteTemplate()
+                         .Enrich.WithWebApiActionName()
+                         .CreateLogger();
+
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(a =>
             {

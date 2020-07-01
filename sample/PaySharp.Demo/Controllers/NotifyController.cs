@@ -6,13 +6,15 @@ using System.Web.Mvc;
 using PaySharp.Alipay.Response;
 using PaySharp.Core;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace PaySharp.Demo.Controllers
 {
     public class NotifyController : Controller
     {
+        private readonly ILogger _logger = Log.ForContext<NotifyController>();
         private readonly IGateways _gateways;
-        private bool isRedirect;
+        private bool _isRedirect;
 
         public NotifyController(IGateways gateways)
         {
@@ -32,7 +34,7 @@ namespace PaySharp.Demo.Controllers
             // 接收并处理支付通知
             await notify.ReceivedAsync();
 
-            if (isRedirect)
+            if (_isRedirect)
             {
                 Response.Redirect("https://github.com/Varorbc/PaySharp");
             }
@@ -52,9 +54,11 @@ namespace PaySharp.Demo.Controllers
                 //同步通知，即浏览器跳转返回
                 if (e.NotifyType == NotifyType.Sync)
                 {
-                    isRedirect = true;
+                    _isRedirect = true;
                 }
             }
+
+            _logger.Information(e.NotifyResponse.Raw);
 
             //处理成功返回true
             return true;
@@ -62,24 +66,32 @@ namespace PaySharp.Demo.Controllers
 
         private bool Notify_RefundSucceed(object arg1, RefundSucceedEventArgs arg2)
         {
+            _logger.Information(arg2.NotifyResponse.Raw);
+
             // 订单退款时的处理代码
             return true;
         }
 
         private bool Notify_CancelSucceed(object arg1, CancelSucceedEventArgs arg2)
         {
+            _logger.Information(arg2.NotifyResponse.Raw);
+
             // 订单撤销时的处理代码
             return true;
         }
 
         private bool Notify_UnknownNotify(object sender, UnKnownNotifyEventArgs e)
         {
+            _logger.Information(e.NotifyResponse.Raw);
+
             // 未知时的处理代码
             return true;
         }
 
         private void Notify_UnknownGateway(object sender, UnknownGatewayEventArgs e)
         {
+            _logger.Information(e.NotifyResponse.Raw);
+
             // 无法识别支付网关时的处理代码
         }
     }
