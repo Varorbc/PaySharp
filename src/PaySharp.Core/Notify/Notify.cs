@@ -158,11 +158,7 @@ namespace PaySharp.Core
             return new SendEventResult(gateway, success);
         }
 
-
-        /// <summary>
-        /// 接收并验证网关的支付通知
-        /// </summary>
-        public async Task<SendEventResult> ReceivedAsync(bool writeFlag = false)
+        public async Task<SendEventResult> ReceivedAsync(bool writeFlag)
         {
             var gateway = await NotifyProcess.GetGatewayAsync(_gateways);
             var sendEventResult = await SendNotifyEventAsync(gateway);
@@ -173,8 +169,15 @@ namespace PaySharp.Core
             }
 
             return sendEventResult;
+        }
 
-
+        /// <summary>
+        /// 接收并验证网关的支付通知
+        /// </summary>
+        public  Task ReceivedAsync()
+        {
+            return ReceivedAsync(true);
+ 
             // var gateway = await NotifyProcess.GetGatewayAsync(_gateways);
             // if (gateway is NullGateway)
             // {
