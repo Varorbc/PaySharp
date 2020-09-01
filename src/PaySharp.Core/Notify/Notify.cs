@@ -72,7 +72,7 @@ namespace PaySharp.Core
 
 
 
-        private async Task<NotifyEventArgs> GetNotifyEventArgs(BaseGateway gateway)
+        private async Task<NotifyEventArgs> GetNotifyEvent(BaseGateway gateway)
         {
             if (gateway is NullGateway)
             {
@@ -108,12 +108,12 @@ namespace PaySharp.Core
 
 
         }
-        private async Task<ValidateEventResult> ValidateNotifyEventAsync(BaseGateway gateway)
+        private async Task<SendEventResult> SendNotifyEventAsync(BaseGateway gateway)
         {
             var success = false;
             try
             {
-                var eventArgs = await GetNotifyEventArgs(gateway);
+                var eventArgs = await GetNotifyEvent(gateway);
                 switch (eventArgs)
                 {
                     case UnknownGatewayEventArgs unknownGatewayEventArgs:
@@ -152,24 +152,24 @@ namespace PaySharp.Core
             }
 
 
-            return new ValidateEventResult(gateway,success);
+            return new SendEventResult(gateway,success);
         }
 
 
         /// <summary>
         /// 接收并验证网关的支付通知
         /// </summary>
-        public async Task<ValidateEventResult> ReceivedAsync(bool writeFlag = false)
+        public async Task<SendEventResult> ReceivedAsync(bool writeFlag = false)
         {
             var gateway = await NotifyProcess.GetGatewayAsync(_gateways);
-            var validateEventResult = await ValidateNotifyEventAsync(gateway);
+            var sendEventResult = await SendNotifyEventAsync(gateway);
 
             if (writeFlag)
             {
-                validateEventResult.WriteFlagXml();
+                sendEventResult.WriteFlagXml();
             }
 
-            return validateEventResult;
+            return sendEventResult;
 
 
             // var gateway = await NotifyProcess.GetGatewayAsync(_gateways);

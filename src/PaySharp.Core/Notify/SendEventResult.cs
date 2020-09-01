@@ -1,10 +1,10 @@
 ﻿namespace PaySharp.Core
 {
-    public class ValidateEventResult
+    public class SendEventResult
     {
         private BaseGateway Gateway { get; }
         public bool Success { get; }
-        public ValidateEventResult(BaseGateway gateway,bool success)
+        public SendEventResult(BaseGateway gateway,bool success)
         {
             Gateway = gateway;
             Success = success;
