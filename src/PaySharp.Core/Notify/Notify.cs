@@ -126,20 +126,23 @@ namespace PaySharp.Core
                     {
                         OnPaySucceed(args);
                         success = true;
+                        break;
                     }
-                    break;
+
                     case RefundSucceedEventArgs refundSucceedEventArgs:
                     {
                         OnRefundSucceed(refundSucceedEventArgs);
                         success = true;
+                        break;
                     }
-                    break;
+
                     case CancelSucceedEventArgs cancelSucceedEventArgs:
                     {
                         OnCancelSucceed(cancelSucceedEventArgs);
                         success = true;
+                        break;
                     }
-                    break;
+
                 }
             }
             catch (GatewayException ex)
@@ -152,7 +155,7 @@ namespace PaySharp.Core
             }
 
 
-            return new SendEventResult(gateway,success);
+            return new SendEventResult(gateway, success);
         }
 
 
