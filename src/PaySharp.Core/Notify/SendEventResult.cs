@@ -11,16 +11,19 @@
         }
 
         #region Overrides of Object
-
-        /// <summary>返回表示当前对象的字符串。</summary>
-        /// <returns>表示当前对象的字符串。</returns>
+        /// <summary>
+        /// 获取当前处理结果的XML
+        /// </summary>
+        /// <returns></returns>
         public string GetFlagXml()
         {
             return Success ? Gateway.GetSuccessFlag() : Gateway.GetFailureFlag();
         }
 
         #endregion
-
+        /// <summary>
+        /// 立即响应处理结果的XML，并结束请求
+        /// </summary>
         public void WriteFlagXml()
         {
             if (Success)
