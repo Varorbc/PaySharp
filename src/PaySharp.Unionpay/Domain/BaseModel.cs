@@ -59,6 +59,7 @@ namespace PaySharp.Unionpay.Domain
         /// 交易子类
         /// 01：自助消费，通过地址的方式区分前台消费和后台消费（含无跳转支付）
         /// 03：分期付款
+        /// 10：签约支付（协议号支付)
         /// </summary>
         [Required(ErrorMessage = "请设置交易子类")]
         public string TxnSubType { get; internal set; } = "01";
