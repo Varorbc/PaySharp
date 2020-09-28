@@ -54,7 +54,16 @@ namespace PaySharp.Unionpay
 
         #region 属性
 
-        public override string GatewayUrl { get; set; } = "https://gateway.95516.com";
+        public override string GatewayUrl
+        {
+            get => _gatewayUrl;
+            set
+            {
+                _gatewayUrl = value;
+                Util.IsTest = _gatewayUrl.Contains("test");
+            }
+        }
+        private string _gatewayUrl = "https://gateway.95516.com";
 
         public new Merchant Merchant => _merchant;
 

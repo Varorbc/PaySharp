@@ -22,14 +22,10 @@ namespace PaySharp.Unionpay
 
         private static Pkcs12Store _pkcs12Store;
         private static string _aliase;
-
-        #endregion
-
-        #region 证书
-
-        private static X509Certificate ACPENCCER = null;
-        private static X509Certificate ACPROOTCER = null;
-        private static X509Certificate ACPMIDDLECER = null;
+        private static X509Certificate _acpEncCer;
+        private static X509Certificate _acpRootCer;
+        private static X509Certificate _acpMiddleCer;
+        internal static bool IsTest { get; set; }
 
         #endregion
 
@@ -136,7 +132,7 @@ namespace PaySharp.Unionpay
             var signByte = Convert.FromBase64String(sign);
 
             var x509Cert = VerifyAndGetPubKey(signPubKeyCert);
-            return x509Cert == null ? false : VerifySignature(x509Cert.GetPublicKey(), signByte, dataByte);
+            return x509Cert != null && VerifySignature(x509Cert.GetPublicKey(), signByte, dataByte);
         }
 
         private static bool VerifySignature(AsymmetricKeyParameter key, byte[] base64DecodingSignStr, byte[] srcByte)
@@ -156,15 +152,8 @@ namespace PaySharp.Unionpay
         private static bool VerifyCertificate(X509Certificate x509Cert)
         {
             var cn = GetIdentitiesFromCertficate(x509Cert);
-            try
-            {
-                x509Cert.CheckValidity();//验证有效期
-                if (!VerifyCertificateChain(x509Cert))//验证书链
-                {
-                    return false;
-                }
-            }
-            catch
+            x509Cert.CheckValidity();//验证有效期
+            if (!VerifyCertificateChain(x509Cert))//验证书链
             {
                 return false;
             }
@@ -192,117 +181,70 @@ namespace PaySharp.Unionpay
                 return false;
             }
 
-            try
+            var selector = new X509CertStoreSelector
             {
-                var selector = new X509CertStoreSelector
-                {
-                    Subject = cert.SubjectDN
-                };
+                Subject = cert.SubjectDN
+            };
 
-                ISet trustAnchors = new HashSet
-                {
-                    new TrustAnchor(rootCert, null)
-                };
-                var pkixParams = new PkixBuilderParameters(trustAnchors, selector);
-
-                IList intermediateCerts = new ArrayList
-                {
-                    rootCert,
-                    middleCert,
-                    cert
-                };
-
-                pkixParams.IsRevocationEnabled = false;
-
-                var intermediateCertStore = X509StoreFactory.Create(
-                    "Certificate/Collection",
-                    new X509CollectionStoreParameters(intermediateCerts));
-                pkixParams.AddStore(intermediateCertStore);
-
-                var pathBuilder = new PkixCertPathBuilder();
-                var result = pathBuilder.Build(pkixParams);
-                var path = result.CertPath;
-                return true;
-            }
-            catch
+            ISet trustAnchors = new HashSet
             {
-                return false;
-            }
+                new TrustAnchor(rootCert, null)
+            };
+            var pkixParams = new PkixBuilderParameters(trustAnchors, selector);
+
+            IList intermediateCerts = new ArrayList
+            {
+                rootCert,
+                middleCert,
+                cert
+            };
+
+            pkixParams.IsRevocationEnabled = false;
+
+            var intermediateCertStore = X509StoreFactory.Create(
+                "Certificate/Collection",
+                new X509CollectionStoreParameters(intermediateCerts));
+            pkixParams.AddStore(intermediateCertStore);
+
+            var pathBuilder = new PkixCertPathBuilder();
+            var result = pathBuilder.Build(pkixParams);
+            _ = result.CertPath;
+            return true;
         }
 
         private static X509Certificate GetCert(byte[] input)
         {
-            try
-            {
-                return new X509CertificateParser().ReadCertificate(input);
-            }
-            catch
-            {
-                return null;
-            }
+            return new X509CertificateParser().ReadCertificate(input);
         }
 
         private static X509Certificate GetRootCert()
         {
-            try
+            if (_acpRootCer is null)
             {
-                if (ACPROOTCER is null)
-                {
-#if DEBUG
-                    ACPROOTCER = GetCert(Resources.acp_test_root);
-#else
-                    ACPROOTCER= GetCert(Resources.acp_prod_root);
-#endif
-                }
+                _acpRootCer = IsTest ? GetCert(Resources.acp_test_root) : GetCert(Resources.acp_prod_root);
+            }
 
-                return ACPROOTCER;
-            }
-            catch
-            {
-                return null;
-            }
+            return _acpRootCer;
         }
 
         private static X509Certificate GetMiddleCert()
         {
-            try
+            if (_acpMiddleCer is null)
             {
-                if (ACPMIDDLECER is null)
-                {
-#if DEBUG
-                    ACPMIDDLECER = GetCert(Resources.acp_test_middle);
-#else
-                    ACPMIDDLECER= GetCert(Resources.acp_prod_middle);
-#endif
-                }
+                _acpMiddleCer = IsTest ? GetCert(Resources.acp_test_middle) : GetCert(Resources.acp_prod_middle);
+            }
 
-                return ACPMIDDLECER;
-            }
-            catch
-            {
-                return null;
-            }
+            return _acpMiddleCer;
         }
 
         private static X509Certificate GetEncCert()
         {
-            try
+            if (_acpEncCer is null)
             {
-                if (ACPENCCER is null)
-                {
-#if DEBUG
-                    ACPENCCER = GetCert(Resources.acp_test_enc);
-#else
-                    ACPENCCER= GetCert(Resources.acp_prod_enc);
-#endif
-                }
+                _acpEncCer = IsTest ? GetCert(Resources.acp_test_enc) : GetCert(Resources.acp_prod_enc);
+            }
 
-                return ACPENCCER;
-            }
-            catch
-            {
-                return null;
-            }
+            return _acpEncCer;
         }
 
         private static string GetIdentitiesFromCertficate(X509Certificate aCert)
@@ -322,20 +264,13 @@ namespace PaySharp.Unionpay
 
         private static X509Certificate GetPubKeyCert(string pubKeyCert)
         {
-            try
-            {
-                pubKeyCert = pubKeyCert
-                    .Replace("-----END CERTIFICATE-----", "")
-                    .Replace("-----BEGIN CERTIFICATE-----", "");
-                var x509CertBytes = Convert.FromBase64String(pubKeyCert);
-                var cf = new X509CertificateParser();
-                var x509Cert = cf.ReadCertificate(x509CertBytes);
-                return x509Cert;
-            }
-            catch
-            {
-                return null;
-            }
+            pubKeyCert = pubKeyCert
+                .Replace("-----END CERTIFICATE-----", "")
+                .Replace("-----BEGIN CERTIFICATE-----", "");
+            var x509CertBytes = Convert.FromBase64String(pubKeyCert);
+            var cf = new X509CertificateParser();
+            var x509Cert = cf.ReadCertificate(x509CertBytes);
+            return x509Cert;
         }
 
         #endregion
