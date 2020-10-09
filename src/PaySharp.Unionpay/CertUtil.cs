@@ -34,13 +34,23 @@ namespace PaySharp.Unionpay
         /// <summary>
         /// 获取Pkcs12Store
         /// </summary>
-        /// <param name="path">证书路径</param>
+        /// <param name="cert">证书路径或base64字符串</param>
         /// <param name="pwd">证书密码</param>
         /// <returns></returns>
-        private static void GetPkcs12Store(string path, string pwd)
+        private static void GetPkcs12Store(string cert, string pwd)
         {
-            using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            var pkcs12Store = new Pkcs12Store(fileStream, pwd.ToCharArray());
+            Stream stream;
+            if (File.Exists(cert))
+            {
+                stream = new FileStream(cert, FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
+            else
+            {
+                var buffer = Convert.FromBase64String(cert);
+                stream = new MemoryStream(buffer);
+            }
+
+            var pkcs12Store = new Pkcs12Store(stream, pwd.ToCharArray());
             foreach (string item in pkcs12Store.Aliases)
             {
                 if (pkcs12Store.IsKeyEntry(item))
@@ -49,19 +59,21 @@ namespace PaySharp.Unionpay
                     _aliase = item;
                 }
             }
+
+            stream.Dispose();
         }
 
         /// <summary>
         /// 获取证书编号
         /// </summary>
-        /// <param name="path">证书路径</param>
+        /// <param name="cert">证书路径或base64字符串</param>
         /// <param name="pwd">证书密码</param>
         /// <returns></returns>
-        public static string GetCertId(string path, string pwd)
+        public static string GetCertId(string cert, string pwd)
         {
             if (string.IsNullOrEmpty(_aliase))
             {
-                GetPkcs12Store(path, pwd);
+                GetPkcs12Store(cert, pwd);
             }
 
             return _pkcs12Store
@@ -80,14 +92,14 @@ namespace PaySharp.Unionpay
         /// <summary>
         /// 获取证书编号
         /// </summary>
-        /// <param name="path">证书路径</param>
+        /// <param name="cert">证书路径或base64字符串</param>
         /// <param name="pwd">证书密码</param>
         /// <returns></returns>
-        public static AsymmetricKeyParameter GetCertKey(string path, string pwd)
+        public static AsymmetricKeyParameter GetCertKey(string cert, string pwd)
         {
             if (string.IsNullOrEmpty(_aliase))
             {
-                GetPkcs12Store(path, pwd);
+                GetPkcs12Store(cert, pwd);
             }
 
             return _pkcs12Store
