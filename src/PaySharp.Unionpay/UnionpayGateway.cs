@@ -33,8 +33,8 @@ namespace PaySharp.Unionpay
         {
             _merchant = merchant;
 
-            _merchant.CertId = Util.GetCertId(merchant.CertPath, merchant.CertPwd);
-            _merchant.CertKey = Util.GetCertKey(merchant.CertPath, merchant.CertPwd);
+            _merchant.CertId = CertUtil.GetCertId(merchant.CertPath, merchant.CertPwd);
+            _merchant.CertKey = CertUtil.GetCertKey(merchant.CertPath, merchant.CertPwd);
         }
 
 #if NETCOREAPP3_1
@@ -60,7 +60,7 @@ namespace PaySharp.Unionpay
             set
             {
                 _gatewayUrl = value;
-                Util.IsTest = _gatewayUrl.Contains("test");
+                CertUtil.IsTest = _gatewayUrl.Contains("test");
             }
         }
         private string _gatewayUrl = "https://gateway.95516.com";

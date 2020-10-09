@@ -16,7 +16,7 @@ using PaySharp.Unionpay.Properties;
 
 namespace PaySharp.Unionpay
 {
-    internal static class Util
+    public static class CertUtil
     {
         #region 字段
 
