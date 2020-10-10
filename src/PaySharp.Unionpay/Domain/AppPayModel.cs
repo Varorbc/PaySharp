@@ -26,7 +26,10 @@ namespace PaySharp.Unionpay.Domain
             set
             {
                 _contractId = value;
-                TxnSubType = "10";
+                if (!string.IsNullOrEmpty(_contractId))
+                {
+                    TxnSubType = "10";
+                }
             }
         }
         private string _contractId;
