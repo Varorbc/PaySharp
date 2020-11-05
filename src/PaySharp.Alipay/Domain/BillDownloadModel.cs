@@ -13,7 +13,7 @@ namespace PaySharp.Alipay.Domain
         /// signcustomer是指基于商户支付宝余额收入及支出等资金变动的帐务账单；
         /// </summary>
         [Required(ErrorMessage = "请设置账单类型")]
-        [StringLength(10, ErrorMessage = "账单类型最大长度为10位")]
+        [StringLength(12, ErrorMessage = "账单类型最大长度为12位")]
         public string BillType { get; set; }
 
         /// <summary>
