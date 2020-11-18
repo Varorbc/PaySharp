@@ -217,7 +217,7 @@ namespace PaySharp.Unionpay.Response
         /// <summary>
         /// 清算金额
         /// </summary>
-        [ReName(Name = "SettleAmt")]
+        [ReName(Name = "settleAmt")]
         public string SettleAmount { get; set; }
 
         /// <summary>

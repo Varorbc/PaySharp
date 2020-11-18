@@ -60,10 +60,10 @@ namespace PaySharp.Unionpay
         public string ReturnUrl { get; set; }
 
         /// <summary>
-        /// 签名证书路径
+        /// 签名证书路径/base64字符串
         /// </summary>
         [Ignore]
-        [Required(ErrorMessage = "请设置签名证书路径")]
+        [Required(ErrorMessage = "请设置签名证书路径或base64字符串")]
         public string CertPath { get; set; }
 
         /// <summary>

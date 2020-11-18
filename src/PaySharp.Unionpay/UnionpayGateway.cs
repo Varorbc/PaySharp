@@ -33,8 +33,8 @@ namespace PaySharp.Unionpay
         {
             _merchant = merchant;
 
-            _merchant.CertId = Util.GetCertId(merchant.CertPath, merchant.CertPwd);
-            _merchant.CertKey = Util.GetCertKey(merchant.CertPath, merchant.CertPwd);
+            _merchant.CertId = CertUtil.GetCertId(merchant.CertPath, merchant.CertPwd);
+            _merchant.CertKey = CertUtil.GetCertKey(merchant.CertPath, merchant.CertPwd);
         }
 
 #if NETCOREAPP3_1
@@ -54,7 +54,16 @@ namespace PaySharp.Unionpay
 
         #region 属性
 
-        public override string GatewayUrl { get; set; } = "https://gateway.95516.com";
+        public override string GatewayUrl
+        {
+            get => _gatewayUrl;
+            set
+            {
+                _gatewayUrl = value;
+                CertUtil.IsTest = _gatewayUrl.Contains("test");
+            }
+        }
+        private string _gatewayUrl = "https://gateway.95516.com";
 
         public new Merchant Merchant => _merchant;
 

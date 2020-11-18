@@ -75,14 +75,14 @@ namespace PaySharp.Unionpay
         {
             gatewayData.Remove("signature");
 
-            return Util.Sign(asymmetricKeyParameter, gatewayData.ToUrl(false));
+            return CertUtil.Sign(asymmetricKeyParameter, gatewayData.ToUrl(false));
         }
 
         internal static bool CheckSign(GatewayData gatewayData, string sign, string signPubKeyCert)
         {
             gatewayData.Remove("signature");
 
-            return Util.VerifyData(gatewayData.ToUrl(false), sign, signPubKeyCert);
+            return CertUtil.VerifyData(gatewayData.ToUrl(false), sign, signPubKeyCert);
         }
     }
 }

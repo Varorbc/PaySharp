@@ -40,7 +40,7 @@ namespace PaySharp.Unionpay.Response
         {
             if (!string.IsNullOrEmpty(FileContent))
             {
-                _billFile = Util.Inflater(FileContent);
+                _billFile = CertUtil.Inflater(FileContent);
             }
         }
     }

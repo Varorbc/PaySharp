@@ -16,5 +16,22 @@ namespace PaySharp.Unionpay.Domain
         /// 支付卡类型
         /// </summary>
         public string PayCardType { get; set; }
+
+        /// <summary>
+        /// 签约协议号
+        /// </summary>
+        public string ContractId
+        {
+            get => _contractId;
+            set
+            {
+                _contractId = value;
+                if (!string.IsNullOrEmpty(_contractId))
+                {
+                    TxnSubType = "10";
+                }
+            }
+        }
+        private string _contractId;
     }
 }
