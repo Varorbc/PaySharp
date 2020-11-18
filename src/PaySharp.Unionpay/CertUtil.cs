@@ -25,7 +25,7 @@ namespace PaySharp.Unionpay
         private static X509Certificate _acpEncCer;
         private static X509Certificate _acpRootCer;
         private static X509Certificate _acpMiddleCer;
-        internal static bool IsTest { get; set; }
+        public static bool IsTest { get; set; }
 
         #endregion
 
