@@ -3,7 +3,7 @@
   <Import Project="../../package.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net45;netcoreapp3.1;net5.0</TargetFrameworks>
     <Title>PaySharp.Qpay</Title>
     <Description>QQ钱包支付</Description>
     <PackageTags>dotnetcore;pay;qpay;</PackageTags>
