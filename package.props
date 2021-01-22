@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Varorbc/PaySharp</PackageProjectUrl>
     <Authors>Varorbc</Authors>

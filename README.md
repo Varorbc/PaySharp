@@ -72,8 +72,8 @@ PaySharp.Allinpay	| [![NuGet](https://img.shields.io/nuget/v/PaySharp.Allinpay.s
 
 # 开发环境
 * Windows 10
-* Visual Studio 2019(16.4)
-* .NET Core SDK 3.1
+* Visual Studio 2019(16.8)
+* .NET SDK 5.0
 
 # 如何使用
 ---

@@ -96,7 +96,7 @@ namespace PaySharp.Core
                 {
                     try
                     {
-#if NETCOREAPP3_1
+#if NETCOREAPP
                         gatewayData.FromForm(HttpUtil.Form);
 #else
                         gatewayData.FromNameValueCollection(HttpUtil.Form);
