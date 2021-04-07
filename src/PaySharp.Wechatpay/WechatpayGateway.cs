@@ -111,19 +111,25 @@ namespace PaySharp.Wechatpay
             return true;
         }
 
-        protected override void WriteSuccessFlag()
+        /// <summary>
+        /// 当接收到支付网关通知并验证无误时按照支付网关要求格式输出表示成功接收到网关通知的字符串
+        /// </summary>
+        protected override string GetSuccessFlag()
         {
             GatewayData.Clear();
             GatewayData.Add("return_code", "SUCCESS");
             GatewayData.Add("return_msg", "OK");
-            HttpUtil.Write(GatewayData.ToXml());
+            return GatewayData.ToXml();
         }
 
-        protected override void WriteFailureFlag()
+        /// <summary>
+        /// 当接收到支付网关通知并验证有误时按照支付网关要求格式输出表示失败接收到网关通知的字符串
+        /// </summary>
+        protected override string GetFailureFlag()
         {
             GatewayData.Clear();
             GatewayData.Add("return_code", "FAIL");
-            HttpUtil.Write(GatewayData.ToXml());
+            return GatewayData.ToXml();
         }
 
         public override TResponse Execute<TModel, TResponse>(Request<TModel, TResponse> request)

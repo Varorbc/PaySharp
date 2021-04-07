@@ -70,61 +70,79 @@ namespace PaySharp.Core
 
         private void OnUnknownGateway(UnknownGatewayEventArgs e) => UnknownGateway?.Invoke(this, e);
 
-        /// <summary>
-        /// 接收并验证网关的支付通知
-        /// </summary>
-        public async Task ReceivedAsync()
+
+
+        private async Task<NotifyEventArgs> GetNotifyEvent(BaseGateway gateway)
         {
-            var gateway = await NotifyProcess.GetGatewayAsync(_gateways);
             if (gateway is NullGateway)
             {
-                OnUnknownGateway(new UnknownGatewayEventArgs(gateway));
-                return;
+                return new UnknownGatewayEventArgs(gateway);
             }
 
+            if (!await gateway.ValidateNotifyAsync())
+            {
+                return new UnKnownNotifyEventArgs(gateway) { Message = "签名验证失败" };
+            }
+
+            if (HttpUtil.RequestType == "GET")
+            {
+                return new PaySucceedEventArgs(gateway);
+            }
+
+            if (gateway.IsPaySuccess)
+            {
+                return new PaySucceedEventArgs(gateway);
+            }
+
+            if (gateway.IsRefundSuccess)
+            {
+                return new RefundSucceedEventArgs(gateway);
+            }
+
+            if (gateway.IsCancelSuccess)
+            {
+                return new CancelSucceedEventArgs(gateway);
+            }
+
+            return new UnKnownNotifyEventArgs(gateway);
+
+
+        }
+        private async Task<SendEventResult> SendNotifyEventAsync(BaseGateway gateway)
+        {
+            var success = false;
             try
             {
-                if (!await gateway.ValidateNotifyAsync())
+                var eventArgs = await GetNotifyEvent(gateway);
+                switch (eventArgs)
                 {
-                    OnUnknownNotify(new UnKnownNotifyEventArgs(gateway)
+                    case UnknownGatewayEventArgs unknownGatewayEventArgs:
+                        OnUnknownGateway(unknownGatewayEventArgs);
+                        break;
+                    case UnKnownNotifyEventArgs unKnownNotifyEventArgs:
+                        OnUnknownNotify(unKnownNotifyEventArgs);
+                        break;
+                    case PaySucceedEventArgs args:
                     {
-                        Message = "签名验证失败"
-                    });
-                    gateway.WriteFailureFlag();
-                    return;
-                }
+                        OnPaySucceed(args);
+                        success = true;
+                        break;
+                    }
 
-                if (HttpUtil.RequestType == "GET")
-                {
-                    OnPaySucceed(new PaySucceedEventArgs(gateway));
-                    return;
-                }
+                    case RefundSucceedEventArgs refundSucceedEventArgs:
+                    {
+                        OnRefundSucceed(refundSucceedEventArgs);
+                        success = true;
+                        break;
+                    }
 
-                var result = false;
-                if (gateway.IsPaySuccess)
-                {
-                    result = OnPaySucceed(new PaySucceedEventArgs(gateway));
-                }
-                else if (gateway.IsRefundSuccess)
-                {
-                    result = OnRefundSucceed(new RefundSucceedEventArgs(gateway));
-                }
-                else if (gateway.IsCancelSuccess)
-                {
-                    result = OnCancelSucceed(new CancelSucceedEventArgs(gateway));
-                }
-                else
-                {
-                    result = OnUnknownNotify(new UnKnownNotifyEventArgs(gateway));
-                }
+                    case CancelSucceedEventArgs cancelSucceedEventArgs:
+                    {
+                        OnCancelSucceed(cancelSucceedEventArgs);
+                        success = true;
+                        break;
+                    }
 
-                if (result)
-                {
-                    gateway.WriteSuccessFlag();
-                }
-                else
-                {
-                    gateway.WriteFailureFlag();
                 }
             }
             catch (GatewayException ex)
@@ -133,8 +151,93 @@ namespace PaySharp.Core
                 {
                     Message = ex.Message
                 });
-                gateway.WriteFailureFlag();
+
             }
+
+
+            return new SendEventResult(gateway, success);
+        }
+
+        public async Task<SendEventResult> ReceivedAsync(bool writeFlag)
+        {
+            var gateway = await NotifyProcess.GetGatewayAsync(_gateways);
+            var sendEventResult = await SendNotifyEventAsync(gateway);
+
+            if (writeFlag)
+            {
+                sendEventResult.WriteFlagXml();
+            }
+
+            return sendEventResult;
+        }
+
+        /// <summary>
+        /// 接收并验证网关的支付通知
+        /// </summary>
+        public  Task ReceivedAsync()
+        {
+            return ReceivedAsync(true);
+ 
+            // var gateway = await NotifyProcess.GetGatewayAsync(_gateways);
+            // if (gateway is NullGateway)
+            // {
+            //     OnUnknownGateway(new UnknownGatewayEventArgs(gateway));
+            //     return;
+            // }
+            //
+            // try
+            // {
+            //     if (!await gateway.ValidateNotifyAsync())
+            //     {
+            //         OnUnknownNotify(new UnKnownNotifyEventArgs(gateway)
+            //         {
+            //             Message = "签名验证失败"
+            //         });
+            //         gateway.WriteFailureFlag();
+            //         return;
+            //     }
+            //
+            //     if (HttpUtil.RequestType == "GET")
+            //     {
+            //         OnPaySucceed(new PaySucceedEventArgs(gateway));
+            //         return;
+            //     }
+            //
+            //     var result = false;
+            //     if (gateway.IsPaySuccess)
+            //     {
+            //         result = OnPaySucceed(new PaySucceedEventArgs(gateway));
+            //     }
+            //     else if (gateway.IsRefundSuccess)
+            //     {
+            //         result = OnRefundSucceed(new RefundSucceedEventArgs(gateway));
+            //     }
+            //     else if (gateway.IsCancelSuccess)
+            //     {
+            //         result = OnCancelSucceed(new CancelSucceedEventArgs(gateway));
+            //     }
+            //     else
+            //     {
+            //         result = OnUnknownNotify(new UnKnownNotifyEventArgs(gateway));
+            //     }
+            //
+            //     if (result)
+            //     {
+            //         gateway.WriteSuccessFlag();
+            //     }
+            //     else
+            //     {
+            //         gateway.WriteFailureFlag();
+            //     }
+            // }
+            // catch (GatewayException ex)
+            // {
+            //     OnUnknownNotify(new UnKnownNotifyEventArgs(gateway)
+            //     {
+            //         Message = ex.Message
+            //     });
+            //     gateway.WriteFailureFlag();
+            // }
         }
 
         #endregion

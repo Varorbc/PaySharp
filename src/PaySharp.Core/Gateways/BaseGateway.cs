@@ -87,7 +87,7 @@ namespace PaySharp.Core
         /// </summary>
         protected internal virtual void WriteSuccessFlag()
         {
-            HttpUtil.Write("success");
+            HttpUtil.Write(GetSuccessFlag());
         }
 
         /// <summary>
@@ -95,9 +95,22 @@ namespace PaySharp.Core
         /// </summary>
         protected internal virtual void WriteFailureFlag()
         {
-            HttpUtil.Write("failure");
+            HttpUtil.Write(GetFailureFlag());
+        }  /// <summary>
+        /// 当接收到支付网关通知并验证无误时按照支付网关要求格式输出表示成功接收到网关通知的字符串
+        /// </summary>
+        protected internal virtual string GetSuccessFlag()
+        {
+           return "success";
         }
 
+        /// <summary>
+        /// 当接收到支付网关通知并验证有误时按照支付网关要求格式输出表示失败接收到网关通知的字符串
+        /// </summary>
+        protected internal virtual string GetFailureFlag()
+        {
+           return "failure";
+        }
         /// <summary>
         /// 执行请求
         /// </summary>
